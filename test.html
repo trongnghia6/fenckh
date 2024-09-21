@@ -12,19 +12,24 @@
             Gửi đến
         </button>
         <ul class="dropdown-menu" aria-labelledby="selectSend">
-            <li><a class="dropdown-item send-option" onclick="selectSend" href="#">All</a></li>
+            <li><a class="dropdown-item send-option" href="#">All</a></li>
             <li><a class="dropdown-item send-option" href="#">Khoa ATTT</a></li>
             <li><a class="dropdown-item send-option" href="#">Khoa CNTT</a></li>
             <li><a class="dropdown-item send-option" href="#">Khoa DTVT</a></li>
         </ul>
     </div>
-    <script>
-        function selectSend(selectSend) {
-        const selectedSend = document.getElementById(selectSend);
-        document.getElementById("selectSend").innerHTML = selectedSend.id;
-        }
-    </script>
-    <script src="/bootstrap-5.3.3-dist/js/bootstrap.bundle.min.js"></script>
+    
     <script src="/bootstrap-5.3.3-dist/js/jquery-3.7.1.min.js"></script>
+    <script src="/bootstrap-5.3.3-dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            // Bắt sự kiện click vào các phần tử có class 'send-option'
+            $('.send-option').click(function(e){
+                e.preventDefault(); // Ngăn chặn hành động mặc định của thẻ <a>
+                var selectedText = $(this).text(); // Lấy nội dung văn bản của phần tử được click
+                $('#selectSend').text(selectedText); // Thay đổi nội dung của nút 'selectSend'
+            });
+        });
+    </script>
 </body>
 </html>
