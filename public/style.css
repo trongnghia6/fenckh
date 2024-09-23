@@ -157,3 +157,11 @@ nav {
 .col{
   display: inline;
 }
+body.login-page {
+  background-image: url('nen.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 100vh;
+  margin: 0;
+}
