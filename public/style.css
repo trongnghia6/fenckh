@@ -165,3 +165,6 @@ body.login-page {
   height: 100vh;
   margin: 0;
 }
+.w-40{
+  width: 40% !important;
+}

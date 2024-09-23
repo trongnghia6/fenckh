@@ -5,22 +5,35 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Đăng nhập</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="../bootstrap-5.3.3-dist/css/bootstrap.min.css">
+    <style>
+      body {
+            background-image: url('../picture/nen.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            height: 100vh;
+            margin: 0;
+      }
+  </style>
 </head>
 <body>
-<div class="container">
+  <div class="container w-40">
+    <div class="d-flex">
+      <img src="../picture/Logo-Hoc-Vien-Ky-Thuat-Mat-Ma-ACTVN.webp" alt="" class="img-fluid" width="20%" style="object-fit: contain;">
+      <img src="../picture/dongchu_banner.png" alt="" class="img-fluid" width="80%" style="object-fit: contain;">
+    </div>
     <div class="heading">Sign In</div>
-    <form action="" class="form">
-      <input required="" class="input" type="text" name="username" id="username" placeholder="Username">
-      <input required="" class="input" type="password" name="password" id="password" placeholder="Password">
-      <!-- Remember Me -->
-      <div class="remember-me-container">
-        <input type="checkbox" id="remember-me" name="remember-me">
-        <label for="remember-me">Remember Me</label>
-      </div>
-
-      <input value="Sign In" type="submit" class="login-button" id="sign-in-button" />
-    </form>
-</div>
+      <form action="" class="form">
+        <input required="" class="input" type="text" name="username" id="username" placeholder="Username">
+        <input required="" class="input" type="password" name="password" id="password" placeholder="Password">
+        <div class="remember-me-container">
+          <input type="checkbox" id="remember-me" name="remember-me">
+          <label for="remember-me">Remember Me</label>
+        </div>
+        <input value="Sign In" type="submit" class="login-button" id="sign-in-button" />
+      </form>
+  </div>
 <script>
   document.querySelector('.form').addEventListener('submit', function(event) {
     event.preventDefault();
