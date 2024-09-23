@@ -5,6 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Học Viện Kỹ Thuật Mật Mã</title>
     <link href="../../bootstrap-5.3.3-dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../../bootstrap-5.3.3-dist/bootstrap-icons-1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <style>
+        .grid-center {
+            display: grid;
+            place-items: center;
+        }
+        .home-link {
+            color: white;
+            text-decoration: none;
+        }
+    </style>
 </head>
 <body>
     <header class="bg-primary text-white py-2">
@@ -23,9 +34,14 @@
 
     <nav class="bg-info py-2">
         <div class="d-flex">
-            <div class="container d-flex justify-content-center">
+            <div class="container d-flex justify-content-center grid-center ">
+                <div class="btn btn-primary text-nowrap mx-1">
+                    <a href="index.html" class="home-link">
+                        <i class="bi bi-house " ></i> Home
+                    </a>
+                </div>
                 <div class="dropdown">
-                    <button class="btn btn-primary dropdown-toggle" style="height:100% ;;" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                    <button class="btn btn-primary dropdown-toggle mx-1"  type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
                       Quản lí hợp đồng
                     </button>
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
@@ -36,9 +52,20 @@
                       <li><a class="dropdown-item" href="#">Lịch sử thay đổi</a></li>
                     </ul>
                 </div>
-                <a href="#" class="btn btn-primary mx-1">Quản lí giảng dạy</a>
                 <div class="dropdown">
-                    <button class="btn btn-primary dropdown-toggle" style="height:100% ;;" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                    <button class="btn btn-primary dropdown-toggle mx-1"  type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                      Quản lí giảng dạy
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                      <li><a class="dropdown-item" href="#">Quản lí môn học</a></li>
+                      <li><a class="dropdown-item" href="#">Quản lí lớp học</a></li>
+                      <li><a class="dropdown-item" href="#">Quản lí đề thi</a></li>
+                      <li><a class="dropdown-item" href="#">Quản lí coi thi</a></li>
+                      <li><a class="dropdown-item" href="#">Quản lí chấm thi</a></li>
+                    </ul>
+                </div>
+                <div class="dropdown">
+                    <button class="btn btn-primary dropdown-toggle mx-1"  type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
                       Thống kê NCKH
                     </button>
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
@@ -54,9 +81,9 @@
                     </ul>
                 </div>
                   
-                <a href="#" class="btn btn-primary mx-1">Tin Tức</a>
+                <a href="#" class="btn btn-primary mx-1 text-nowrap">Tin Tức</a>
             </div>
-            <div class="my-2"><a href="#" class="mx-1 justify-content-end text-nowrap">Hi, Lê Đức...</a></div>
+            <div class="my-2 grid-center"><a href="#" class="mx-1 justify-content-end text-nowrap">Hi, Lê Đức...</a></div>
     
         </div>
     </nav>
@@ -75,7 +102,7 @@
                                               Giảng viên
                                             </a>
                                             <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                              <li><a class="dropdown-item" href="/public/index/giangVien/ttgvienmoi.html">Thông tin GV mời</a></li>
+                                              <li><a class="dropdown-item" href="/public/index/ttgvienmoi.html">Thông tin GV mời</a></li>
                                               <li><a class="dropdown-item" href="#">Hợp đồng mời</a></li>
                                             </ul>
                                         </nav>
