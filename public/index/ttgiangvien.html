@@ -22,6 +22,10 @@
         .w-20{
             width: 20% !important;
         }
+        .active{
+            background-color: lightskyblue !important;
+            color: #000 !important;
+        }
     </style>
 </head>
 <body>
@@ -103,11 +107,11 @@
                         <ul class="nav nav-tabs list-group" id="myTab" role="tablist">
                             <li class="nav-item" role="presentation">
                                 <nav class="nav-item dropdown">
-                                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <a class="nav-link dropdown-toggle active" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                       Giảng viên
                                     </a>
                                     <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                      <li><a class="dropdown-item" href="/public/index/ttgiangvien.html">Thông tin GV mời</a></li>
+                                      <li><a class="dropdown-item active" href="/public/index/ttgiangvien.html">Thông tin GV mời</a></li>
                                       <li><a class="dropdown-item" href="/public/index/hdmoi.html">Hợp đồng mời</a></li>
                                     </ul>
                                 </nav>
@@ -138,6 +142,18 @@
                                 <a class="nav-link" href="chatbox.html" id="navbarDropdownMenuLink" role="button" >Chat box</a>
                             </li>
                         </ul>
+                </div>
+                <div class="mx-5" style="width: 100%;">
+                    <div class="d-flex text-nowrap justify-content-between">
+                        <a>Khoa Công Nghệ Thông Tin</a>
+                        <div>
+                            <form action="" class="d-flex justify-content-center" style="height: 100%;">
+                                <input class="flex-fill" style="height: 100%;" type="text">
+                                <button class="bi bi-search btn btn-primary"></button>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="h-75 bg-light"><a href="">Bảng</a></div>
                 </div>
             </div>    
         </div>
