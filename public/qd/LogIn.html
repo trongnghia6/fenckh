@@ -1,0 +1,46 @@
+<html lang="en"></html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./css/LogIn.css">
+    <title>Log In</title>
+</head>
+<body>
+  <div class="bg">
+    <div class="form">
+      <div class="title">
+        <img class="logo" src="./images/actvn_big_icon.png" alt="LOGO HVKTMM">
+        <h1 class="schoolname">Ban Cơ yếu Chính Phủ <br> Học viện Kỹ thuật mật mã</h1>
+      </div>
+      <div class="login-card">
+          <div class="card-header">
+            <h1>Đăng nhập</h1>
+          </div>
+          <div class="card-body">
+            <form>
+              <div class="input-group">
+                <input type="text" class="inputbox" id="username" name="username" required="" autofocus >
+                <label for="username" class="inputgroup">Mã giảng viên</label>
+              </div>
+              <div class="input-group">
+                <input type="password" class="inputbox" id="password" name="password" required="" autofocus >
+                <label for="password" class="inputgroup">Mật khẩu</label>
+              </div>
+              <div class="input-group">
+                <button type="submit" class="login-button">Đăng nhập</button>
+              </div>
+            </form>
+          </div>
+        </div>
+    </div>
+  </div>
+  <script>
+    document.querySelector('.form').addEventListener('submit', function(event) {
+      event.preventDefault();
+        window.location.href = "http://127.0.0.1:5500/Home.html"
+    });
+  
+  </script>
+      
+</body>
+</html>
