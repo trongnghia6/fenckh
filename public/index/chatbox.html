@@ -178,6 +178,14 @@
                 var selectedText = $(this).text(); // Lấy nội dung văn bản của phần tử được click
                 $('#selectSend').text(selectedText); // Thay đổi nội dung của nút 'selectSend'
             });
+    
+            // Bắt sự kiện khi nhấn phím trong ô input
+            $('.form-control').keydown(function(e) {
+                if (e.keyCode === 13) { // Kiểm tra nếu phím Enter được nhấn (mã phím 13)
+                    e.preventDefault(); // Ngăn chặn hành động mặc định của phím Enter
+                    $('.btn-primary').click(); // Kích hoạt sự kiện click trên nút Send
+                }
+            });
         });
     </script>
 </body>

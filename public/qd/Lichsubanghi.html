@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lịch sử thay đổi</title>
+    <link href="../../bootstrap-5.3.3-dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../../bootstrap-5.3.3-dist/bootstrap-icons-1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <style>
+        .grid-center {
+            display: grid;
+            place-items: center;
+        }
+        .home-link {
+            color: white;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header giống trang chính -->
+    <header class="bg-primary text-white py-2">
+        <div class="container">
+            <div class="d-flex">
+                <div>
+                    <img src="../../picture/Logo-Hoc-Vien-Ky-Thuat-Mat-Ma-ACTVN.webp" alt="Logo" class="img-fluid" style="height: 102.4px;">
+                </div>
+                <div class="text-center" style="width: 100%;">
+                    <h1>HỌC VIỆN KỸ THUẬT MẬT MÃ</h1>
+                    <h2>HỆ THỐNG QUẢN LÍ THÔNG TIN CHO GIẢNG VIÊN</h2>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Nav giống trang chính -->
+    <nav class="bg-info py-2">
+        <div class="d-flex">
+            <div class="container d-flex justify-content-center grid-center">
+                <div class="btn btn-primary text-nowrap mx-1">
+                    <a href="index.html" class="home-link">
+                        <i class="bi bi-house"></i> Home
+                    </a>
+                </div>
+                <div class="dropdown">
+                    <button class="btn btn-primary dropdown-toggle mx-1" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                        Quản lí hợp đồng
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <li><a class="dropdown-item" href="#">Xem hợp đồng</a></li>
+                        <li><a class="dropdown-item" href="#">Thông tin giảng viên mời</a></li>
+                        <li><a class="dropdown-item" href="#">Thông tin lớp giảng dạy</a></li>
+                        <li><a class="dropdown-item" href="#">Lương hợp đồng</a></li>
+                        <li><a class="dropdown-item" href="history.html">Lịch sử thay đổi</a></li>
+                    </ul>
+                </div>
+                <div class="dropdown">
+                    <button class="btn btn-primary dropdown-toggle mx-1" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                        Quản lí giảng dạy
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <li><a class="dropdown-item" href="#">Quản lí môn học</a></li>
+                        <li><a class="dropdown-item" href="#">Quản lí lớp học</a></li>
+                        <li><a class="dropdown-item" href="#">Quản lí đề thi</a></li>
+                        <li><a class="dropdown-item" href="#">Quản lí coi thi</a></li>
+                        <li><a class="dropdown-item" href="#">Quản lí chấm thi</a></li>
+                    </ul>
+                </div>
+                <div class="dropdown">
+                    <button class="btn btn-primary dropdown-toggle mx-1" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                        Thống kê NCKH
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <li><a class="dropdown-item" href="#">Đề tài, dự án</a></li>
+                        <li><a class="dropdown-item" href="#">Hợp tác chuyển giao CN</a></li>
+                        <li><a class="dropdown-item" href="#">Bài báo, ấn phẩm</a></li>
+                        <li><a class="dropdown-item" href="#">Bằng sáng chế</a></li>
+                        <li><a class="dropdown-item" href="#">Sách, giáo trình</a></li>
+                    </ul>
+                </div>
+                <a href="#" class="btn btn-primary mx-1 text-nowrap">Tin Tức</a>
+                <a href="./vuotgio.html" class="btn btn-primary mx-1 text-nowrap">Vượt Giờ</a>
+            </div>
+            <div class="my-2 grid-center"><a href="#" class="mx-1 justify-content-end text-nowrap">Hi, Lê Đức...</a></div>
+        </div>
+    </nav>
+
+    <div class="container-fluid my-4">
+        <div class="row">
+            <div class="d-flex" style="width: 100%;">
+                <!-- Sidebar giống trang chính -->
+                <div style="width: 50%;">
+                    <div class="bg-light p-3 mb-4">
+                        <h4>Chủ đề</h4>
+                        <ul class="nav nav-tabs list-group" id="myTab" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <nav class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Giảng viên
+                                    </a>
+                                    <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                        <li><a class="dropdown-item" href="/public/index/ttgvienmoi.html">Thông tin GV mời</a></li>
+                                        <li><a class="dropdown-item" href="#">Hợp đồng mời</a></li>
+                                    </ul>
+                                </nav>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link" href="#">Phòng Đào Tạo</a>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link" href="#">Phòng NCKH</a></li>
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link" href="#">Phòng Tài Chính</a>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link" href="#">Thống Kê</a></li>
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link" href="chatbox.html">Chat box</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Nội dung Lịch sử thay đổi -->
+                <div class="container">
+                    <h2 class="mb-4">Lịch sử thay đổi</h2>
+                    <table class="table table-bordered">
+                        <thead class="thead-light">
+                            <tr>
+                                <th scope="col"><input type="checkbox" id="selectAll"></th>
+                                <th scope="col">Thời gian</th>
+                                <th scope="col">Người sửa</th>
+                                <th scope="col">Trạng thái</th>
+                                <th scope="col">Mô tả</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><input type="checkbox" class="rowCheckbox"></td>
+                                <td>13/09/2024 - 14:30</td>
+                                <td>Lê Đức</td>
+                                <td>Đã duyệt</td>
+                                <td>Sửa hợp đồng giảng viên</td>
+                            </tr>
+                            <tr>
+                                <td><input type="checkbox" class="rowCheckbox"></td>
+                                <td>12/09/2024 - 10:15</td>
+                                <td>Nguyễn Văn B</td>
+                                <td>Chưa duyệt</td>
+                                <td>Thêm thông tin nghiên cứu khoa học</td>
+                            </tr>
+                            <tr>
+                                <td><input type="checkbox" class="rowCheckbox"></td>
+                                <td>10/09/2024 - 09:50</td>
+                                <td>Trần Văn C</td>
+                                <td>Từ chối</td>
+                                <td>Yêu cầu hợp đồng mới</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <!-- Nút "Duyệt" và "Từ chối" dưới bảng -->
+                    <div class="d-flex justify-content-end">
+                        <button class="btn btn-success mx-2">Duyệt</button>
+                        <button class="btn btn-danger">Từ chối</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../bootstrap-5.3.3-dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.getElementById('selectAll').addEventListener('change', function() {
+            var checkboxes = document.querySelectorAll('.rowCheckbox');
+            checkboxes.forEach(function(checkbox) {
+                checkbox.checked = document.getElementById('selectAll').checked;
+            });
+        });
+    </script>
+</body>
+</html>
