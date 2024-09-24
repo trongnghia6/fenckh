@@ -7,6 +7,11 @@
     <link rel="stylesheet" href="../../bootstrap-5.3.3-dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="../../bootstrap-5.3.3-dist/bootstrap-icons-1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="styles.css">
+    <style>
+        input[type="file"] {
+            display: none; /* Ẩn input */
+}
+    </style>
 </head>
 <body>
     <header class="bg-primary text-white py-2 background-image">
@@ -132,7 +137,10 @@
                 </div>
                 <div class="mx-5 w-80">
                     <div class="d-flex justify-content-between">
-                        <button class="btn btn-outline-primary">Chọn file</button>
+                        <button class="btn btn-outline-primary" onclick="document.getElementById('fileInput').click();">
+                            Chọn file
+                            <input type="file" id="fileInput" onchange="updateFileName()" />
+                        </button>
                         <button class="btn btn-outline-primary">Import</button>
                     </div>
                     <div class="h-75"><a href="">Bảng</a></div>
@@ -145,6 +153,14 @@
     </div>
     <script src="../../bootstrap-5.3.3-dist/js/jquery-3.7.1.min.js"></script>
     <script src="../../bootstrap-5.3.3-dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function updateFileName() {
+            const input = document.getElementById('fileInput');
+            if (input.files.length > 0) {
+                alert(`Đã chọn file: ${input.files[0].name}`);
+            }
+        }
+    </script>
 </body>
 </html>
 
