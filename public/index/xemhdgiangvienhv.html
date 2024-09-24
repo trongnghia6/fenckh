@@ -125,11 +125,61 @@
                             </li>
                         </ul>
                 </div>
+                <div class="mx-5" style="width: 100%;">
+                    <div class="d-flex justify-content-start">
+                        <div class="dropdown mx-2">
+                            <button class="btn btn-outline-primary dropdown-toggle" type="button" id="selectYear" data-bs-toggle="dropdown" aria-expanded="false">
+                                Năm
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <li><a class="dropdown-item year" href="#">2020</a></li>
+                                <li><a class="dropdown-item year" href="#">2021</a></li>
+                                <li><a class="dropdown-item year" href="#">2022</a></li>
+                                <li><a class="dropdown-item year" href="#">2023</a></li>
+                                <li><a class="dropdown-item year" href="#">2023</a></li>
+                                <li><a class="dropdown-item year" href="#">2024</a></li>
+                            </ul>
+                        </div>
+                        <div class="dropdown mx-2">
+                            <button class="btn btn-outline-primary dropdown-toggle" type="button" id="selectDot" data-bs-toggle="dropdown" aria-expanded="false">
+                                Đợt
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <li><a class="dropdown-item dot" href="#">1</a></li>
+                                <li><a class="dropdown-item dot" href="#">2</a></li>
+                                <li><a class="dropdown-item dot" href="#">3</a></li>
+                                <li><a class="dropdown-item dot" href="#">4</a></li>
+                            </ul>
+                        </div>
+                        <div>
+                            <button class="btn btn-primary">Hiển thị</button>
+                        </div>
+                    </div>
+                    <div class="h-75 bg-light"><a href="">Bảng</a></div>
+                </div>
             </div>    
         </div>
     </div>
     <script src="../../bootstrap-5.3.3-dist/js/jquery-3.7.1.min.js"></script>
     <script src="../../bootstrap-5.3.3-dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            // Bắt sự kiện click vào các phần tử có class 'send-option'
+            $('.year').click(function(e){
+                e.preventDefault(); // Ngăn chặn hành động mặc định của thẻ <a>
+                var selectedText = $(this).text(); // Lấy nội dung văn bản của phần tử được click
+                $('#selectYear').text(selectedText); // Thay đổi nội dung của nút 'selectSend'
+            });
+        });
+        $(document).ready(function(){
+            // Bắt sự kiện click vào các phần tử có class 'send-option'
+            $('.dot').click(function(e){
+                e.preventDefault(); // Ngăn chặn hành động mặc định của thẻ <a>
+                var selectedText = $(this).text(); // Lấy nội dung văn bản của phần tử được click
+                $('#selectDot').text(selectedText); // Thay đổi nội dung của nút 'selectSend'
+            });
+        });
+    </script>
 </body>
 </html>
 
