@@ -7,6 +7,25 @@
     <link rel="stylesheet" href="../../bootstrap-5.3.3-dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="../../bootstrap-5.3.3-dist/bootstrap-icons-1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="styles.css">
+    <style>
+        /* CSS cho kích thước màn hình lớn (desktop) */
+        .navbar-nav .btn {
+            width: auto; /* Chiều rộng tự động cho màn hình lớn */
+            height: auto; /* Chiều cao tự động cho màn hình lớn */
+            margin: 0 5px; /* Khoảng cách giữa các nút */
+        }
+        
+        /* CSS cho kích thước màn hình nhỏ (responsive) */
+        @media (max-width: 991px) {  /* 991px là kích thước màn hình nhỏ hơn lg */
+            .navbar-nav .btn {
+                width: 90%;  /* Đảm bảo các nút có chiều rộng bằng nhau khi responsive */
+                margin: 5px 0; /* Thêm khoảng cách giữa các nút khi responsive */
+                display: block; /* Đảm bảo các nút hiển thị như block để chúng nằm ngang nhau */
+                
+            }
+        }
+
+    </style>
 </head>
 <body>
     <header class="bg-primary text-white py-2 background-image">
@@ -23,67 +42,77 @@
         </div>
     </header>
 
-    <nav class="bg-info py-2">
-        <div class="d-flex">
-            <div class="container d-flex justify-content-center grid-center ">
-                <div class="btn btn-primary text-nowrap mx-1">
-                    <a href="index.html" class="home-link">
-                        <i class="bi bi-house " ></i> Home
-                    </a>
+    <!-- Responsive Navbar -->
+    <nav class="navbar navbar-expand-lg bg-info py-2">
+        <div class="container">
+            <!-- Nút toggle hamburger cho các màn hình nhỏ -->
+            <button class="navbar-toggler text-white" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <!-- Nội dung của navbar sẽ thu gọn trên màn hình nhỏ -->
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <div class="navbar-nav mx-auto">
+                    <div class="btn btn-primary text-nowrap mx-1">
+                        <a href="index.html" class="home-link">
+                            <i class="bi bi-house"></i> Home
+                        </a>
+                    </div>
+                    <div class="dropdown">
+                        <button class="btn btn-primary dropdown-toggle mx-1" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                            Quản lí hợp đồng
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <li><a class="dropdown-item" href="#">Xem hợp đồng</a></li>
+                            <li><a class="dropdown-item" href="#">Thông tin giảng viên mời</a></li>
+                            <li><a class="dropdown-item" href="#">Thông tin lớp giảng dạy</a></li>
+                            <li><a class="dropdown-item" href="#">Lương hợp đồng</a></li>
+                            <li><a class="dropdown-item" href="./lsbanghi.html">Lịch sử thay đổi</a></li>
+                        </ul>
+                    </div>
+                    <div class="dropdown">
+                        <button class="btn btn-primary dropdown-toggle mx-1" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false">
+                            Quản lí giảng dạy
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
+                            <li><a class="dropdown-item" href="#">Quản lí môn học</a></li>
+                            <li><a class="dropdown-item" href="#">Quản lí lớp học</a></li>
+                            <li><a class="dropdown-item" href="#">Quản lí đề thi</a></li>
+                            <li><a class="dropdown-item" href="#">Quản lí coi thi</a></li>
+                            <li><a class="dropdown-item" href="#">Quản lí chấm thi</a></li>
+                        </ul>
+                    </div>
+                    <div class="dropdown">
+                        <button class="btn btn-primary dropdown-toggle mx-1" type="button" id="dropdownMenuButton3" data-bs-toggle="dropdown" aria-expanded="false">
+                            Thống kê NCKH
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton3">
+                            <li><a class="dropdown-item" href="#">Đề tài, dự án</a></li>
+                            <li><a class="dropdown-item" href="#">Hợp tác chuyển giao CN</a></li>
+                            <li><a class="dropdown-item" href="#">Bài báo, ấn phẩm</a></li>
+                            <li><a class="dropdown-item" href="#">Bằng sáng chế</a></li>
+                            <li><a class="dropdown-item" href="#">Sách, giáo trình</a></li>
+                            <li><a class="dropdown-item" href="#">Hướng dẫn sinh viên</a></li>
+                            <li><a class="dropdown-item" href="#">Xây dựng CT đào tạo</a></li>
+                            <li><a class="dropdown-item" href="#">NV khoa học và công nghệ khác</a></li>
+                            <li><a class="dropdown-item" href="#">Biên soạn giáo trình</a></li>
+                        </ul>
+                    </div>
+                    <a href="#" class="btn btn-primary mx-1 text-nowrap">Triển khai</a>
                 </div>
-                <div class="dropdown">
-                    <button class="btn btn-primary dropdown-toggle mx-1"  type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                      Quản lí hợp đồng
-                    </button>
-                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                      <li><a class="dropdown-item" href="#">Xem hợp đồng</a></li>
-                      <li><a class="dropdown-item" href="#">Thông tin giảng viên mời</a></li>
-                      <li><a class="dropdown-item" href="#">Thông tin lớp giảng dạy</a></li>
-                      <li><a class="dropdown-item" href="#">Lương hợp đồng</a></li>
-                      <li><a class="dropdown-item" href="./lsbanghi.html">Lịch sử thay đổi</a></li>
-                    </ul>
+
+                <!-- Phần dropdown của tài khoản người dùng -->
+                <div class="navbar-nav">
+                    <div class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle bi bi-person" href="#" id="navbarDropdownUser" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Hi, Lê Đức Thuận
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdownUser">
+                            <li><a class="dropdown-item" href="#">Thông tin tài khoản</a></li>
+                            <li><a class="dropdown-item" href="../login.html">Đăng xuất</a></li>
+                        </ul>
+                    </div>
                 </div>
-                <div class="dropdown">
-                    <button class="btn btn-primary dropdown-toggle mx-1"  type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                      Quản lí giảng dạy
-                    </button>
-                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                      <li><a class="dropdown-item" href="#">Quản lí môn học</a></li>
-                      <li><a class="dropdown-item" href="#">Quản lí lớp học</a></li>
-                      <li><a class="dropdown-item" href="#">Quản lí đề thi</a></li>
-                      <li><a class="dropdown-item" href="#">Quản lí coi thi</a></li>
-                      <li><a class="dropdown-item" href="#">Quản lí chấm thi</a></li>
-                    </ul>
-                </div>
-                <div class="dropdown">
-                    <button class="btn btn-primary dropdown-toggle mx-1"  type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                      Thống kê NCKH
-                    </button>
-                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                      <li><a class="dropdown-item" href="#">Đề tài, dự án</a></li>
-                      <li><a class="dropdown-item" href="#">Hợp tác chuyển giao CN</a></li>
-                      <li><a class="dropdown-item" href="#">Bài báo, ấn phẩm</a></li>
-                      <li><a class="dropdown-item" href="#">Bằng sáng chế</a></li>
-                      <li><a class="dropdown-item" href="#">Sách, giáo trình</a></li>
-                      <li><a class="dropdown-item" href="#">Hướng dẫn sinh viên</a></li>
-                      <li><a class="dropdown-item" href="#">Xây dựng CT đào tạo</a></li>
-                      <li><a class="dropdown-item" href="#">NV khoa học và công nghệ khác</a></li>
-                      <li><a class="dropdown-item" href="#">Biên soạn giáo trình</a></li>
-                    </ul>
-                </div>
-                  
-                <a href="#" class="btn btn-primary mx-1 text-nowrap">Triển khai</a>
-            </div>
-            <div class="my-2 grid-center">
-                <nav class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle bi bi-person" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                      Hi,Lê Đức Thuận
-                    </a>
-                    <ul class="dropdown-menu text-center" aria-labelledby="navbarDropdownMenuLink">
-                      <li><a class="dropdown-item" href="#">Thông tin tài khoản</a></li>
-                      <li><a class="dropdown-item" href="../login.html">Đăng xuất</a></li>
-                    </ul>
-                </nav>
             </div>
         </div>
     </nav>
@@ -101,7 +130,7 @@
                                               Giảng viên
                                             </a>
                                             <ul class="dropdown-menu drop-custom" aria-labelledby="navbarDropdownMenuLink">
-                                                <li><a class="dropdown-item" href="/public/index/ttgiangvien.html">Thông tin GV mời</a></li>
+                                                <li><a class="dropdown-item" href="./ttgiangvien.html">Thông tin GV mời</a></li>
                                                 <li><a class="dropdown-item" href="/public/index/hdmoi.html">Hợp đồng mời</a></li>
                                             </ul>
                                         </nav>
@@ -112,8 +141,8 @@
                                               Phòng đào tạo
                                             </a>
                                             <ul class="dropdown-menu drop-custom text-center" aria-labelledby="navbarDropdownMenuLink">
-                                              <li><a class="dropdown-item" href="/public/index/import.html">Import</a></li>
-                                              <li><a class="dropdown-item" href="/public/index/nhaptay.html">Nhập tay</a></li>
+                                              <li><a class="dropdown-item" href="./import.html">Import</a></li>
+                                              <li><a class="dropdown-item" href="./nhaptay.html">Nhập tay</a></li>
                                             </ul>
                                         </nav>
                                     </li>
