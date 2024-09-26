@@ -6,6 +6,7 @@ const {
   createUser,
   getLogin,
   getIndex,
+  getImport,
 } = require("../controllers/homeController");
 
 router.get("/homePage", getHomePage);
@@ -14,5 +15,6 @@ router.post("/abc/create", createUser);
 /////////////////////////////////
 router.get("/", getLogin);
 router.get("/index", getIndex);
+// router.get("/index/import", getImport);
 
 module.exports = router;

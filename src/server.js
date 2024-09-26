@@ -28,13 +28,14 @@ app.use(express.urlencoded({ extended: true })); // for form data
 app.use("/", webRoutes);
 
 app.listen(port, hostname, () => {
-  console.log(`Example app listening on port ${port}`);
+  console.log(`Server running on http://localhost:${port}`);
 });
 
 // Phục vụ các file tĩnh từ thư mục node_modules
 // app.use("/node_modules", express.static(path.join(__dirname, "/node_modules")));
 app.use(express.static(path.join(__dirname, "../node_modules")));
 app.use(express.static(path.join(__dirname, "public/images")));
+
 
 // simple query
 // connection.query("SELECT * FROM `bomon`", function (err, results, fields) {
@@ -46,3 +47,15 @@ app.use(express.static(path.join(__dirname, "public/images")));
 //   // // In ra dữ liệu dưới dạng JSON
 //   // console.log("Data in JSON format: ", jsonData);
 // });
+
+
+
+// == src of L ==
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
+
+app.use(express.static(path.join(__dirname, "public/js"))); // cấu hình tệp js
+app.use(express.json()); // Thêm dòng này để xử lý JSON
+
+const importFile = require('./routes/importRoute');
+app.use('/', importFile); // cấu hình import

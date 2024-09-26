@@ -1,19 +1,18 @@
+const express = require("express");
+const multer = require("multer");
 const connection = require("../config/database");
 
+const router = express.Router();
+
+// Cấu hình multer để lưu file tạm thời trong thư mục 'uploads'
+const upload = multer({
+  dest: "uploads/" // Đường dẫn thư mục lưu trữ file
+});
+
+// Các hàm khác
 const getAbc = (req, res) => {
   res.send("What do you want");
 };
-const connect = require("../config/database");
-
-// const getAbc = (req, res) => {
-//   connect.query("SELECT * FROM `bomon`", function (err, results, fields) {
-//     console.log("result = ", results); // results contains rows returned by server
-//     // console.log(fields); // fields contains extra meta data about results, if available
-//     // Chuyển đổi kết quả thành JSON
-//     a = results;
-//     res.send(JSON.stringify(a));
-//   });
-// };
 
 const getHomePage = (req, res) => {
   return res.render("homePage.ejs");
@@ -44,4 +43,31 @@ const getIndex = (req, res) => {
   res.render("index.ejs");
 };
 
-module.exports = { getHomePage, getAbc, createUser, getLogin, getIndex };
+const getImport = (req, res) => {
+  res.render("import.ejs");
+};
+
+// Hàm postFile xử lý upload file Excel
+const postFile = (req, res) => {
+  // Sử dụng multer để upload file
+  upload.single('excelFile')(req, res, function (err) {
+
+    // Xử lý file sau khi upload thành công
+    console.log(req.file); // Thông tin về file được upload
+
+    // Bạn có thể thực hiện thêm các bước xử lý khác tại đây, ví dụ đọc dữ liệu từ file Excel
+
+    res.send("File uploaded and processed successfully.");
+  });
+};
+
+// Xuất các hàm để sử dụng trong router
+module.exports = {
+  getHomePage,
+  getAbc,
+  createUser,
+  getLogin,
+  getIndex,
+  getImport,
+  postFile,  // Thêm hàm này vào export để sử dụng trong router
+};
