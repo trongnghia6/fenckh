@@ -39,3 +39,19 @@
     border-radius: 10px;
     border-style: solid;
 }
+/* CSS cho kích thước màn hình lớn (desktop) */
+.navbar-nav .btn {
+    width: auto; /* Chiều rộng tự động cho màn hình lớn */
+    height: auto; /* Chiều cao tự động cho màn hình lớn */
+    margin: 0 5px; /* Khoảng cách giữa các nút */
+}
+
+/* CSS cho kích thước màn hình nhỏ (responsive) */
+@media (max-width: 991px) {  /* 991px là kích thước màn hình nhỏ hơn lg */
+    .navbar-nav .btn {
+        width: 90%;  /* Đảm bảo các nút có chiều rộng bằng nhau khi responsive */
+        margin: 5px 0; /* Thêm khoảng cách giữa các nút khi responsive */
+        display: block; /* Đảm bảo các nút hiển thị như block để chúng nằm ngang nhau */
+        
+    }
+}
