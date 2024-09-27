@@ -46,6 +46,12 @@ const getIndex = (req, res) => {
 const getImport = (req, res) => {
   res.render("import.ejs");
 };
+const getDtaoduyet = (req, res) => {
+  res.render("daotaoduyet.ejs");
+};
+const getDtaoxemhd = (req, res) => {
+  res.render("daotaoxemhd.ejs");
+};
 
 // Hàm postFile xử lý upload file Excel
 const postFile = (req, res) => {
@@ -69,5 +75,7 @@ module.exports = {
   getLogin,
   getIndex,
   getImport,
+  getDtaoduyet,
+  getDtaoxemhd,
   postFile,  // Thêm hàm này vào export để sử dụng trong router
 };
