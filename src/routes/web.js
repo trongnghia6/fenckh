@@ -1,17 +1,20 @@
 const express = require("express");
 const router = express.Router();
 const {
-  getHomePage,
+  gethomePage,
   getAbc,
   createUser,
   getLogin,
   getIndex,
   getImport,
   getDtaoduyet,
-  getDtaoxemhd
+  getDtaoxemhd,
+  getPhongTaiChinh,
+
+
 } = require("../controllers/homeController");
 
-router.get("/homePage", getHomePage);
+router.get("/homePage", gethomePage);
 router.get("/abc", getAbc);
 router.post("/abc/create", createUser);
 /////////////////////////////////
@@ -19,6 +22,7 @@ router.get("/", getLogin);
 router.get("/index", getIndex);
 router.get("/daotaoxemhd", getDtaoxemhd);
 router.get("/daotaoxemhd/daotaoduyet", getDtaoduyet);
-// router.get("/index/import", getImport);
+router.get("/index/import", getImport);
+router.get("/PhongTaiChinh", getPhongTaiChinh);
 
 module.exports = router;
