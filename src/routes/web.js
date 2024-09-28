@@ -8,7 +8,8 @@ const {
   getIndex,
   getImport,
   getDtaoduyet,
-  getDtaoxemhd
+  getDtaoxemhd,
+  getDtaonhap,
 } = require("../controllers/homeController");
 
 router.get("/homePage", getHomePage);
@@ -19,6 +20,7 @@ router.get("/", getLogin);
 router.get("/index", getIndex);
 router.get("/daotaoxemhd", getDtaoxemhd);
 router.get("/daotaoxemhd/daotaoduyet", getDtaoduyet);
+router.get("/daotaoxemhd/daotaonhap", getDtaonhap);
 // router.get("/index/import", getImport);
 
 module.exports = router;
