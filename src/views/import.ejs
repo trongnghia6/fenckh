@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Học Viện Kỹ Thuật Mật Mã</title>
+  <link href="/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="/bootstrap/dist/bootstrap-icons-1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/bootstrap/dist/js/bootstrap.min.js">
+  <style>
+    .background-image {
+      background: url('../../picture/OIP.jfif') no-repeat center center;
+      background-size: cover;
+      /* hoặc contain */
+    }
+
+    .grid-center {
+      display: grid;
+      place-items: center;
+    }
+
+    .home-link {
+      color: white;
+      text-decoration: none;
+    }
+
+    .w-20 {
+      width: 20% !important;
+    }
+  </style>
+</head>
+
+<body>
+  <header class="bg-primary text-white py-2 background-image">
+    <div class="container">
+      <div class="d-flex">
+        <div>
+          <img src="../../picture/Logo-Hoc-Vien-Ky-Thuat-Mat-Ma-ACTVN.webp" alt="Logo" class="img-fluid"
+            style="height: 102.4px;">
+        </div>
+        <div class="text-center">
+          <h1>HỌC VIỆN KỸ THUẬT MẬT MÃ</h1>
+          <h2>HỆ THỐNG QUẢN LÍ THÔNG TIN CHO GIẢNG VIÊN</h2>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <nav class="bg-info py-2">
+    <div class="d-flex">
+      <div class="container d-flex justify-content-center grid-center ">
+        <div class="btn btn-primary text-nowrap mx-1">
+          <a href="index.html" class="home-link">
+            <i class="bi bi-house "></i> Home
+          </a>
+        </div>
+        <div class="dropdown">
+          <button class="btn btn-primary dropdown-toggle mx-1" type="button" id="dropdownMenuButton"
+            data-bs-toggle="dropdown" aria-expanded="false">
+            Quản lí hợp đồng
+          </button>
+          <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <li><a class="dropdown-item" href="#">Xem hợp đồng</a></li>
+            <li><a class="dropdown-item" href="#">Thông tin giảng viên mời</a></li>
+            <li><a class="dropdown-item" href="#">Thông tin lớp giảng dạy</a></li>
+            <li><a class="dropdown-item" href="#">Lương hợp đồng</a></li>
+            <li><a class="dropdown-item" href="#">Lịch sử thay đổi</a></li>
+          </ul>
+        </div>
+        <div class="dropdown">
+          <button class="btn btn-primary dropdown-toggle mx-1" type="button" id="dropdownMenuButton"
+            data-bs-toggle="dropdown" aria-expanded="false">
+            Quản lí giảng dạy
+          </button>
+          <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <li><a class="dropdown-item" href="#">Quản lí môn học</a></li>
+            <li><a class="dropdown-item" href="#">Quản lí lớp học</a></li>
+            <li><a class="dropdown-item" href="#">Quản lí đề thi</a></li>
+            <li><a class="dropdown-item" href="#">Quản lí coi thi</a></li>
+            <li><a class="dropdown-item" href="#">Quản lí chấm thi</a></li>
+          </ul>
+        </div>
+        <div class="dropdown">
+          <button class="btn btn-primary dropdown-toggle mx-1" type="button" id="dropdownMenuButton"
+            data-bs-toggle="dropdown" aria-expanded="false">
+            Thống kê NCKH
+          </button>
+          <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <li><a class="dropdown-item" href="#">Đề tài, dự án</a></li>
+            <li><a class="dropdown-item" href="#">Hợp tác chuyển giao CN</a></li>
+            <li><a class="dropdown-item" href="#">Bài báo, ấn phẩm</a></li>
+            <li><a class="dropdown-item" href="#">Bằng sáng chế</a></li>
+            <li><a class="dropdown-item" href="#">Sách, giáo trình</a></li>
+            <li><a class="dropdown-item" href="#">Hướng dẫn sinh viên</a></li>
+            <li><a class="dropdown-item" href="#">Xây dựng CT đào tạo</a></li>
+            <li><a class="dropdown-item" href="#">NV khoa học và công nghệ khác</a></li>
+            <li><a class="dropdown-item" href="#">Biên soạn giáo trình</a></li>
+          </ul>
+        </div>
+
+        <a href="#" class="btn btn-primary mx-1 text-nowrap">Tin Tức</a>
+      </div>
+      <div class="my-2 grid-center"><a href="#" class="mx-1 justify-content-end text-nowrap">Hi, Lê Đức...</a></div>
+
+    </div>
+  </nav>
+
+  <div class="container-fluid my-4">
+    <div class="row">
+      <div class="d-flex ">
+        <div class=" bg-light mb-4 w-20">
+          <h4>Chủ đề</h4>
+          <ul class="nav nav-tabs list-group" id="myTab" role="tablist">
+            <li class="nav-item" role="presentation">
+              <nav class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+                  data-bs-toggle="dropdown" aria-expanded="false">
+                  Giảng viên
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                  <li><a class="dropdown-item" href="/public/index/ttgiangvien.html">Thông tin GV mời</a></li>
+                  <li><a class="dropdown-item" href="/public/index/hdmoi.html">Hợp đồng mời</a></li>
+                </ul>
+              </nav>
+            </li>
+            <li class="nav-item" role="presentation">
+              <nav class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+                  data-bs-toggle="dropdown" aria-expanded="false">
+                  Phòng đào tạo
+                </a>
+                <ul class="dropdown-menu text-center" aria-labelledby="navbarDropdownMenuLink">
+                  <li><a class="dropdown-item" href="/public/index/duyethd.html">Duyệt</a></li>
+                  <li><a class="dropdown-item" href="/index/import">Import</a></li>
+                  <li><a class="dropdown-item" href="/public/index/nhaptay.html">Nhập tay</a></li>
+                  <li><a class="dropdown-item" href="/public/index/xemhd.html">Xem hợp đồng</a></li>
+                </ul>
+              </nav>
+            </li>
+            <li class="nav-item" role="presentation">
+              <a class="nav-link " href="#" id="navbarDropdownMenuLink" role="button">Phòng NCKH</a>
+            </li>
+            <li class="nav-item text-nowrap" role="presentation"></li>
+            <a class="nav-link" href="#" id="navbarDropdownMenuLink" role="button">Phòng Tài Chinh</a>
+            </li>
+            <li class="nav-item text-nowrap" role="presentation"></li>
+            <a class="nav-link" href="#" id="navbarDropdownMenuLink" role="button">Thống Kê</a>
+            </li>
+            <li class="nav-item" role="presentation"></li>
+            <a class="nav-link" href="chatbox.html" id="navbarDropdownMenuLink" role="button">Chat box</a>
+            </li>
+          </ul>
+        </div>
+        <div class="mx-5" style="width: 100%;">
+          <div class="d-flex justify-content-between">
+            <button class="btn btn-outline-primary" id="chosseFile">Chọn file</button>
+            <button class="btn btn-outline-primary" id="checkAccecpt">Xin duyệt</button>
+            <!-- <button class="btn btn-outline-primary" id="importFile">Import</button> -->
+          </div>
+          <div id="dataTableContainer" class="h-75"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+  <script src="../../bootstrap-5.3.3-dist/js/jquery-3.7.1.min.js"></script>
+  <script src="../../bootstrap-5.3.3-dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+
+    document.getElementById('chosseFile').addEventListener('click', function () {
+      // Tạo một input để chọn file
+      const fileInput = document.createElement('input');
+      fileInput.type = 'file';
+      fileInput.accept = '.xlsx'; // Chỉ cho phép chọn file Excel
+
+      // Khi có file được chọn
+      fileInput.addEventListener('change', function () {
+        const formData = new FormData();
+        formData.append('excelFile', fileInput.files[0]); // Thêm file vào FormData
+
+        // Gửi yêu cầu POST đến server
+        fetch('http://localhost:3000/index/import', {
+          method: 'POST',
+          body: formData
+        })
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('Import thất bại');
+            }
+            return response.json(); // Chuyển đổi phản hồi sang JSON
+          })
+          .then(data => {
+            if (!data || data.length === 0) {
+              throw new Error('Dữ liệu trả về trống');
+            }
+
+            // Tạo bảng HTML từ dữ liệu JSON, bỏ qua cột "Ghi chú"
+            let tableHtml = '<table class="table table-bordered"><thead><tr>';
+
+            // Lấy tiêu đề từ đối tượng JSON đầu tiên (trừ "Ghi chú")
+            const headers = Object.keys(data[0]).filter(key => key !== 'Ghi chú');
+            headers.forEach(header => {
+              tableHtml += `<th>${header}</th>`;
+            });
+            tableHtml += '</tr></thead><tbody>';
+
+            // Duyệt qua từng mục trong dữ liệu
+            data.forEach(item => {
+              tableHtml += '<tr>';
+              headers.forEach(key => {
+                tableHtml += `<td>${item[key] !== null ? item[key] : ''}</td>`;
+              });
+              tableHtml += '</tr>';
+            });
+            tableHtml += '</tbody></table>';
+
+            // Chèn bảng vào thẻ div có id="dataTableContainer"
+            document.getElementById('dataTableContainer').innerHTML = tableHtml;
+
+            // Lưu dữ liệu JSON để sử dụng sau
+            window.receivedJsonData = data; // Lưu vào biến toàn cục
+          })
+          .catch(error => {
+            document.getElementById('uploadStatus').innerHTML = `
+      <span style="color: red;">Import thất bại!</span>
+    `;
+            console.error(error);
+          });
+      });
+
+      // Tự động mở dialog chọn file
+      fileInput.click();
+    });
+
+    // Xử lý khi nhấn nút checkAccecpt
+    document.getElementById('checkAccecpt').addEventListener('click', function () {
+      // Kiểm tra xem dữ liệu JSON đã nhận có tồn tại không
+      if (window.receivedJsonData) {
+        // Gửi dữ liệu JSON lên server
+        fetch('http://localhost:3000/accept', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(window.receivedJsonData) // Gửi dữ liệu đã nhận
+        })
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('Gửi dữ liệu thất bại');
+            }
+            return response.json(); // Chuyển đổi phản hồi sang JSON
+          })
+          .then(data => {
+            alert('Xin duyệt gửi thành công!');
+          })
+          .catch(error => {
+            console.error('Lỗi:', error);
+            alert('Gửi dữ liệu thất bại!');
+          });
+      } else {
+        alert('Không có dữ liệu để gửi.');
+      }
+    });
+
+    // oik
+
+  </script>
+</body>
+
+</html>
