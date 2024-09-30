@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Học Viện Kỹ Thuật Mật Mã</title>
-    <link rel="stylesheet" href="/bootstrap/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/bootstrap/dist/bootstrap-icons-1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="../../node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../../bootstrap-5.3.3-dist/bootstrap-icons-1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="../public/css/styles.css">
 </head>
 <body>
@@ -13,7 +13,7 @@
         <div class="container">
             <div class="d-flex">
                 <div>
-                    <img src="/Logo-Hoc-Vien-Ky-Thuat-Mat-Ma-ACTVN.webp" alt="Logo" class="img-fluid" style="height: 102.4px;">
+                    <img src="../../picture/Logo-Hoc-Vien-Ky-Thuat-Mat-Ma-ACTVN.webp" alt="Logo" class="img-fluid" style="height: 102.4px;">
                 </div>
                 <div class="text-center" style="width: 100%;">
                     <h1>HỌC VIỆN KỸ THUẬT MẬT MÃ</h1>
@@ -123,204 +123,46 @@
                 </div>
                 <div class="w-80">
                     <div class="m-3">
-                         <form action="/daotaoxemhd/daotaonhap/createGVM" class="form d-flex flex-column" method="POST">
-                            <fieldset>
-                                <a>id_GVM:<input class="input m-2 w-20 form-control" type="text" name="Id_GVM" id="id_GVM"></a>
-                                <a>Họ tên:<input class="input m-2 w-20 form-control" type="text" name="HoTen" id="HoTen"></a>
-                                <a>Giới tính:<select class="input m-2 form-control" style="width: 100px;" name="GioiTinh" id="gioitinh">
-                                    <option value="Nam">Nam</option>
-                                    <option value="Nu">Nữ</option></select>
-                                </a>
-                                <a>Ngày sinh: <input class="input m-2 w-20 form-control" type="date" name="NgaySinh" id="ngaySinh"></a>
-                                <a>CCCD: <input class="input m-2 w-20 form-control" type="text" name="CCCD" id="CCCD"></a>
-                                <a>Địa chỉ: <input class="input m-2 w-20 form-control" type="text" name="DiaChi" id="DiaChi"></a>
-                                <a>Điện thoại: <input class="input m-2 w-20 form-control" type="text" name="DienThoai" id="dienThoai"></a>
-                                <a>Email: <input class="input m-2 w-20 form-control" type="text" name="email" id="email"></a>
-                                <a>Mã số thuế: <input class="input m-2 w-20 form-control" type="text" name="MaSoThue" id="msthue"></a>
-                                <a>Học vị: <input class="input m-2 w-20 form-control" type="text" name="HocVi" id="hocVi"></a>
-                                <a>Chức vụ: <input class="input m-2 w-20 form-control" type="text" name="ChucVu" id="chucvu"></a>
-                                <a>Hệ số lương: <input class="input m-2 w-20 form-control" type="text" name="HeSoLuong" id="hsl"></a>
-                                <a>Số tài khoản: <input class="input m-2 w-20 form-control" type="text" name="STK" id="stk"></a>
-                                <a>Ngân hàng: <input class="input m-2 w-20 form-control" type="text" name="NganHang" id="nganHang"></a>
-                                <a>Mặt trước cccd: <input class="input m-2 form-control" type="file" name="truocCCCD" id="truocCCCD"></a>
-                                <a>Mặt sau cccd: <input class="input m-2 form-control" type="file" name="sauCCCD" id="sauCCCD"></a>
-                                <a>File lý lịch: <input class="input m-2 form-control" type="file" name="lyLich" id="lyLich"></a>
-                                <a>Mã phòng ban: <input class="input m-2 w-20 form-control" type="text" name="maPhongBan" id="maPhongBan"></a>
-                                <a>Mã bộ môn: <input class="input m-2 w-20 form-control" type="text" name="maBoMon" id="maBoMon"></a>
-                                <a>Tình trạng giảng dạy:<select class="input m-2 form-control" name="form-selection" id="tinhTrang" style="width: 100px;">
-                                    <option value="true">True</option>
-                                    <option value="false">False</option></select>
-                                </a>
-                     
-                                <button class="btn btn-success" id="submit" style="width: 100px;">Submit</button>
-                            </fieldset>
-                        </form>  
-                        <!-- <form action="/daotaoxemhd/daotaonhap/createGVM" method="POST">
-                            <fieldset>
-                              <legend style="float:right">Personalia:</legend>
-                              <label for="fname">Id_GVM:</label>
-                              <input type="text" id="id" name="id"><br><br>
-                              <label for="lname">Họ tên:</label>
-                              <input type="text" id="HoTen" name="HoTen"><br><br>
-                              <label for="email">Gioi tinh:</label>
-                              <input type="email" id="GioiTinh" name="GioiTinh"><br><br>
-                              <label for="birthday">Ngày Sinh:</label>
-                              <input type="date" id="birthday" name="birthday"><br><br>
-
-                              <label for="fname">CCCD:</label>
-                              <input type="text" id="fname" name="fname"><br><br>
-                              <label for="lname">Dia chi:</label>
-                              <input type="text" id="lname" name="lname"><br><br>
-                              <label for="email">Dien thoai:</label>
-                              <input type="email" id="email" name="email"><br><br>
-
-                              <label for="fname">Email:</label>
-                              <input type="text" id="fname" name="fname"><br><br>
-                              <label for="lname">Ma số thuế:</label>
-                              <input type="text" id="lname" name="lname"><br><br>
-                              <label for="email">Học vị:</label>
-                              <input type="email" id="email" name="email"><br><br>
-
-                              <label for="fname">Chuc vu:</label>
-                              <input type="text" id="fname" name="fname"><br><br>
-                              <label for="lname">hệ số lương:</label>
-                              <input type="text" id="lname" name="lname"><br><br>
-                              <label for="email">Stk:</label>
-                              <input type="email" id="email" name="email"><br><br>                              <label for="fname">Id_GVM:</label>
-                              <input type="text" id="fname" name="fname"><br><br>
-                              <label for="lname">Ngân hàng:</label>
-                              <input type="text" id="lname" name="lname"><br><br>
-                              <label for="email">Mã phòng ban:</label>
-                              <input type="email" id="email" name="email"><br><br>
-
-                              <label for="fname">Mã bộ môn:</label>
-                              <input type="text" id="fname" name="fname"><br><br>
-                              <label for="lname">Tình trạng giảng dạy:</label>
-                              <input type="text" id="lname" name="lname"><br><br>
-
-
-                              <input type="submit" value="Submit">
-                            </fieldset>
-                          </form>  -->
-                          <!-- <form action="./daotaoxemhd/daotaonhap/createGVM" class="form d-flex flex-column" method="POST">
-                            <fieldset>
-                              <label for="id_GVM">id_GVM:</label>
-                              <input required="" class="input m-2 w-20 form-control" type="text" name="id_GVM" id="id_GVM">
-                              
-                              <label for="name">Họ tên:</label>
-                              <input required="" class="input m-2 w-20 form-control" type="text" name="name" id="name">
-                              
-                              <label for="gioitinh">Giới tính:</label>
-                              <select class="input m-2 form-control" style="width: 100px;" name="gioiTinh" id="gioitinh">
+                        <form action="" class="form d-flex flex-column">
+                            <a>id_GVM:<input required="" class="input m-2 w-20 form-control" type="text" name="id_GVM" id="id_GVM"></a>
+                            <a>Họ tên:<input required="" class="input m-2 w-20 form-control" type="text" name="name" id="name"></a>
+                            <a>Giới tính:<select class="input m-2 form-control" style="width: 100px;" name="form-selection" id="gioitinh">
                                 <option value="Nam">Nam</option>
-                                <option value="Nu">Nữ</option>
-                              </select>
-                              
-                              <label for="ngaySinh">Ngày sinh:</label>
-                              <input required="" class="input m-2 w-20 form-control" type="date" name="ngaySinh" id="ngaySinh">
-                              
-                              <label for="CCCD">CCCD:</label>
-                              <input required="" class="input m-2 w-20 form-control" type="text" name="CCCD" id="CCCD">
-                              
-                              <label for="diaChi">Địa chỉ:</label>
-                              <input required="" class="input m-2 w-20 form-control" type="text" name="diaChi" id="diaChi">
-                              
-                              <label for="dienThoai">Điện thoại:</label>
-                              <input required="" class="input m-2 w-20 form-control" type="text" name="dienThoai" id="dienThoai">
-                              
-                              <label for="email">Email:</label>
-                              <input required="" class="input m-2 w-20 form-control" type="text" name="email" id="email">
-                              
-                              <label for="msthue">Mã số thuế:</label>
-                              <input required="" class="input m-2 w-20 form-control" type="text" name="msthue" id="msthue">
-                              
-                              <label for="hocVi">Học vị:</label>
-                              <input required="" class="input m-2 w-20 form-control" type="text" name="hocVi" id="hocVi">
-                              
-                              <label for="chucvu">Chức vụ:</label>
-                              <input required="" class="input m-2 w-20 form-control" type="text" name="chucvu" id="chucvu">
-                              
-                              <label for="hsl">Hệ số lương:</label>
-                              <input required="" class="input m-2 w-20 form-control" type="text" name="hsl" id="hsl">
-                              
-                              <label for="stk">Số tài khoản:</label>
-                              <input required="" class="input m-2 w-20 form-control" type="text" name="stk" id="stk">
-                              
-                              <label for="nganHang">Ngân hàng:</label>
-                              <input required="" class="input m-2 w-20 form-control" type="text" name="nganHang" id="nganHang">
-                              
-                              <label for="truocCCCD">Mặt trước CCCD:</label>
-                              <input required="" class="input m-2 form-control" type="file" name="truocCCCD" id="truocCCCD">
-                              
-                              <label for="sauCCCD">Mặt sau CCCD:</label>
-                              <input required="" class="input m-2 form-control" type="file" name="sauCCCD" id="sauCCCD">
-                              
-                              <label for="lyLich">File lý lịch:</label>
-                              <input required="" class="input m-2 form-control" type="file" name="lyLich" id="lyLich">
-                              
-                              <label for="maPhongBan">Mã phòng ban:</label>
-                              <input required="" class="input m-2 w-20 form-control" type="text" name="maPhongBan" id="maPhongBan">
-                              
-                              <label for="maBoMon">Mã bộ môn:</label>
-                              <input required="" class="input m-2 w-20 form-control" type="text" name="maBoMon" id="maBoMon">
-                              
-                              <label for="tinhTrang">Tình trạng giảng dạy:</label>
-                              <select class="input m-2 form-control" name="tinhTrang" id="tinhTrang" style="width: 100px;">
+                                <option value="Nu">Nữ</option></select>
+                            </a>
+                            <a>Ngày sinh: <input required="" class="input m-2 w-20 form-control" type="date" name="ngaySinh" id="ngaySinh"></a>
+                            <a>CCCD: <input required="" class="input m-2 w-20 form-control" type="text" name="CCCD" id="CCCD"></a>
+                            <a>Địa chỉ: <input required="" class="input m-2 w-20 form-control" type="text" name="diaChi" id="diaChi"></a>
+                            <a>Điện thoại: <input required="" class="input m-2 w-20 form-control" type="text" name="dienThoai" id="dienThoai"></a>
+                            <a>Email: <input required="" class="input m-2 w-20 form-control" type="text" name="email" id="email"></a>
+                            <a>Mã số thuế: <input required="" class="input m-2 w-20 form-control" type="text" name="msthue" id="msthue"></a>
+                            <a>Học vị: <input required="" class="input m-2 w-20 form-control" type="text" name="hocVi" id="hocVi"></a>
+                            <a>Chức vụ: <input required="" class="input m-2 w-20 form-control" type="text" name="chucvu" id="chucvu"></a>
+                            <a>Hệ số lương: <input required="" class="input m-2 w-20 form-control" type="text" name="hsl" id="hsl"></a>
+                            <a>Số tài khoản: <input required="" class="input m-2 w-20 form-control" type="text" name="stk" id="stk"></a>
+                            <a>Ngân hàng: <input required="" class="input m-2 w-20 form-control" type="text" name="nganHang" id="nganHang"></a>
+                            <a>Mặt trước cccd: <input required="" class="input m-2 form-control" type="file" name="truocCCCD" id="truocCCCD"></a>
+                            <a>Mặt sau cccd: <input required="" class="input m-2 form-control" type="file" name="sauCCCD" id="sauCCCD"></a>
+                            <a>File lý lịch: <input required="" class="input m-2 form-control" type="file" name="lyLich" id="lyLich"></a>
+                            <a>Mã phòng ban: <input required="" class="input m-2 w-20 form-control" type="text" name="maPhongBan" id="maPhongBan"></a>
+                            <a>Mã bộ môn: <input required="" class="input m-2 w-20 form-control" type="text" name="maBoMon" id="maBoMon"></a>
+                            <a>Tình trạng giảng dạy:<select class="input m-2 form-control" name="form-selection" id="tinhTrang" style="width: 100px;">
                                 <option value="true">True</option>
-                                <option value="false">False</option>
-                              </select>
-                              
-                   
-                              <button type="submit" class="btn btn-success" id="submit" style="width: 100px;">Submit</button>
-                            </fieldset>
-                          </form> -->
-                          
-                        
-                          <!-- <form action="./daotaoxemhd/daotaonhap/createGVM" class="form d-flex flex-column" method="POST">
-                            <label>id_GVM: <input required class="input m-2 w-20 form-control" type="text" name="id_GVM" id="id_GVM"></label>
-                            <label>Họ tên: <input required class="input m-2 w-20 form-control" type="text" name="name" id="name"></label>
-                            <label>Giới tính: 
-                                <select class="input m-2 form-control" style="width: 100px;" name="gioiTinh" id="gioitinh">
-                                    <option value="Nam">Nam</option>
-                                    <option value="Nu">Nữ</option>
-                                </select>
-                            </label>
-                            <label>Ngày sinh: <input required class="input m-2 w-20 form-control" type="date" name="ngaySinh" id="ngaySinh"></label>
-                            <label>CCCD: <input required class="input m-2 w-20 form-control" type="text" name="CCCD" id="CCCD"></label>
-                            <label>Địa chỉ: <input required class="input m-2 w-20 form-control" type="text" name="diaChi" id="diaChi"></label>
-                            <label>Điện thoại: <input required class="input m-2 w-20 form-control" type="text" name="dienThoai" id="dienThoai"></label>
-                            <label>Email: <input required class="input m-2 w-20 form-control" type="text" name="email" id="email"></label>
-                            <label>Mã số thuế: <input required class="input m-2 w-20 form-control" type="text" name="msthue" id="msthue"></label>
-                            <label>Học vị: <input required class="input m-2 w-20 form-control" type="text" name="hocVi" id="hocVi"></label>
-                            <label>Chức vụ: <input required class="input m-2 w-20 form-control" type="text" name="chucvu" id="chucvu"></label>
-                            <label>Hệ số lương: <input required class="input m-2 w-20 form-control" type="text" name="hsl" id="hsl"></label>
-                            <label>Số tài khoản: <input required class="input m-2 w-20 form-control" type="text" name="stk" id="stk"></label>
-                            <label>Ngân hàng: <input required class="input m-2 w-20 form-control" type="text" name="nganHang" id="nganHang"></label>
-                            <label>Mặt trước CCCD: <input required class="input m-2 form-control" type="file" name="truocCCCD" id="truocCCCD"></label>
-                            <label>Mặt sau CCCD: <input required class="input m-2 form-control" type="file" name="sauCCCD" id="sauCCCD"></label>
-                            <label>File lý lịch: <input required class="input m-2 form-control" type="file" name="lyLich" id="lyLich"></label>
-                            <label>Mã phòng ban: <input required class="input m-2 w-20 form-control" type="text" name="maPhongBan" id="maPhongBan"></label>
-                            <label>Mã bộ môn: <input required class="input m-2 w-20 form-control" type="text" name="maBoMon" id="maBoMon"></label>
-                            <label>Tình trạng giảng dạy: 
-                                <select class="input m-2 form-control" name="tinhTrang" id="tinhTrang" style="width: 100px;">
-                                    <option value="true">True</option>
-                                    <option value="false">False</option>
-                                </select>
-                            </label>
-                            <button class="btn btn-success" type="submit" id="submit" style="width: 100px;">Submit</button>
-                        </form> -->
+                                <option value="false">False</option></select>
+                            </a>
 
-                          
+                            <button class="btn btn-success" id="submit" style="width: 100px;">Submit</button>
+                        </form> 
                     </div>
                 </div>
             </div>    
      </div>
-    <script src="/bootstrap/dist/js/jquery-3.7.1.min.js"></script>
-    <script src="/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- <script >
+    <script src="../../bootstrap-5.3.3-dist/js/jquery-3.7.1.min.js"></script>
+    <script src="../../bootstrap-5.3.3-dist/js/bootstrap.bundle.min.js"></script>
+    <script >
         $(document).ready(function() {
     $('form').on('submit', function(event) {
-       event.preventDefault(); // Ngăn chặn hành động submit mặc định
+        event.preventDefault(); // Ngăn chặn hành động submit mặc định
 
         var formData = $(this).serializeArray(); // Lấy tất cả dữ liệu từ form
         var formObject = {};
@@ -332,39 +174,7 @@
         console.log(formObject); // Hiển thị dữ liệu trong console
         });
     });
-    </script> -->
-    <!-- <script>
-        $(document).ready(function() {
-            $('form').on('submit', function(event) {
-                event.preventDefault(); // Ngăn chặn hành động submit mặc định
-        
-                var formData = $(this).serializeArray(); // Lấy tất cả dữ liệu từ form
-                var formObject = {};
-        
-                $.each(formData, function(index, field) {
-                    formObject[field.name] = field.value; // Chuyển đổi dữ liệu thành đối tượng
-                });
-        
-                console.log(formObject); // Hiển thị dữ liệu trong console
-        
-                // Gửi dữ liệu đến server
-                $.ajax({
-                    url: $(this).attr('action'), // URL lấy từ thuộc tính action của form
-                    type: 'POST',
-                    data: formObject, // Gửi dữ liệu đã thu thập
-                    success: function(response) {
-                        console.log('Dữ liệu đã được gửi thành công:', response);
-                        // Bạn có thể thực hiện thêm các hành động khác tại đây
-                    },
-                    error: function(xhr, status, error) {
-                        console.error('Đã xảy ra lỗi khi gửi dữ liệu:', error);
-                    }
-                });
-            });
-        });
-        
-    </script> -->
-
+    </script>
 </body>
 </html>
 
