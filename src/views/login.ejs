@@ -42,7 +42,7 @@
         />
       </div>
       <div class="heading">Sign In</div>
-      <form action="" class="form">
+      <form action="/login" class="form">
         <input
           required=""
           class="input"
@@ -71,12 +71,52 @@
         />
       </form>
     </div>
-    <script>
+    <!-- <script>
       document
         .querySelector(".form")
         .addEventListener("submit", function (event) {
           event.preventDefault();
           window.location.href = "/index"; //index/index.html
+        });
+    </script> -->
+    <script>
+      document
+        .querySelector(".form")
+        .addEventListener("submit", function (event) {
+          event.preventDefault(); // Ngăn chặn hành vi gửi form mặc định
+
+          const username = document.getElementById("username").value;
+          const password = document.getElementById("password").value;
+
+          console.log(username, password);
+          fetch("http://localhost:3000/login", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ username, password }),
+          })
+            .then((response) => {
+              if (response.ok) {
+                return response.json(); // Chỉ đọc phản hồi nếu response.ok là true
+              } else {
+                return response.json().then((data) => {
+                  throw new Error(data.message); // Ném lỗi với thông báo từ server
+                });
+              }
+            })
+            .then((data) => {
+              console.log("Response data:", data); // Kiểm tra dữ liệu trả về
+              // Nếu đăng nhập thành công, chuyển hướng
+
+              window.location.href = data.url;
+              //alert(data.url);
+              //window.location.href = "/index";
+            })
+            .catch((error) => {
+              console.error("Error:", error);
+              alert(error.message); // Hiển thị thông báo lỗi
+            });
         });
     </script>
   </body>

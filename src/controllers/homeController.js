@@ -6,7 +6,7 @@ const router = express.Router();
 
 // Cấu hình multer để lưu file tạm thời trong thư mục 'uploads'
 const upload = multer({
-  dest: "uploads/" // Đường dẫn thư mục lưu trữ file
+  dest: "uploads/", // Đường dẫn thư mục lưu trữ file
 });
 
 // Các hàm khác
@@ -53,7 +53,8 @@ const getDtaoxemhd = (req, res) => {
   res.render("daotaoxemhd.ejs");
 };
 const getDtaonhap = (req, res) => {
-  res.render("daotaonhap.ejs");}
+  res.render("daotaonhap.ejs");
+};
 const getPhongTaiChinh = (req, res) => {
   res.render("PhongTaiChinh.ejs");
 };
@@ -64,8 +65,7 @@ const gethomePage = (req, res) => {
 // Hàm postFile xử lý upload file Excel
 const postFile = (req, res) => {
   // Sử dụng multer để upload file
-  upload.single('excelFile')(req, res, function (err) {
-
+  upload.single("excelFile")(req, res, function (err) {
     // Xử lý file sau khi upload thành công
     console.log(req.file); // Thông tin về file được upload
 
@@ -73,6 +73,11 @@ const postFile = (req, res) => {
 
     res.send("File uploaded and processed successfully.");
   });
+};
+
+const createGVM = (req, res) => {
+  console.log("thanh cong");
+  res.send("ahiahi succes");
 };
 
 // Xuất các hàm để sử dụng trong router
@@ -87,5 +92,6 @@ module.exports = {
   getDtaoxemhd,
   getDtaonhap,
   getPhongTaiChinh,
-  postFile,  // Thêm hàm này vào export để sử dụng trong router
+  postFile, // Thêm hàm này vào export để sử dụng trong router
+  createGVM,
 };
