@@ -12,11 +12,31 @@ const upload = multer({
 });
 
 // Route GET để render trang upload file
-router.get('/index/import', (req, res) => {
+router.get('/import', (req, res) => {
   res.render('import'); // render file 'import.ejs' trong thư mục 'views'
 });
 
 // Route POST để xử lý upload file Excel
-router.post('/index/import', upload.single('excelFile'), obj.handleUploadAndRender);
+router.post('/import', upload.single('excelFile'), obj.handleUploadAndRender);
+
+
+// Định tuyến cho POST request tới /index / save - data
+router.post('/save-data', async (req, res) => {
+  try {
+    // Gọi hàm xử lý dữ liệu import
+    const result = await obj.importTableTam(req.body);
+
+    // Kiểm tra kết quả trả về và phản hồi cho client
+    if (result === true) {
+      res.status(200).json({ success: true, message: 'Dữ liệu đã được lưu thành công!' });
+    } else {
+      res.status(500).json({ success: false, message: 'Lưu dữ liệu thất bại!' });
+    }
+  } catch (error) {
+    console.error('Lỗi server:', error);
+    res.status(500).json({ success: false, message: 'Lỗi trong quá trình lưu dữ liệu!', error });
+  }
+});
+
 
 module.exports = router;

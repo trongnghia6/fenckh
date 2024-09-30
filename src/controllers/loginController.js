@@ -87,7 +87,7 @@ const login = async (req, res) => {
 
         let url;
         const role = roles[0].Quyen;
-        console.log(role);
+        // console.log(role);
 
         if (role.includes("daotao")) {
           url = "/daotaoxemhd";

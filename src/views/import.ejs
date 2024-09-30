@@ -155,7 +155,7 @@
         <div class="mx-5" style="width: 100%;">
           <div class="d-flex justify-content-between">
             <button class="btn btn-outline-primary" id="chosseFile">Chọn file</button>
-            <button class="btn btn-outline-primary" id="checkAccecpt">Xin duyệt</button>
+            <button class="btn btn-outline-primary" id="import">Import</button>
             <!-- <button class="btn btn-outline-primary" id="importFile">Import</button> -->
           </div>
           <div id="dataTableContainer" class="h-75"></div>
@@ -167,7 +167,6 @@
   <script src="../../bootstrap-5.3.3-dist/js/jquery-3.7.1.min.js"></script>
   <script src="../../bootstrap-5.3.3-dist/js/bootstrap.bundle.min.js"></script>
   <script>
-
     document.getElementById('chosseFile').addEventListener('click', function () {
       // Tạo một input để chọn file
       const fileInput = document.createElement('input');
@@ -180,7 +179,7 @@
         formData.append('excelFile', fileInput.files[0]); // Thêm file vào FormData
 
         // Gửi yêu cầu POST đến server
-        fetch('http://localhost:3000/index/import', {
+        fetch('http://localhost:3000/import', {
           method: 'POST',
           body: formData
         })
@@ -233,37 +232,38 @@
       fileInput.click();
     });
 
-    // Xử lý khi nhấn nút checkAccecpt
-    document.getElementById('checkAccecpt').addEventListener('click', function () {
-      // Kiểm tra xem dữ liệu JSON đã nhận có tồn tại không
+    document.getElementById('import').addEventListener('click', function () {
       if (window.receivedJsonData) {
-        // Gửi dữ liệu JSON lên server
-        fetch('http://localhost:3000/accept', {
+        fetch('http://localhost:3000/save-data', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
           },
-          body: JSON.stringify(window.receivedJsonData) // Gửi dữ liệu đã nhận
+          body: JSON.stringify(window.receivedJsonData)
         })
           .then(response => {
             if (!response.ok) {
               throw new Error('Gửi dữ liệu thất bại');
             }
-            return response.json(); // Chuyển đổi phản hồi sang JSON
+            return response.json();
           })
           .then(data => {
-            alert('Xin duyệt gửi thành công!');
+            if (data.success) {
+              alert('Import thành công!');
+            } else {
+              alert('Import thất bại!');
+            }
           })
           .catch(error => {
-            console.error('Lỗi:', error);
             alert('Gửi dữ liệu thất bại!');
+            console.error('Error:', error);
           });
       } else {
         alert('Không có dữ liệu để gửi.');
       }
     });
 
-    // oik
+
 
   </script>
 </body>
