@@ -24,7 +24,7 @@
     align-items: center;
 }
 .active{
-    background-color: lightskyblue !important;
+    background-color: rgb(135, 145, 250) !important;
     color: #000 !important;
 }
 .bg-custom{
@@ -321,4 +321,10 @@
   
   .switch input[type="checkbox"] {
     display: none;
+  }
+  .bg-color{
+    background-image: linear-gradient(to right, #0f0c29, #302b63, #24243e);
+  }
+  .bg-test{
+    background-color: #15172b;
   }
