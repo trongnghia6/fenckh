@@ -1,11 +1,14 @@
 {
-  "extends": ["development"],
+  "extends": [
+    "development"
+  ],
   "hints": {
     "no-inline-styles": "off",
     "axe/aria": [
       "default",
       {
-        "aria-required-children": "off"
+        "aria-required-children": "off",
+        "empty-table-header": "off"
       }
     ],
     "axe/structure": "off",

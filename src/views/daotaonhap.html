@@ -9,7 +9,32 @@
     <link rel="stylesheet" href="../public/css/styles.css">
 </head>
 <body>
-    <header class="bg-primary text-white py-2 background-image">
+    <nav class="fixed-top py-2">
+        <div class="inputmenu text-nowrap d-flex justify-content-end" >
+            <button class="value text-white">
+                <div class="bi bi-eye">
+                    <a class="text-decoration-none text-white" href="/daotaoxemhd">Xem hợp đồng</a>
+                </div>
+            </button>
+            <button class="value active">
+                <div class="bi bi-pen text-white">
+                    <a class="text-decoration-none text-white" href="/daotaoxemhd/daotaonhap">Nhập</a>
+                </div>
+            </button>
+            <button class="value">
+                <div class="bi bi-check-circle-fill">
+                    <a class="text-decoration-none text-white" href="/daotaoxemhd/daotaoduyet">Xem yêu cầu duyệt</a>
+                </div>
+            </button>
+            <button class="value">
+                <div class="bi bi-chat-dots">
+                    <a class="text-decoration-none text-white" href="chatbox.html">Chat box</a>
+                </div>
+            </button>
+        </div>
+    </nav>
+    <!-- <div class="bg-primary text-white py-5 background-image"></div> -->
+    <div class="bg-header text-white py-5 background-image">
         <div class="container">
             <div class="d-flex">
                 <div>
@@ -21,49 +46,25 @@
                 </div>
             </div>
         </div>
-    </header>
+    </div>
 
     <!-- Responsive Navbar -->
-    <nav class="navbar navbar-expand-lg bg-info py-2">
-        <div class="inputmenu text-nowrap" >
-            <button class="value">
-                <div class="bi bi-eye">
-                    <a class="text-decoration-none text-secondary" href="/daotaoxemhd">Xem hợp đồng</a>
-                </div>
-            </button>
-            <button class="value active">
-                <div class="bi bi-pen">
-                    <a class="text-decoration-none text-secondary" href="/daotaoxemhd/daotaonhap">Nhập</a>
-                </div>
-            </button>
-            <button class="value">
-                <div class="bi bi-check-circle-fill">
-                    <a class="text-decoration-none text-secondary" href="/daotaoxemhd/daotaoduyet">Xem yêu cầu duyệt</a>
-                </div>
-            </button>
-            <button class="value">
-                <div class="bi bi-chat-dots">
-                    <a class="text-decoration-none text-secondary" href="chatbox.html">Chat box</a>
-                </div>
-            </button>
-            
-        </div>
-    </nav>
+
 
     <div class=" bg-color">
              <div class="d-flex justify-content-center">
-                <div class="w-50">
+                <div class="w-50 mt-3">
                         <div class="">
                             <h1 class="text-white text-center">Thêm giảng viên mời</h1>
                             <div class="input-container ic1">
                                 <input placeholder="" type="text" class="input" id="id_GVM">
                                 <div class="cut"></div>
-                                <label class="iLabel" for="id_GVM">id_GVM</label>
+                                <label class="iLabel text-secondary" for="id_GVM">id_GVM</label>
                             </div>
                             <div class="input-container ic2">
                                 <input placeholder="" type="text" class="input" id="name">
                                 <div class="cut cut-short"></div>
-                                <label class="iLabel" for="name">Họ tên</label>
+                                <label class="iLabel text-secondary" for="name">Họ tên</label>
                             </div>
                             <div class="input-container ic2">
                                 <div class="cut cut-short"></div>
@@ -89,52 +90,52 @@
                             <div class="input-container ic2">
                                 <input placeholder="" type="text" class="input" id="cccd">
                                 <div class="cut cut-short"></div>
-                                <label class="iLabel" for="cccd">CCCD</label>
+                                <label class="iLabel text-secondary" for="cccd">CCCD</label>
                             </div>
                             <div class="input-container ic2">
                                 <input placeholder="" type="text" class="input" id="diachi">
                                 <div class="cut cut-short"></div>
-                                <label class="iLabel" for="diachi">Địa chỉ</label>
+                                <label class="iLabel text-secondary" for="diachi">Địa chỉ</label>
                             </div>
                             <div class="input-container ic2">
                                 <input placeholder="" type="text" class="input" id="dienthoai">
                                 <div class="cut cut-short"></div>
-                                <label class="iLabel" for="dienthoai">Điện thoại</label>
+                                <label class="iLabel text-secondary" for="dienthoai">Điện thoại</label>
                             </div>
                             <div class="input-container ic2">
                                 <input placeholder="" type="text" class="input" id="email">
                                 <div class="cut cut-short"></div>
-                                <label class="iLabel" for="email">Email</label>
+                                <label class="iLabel text-secondary" for="email">Email</label>
                             </div>
                             <div class="input-container ic2">
                                 <input placeholder="" type="text" class="input" id="msthue">
                                 <div class="cut cut-short"></div>
-                                <label class="iLabel" for="msthue">Mã số thuế</label>
+                                <label class="iLabel text-secondary" for="msthue">Mã số thuế</label>
                             </div>
                             <div class="input-container ic2">
                                 <input placeholder="" type="text" class="input" id="hocvi">
                                 <div class="cut cut-short"></div>
-                                <label class="iLabel" for="hocvi">Học vị</label>
+                                <label class="iLabel text-secondary" for="hocvi">Học vị</label>
                             </div>
                             <div class="input-container ic2">
                                 <input placeholder="" type="text" class="input" id="chucvu">
                                 <div class="cut cut-short"></div>
-                                <label class="iLabel" for="chucvu">Chức vụ</label>
+                                <label class="iLabel text-secondary" for="chucvu">Chức vụ</label>
                             </div>
                             <div class="input-container ic2">
                                 <input placeholder="" type="text" class="input" id="hsl">
                                 <div class="cut cut-short"></div>
-                                <label class="iLabel" for="hsl">Hệ số lương</label>
+                                <label class="iLabel text-secondary" for="hsl">Hệ số lương</label>
                             </div>
                             <div class="input-container ic2">
                                 <input placeholder="" type="text" class="input" id="stk">
                                 <div class="cut cut-short"></div>
-                                <label class="iLabel" for="stk">Số tài khoản</label>
+                                <label class="iLabel text-secondary" for="stk">Số tài khoản</label>
                             </div>
                             <div class="input-container ic2">
                                 <input placeholder="" type="text" class="input" id="nganhang">
                                 <div class="cut cut-short"></div>
-                                <label class="iLabel" for="nganhang">Ngân hàng</label>
+                                <label class="iLabel text-secondary" for="nganhang">Ngân hàng</label>
                             </div>
                             <div class="input-container ic2 d-flex text-nowrap align-items-center">
                                 <a class="text-secondary text-decoration-none">Mặt trước CCCD</a>
@@ -154,12 +155,12 @@
                             <div class="input-container ic2">
                                 <input placeholder="" type="text" class="input" id="maphongban">
                                 <div class="cut cut-short"></div>
-                                <label class="iLabel" for="maphongban">Mã phòng ban</label>
+                                <label class="iLabel text-secondary" for="maphongban">Mã phòng ban</label>
                             </div>
                             <div class="input-container ic2">
                                 <input placeholder="" type="text" class="input" id="mabomon">
                                 <div class="cut cut-short"></div>
-                                <label class="iLabel" for="mabomon">Mã bộ môn</label>
+                                <label class="iLabel text-secondary" for="mabomon">Mã bộ môn</label>
                             </div>
                             <div class="input-container ic2 ">
                                 <label class="switch d-flex align-items-center">

@@ -24,8 +24,11 @@
     align-items: center;
 }
 .active{
-    background-color: rgb(135, 145, 250) !important;
+    background-color: #f64c72 !important;
     color: #000 !important;
+}
+.bg-header{
+  background-color: #2f2fa2;
 }
 .bg-custom{
     background-color: #B8E1FF;
@@ -38,6 +41,10 @@
     border-color: #F99A9C;
     border-radius: 10px;
     border-style: solid;
+}
+.text-secondary{
+  font-weight: 800;
+  font-size: 20px;
 }
 /* CSS cho kích thước màn hình lớn (desktop) */
 .navbar-nav .btn {
@@ -67,17 +74,17 @@
   }
   
   .value {
-    background-color: transparent;
+    background-color: #242582;
     border: none;
     padding: 10px;
-    color: white;
+    font-weight: 1000;
+    color: white ;
     display: flex;
     position: relative;
     gap: 5px;
     cursor: pointer;
     border-radius: 4px;
   }
-  
   .value:not(:active):hover,
   .value:focus {
     background-color: #21262C;
