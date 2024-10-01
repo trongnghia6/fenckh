@@ -58,10 +58,11 @@
 /* From Uiverse.io by Yaroslav205728 */ 
 .inputmenu {
     display: flex;
-    flex-direction: column;
-    width: 200px;
-    background-color: #0D1117;
-    justify-content: center;
+    flex-direction: row;
+    font-size: 20px;
+    /* background-color:  #1974d3; */
+    /* background-color: #0D1117; */
+    /* background-image: radial-gradient(circle 248px at center, #16d9e3 0%, #30c7ec 47%, #46aef7 100%);    justify-content: center; */
     border-radius: 5px
   }
   
@@ -110,7 +111,8 @@
   }
   /* From Uiverse.io by rahilansari261 */ 
 .form {
-    background-color: #15172b;
+    /* background-color: #15172b; */
+    background-image: linear-gradient(45deg, #ff9a9e 0%, #fad0c4 99%, #fad0c4 100%);
     border-radius: 20px;
     box-sizing: border-box;
     padding: 20px;
@@ -148,7 +150,8 @@
   }
   
   .input {
-    background-color: #303245;
+    /* background-color: #303245; */
+    background-image: linear-gradient(to top, #fad0c4 0%, #ffd1ff 100%);
     border-radius: 12px;
     border: 0;
     box-sizing: border-box;
@@ -161,7 +164,7 @@
   }
   
   .cut {
-    background-color: #15172b;
+    /* background-color: #15172b; */
     border-radius: 10px;
     height: 20px;
     left: 20px;
@@ -273,10 +276,12 @@
     opacity: 1;
   }
   .form-control{
-    background-color: #303245;
+    /* background-color: #303245; */
+    background-image: linear-gradient(to top, #fad0c4 0%, #ffd1ff 100%);
   }
   .form-control:focus {
-    background-color: #303245;
+    /* background-color: #303245; */
+    background-image: linear-gradient(to top, #fad0c4 0%, #ffd1ff 100%);
   }
   /* From Uiverse.io by WhiteNervosa */ 
 .slider {
@@ -323,7 +328,8 @@
     display: none;
   }
   .bg-color{
-    background-image: linear-gradient(to right, #0f0c29, #302b63, #24243e);
+    background-color:#b9a9d8;
+    /* background-image: linear-gradient(to top, #fdcbf1 0%, #fdcbf1 1%, #e6dee9 100%); */
   }
   .bg-test{
     background-color: #15172b;
