@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+
 const {
   gethomePage,
   getAbc,
@@ -15,7 +16,10 @@ const {
 
 // const { createGVM } = require("../controllers/DaoTaoController");
 
-const { createGVM } = require("../controllers/createGvmController");
+const {
+  createGVM,
+  handleUploadFile,
+} = require("../controllers/createGvmController");
 
 router.get("/homePage", gethomePage);
 router.get("/abc", getAbc);
@@ -27,7 +31,7 @@ router.get("/daotaoxemhd", getDtaoxemhd);
 router.get("/daotaoxemhd/daotaoduyet", getDtaoduyet);
 router.get("/daotaoxemhd/daotaonhap", getDtaonhap);
 
-router.post("/daotaoxemhd/daotaonhap/createGVM", createGVM);
+//router.post("/daotaoxemhd/daotaonhap/createGVM", handleUploadFile);
 // router.get("/index/import", getImport);
 router.get("/index/import", getImport);
 router.get("/PhongTaiChinh", getPhongTaiChinh);

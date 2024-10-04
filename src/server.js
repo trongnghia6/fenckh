@@ -15,6 +15,8 @@ const configViewEngine = require("./config/viewEngine");
 // const webRoutes = require("./routes/web");
 
 const webRoutes = require("./routes/web");
+const inputGvmRoutes = require("./routes/uploadImg");
+const gvmList = require("./routes/gvmListRoute");
 
 const app = express();
 const port = process.env.port || 8888;
@@ -41,6 +43,8 @@ app.use(express.urlencoded({ extended: true })); // for form data
 // Khai bao route
 app.use("/", webRoutes);
 app.use("/", login);
+app.use("/", inputGvmRoutes);
+app.use("/", gvmList);
 
 app.listen(port, hostname, () => {
   console.log(`Server running on http://localhost:${port}`);
@@ -62,7 +66,6 @@ app.use(express.static(path.join(__dirname, "public/images")));
 //   // console.log("Data in JSON format: ", jsonData);
 // });
 
-
 // == src of L ==
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
@@ -71,10 +74,9 @@ app.use(express.static(path.join(__dirname, "public/js"))); // cấu hình tệp
 app.use(express.json()); // Thêm dòng này để xử lý JSON
 
 const importFile = require("./routes/importRoute");
-const infoGvm = require('./routes/infoRoute');
+const infoGvm = require("./routes/infoRoute");
 // const login = require('./routes/loginRoute');
 
-
-app.use('/', importFile); // cấu hình import
-app.use('/', infoGvm); // cấu hình import
+app.use("/", importFile); // cấu hình import
+app.use("/", infoGvm); // cấu hình import
 // app.use('/', login); // cấu hình import

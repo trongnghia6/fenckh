@@ -6,7 +6,7 @@
     <title>Học Viện Kỹ Thuật Mật Mã</title>
     <link rel="stylesheet" href="/bootstrap/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="/bootstrap/dist/bootstrap-icons-1.11.3/font/bootstrap-icons.min.css">
-    <link rel="stylesheet" href="../public/css/styles.css">
+    <!-- <link rel="stylesheet" href="public/css/styles.css"> -->
 </head>
 <body>
     <header class="bg-primary text-white py-2 background-image">
@@ -35,7 +35,7 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <div class="navbar-nav mx-auto">
                     <div class="btn btn-primary text-nowrap mx-1">
-                        <a href="index.html" class="home-link">
+                        <a href="index.ejs" class="home-link">
                             <i class="bi bi-house"></i> Home
                         </a>
                     </div>
@@ -109,11 +109,21 @@
                                         <a class="nav-link" href="/daotaoxemhd" role="button">Xem hợp đồng</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a  class="nav-link active" href="/daotaoxemhd/daotaoduyet" role="button">Xem yêu cầu duyệt</a>
+                                        <a  class="nav-link" href="/daotaoxemhd/daotaoduyet" role="button">Xem yêu cầu duyệt</a>
                                     </li>
+
+                                    <!-- Danh sách giảng viên mời -->
+                                    <li class="nav-item"></li>
+                                        <a  class="nav-link" href="/daotaoxemhd/gvmList" role="button">Danh sách giảng viên mời</a>
+                                    </li>
+                                    <!--  -->
+
                                     <li class="nav-item" role="presentation"></li>
-                                        <a class="nav-link" href="/daotaoxemhd/daotaonhap" id="navbarDropdownMenuLink" role="button" >Nhập</a>
+                                        <a class="nav-link active" href="/daotaoxemhd/daotaonhap" id="navbarDropdownMenuLink" role="button" >Nhập</a>
                                     </li>
+
+
+
                                     <li class="nav-item" role="presentation"></li>
                                         <a class="nav-link" href="chatbox.html" id="navbarDropdownMenuLink" role="button" >Chat box</a>
                                     </li>
@@ -121,9 +131,10 @@
                         </div>
                     </div>
                 </div>
-                <div class="w-80">
+                <div class="w-80 daotaonhap">
                     <div class="m-3">
-                         <form action="/daotaoxemhd/daotaonhap/createGVM" class="form d-flex flex-column" method="POST">
+                         <form action="/daotaoxemhd/daotaonhap/cccd" enctype="multipart/form-data" class="form d-flex flex-column" method="POST" >
+                            <!-- //enctype="multipart/form-data" -->
                             <fieldset>
                                 <a>id_GVM:<input class="input m-2 w-20 form-control" type="text" name="Id_GVM" id="id_GVM"></a>
                                 <a>Họ tên:<input class="input m-2 w-20 form-control" type="text" name="HoTen" id="HoTen"></a>
@@ -142,14 +153,36 @@
                                 <a>Hệ số lương: <input class="input m-2 w-20 form-control" type="text" name="HeSoLuong" id="hsl"></a>
                                 <a>Số tài khoản: <input class="input m-2 w-20 form-control" type="text" name="STK" id="stk"></a>
                                 <a>Ngân hàng: <input class="input m-2 w-20 form-control" type="text" name="NganHang" id="nganHang"></a>
-                                <a>Mặt trước cccd: <input class="input m-2 form-control" type="file" name="truocCCCD" id="truocCCCD"></a>
-                                <a>Mặt sau cccd: <input class="input m-2 form-control" type="file" name="sauCCCD" id="sauCCCD"></a>
+                             
+                                <!-- <a>Mặt trước cccd: <input class="input m-2 form-control" type="file" name="truocCCCD" id="truocCCCD"></a> -->
+                                <div>
+                                    <label>Mặt trước CCCD:</label>
+                                    <input class="input m-2 form-control" type="file" name="truocCCCD" />
+                                </div>
+                                <div>
+                                    <label>Mặt sau cccd: </label>
+                                    <input class="input m-2 form-control" type="file" name="sauCCCD" id="sauCCCD">
+                                </div>
                                 <a>File lý lịch: <input class="input m-2 form-control" type="file" name="lyLich" id="lyLich"></a>
-                                <a>Mã phòng ban: <input class="input m-2 w-20 form-control" type="text" name="maPhongBan" id="maPhongBan"></a>
+                                <!-- <a>Mã phòng ban: <input class="input m-2 w-20 form-control" type="text" name="maPhongBan" id="maPhongBan"></a> -->
+                                <div>
+                                    <p>Mã phòng ban</p>
+                                    <label>
+                                        <input class=" m-2" type="checkbox" name="maPhongBan" value="CNTT"> CNTT
+                                      </label>
+                                      <label>
+                                        <input class=" m-2" type="checkbox" name="maPhongBan" value="ATTT"> ATTT
+                                      </label>
+                                      <label>
+                                        <input class=" m-2 " type="checkbox" name="maPhongBan" value="DTVT"> DTVT
+                                      </label>
+                                 </div>
+                                
                                 <a>Mã bộ môn: <input class="input m-2 w-20 form-control" type="text" name="maBoMon" id="maBoMon"></a>
-                                <a>Tình trạng giảng dạy:<select class="input m-2 form-control" name="form-selection" id="tinhTrang" style="width: 100px;">
-                                    <option value="true">True</option>
-                                    <option value="false">False</option></select>
+
+                                <a>Tình trạng giảng dạy:<select class="input m-2 form-control" name="tinhTrangGiangDay" id="tinhTrang" style="width: 100px;">
+                                    <option value="true">Đang giảng dạy</option>
+                                    <option value="false">Đã ngừng giảng dạy</option></select>
                                 </a>
                      
                                 <button class="btn btn-success" id="submit" style="width: 100px;">Submit</button>
@@ -364,7 +397,29 @@
         });
         
     </script> -->
+    <script>
+        // Lấy query string từ URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const message = urlParams.get('message');
+        
+        // Lấy phần tử div để hiển thị thông báo
+        const messageDiv = document.getElementById('message');
+        
+        // Hiển thị thông báo dựa trên giá trị của message
+        if (message === 'insertSuccess') {
+          alert("insertSuccess")
+        } else if (message === 'insertFalse') {
+          alert("insertFalse")
+        }
 
+          // Sau khi hiển thị thông báo, xóa query string để tránh hiển thị lại khi refresh
+  if (message) {
+    // Sử dụng window.history để xóa query string mà không refresh lại trang
+    const newUrl = window.location.origin + window.location.pathname;
+    window.history.replaceState({}, document.title, newUrl);
+  }
+
+      </script>
 </body>
 </html>
 
