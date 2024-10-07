@@ -8,16 +8,66 @@
   <link rel="stylesheet" href="/bootstrap/dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="../../bootstrap-5.3.3-dist/bootstrap-icons-1.11.3/font/bootstrap-icons.min.css">
   <link rel="stylesheet" href="../public/css/styles.css">
+  <style>
+    /* CSS cho bảng */
+    .table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    .table th,
+    .table td {
+      padding: 10px;
+      text-align: left;
+      border: 1px solid #dee2e6;
+    }
+
+    .table th {
+      background-color: #007bff;
+      color: white;
+      font-weight: bold;
+    }
+
+    .table tbody tr:nth-child(even) {
+      background-color: #f8f9fa;
+    }
+
+    .table tbody tr:hover {
+      background-color: #e2e6ea;
+    }
+
+    .table td {
+      vertical-align: middle;
+    }
+
+    .bg-custom {
+      background-color: #f8f9fa;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .spinner-border {
+      position: fixed;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 1000;
+    }
+  </style>
+
+  <script src="/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 
 <body>
-  <header class="bg-primary text-white py-2 background-image">
+  <header class="bg-primary text-white py-2">
     <div class="container">
-      <div class="d-flex">
+      <div class="d-flex align-items-center">
         <div>
           <img src="/Logo-Hoc-Vien-Ky-Thuat-Mat-Ma-ACTVN.webp" alt="Logo" class="img-fluid" style="height: 102.4px;">
         </div>
-        <div class="text-center" style="width: 100%;">
+        <div class="text-center flex-grow-1">
           <h1>HỌC VIỆN KỸ THUẬT MẬT MÃ</h1>
           <h2>HỆ THỐNG QUẢN LÍ THÔNG TIN CHO GIẢNG VIÊN</h2>
         </div>
@@ -25,20 +75,17 @@
     </div>
   </header>
 
-  <!-- Responsive Navbar -->
   <nav class="navbar navbar-expand-lg bg-info py-2">
     <div class="container">
-      <!-- Nút toggle hamburger cho các màn hình nhỏ -->
       <button class="navbar-toggler text-white" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
         aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
 
-      <!-- Nội dung của navbar sẽ thu gọn trên màn hình nhỏ -->
       <div class="collapse navbar-collapse" id="navbarNav">
         <div class="navbar-nav mx-auto">
           <div class="btn btn-primary text-nowrap mx-1">
-            <a href="index.html" class="home-link">
+            <a href="index.html" class="home-link text-white text-decoration-none">
               <i class="bi bi-house"></i> Home
             </a>
           </div>
@@ -88,7 +135,6 @@
           <a href="#" class="btn btn-primary mx-1 text-nowrap">Triển khai</a>
         </div>
 
-        <!-- Phần dropdown của tài khoản người dùng -->
         <div class="navbar-nav">
           <div class="nav-item dropdown">
             <a class="nav-link dropdown-toggle bi bi-person" href="#" id="navbarDropdownUser" role="button"
@@ -107,9 +153,9 @@
 
   <div class="container-fluid my-4">
     <div class="d-flex ">
-      <div class="w-20">
+      <div class="w-25">
         <div class="bg-custom">
-          <div class=" p-3">
+          <div class="p-3">
             <h4>Chủ đề</h4>
             <ul class="nav nav-tabs list-group" id="myTab" role="tablist">
               <li class="nav-item">
@@ -118,68 +164,102 @@
               <li class="nav-item">
                 <a class="nav-link active" href="/index/import" role="button">Import</a>
               </li>
-              <li class="nav-item" role="presentation"></li>
-              <a class="nav-link" href="/daotaoxemhd/daotaonhap" id="navbarDropdownMenuLink" role="button">Nhập</a>
+              <li class="nav-item">
+                <a class="nav-link" href="/daotaoxemhd/daotaonhap" role="button">Nhập</a>
               </li>
-              <li class="nav-item" role="presentation"></li>
-              <a class="nav-link" href="bang-quy-chuan" id="navbarDropdownMenuLink" role="button">Bảng quy chuẩn</a>
+              <li class="nav-item">
+                <a class="nav-link" href="#" role="button">Bảng quy chuẩn</a>
               </li>
             </ul>
           </div>
         </div>
       </div>
-      <div class="mx-5 w-80">
-        <div class="d-flex justify-content-start">
-          <div class="dropdown mx-2">
-            <button class="btn btn-outline-primary dropdown-toggle" type="button" id="selectYear"
-              data-bs-toggle="dropdown" aria-expanded="false">
-              Năm
-            </button>
-            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-              <li><a class="dropdown-item year" href="#">2020</a></li>
-              <li><a class="dropdown-item year" href="#">2021</a></li>
-              <li><a class="dropdown-item year" href="#">2022</a></li>
-              <li><a class="dropdown-item year" href="#">2023</a></li>
-              <li><a class="dropdown-item year" href="#">2023</a></li>
-              <li><a class="dropdown-item year" href="#">2024</a></li>
-            </ul>
-          </div>
-          <div class="dropdown mx-2">
-            <button class="btn btn-outline-primary dropdown-toggle" type="button" id="selectDot"
-              data-bs-toggle="dropdown" aria-expanded="false">
-              Đợt
-            </button>
-            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-              <li><a class="dropdown-item dot" href="#">1</a></li>
-              <li><a class="dropdown-item dot" href="#">2</a></li>
-              <li><a class="dropdown-item dot" href="#">3</a></li>
-              <li><a class="dropdown-item dot" href="#">4</a></li>
-            </ul>
-          </div>
-          <div>
-            <button class="btn btn-success">Hiển thị</button>
-          </div>
+      <div class="mx-5 flex-grow-1">
+        <div class="d-flex justify-content-start mb-3">
+          <button class="btn btn-success" id="render">Hiển thị</button>
+          <button class="btn btn-success mx-2" id="filter">Lọc GVM</button>
+          <!-- Nút Lọc màu giống nút Hiển thị -->
+        </div>
+        <div>
+          <table class="table table-bordered">
+            <thead>
+              <tr id="table-header"></tr>
+            </thead>
+            <tbody id="data-table-body"></tbody>
+          </table>
         </div>
       </div>
     </div>
   </div>
-  <script src="/bootstrap/dist/js/jquery-3.7.1.min.js"></script>
-  <script src="/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
   <script>
-    $(document).ready(function () {
-      // Bắt sự kiện click vào các phần tử có class 'send-option'
-      $('.year').click(function (e) {
-        e.preventDefault(); // Ngăn chặn hành động mặc định của thẻ <a>
-        var selectedText = $(this).text(); // Lấy nội dung văn bản của phần tử được click
-        $('#selectYear').text(selectedText); // Thay đổi nội dung của nút 'selectSend'
+    document.addEventListener('DOMContentLoaded', function () {
+      document.getElementById('render').addEventListener('click', function () {
+        const loadingSpinner = document.createElement('div'); // Tạo spinner
+        loadingSpinner.className = 'spinner-border'; // Thêm lớp spinner
+        loadingSpinner.role = 'status'; // Đặt vai trò
+        loadingSpinner.innerHTML = '<span class="visually-hidden">Loading...</span>'; // Thêm thông báo ẩn
+        document.body.appendChild(loadingSpinner); // Thêm spinner vào body
+
+        fetch('http://localhost:3000/bang-quy-chuan-data') // Thay đổi URL API thành URL thực tế của bạn
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('Network response was not ok: ' + response.statusText);
+            }
+            return response.json();
+          })
+          .then(data => {
+            // Tạo bảng HTML từ dữ liệu JSON
+            let tableHtml = '';
+            const headersMap = {
+              'GiaoVien': 'Giảng viên theo TKB',
+              'GiaoVienGiangDay': 'Giảng viên giảng dạy',
+              'MoiGiang': 'Mời giảng?',
+              'SoTinChi': 'Số tín chỉ',
+              'LopHocPhan': 'Lớp học phần',
+              'LL': 'LL',
+              'SoTietCTDT': 'Số tiết CTĐT',
+              'HeSoT7CN': 'Hệ số ngoài giờ',
+              'SoSinhVien': 'Số sinh viên',
+              'HeSoLopDong': 'Hệ số lớp đông',
+              'QuyChuan': 'Quy chuẩn',
+              'GhiChu': 'Ghi chú'
+            };
+
+            const headers = Object.keys(data[0]);
+            headers.forEach(header => {
+              const newHeaderName = headersMap[header] || header; // Sử dụng tên cột mới nếu có
+              tableHtml += `<th>${newHeaderName}</th>`;
+            });
+
+            document.getElementById('table-header').innerHTML = tableHtml;
+
+            // Duyệt qua từng mục trong dữ liệu
+            data.forEach(item => {
+              const row = headers.map(key => `<td>${item[key] !== null ? item[key] : ''}</td>`).join('');
+              document.getElementById('data-table-body').innerHTML += `<tr>${row}</tr>`;
+            });
+            loadingSpinner.remove(); // Xóa spinner sau khi hoàn thành
+          })
+          .catch(error => {
+            console.error('Error fetching data:', error);
+            alert('Có lỗi xảy ra khi gọi API: ' + error.message);
+            loadingSpinner.remove(); // Xóa spinner nếu có lỗi
+          });
       });
-    });
-    $(document).ready(function () {
-      // Bắt sự kiện click vào các phần tử có class 'send-option'
-      $('.dot').click(function (e) {
-        e.preventDefault(); // Ngăn chặn hành động mặc định của thẻ <a>
-        var selectedText = $(this).text(); // Lấy nội dung văn bản của phần tử được click
-        $('#selectDot').text(selectedText); // Thay đổi nội dung của nút 'selectSend'
+
+      // Thêm sự kiện cho nút lọc
+      document.getElementById('filter').addEventListener('click', function () {
+        const rows = document.querySelectorAll('#data-table-body tr');
+        rows.forEach(row => {
+          const cells = row.getElementsByTagName('td');
+          const moiGiang = cells[2].textContent; // Giả sử "Mời giảng" là cột thứ 3 (index 2)
+          if (moiGiang !== '1') {
+            row.style.display = 'none'; // Ẩn hàng nếu "Mời giảng" không bằng 1
+          } else {
+            row.style.display = ''; // Hiện hàng nếu "Mời giảng" bằng 1
+          }
+        });
       });
     });
   </script>

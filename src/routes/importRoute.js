@@ -24,7 +24,7 @@ router.post('/import', upload.single('excelFile'), obj.handleUploadAndRender);
 router.post('/save-data', async (req, res) => {
   try {
     // Gọi hàm xử lý dữ liệu import
-    const result = await obj.importTableTam(req.body);
+    const result = await obj.importTableQC(req.body);
 
     // Kiểm tra kết quả trả về và phản hồi cho client
     if (result === true) {

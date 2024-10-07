@@ -4,6 +4,7 @@ const fs = require('fs');
 require('dotenv').config();
 const path = require('path');
 const connection = require('../controllers/connectDB');
+const { json } = require('express');
 
 // Hàm chuyển đổi tệp Excel sang JSON
 const convertExcelToJSON = (filePath) => {
@@ -33,43 +34,44 @@ const convertExcelToJSON = (filePath) => {
   }
 };
 
-// Nhập dữ liệu JSON vào cơ sở dữ liệu
-const importTableTam = async (jsonData) => {
-  const tableName = process.env.DB_TABLE_NAME;
+// Hàm nhập dữ liệu vào bảng quychuan
+const importTableQC = async (jsonData) => {
+  const tableName = process.env.DB_TABLE_NAME; // Giả sử biến này có giá trị là "quychuan"
 
-  const columnTT = 'TT';
-  const columnSoTinChi = 'SoTinChi';
-  const columnLopHocPhan = 'LopHocPhan';
-  const columnGiaoVien = 'GiaoVien';
-  const columnLL = 'LL';
-  const columnSoTietCTDT = 'SoTietCTDT';
-  const columnHeSoT7CN = 'HeSoT7CN';
-  const columnSoSinhVien = 'SoSinhVien';
-  const columnHeSoLopDong = 'HeSoLopDong';
-  const columnQuyChuan = 'QuyChuan';
-  const columnGhiChu = 'GhiChu';
+  // Tạo câu lệnh INSERT động
+  const query = `
+    INSERT INTO ${tableName} (
+      GiaoVien, 
+      GiaoVienGiangDay, 
+      MoiGiang, 
+      SoTinChi, 
+      LopHocPhan, 
+      LL, 
+      SoTietCTDT, 
+      HeSoT7CN, 
+      SoSinhVien, 
+      HeSoLopDong, 
+      QuyChuan, 
+      GhiChu
+    ) VALUES (?, NULL, FALSE, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+  `;
 
   const insertPromises = jsonData.map(item => {
-    const query = `INSERT INTO ${tableName} 
-      (${columnTT}, ${columnSoTinChi}, ${columnLopHocPhan}, ${columnGiaoVien}, ${columnLL}, 
-       ${columnSoTietCTDT}, ${columnHeSoT7CN}, ${columnSoSinhVien}, ${columnHeSoLopDong}, ${columnQuyChuan}, ${columnGhiChu}) 
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
-
     return new Promise((resolve, reject) => {
-      const keys = Object.keys(item);
-      connection.query(query, [
-        item[keys[0]],
-        item[keys[1]],
-        item[keys[2]],
-        item[keys[3]],
-        item[keys[4]],
-        item[keys[5]],
-        item[keys[6]],
-        item[keys[7]],
-        item[keys[8]],
-        item[keys[9]],
-        item[keys[10]],
-      ], (err, results) => {
+      const values = [
+        item['Giáo Viên'],                          // Tên giáo viên
+        item['Số TC'],                               // Số tín chỉ
+        item['Lớp học phần'],                        // Lớp học phần                     
+        item['Số tiết lên lớp theo TKB'],          // LL (cần xác định từ dữ liệu nếu cần)
+        item['Số tiết theo CTĐT'],                  // Số tiết CTĐT
+        item['Hệ số lên lớp ngoài giờ HC/ Thạc sĩ/ Tiến sĩ'], // Hệ số T7/CN
+        item['Số SV'],                               // Số sinh viên
+        item['Hệ số lớp đông'],                     // Hệ số lớp đông
+        item['QC'],                                  // Quy chuẩn
+        item['Ghi chú']                              // Ghi chú
+      ];
+
+      connection.query(query, values, (err, results) => {
         if (err) {
           console.error('Error:', err);
           reject(err);
@@ -278,4 +280,4 @@ const handleUploadAndRender = async (req, res) => {
 
 };
 
-module.exports = { handleUploadAndRender, importJSONToDB, importTableTam };
+module.exports = { handleUploadAndRender, importJSONToDB, importTableQC };

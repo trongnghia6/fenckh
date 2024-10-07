@@ -1,3 +1,34 @@
+.background-image {
+  background: url('../../picture/OIP.jfif') no-repeat center center;
+  background-size: cover;
+}
+
+.grid-center {
+  display: grid;
+  place-items: center;
+}
+
+.home-link {
+  color: white;
+  text-decoration: none;
+}
+
+.w-20 {
+  width: 20% !important;
+}
+
+.header-container,
+.row-container {
+  display: grid;
+  grid-template-columns: repeat(9, 1fr);
+  padding: 10px;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.column {
+  padding: 5px;
+}
+
 /* Bố cục hàng ngang cho mỗi dòng */
 .row-container {
   display: flex;
@@ -11,7 +42,7 @@
 /* Căn chỉnh cho mỗi cột trong dòng */
 .column {
   flex: 1;
-  padding: 0 50px;
+  padding: 0 10px;
 }
 
 /* Đặt chiều rộng cho các cột */
@@ -90,4 +121,18 @@
   /* Sử dụng flex để căn chỉnh nội dung bên trong */
   align-items: center;
   /* Căn giữa theo chiều dọc */
+}
+
+
+.table {
+  width: 100%;
+  /* Đảm bảo bảng chiếm toàn bộ chiều rộng */
+}
+
+.table th,
+.table td {
+  width: auto;
+  /* Để các cột tự động điều chỉnh độ rộng theo nội dung */
+  text-align: center;
+  /* Canh giữa nội dung cho đồng bộ */
 }

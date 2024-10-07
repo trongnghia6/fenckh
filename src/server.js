@@ -72,9 +72,8 @@ app.use(express.json()); // Thêm dòng này để xử lý JSON
 
 const importFile = require("./routes/importRoute");
 const infoGvm = require('./routes/infoRoute');
-// const login = require('./routes/loginRoute');
-
+const tableQc = require('./routes/gvmRoute');
 
 app.use('/', importFile); // cấu hình import
 app.use('/', infoGvm); // cấu hình import
-// app.use('/', login); // cấu hình import
+app.use('/', tableQc); // cấu hình import

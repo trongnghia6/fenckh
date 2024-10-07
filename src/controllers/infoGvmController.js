@@ -111,4 +111,93 @@ const renderInfo = (req, res) => {
   });
 };
 
-module.exports = { renderInfo };
+// Hàm lấy tất cả tên giảng viên từ cơ sở dữ liệu
+const getNameGVM = (req, res) => {
+
+  // Truy vấn để lấy danh sách giảng viên mời
+  const query = 'SELECT DISTINCT TenNhanVien,MaPhongBan FROM nhanvien;';
+
+  connection.query(query, (error, results) => {
+    if (error) {
+      return res.status(500).json({ error: 'Internal server error' });
+    }
+
+    if (results.length === 0) {
+      return res.status(404).json({ message: 'No teachers found' });
+    }
+
+    // Lấy đầy đủ tên giảng viên từ cột HoTen và trả về kết quả
+    return res.status(200).json(results);
+  });
+};
+
+// Hàm bất đồng bộ để lấy Chuyên Ngành và tên giảng viên mời
+const getKhoaAndNameGvmOfKhoa = async (req, res) => {
+  try {
+    // Truy vấn đầu tiên để lấy Chuyên Ngành và Tên Học Phần
+    const khoaResults = await new Promise((resolve, reject) => {
+      const queryKhoa = `
+        SELECT DISTINCT hocphan.ChuyenNganh, hocphan.TenHocPhan
+        FROM hocphan
+        JOIN quychuan ON hocphan.TenHocPhan = quychuan.LopHocPhan;
+      `;
+
+      connection.query(queryKhoa, (error, results) => {
+        if (error) {
+          console.error('Lỗi truy vấn cơ sở dữ liệu:', error);
+          return reject(new Error('Không thể truy xuất dữ liệu từ cơ sở dữ liệu.')); // Kết thúc nếu có lỗi
+        }
+        resolve(results); // Trả về dữ liệu
+      });
+    });
+
+    // Nếu không có kết quả từ truy vấn chuyên ngành
+    if (khoaResults.length === 0) {
+      return []; // Trả về mảng rỗng nếu không tìm thấy chuyên ngành
+    }
+
+    // Tạo mảng các chuyên ngành để sử dụng trong truy vấn thứ hai
+    const maPhongBanList = khoaResults.map(row => row.ChuyenNganh.trim()); // Sử dụng trim() để loại bỏ \n và \r
+
+
+    // Truy vấn thứ hai để lấy tên giảng viên mời
+    const gvmResults = await new Promise((resolve, reject) => {
+      const queryGVM = `
+        SELECT gvmoi.HoTen, gvmoi.MaPhongBan
+        FROM gvmoi
+        WHERE gvmoi.MaPhongBan IN (${maPhongBanList.map((_, index) => `?`).join(', ')}); 
+      `;
+
+      connection.query(queryGVM, maPhongBanList, (error, results) => {
+        if (error) {
+          console.error('Lỗi truy vấn cơ sở dữ liệu:', error);
+          return reject(new Error('Không thể truy xuất dữ liệu từ cơ sở dữ liệu.')); // Kết thúc nếu có lỗi
+        }
+        resolve(results); // Trả về dữ liệu
+      });
+    });
+
+    // console.log(khoaResults, gvmResults)
+    // Kết hợp kết quả chuyên ngành và tên giảng viên
+    const finalResults = khoaResults.map(khoa => {
+      return {
+        ChuyenNganh: khoa.ChuyenNganh.trim(), // Loại bỏ \n và \r
+        TenHocPhan: khoa.TenHocPhan.trim(), // Loại bỏ \n và \r
+        GiangVien: gvmResults.filter(gvm => gvm.MaPhongBan.trim() === khoa.ChuyenNganh.trim()).map(gvm => gvm.HoTen)
+      };
+    });
+
+    // console.log(finalResults)
+    // return finalResults; // Trả kết quả cuối cùng
+    return res.status(200).json(finalResults);
+
+  } catch (error) {
+    console.error('Lỗi trong hàm getKhoaAndNameGvmOfKhoa:', error);
+    throw error; // Ném lại lỗi cho caller
+  }
+};
+
+
+
+
+module.exports = { renderInfo, getNameGVM, getKhoaAndNameGvmOfKhoa };
