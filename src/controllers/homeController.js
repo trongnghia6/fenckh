@@ -93,5 +93,5 @@ module.exports = {
   getDtaonhap,
   getPhongTaiChinh,
   postFile, // Thêm hàm này vào export để sử dụng trong router
-  createGVM,
+  // createGVM,
 };

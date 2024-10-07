@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Học Viện Kỹ Thuật Mật Mã</title>
+    <link rel="stylesheet" href="/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/bootstrap/dist/bootstrap-icons-1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="/css/gvmList.css">
+</head>
+<body>
+    <header class="bg-primary text-white py-2 background-image">
+        <div class="container">
+            <div class="d-flex">
+                <div>
+                    <img src="/Logo-Hoc-Vien-Ky-Thuat-Mat-Ma-ACTVN.webp" alt="Logo" class="img-fluid" style="height: 102.4px;">
+                </div>
+                <div class="text-center" style="width: 100%;">
+                    <h1>HỌC VIỆN KỸ THUẬT MẬT MÃ</h1>
+                    <h2>HỆ THỐNG QUẢN LÍ THÔNG TIN CHO GIẢNG VIÊN</h2>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Responsive Navbar -->
+    <nav class="navbar navbar-expand-lg bg-info py-2">
+        <div class="container">
+            <!-- Nút toggle hamburger cho các màn hình nhỏ -->
+            <button class="navbar-toggler text-white" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <!-- Nội dung của navbar sẽ thu gọn trên màn hình nhỏ -->
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <div class="navbar-nav mx-auto">
+                    <div class="btn btn-primary text-nowrap mx-1">
+                        <a href="index.ejs" class="home-link">
+                            <i class="bi bi-house"></i> Home
+                        </a>
+                    </div>
+                    <div class="dropdown">
+                        <button class="btn btn-primary dropdown-toggle mx-1" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                            Quản lí hợp đồng
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <li><a class="dropdown-item" href="#">Xem hợp đồng</a></li>
+                            <li><a class="dropdown-item" href="#">Thông tin giảng viên mời</a></li>
+                            <li><a class="dropdown-item" href="#">Thông tin lớp giảng dạy</a></li>
+                            <li><a class="dropdown-item" href="#">Lương hợp đồng</a></li>
+                            <li><a class="dropdown-item" href="./lsbanghi.html">Lịch sử thay đổi</a></li>
+                        </ul>
+                    </div>
+                    <div class="dropdown">
+                        <button class="btn btn-primary dropdown-toggle mx-1" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false">
+                            Quản lí giảng dạy
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
+                            <li><a class="dropdown-item" href="#">Quản lí môn học</a></li>
+                            <li><a class="dropdown-item" href="#">Quản lí lớp học</a></li>
+                            <li><a class="dropdown-item" href="#">Quản lí đề thi</a></li>
+                            <li><a class="dropdown-item" href="#">Quản lí coi thi</a></li>
+                            <li><a class="dropdown-item" href="#">Quản lí chấm thi</a></li>
+                        </ul>
+                    </div>
+                    <div class="dropdown">
+                        <button class="btn btn-primary dropdown-toggle mx-1" type="button" id="dropdownMenuButton3" data-bs-toggle="dropdown" aria-expanded="false">
+                            Thống kê NCKH
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton3">
+                            <li><a class="dropdown-item" href="#">Đề tài, dự án</a></li>
+                            <li><a class="dropdown-item" href="#">Hợp tác chuyển giao CN</a></li>
+                            <li><a class="dropdown-item" href="#">Bài báo, ấn phẩm</a></li>
+                            <li><a class="dropdown-item" href="#">Bằng sáng chế</a></li>
+                            <li><a class="dropdown-item" href="#">Sách, giáo trình</a></li>
+                            <li><a class="dropdown-item" href="#">Hướng dẫn sinh viên</a></li>
+                            <li><a class="dropdown-item" href="#">Xây dựng CT đào tạo</a></li>
+                            <li><a class="dropdown-item" href="#">NV khoa học và công nghệ khác</a></li>
+                            <li><a class="dropdown-item" href="#">Biên soạn giáo trình</a></li>
+                        </ul>
+                    </div>
+                    <a href="#" class="btn btn-primary mx-1 text-nowrap">Triển khai</a>
+                </div>
+
+                <!-- Phần dropdown của tài khoản người dùng -->
+                <div class="navbar-nav">
+                    <div class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle bi bi-person" href="#" id="navbarDropdownUser" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Hi, Lê Đức Thuận
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdownUser">
+                            <li><a class="dropdown-item" href="#">Thông tin tài khoản</a></li>
+                            <li><a class="dropdown-item" href="../login.html">Đăng xuất</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid my-4">
+             <div class="d-flex ">
+                <div class="w-20">
+                    <div class="bg-custom">
+                        <div class=" p-3">
+                            <h4>Chủ đề</h4>
+                                <ul class="nav nav-tabs list-group" id="myTab" role="tablist">
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="/daotaoxemhd" role="button">Xem hợp đồng</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a  class="nav-link" href="/daotaoxemhd/daotaoduyet" role="button">Xem yêu cầu duyệt</a>
+                                    </li>
+
+                                    <!-- Danh sách giảng viên mời -->
+                                    <li class="nav-item"></li>
+                                        <a  class="nav-link active" href="/daotaoxemhd/gvmList" role="button">Danh sách giảng viên mời</a>
+                                    </li>
+                                    <!--  -->
+
+                                    <li class="nav-item" role="presentation"></li>
+                                        <a class="nav-link" href="/daotaoxemhd/daotaonhap" id="navbarDropdownMenuLink" role="button" >Nhập</a>
+                                    </li>
+                                    <li class="nav-item" role="presentation"></li>
+                                        <a class="nav-link" href="chatbox.html" id="navbarDropdownMenuLink" role="button" >Chat box</a>
+                                    </li>
+                                </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Main content -->
+                <div class="gvmList w-80">
+                    <div class="m-3">
+                        <div class="container">
+                            <h1>DANH SÁCH GIẢNG VIÊN MỜI</h1>
+                            <div class="header-actions">
+                              <button class="add-class" onclick="addClass()">+ Thêm giảng viên mời</button>
+                              <input
+                                type="text"
+                                placeholder="Tìm kiếm theo Tên..."
+                                class="search"
+                                id="searchInput"
+                                onkeyup="searchClass()"
+                              />
+                              <select class="filter" onchange="filterClasses()">
+                                <option value="">Công nghệ thông tin</option>
+                                <option value="">An toàn thông tin</option>
+                                <option value="">Điện tử viễn thông</option>
+                                <!-- Các tùy chọn lọc khác -->
+                              </select>
+                            </div>
+                            <table class="class-table" id="classTable">
+                              <thead>
+                                    <tr>
+                                      <th>STT</th>
+                                        <th>Mã giảng viên mời</th>
+                                        <th>Tên giảng viên mời</th>
+                                        <th>Ngày sinh</th>
+                                        <th>Hành động</th>
+                                      </tr>
+                              </thead>
+                              <tbody>
+                                <% for (var i = 0; i < gvmLists.length; i++) { %>
+                                    <tr>
+                                        <td><%= i+1 %></td>
+                                        <td><%= gvmLists[i].MaGvm %></td>
+                                        <td><%= gvmLists[i].HoTen %></td>
+                                        <!-- <td><%= gvmLists[i].NgaySinh.toLocaleDateString('en-US') %></td> -->
+                                        <% const options = { year: 'numeric', month: '2-digit', day: '2-digit' }; %>
+                                        <td><%= new Date(gvmLists[i].NgaySinh).toLocaleDateString('vi-VN', options) %></td>
+
+
+                                        <td>
+                                          <button class="action-button edit" onclick="editClass(this, <%= i %>)">
+                                            ✏️
+                                          </button>
+                                          <!-- <button class="action-button view" onclick="viewClass(this)">
+                                            👁️
+                                          </button> -->
+                                          <button class="action-button view" onclick="viewClass(<%= i %>)">
+                                            👁️
+                                        </button>
+                                        
+                                          <!-- <button class="action-button delete" onclick="deleteClass(this)">
+                                            🗑️
+                                          </button> -->
+                                        </td>
+                                      </tr>
+                                    <% } %>
+                              </tbody>
+                            </table>
+                            <!-- <div class="pagination">
+                              <span>10 / trang</span>
+                              <button class="page-button">1</button>
+                            </div> -->
+                          </div>
+                      
+                          <!-- Modal (hiển thị khi xem/chỉnh sửa lớp học) -->
+                          <!-- <div id="modal" class="modal" style="display: none">
+                            <div class="modal-content">
+                              <span class="close-button" onclick="closeModal()">×</span>
+                              <h2 id="modal-title">Chi tiết lớp học</h2>
+                              <p id="modal-body"></p>
+                            </div>
+                          </div> -->
+                          
+                          <div id="modal" class="modal" style="display: none">
+                            <div class="modal-content">
+                                <span class="close-button" onclick="closeModal()">×</span>
+                                <h2 id="modal-title">Chi tiết giảng viên mời</h2>
+                                <br>
+                                <p><strong>Mã giảng viên:</strong> <span id="modal-ma-gv"></span></p>
+                                <p><strong>Họ tên:</strong> <span id="modal-ho-ten"></span></p>
+                                <p><strong>Ngày sinh:</strong> <span id="modal-ngay-sinh"></span></p>
+                                <p><strong>CCCD:</strong> <span id="modal-cccd"></span></p>
+                                <p><strong>Ngày cấp CCCD:</strong> <span id="modal-ngay-cap"></span></p>
+                                <p><strong>Nơi cấp CCCD:</strong> <span id="modal-noi-cap"></span></p>
+                                <p><strong>Địa chỉ theo CCCD:</strong> <span id="modal-dia-chi-cccd"></span></p>
+                                <p><strong>Số tài khoản:</strong> <span id="modal-so-tk"></span></p>
+                                <p><strong>Ngân hàng:</strong> <span id="modal-ngan-hang"></span></p>
+                                <p><strong>Email:</strong> <span id="modal-email"></span></p>
+                                <p><strong>Hệ số lương:</strong> <span id="modal-heso-luong"></span></p>
+                                <p><strong>Nơi công tác:</strong> <span id="modal-noi-cong-tac"></span></p>
+                                <p><strong>Chức vụ:</strong> <span id="modal-chuc-vu"></span></p>
+                                <p><strong>Mã số thuế:</strong> <span id="modal-ma-so-thue"></span></p>
+                            </div>
+                        </div>
+                        
+
+                    </div>
+                </div>
+            </div>    
+     </div>
+    <script src="/bootstrap/dist/js/jquery-3.7.1.min.js"></script>
+    <script src="/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Tìm kiếm giảng viên mời theo tên
+function searchClass() {
+    let input = document.getElementById("searchInput").value.toLowerCase();
+    let table = document.getElementById("classTable");
+    let tr = table.getElementsByTagName("tr");
+  
+    for (let i = 1; i < tr.length; i++) {
+      let td = tr[i].getElementsByTagName("td")[2];
+      if (td) {
+        let textValue = td.textContent || td.innerText;
+        if (textValue.toLowerCase().indexOf(input) > -1) {
+          tr[i].style.display = "";
+        } else {
+          tr[i].style.display = "none";
+        }
+      }
+    }
+  }
+  
+  // Xóa gvm
+  /*
+  function deleteClass(button) {
+    let row = button.parentNode.parentNode;
+    row.parentNode.removeChild(row);
+  }
+  */
+
+    // Thêm lớp học
+    function addClass() {
+      window.location.href = '/daotaoxemhd/daotaonhap';
+    }
+
+  // Chỉnh sửa gvm
+  function editClass(button, index) {
+      alert("Đang chuyển hướng đến update");
+      hre = '/updateGvm/'+index;
+      window.location.href = hre;
+
+  }
+
+  async function fetchGVMLists() {
+    try {
+        const response = await fetch('/api/gvm');
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+
+        const gvmLists = await response.json();
+        return gvmLists;
+    } catch (error) {
+        console.error('Error fetching data:', error);
+    }
+}
+ 
+/*
+ function fetchGVMLists() {
+  fetch('/api/gvm')
+      .then(response => {
+          if (!response.ok) {
+              throw new Error('Network response was not ok');
+          }
+          return response.json(); // Trả về Promise cho kết quả JSON
+      })
+      .then(gvmLists => {
+          alert("Lấy thành công");
+          return gvmLists; // Trả về danh sách giảng viên mời
+      })
+      .catch(error => {
+          console.error('Error fetching data:', error); // Xử lý lỗi
+      });
+}
+*/
+
+ async function viewClass( index) {
+
+  gvmLists = await fetchGVMLists();
+  
+  //alert("ga")
+  //alert(JSON.stringify(gvmLists[index]));
+  var gvm = gvmLists[index];
+  
+  // Hiển thị thông tin vào modal
+  /*
+  document.getElementById('modal-ma-gv').innerText = gvm.id_Gvm;
+  document.getElementById('modal-ho-ten').innerText = gvm.HoTen;
+  document.getElementById('modal-ngay-sinh').innerText = new Date(gvm.NgaySinh).toLocaleDateString('vi-VN');
+  document.getElementById('modal-cccd').innerText = gvm.CCCD;
+  document.getElementById('modal-ngay-cap').innerText = gvm.NgayCap;
+  document.getElementById('modal-so-tk').innerText = gvm.SoTaiKhoan;
+  document.getElementById('modal-ngan-hang').innerText = gvm.NganHang;
+  document.getElementById('modal-email').innerText = gvm.Email;
+  document.getElementById('modal-heso-luong').innerText = gvm.HeSoLuong;
+*/
+document.getElementById('modal-ma-gv').innerText = gvm.MaGvm;
+document.getElementById('modal-ho-ten').innerText = gvm.HoTen;
+document.getElementById('modal-ngay-sinh').innerText = new Date(gvm.NgaySinh).toLocaleDateString('vi-VN');
+document.getElementById('modal-cccd').innerText = gvm.CCCD;
+document.getElementById('modal-ngay-cap').innerText = new Date(gvm.NgayCapCCCD).toLocaleDateString('vi-VN');
+document.getElementById('modal-noi-cap').innerText = gvm.NoiCapCCCD;
+document.getElementById('modal-dia-chi-cccd').innerText = gvm.DiaChi;
+document.getElementById('modal-so-tk').innerText = gvm.STK;
+document.getElementById('modal-ngan-hang').innerText = gvm.NganHang;
+document.getElementById('modal-email').innerText = gvm.Email;
+document.getElementById('modal-heso-luong').innerText = gvm.HSL;//
+document.getElementById('modal-noi-cong-tac').innerText = gvm.NoiCongTac;
+document.getElementById('modal-chuc-vu').innerText = gvm.ChucVu;
+document.getElementById('modal-ma-so-thue').innerText = gvm.MaSoThue;
+  // Hiển thị modal
+  document.getElementById('modal').style.display = 'flex';
+}
+  
+
+  
+  // Đóng modal
+  function closeModal() {
+    document.getElementById("modal").style.display = "none";
+  }
+  
+  // Thêm sự kiện khi nhấn ra ngoài modal để đóng modal
+  window.onclick = function (event) {
+    let modal = document.getElementById("modal");
+    if (event.target == modal) {
+      modal.style.display = "none";
+    }
+  };
+  
+    </script>
+
+    <script>
+      // Lấy query string từ URL
+      const urlParams = new URLSearchParams(window.location.search);
+      const message = urlParams.get('message');
+      
+      // Lấy phần tử div để hiển thị thông báo
+      const messageDiv = document.getElementById('message');
+
+     // console.log(message)
+      // Hiển thị thông báo dựa trên giá trị của message
+      if (message === 'insertSuccess') {
+        alert("Update Success")
+      } else if (message === 'insertFalse') {
+        alert("Update False")
+      }
+
+        // Sau khi hiển thị thông báo, xóa query string để tránh hiển thị lại khi refresh
+if (message) {
+  // Sử dụng window.history để xóa query string mà không refresh lại trang
+  const newUrl = window.location.origin + window.location.pathname;
+  window.history.replaceState({}, document.title, newUrl);
+}
+
+    </script>
+</body>
+</html>
+

@@ -15,6 +15,9 @@ const configViewEngine = require("./config/viewEngine");
 // const webRoutes = require("./routes/web");
 
 const webRoutes = require("./routes/web");
+const inputGvmRoutes = require("./routes/createGvmRoute");
+const gvmList = require("./routes/gvmListRoute");
+const updateGvm = require("./routes/updateGvmRoute");
 
 const app = express();
 const port = process.env.port || 8888;
@@ -41,6 +44,9 @@ app.use(express.urlencoded({ extended: true })); // for form data
 // Khai bao route
 app.use("/", webRoutes);
 app.use("/", login);
+app.use("/", inputGvmRoutes);
+app.use("/", gvmList);
+app.use("/", updateGvm);
 
 app.listen(port, hostname, () => {
   console.log(`Server running on http://localhost:${port}`);
@@ -61,7 +67,6 @@ app.use(express.static(path.join(__dirname, "public/images")));
 //   // // In ra dữ liệu dưới dạng JSON
 //   // console.log("Data in JSON format: ", jsonData);
 // });
-
 
 // == src of L ==
 app.set("view engine", "ejs");
