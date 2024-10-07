@@ -15,8 +15,9 @@ const configViewEngine = require("./config/viewEngine");
 // const webRoutes = require("./routes/web");
 
 const webRoutes = require("./routes/web");
-const inputGvmRoutes = require("./routes/uploadImg");
+const inputGvmRoutes = require("./routes/createGvmRoute");
 const gvmList = require("./routes/gvmListRoute");
+const updateGvm = require("./routes/updateGvmRoute");
 
 const app = express();
 const port = process.env.port || 8888;
@@ -45,6 +46,7 @@ app.use("/", webRoutes);
 app.use("/", login);
 app.use("/", inputGvmRoutes);
 app.use("/", gvmList);
+app.use("/", updateGvm);
 
 app.listen(port, hostname, () => {
   console.log(`Server running on http://localhost:${port}`);
@@ -75,8 +77,9 @@ app.use(express.json()); // Thêm dòng này để xử lý JSON
 
 const importFile = require("./routes/importRoute");
 const infoGvm = require("./routes/infoRoute");
-// const login = require('./routes/loginRoute');
+// const { require } = require("app-root-path");
 
 app.use("/", importFile); // cấu hình import
 app.use("/", infoGvm); // cấu hình import
 // app.use('/', login); // cấu hình import
+// const login = require('./routes/loginRoute');
