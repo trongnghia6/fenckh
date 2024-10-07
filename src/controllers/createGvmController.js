@@ -197,11 +197,15 @@ let handleUploadFile = async (req, res) => {
   console.log("req.body: ", req.body);
 
   // Lấy các thông tin từ form
-  let Id_GVM = req.body.Id_GVM;
+  let Id_GVM = req.body.Id_GVM.toUpperCase();
   let HoTen = req.body.HoTen;
   let GioiTinh = req.body.GioiTinh;
   let NgaySinh = req.body.NgaySinh;
   let CCCD = req.body.CCCD;
+  let NgayCapCCCD = req.body.NgayCapCCCD;
+  let NoiCapCCCD = req.body.NoiCapCCCD;
+  let NoiCongTac = req.body.NoiCongTac;
+
   let DiaChi = req.body.DiaChi;
   let DienThoai = req.body.DienThoai;
   let email = req.body.email;
@@ -239,13 +243,13 @@ let handleUploadFile = async (req, res) => {
     let sauCCCD = req.files["sauCCCD"]
       ? req.files["sauCCCD"][0].filename
       : null;
-
-    console.log("Mặt trước CCCD: ", truocCCCD);
-    console.log("Mặt sau CCCD: ", sauCCCD);
+    let FileLyLich = req.files["FileLyLich"]
+      ? req.files["FileLyLich"][0].filename
+      : null;
 
     // Truy vấn để insert dữ liệu vào cơ sở dữ liệu
-    const query = `INSERT INTO gvmoi (id_GVM, HoTen, GioiTinh, NgaySinh, CCCD, DiaChi, DienThoai, Email, MaSoThue, HocVi, ChucVu, HSL, STK, NganHang, MatTruocCCCD, MatSauCCCD, FileLyLich, MaPhongBan, MaBoMon, TinhTrangGiangDay)
-                   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+    const query = `INSERT INTO gvmoi (MaGVM, HoTen, GioiTinh, NgaySinh, CCCD, NgayCapCCCD, NoiCapCCCD, NoiCongTac, DiaChi, DienThoai, Email, MaSoThue, HocVi, ChucVu, HSL, STK, NganHang, MatTruocCCCD, MatSauCCCD, FileLyLich, MaPhongBan, TinhTrangGiangDay)
+                   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
 
     connection.query(
       query,
@@ -255,6 +259,9 @@ let handleUploadFile = async (req, res) => {
         GioiTinh,
         NgaySinh,
         CCCD,
+        NgayCapCCCD,
+        NoiCapCCCD,
+        NoiCongTac,
         DiaChi,
         DienThoai,
         email,
@@ -266,9 +273,9 @@ let handleUploadFile = async (req, res) => {
         NganHang,
         truocCCCD, // Ảnh mặt trước CCCD
         sauCCCD, // Ảnh mặt sau CCCD
-        "0", // Giả sử đây là vị trí của FileLyLich (có thể cập nhật sau)
+        FileLyLich, // Giả sử đây là vị trí của FileLyLich (có thể cập nhật sau)
         MaPhongBan,
-        "0", // Mã bộ môn (có thể cập nhật sau)
+        // "0", // Mã bộ môn (có thể cập nhật sau)
         tinhTrangGiangDay, // Tình trạng giảng dạy
       ],
       function (err, results) {
@@ -276,7 +283,6 @@ let handleUploadFile = async (req, res) => {
           console.error("Error executing query: ", err);
           return res.redirect("/daotaoxemhd/daotaonhap?message=insertFalse");
         }
-        console.log("Kết quả: ", results);
         res.redirect("/daotaoxemhd/daotaonhap?message=insertSuccess");
       }
     );

@@ -144,7 +144,9 @@
                                 onkeyup="searchClass()"
                               />
                               <select class="filter" onchange="filterClasses()">
-                                <option value="">Lựa chọn</option>
+                                <option value="">Công nghệ thông tin</option>
+                                <option value="">An toàn thông tin</option>
+                                <option value="">Điện tử viễn thông</option>
                                 <!-- Các tùy chọn lọc khác -->
                               </select>
                             </div>
@@ -162,7 +164,7 @@
                                 <% for (var i = 0; i < gvmLists.length; i++) { %>
                                     <tr>
                                         <td><%= i+1 %></td>
-                                        <td><%= gvmLists[i].id_Gvm %></td>
+                                        <td><%= gvmLists[i].MaGvm %></td>
                                         <td><%= gvmLists[i].HoTen %></td>
                                         <!-- <td><%= gvmLists[i].NgaySinh.toLocaleDateString('en-US') %></td> -->
                                         <% const options = { year: 'numeric', month: '2-digit', day: '2-digit' }; %>
@@ -170,7 +172,7 @@
 
 
                                         <td>
-                                          <button class="action-button edit" onclick="editClass(this)">
+                                          <button class="action-button edit" onclick="editClass(this, <%= i %>)">
                                             ✏️
                                           </button>
                                           <!-- <button class="action-button view" onclick="viewClass(this)">
@@ -180,9 +182,9 @@
                                             👁️
                                         </button>
                                         
-                                          <button class="action-button delete" onclick="deleteClass(this)">
+                                          <!-- <button class="action-button delete" onclick="deleteClass(this)">
                                             🗑️
-                                          </button>
+                                          </button> -->
                                         </td>
                                       </tr>
                                     <% } %>
@@ -207,8 +209,8 @@
                             <div class="modal-content">
                                 <span class="close-button" onclick="closeModal()">×</span>
                                 <h2 id="modal-title">Chi tiết giảng viên mời</h2>
-                        
-                                <p><strong>Mã giáo viên:</strong> <span id="modal-ma-gv"></span></p>
+                                <br>
+                                <p><strong>Mã giảng viên:</strong> <span id="modal-ma-gv"></span></p>
                                 <p><strong>Họ tên:</strong> <span id="modal-ho-ten"></span></p>
                                 <p><strong>Ngày sinh:</strong> <span id="modal-ngay-sinh"></span></p>
                                 <p><strong>CCCD:</strong> <span id="modal-cccd"></span></p>
@@ -222,17 +224,6 @@
                                 <p><strong>Nơi công tác:</strong> <span id="modal-noi-cong-tac"></span></p>
                                 <p><strong>Chức vụ:</strong> <span id="modal-chuc-vu"></span></p>
                                 <p><strong>Mã số thuế:</strong> <span id="modal-ma-so-thue"></span></p>
-
-
-                                <!-- <p><strong>Mã giáo viên:</strong> <span id="modal-ma-gv"></span></p>
-                                <p><strong>Họ tên:</strong> <span id="modal-ho-ten"></span></p>
-                                <p><strong>Ngày sinh:</strong> <span id="modal-ngay-sinh"></span></p>
-                                <p><strong>CCCD:</strong> <span id="modal-cccd"></span></p>
-                                <p><strong>Ngày cấp:</strong> <span id="modal-ngay-cap"></span></p>
-                                <p><strong>Số tài khoản:</strong> <span id="modal-so-tk"></span></p>
-                                <p><strong>Ngân hàng:</strong> <span id="modal-ngan-hang"></span></p>
-                                <p><strong>Email:</strong> <span id="modal-email"></span></p>
-                                <p><strong>Hệ số lương:</strong> <span id="modal-heso-luong"></span></p> -->
                             </div>
                         </div>
                         
@@ -245,7 +236,7 @@
     <script src="/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
-        // Tìm kiếm lớp học theo tên
+        // Tìm kiếm giảng viên mời theo tên
 function searchClass() {
     let input = document.getElementById("searchInput").value.toLowerCase();
     let table = document.getElementById("classTable");
@@ -264,15 +255,24 @@ function searchClass() {
     }
   }
   
-  // Xóa lớp học
+  // Xóa gvm
+  /*
   function deleteClass(button) {
     let row = button.parentNode.parentNode;
     row.parentNode.removeChild(row);
   }
-  
-  // Chỉnh sửa lớp học
-  function editClass(button) {
-    alert("chưa có gì :)))")
+  */
+
+    // Thêm lớp học
+    function addClass() {
+      window.location.href = '/daotaoxemhd/daotaonhap';
+    }
+
+  // Chỉnh sửa gvm
+  function editClass(button, index) {
+      alert("Đang chuyển hướng đến update");
+      hre = '/updateGvm/'+index;
+      window.location.href = hre;
 
   }
 
@@ -284,7 +284,6 @@ function searchClass() {
         }
 
         const gvmLists = await response.json();
-        //alert("lay thanh cong")
         return gvmLists;
     } catch (error) {
         console.error('Error fetching data:', error);
@@ -330,17 +329,17 @@ function searchClass() {
   document.getElementById('modal-email').innerText = gvm.Email;
   document.getElementById('modal-heso-luong').innerText = gvm.HeSoLuong;
 */
-document.getElementById('modal-ma-gv').innerText = gvm.id_Gvm;
+document.getElementById('modal-ma-gv').innerText = gvm.MaGvm;
 document.getElementById('modal-ho-ten').innerText = gvm.HoTen;
 document.getElementById('modal-ngay-sinh').innerText = new Date(gvm.NgaySinh).toLocaleDateString('vi-VN');
 document.getElementById('modal-cccd').innerText = gvm.CCCD;
-document.getElementById('modal-ngay-cap').innerText = new Date(gvm.NgayCap).toLocaleDateString('vi-VN');
-document.getElementById('modal-noi-cap').innerText = gvm.NoiCap;
-document.getElementById('modal-dia-chi-cccd').innerText = gvm.DiaChiCCCD;
-document.getElementById('modal-so-tk').innerText = gvm.SoTaiKhoan;
+document.getElementById('modal-ngay-cap').innerText = new Date(gvm.NgayCapCCCD).toLocaleDateString('vi-VN');
+document.getElementById('modal-noi-cap').innerText = gvm.NoiCapCCCD;
+document.getElementById('modal-dia-chi-cccd').innerText = gvm.DiaChi;
+document.getElementById('modal-so-tk').innerText = gvm.STK;
 document.getElementById('modal-ngan-hang').innerText = gvm.NganHang;
 document.getElementById('modal-email').innerText = gvm.Email;
-document.getElementById('modal-heso-luong').innerText = gvm.HeSoLuong;
+document.getElementById('modal-heso-luong').innerText = gvm.HSL;//
 document.getElementById('modal-noi-cong-tac').innerText = gvm.NoiCongTac;
 document.getElementById('modal-chuc-vu').innerText = gvm.ChucVu;
 document.getElementById('modal-ma-so-thue').innerText = gvm.MaSoThue;
@@ -363,12 +362,31 @@ document.getElementById('modal-ma-so-thue').innerText = gvm.MaSoThue;
     }
   };
   
-  // Thêm lớp học
-  function addClass() {
-    //alert("Đang chuyển hướng");
-    window.location.href = '/daotaoxemhd/daotaonhap';
-  }
-  
+    </script>
+
+    <script>
+      // Lấy query string từ URL
+      const urlParams = new URLSearchParams(window.location.search);
+      const message = urlParams.get('message');
+      
+      // Lấy phần tử div để hiển thị thông báo
+      const messageDiv = document.getElementById('message');
+
+     // console.log(message)
+      // Hiển thị thông báo dựa trên giá trị của message
+      if (message === 'insertSuccess') {
+        alert("Update Success")
+      } else if (message === 'insertFalse') {
+        alert("Update False")
+      }
+
+        // Sau khi hiển thị thông báo, xóa query string để tránh hiển thị lại khi refresh
+if (message) {
+  // Sử dụng window.history để xóa query string mà không refresh lại trang
+  const newUrl = window.location.origin + window.location.pathname;
+  window.history.replaceState({}, document.title, newUrl);
+}
+
     </script>
 </body>
 </html>
