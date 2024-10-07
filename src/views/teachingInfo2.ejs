@@ -205,7 +205,7 @@
 
         const giaoVienGiangDayTd = document.createElement('td');
         giaoVienGiangDayTd.textContent = row.GiaoVienGiangDay || ''; // Hiển thị tên giảng viên giảng dạy, nếu không có thì để trống
-        tableRow.appendChild(giaoVienGiangDayTd);
+        tableRow.appendChild(giaoVienGiangDayTd); c
 
         const khoaTd = document.createElement('td');
         khoaTd.textContent = row.Khoa || 'CNTT'; // Sử dụng dữ liệu thực tế cho khoa
@@ -215,6 +215,7 @@
         boMonTd.textContent = ""; // Hiển thị thông tin bộ môn
         tableRow.appendChild(boMonTd);
 
+        // test commit
         const soTietLTTd = document.createElement('td');
         soTietLTTd.textContent = row.LL || ''; // Hiển thị số tiết lý thuyết
         tableRow.appendChild(soTietLTTd);
