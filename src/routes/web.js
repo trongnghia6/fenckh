@@ -12,7 +12,9 @@ const {
   getDtaoxemhd,
   getDtaonhap,
   getPhongTaiChinh,
-  getHomeMainDT,
+  getHomeMainDaoTao,
+  getTeachingInfo,
+  getXemBangQC,
 } = require("../controllers/homeController");
 
 // const { createGVM } = require("../controllers/DaoTaoController");
@@ -37,5 +39,9 @@ router.get("/daotaoxemhd/daotaonhap", getDtaonhap);
 // router.get("/index/import", getImport);
 router.get("/index/import", getImport);
 router.get("/PhongTaiChinh", getPhongTaiChinh);
+//phong dao tao
+router.get("/maindt", getHomeMainDaoTao);
+router.get("/maindt/teachingInfo", getTeachingInfo);
+router.get("/maindt/tableQC", getXemBangQC);
 
 module.exports = router;
