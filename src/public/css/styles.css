@@ -341,3 +341,58 @@
   .bg-test{
     background-color: #15172b;
   }
+  .navbar-top {
+    background-color: #f9f5e6; /* Màu nền vàng nhạt */
+    padding: 10px 20px;
+}
+.navbar-brand {
+    display: flex;
+    align-items: center;
+    color: #d42f2f; /* Màu chữ đỏ */
+    font-weight: bold;
+    padding-left: 15px;
+    margin-bottom: 10px;
+}
+.navbar-brand img {
+    margin-left: 10%;
+    height: 120px; /* Kích thước logo */
+    margin-right: 15px;
+}
+.navbar-title {
+    text-align: center;
+    line-height: 1.2;
+}
+.navbar-title .main-title {
+    font-size: 1.8rem;
+    color: #d42f2f;
+    font-weight: bold;
+}
+.navbar-title .sub-title {
+    font-size: 1.1rem;
+    color: #d5a253;
+}
+.navbar-bottom {
+    background-color: blue; /* Màu nền cam */
+     padding: 5px;
+     justify-content: space-around;
+     box-shadow: 0 10px 15px rgba(159, 9, 9, 0.2), 0 4px 6px rgba(185, 12, 12, 0.1); /* Hiệu ứng bóng đổ 3D */
+     position: relative;
+     transform-style: preserve-3d;
+}
+.navbar-bottom .nav-link {
+    color: white;
+    font-weight: bold;
+    text-transform: uppercase;
+    padding: 5px 10px;
+    margin-right: 15px;
+}
+.navbar-bottom .nav-link:hover {
+    color: black;
+    background-color: #f8f5f4; /* Màu cam đậm hơn khi hover */
+    transform: perspective(500px) translateZ(10px); /* Tạo hiệu ứng nổi 3D */
+    box-shadow: 0 10px 10px rgba(0, 0, 0, 0.3);
+}
+.login {
+    color: red;
+    font-weight: bold;
+}
