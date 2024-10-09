@@ -61,6 +61,15 @@ const getPhongTaiChinh = (req, res) => {
 const gethomePage = (req, res) => {
   res.render("homepage.ejs");
 };
+const getHomeMainDaoTao = (req, res) => {
+  res.render("maindt.ejs");
+};
+const getTeachingInfo = (req, res) => {
+  res.render("teachingInfo.ejs");
+};
+const getXemBangQC = (req, res) => {
+  res.render("tableQC.ejs");
+};
 
 // Hàm postFile xử lý upload file Excel
 const postFile = (req, res) => {
@@ -92,6 +101,10 @@ module.exports = {
   getDtaoxemhd,
   getDtaonhap,
   getPhongTaiChinh,
-  postFile, // Thêm hàm này vào export để sử dụng trong router
+  postFile, 
+  getHomeMainDaoTao,
+  getTeachingInfo,
+  getXemBangQC
+  // Thêm hàm này vào export để sử dụng trong router
   // createGVM,
 };
