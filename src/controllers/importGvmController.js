@@ -17,7 +17,7 @@ const updateTableQC = async (data) => {
       `;
 
       const values = [
-        item['giaoVienGiangDay'], // Tên giáo viên giảng dạy
+        item['giaoVienGiangDay'], // Tên Giảng viên giảng dạy
         item['gvMoi'],            // Giá trị mới của trường MoiGiang
         item['lopHocPhan']        // Điều kiện tìm kiếm theo LopHocPhan
       ];
