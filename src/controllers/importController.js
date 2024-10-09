@@ -101,7 +101,8 @@ const importTableQC = async (jsonData) => {
       MoiGiang, 
       SoTinChi, 
       MaHocPhan, 
-      LopHocPhan, 
+      LopHocPhan,
+      TenLop, 
       LL, 
       SoTietCTDT, 
       HeSoT7CN, 
@@ -109,13 +110,13 @@ const importTableQC = async (jsonData) => {
       HeSoLopDong, 
       QuyChuan, 
       GhiChu
-    ) VALUES (?, ?, ?, ?, ?, NULL, FALSE, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+    ) VALUES (?, ?, ?, ?, ?, NULL, FALSE, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
   `;
 
   const insertPromises = jsonData.map(item => {
     return new Promise((resolve, reject) => {
       // Sử dụng hàm tachChuoi để tách các thông tin từ chuỗi
-      const { HocKi, NamHoc, Lop } = tachChuoi(item['LopHocPhan']);
+      const { TenLop, HocKi, NamHoc, Lop } = tachChuoi(item['LopHocPhan']);
 
       const values = [
         item['Khoa'],                                // Khoa
@@ -125,7 +126,8 @@ const importTableQC = async (jsonData) => {
         item['GiaoVien'],                            // Tên Giảng viên
         item['SoTinChi'],                            // Số tín chỉ
         item['MaHocPhan'],                           // Mã học phần
-        Lop,                                         // Lớp học phần (được tách từ chuỗi)
+        TenLop,                                         // Lớp học phần (được tách từ chuỗi)
+        Lop,
         item['LL'],                                  // LL (Số tiết theo lịch)
         item['SoTietCTDT'],                          // Số tiết theo CTĐT
         item['HeSoT7CN'],                            // Hệ số T7/CN
