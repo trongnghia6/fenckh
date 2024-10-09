@@ -90,7 +90,7 @@ const login = async (req, res) => {
         // console.log(role);
 
         if (role.includes("daotao")) {
-          url = "/daotaoxemhd";
+          url = "/dtxemhd";
         } else if (role.includes("nhanvien")) {
           url = "/index";
         } else {
