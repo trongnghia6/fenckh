@@ -8,71 +8,108 @@
   
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
-  <link rel="stylesheet" href="/css/styles.css">
+  <link rel="stylesheet" href="../../public/css/styles.css">
   
 </head>
 
 <body>
   <!-- Phần trên của navbar chứa logo và tiêu đề -->
-<div class="fixed-top">
-  <nav class="navbar-top ">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="#">
-            <img src="/Logo-Hoc-Vien-Ky-Thuat-Mat-Ma-ACTVN.webp" alt="Logo">
-            <div class="navbar-title">
-              <img src="/dongchu_banner.png" alt="banner">
-            </div>
-        </a>
-    </div>
+<nav class="navbar-top">
+  <div class="container-fluid">
+      <a class="navbar-brand" href="#">
+          <img src="/picture/Logo-Hoc-Vien-Ky-Thuat-Mat-Ma-ACTVN.webp" alt="Logo">
+          <div class="navbar-title">
+            <img src="/picture/dongchu_banner.png" alt="banner">
+          </div>
+      </a>
+  </div>
 </nav>
 
 <!-- Phần dưới của navbar chứa các mục nằm ngang -->
 <nav class="navbar navbar-expand-lg navbar-bottom">
-    <div class="container-fluid">
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link" href="/maindt">HOME</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/maindt/teachingInfo">Thông tin GD</a>
-                </li>
-                <li>
-                <li class="nav-item">
-                    <a class="nav-link active" href="/index/import">Import</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Duyệt</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="/maindt/tableQC">Bảng quy chuẩn</a>
-                </li>
-                <div class="navbar-nav">
-                  <div class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="/login" id="navbarDropdownUser" data-bs-toggle="dropdown" aria-expanded="false">
-                          Hi, Lê Đức Thuận
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <a class="dropdown-item" href="#">Thông tin cá nhân</a>
-                            <a class="dropdown-item" href="/">Đăng xuất</a>
-                        </div>
-                  </div>
-            </ul>
-        </div>
-    </div>
-  </nav>
- </div>
-
+  <div class="container-fluid">
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+          <ul class="navbar-nav">
+              <li class="nav-item">
+                  <a class="nav-link" href="./maindt.html">HOME</a>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link" href="/daotaoxemhd/gvmList">Thông tin GD</a>
+              </li>
+              <li>
+              <li class="nav-item">
+                  <a class="nav-link" href="/index/import">Import</a>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link" href="#">Duyệt</a>
+              </li>
+              <div class="navbar-nav">
+                <div class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle bi bi-person" href="/login" id="navbarDropdownUser" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Hi, Lê Đức Thuận
+                    </a>
+                </div>
+          </ul>
+      </div>
+  </div>
+</nav>
 
   <div class="container-fluid my-4 mg-top">
-        <div class="mx-5">
+    <div class="row">
+      <div class="d-flex ">
+        <div class=" bg-light mb-4 w-20">
+          <h4>Chủ đề</h4>
+          <ul class="nav nav-tabs list-group" id="myTab" role="tablist">
+            <li class="nav-item" role="presentation">
+              <nav class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+                  data-bs-toggle="dropdown" aria-expanded="false">
+                  Giảng viên
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                  <li><a class="dropdown-item" href="/public/index/ttgiangvien.html">Thông tin GD mời</a></li>
+                  <li><a class="dropdown-item" href="/public/index/hdmoi.html">Hợp đồng mời</a></li>
+                </ul>
+              </nav>
+            </li>
+            <li class="nav-item" role="presentation">
+              <nav class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+                  data-bs-toggle="dropdown" aria-expanded="false">
+                  Phòng đào tạo
+                </a>
+                <ul class="dropdown-menu text-center" aria-labelledby="navbarDropdownMenuLink">
+                  <li><a class="dropdown-item" href="/public/index/duyethd.html">Duyệt</a></li>
+                  <li><a class="dropdown-item" href="/index/import">Import</a></li>
+                  <li><a class="dropdown-item" href="/public/index/nhaptay.html">Nhập tay</a></li>
+                  <li><a class="dropdown-item" href="/public/index/xemhd.html">Xem hợp đồng</a></li>
+                </ul>
+              </nav>
+            </li>
+            <li class="nav-item" role="presentation">
+              <a class="nav-link " href="#" id="navbarDropdownMenuLink" role="button">Phòng NCKH</a>
+            </li>
+            <li class="nav-item text-nowrap" role="presentation"></li>
+            <a class="nav-link" href="#" id="navbarDropdownMenuLink" role="button">Phòng Tài Chinh</a>
+            </li>
+            <li class="nav-item text-nowrap" role="presentation"></li>
+            <a class="nav-link" href="#" id="navbarDropdownMenuLink" role="button">Thống Kê</a>
+            </li>
+            <li class="nav-item" role="presentation"></li>
+            <a class="nav-link" href="chatbox.html" id="navbarDropdownMenuLink" role="button">Chat box</a>
+            </li>
+          </ul>
+        </div>
+        <div class="mx-5" style="width: 100%;">
           <div class="d-flex justify-content-between">
             <button class="btn btn-outline-primary" id="chosseFile">Chọn file</button>
+
+
             <!-- Combo box Đợt -->
-            <select class="form-select w-100px mx-2" id="combobox-dot">
+            <select class="form-select w-25 mx-2" id="combobox-dot">
               <option value="1">Đợt 1</option>
               <option value="2">Đợt 2</option>
               <option value="3">Đợt 3</option>
@@ -80,7 +117,7 @@
             </select>
 
             <!-- Combo box với các giá trị CNTT, ATTT, DTVT -->
-            <select class="form-select w-100px mx-2" id="combobox-khoa">
+            <select class="form-select w-25 mx-2" id="combobox-khoa">
               <option value="CNTT">CNTT</option>
               <option value="ATTT">ATTT</option>
               <option value="DTVT">DTVT</option>
@@ -93,6 +130,9 @@
           </div>
           <div id="dataTableContainer" class="h-75"></div>
         </div>
+      </div>
+    </div>
+  </div>
   </div>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

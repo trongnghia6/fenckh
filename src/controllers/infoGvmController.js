@@ -3,6 +3,7 @@ const fs = require('fs');
 require('dotenv').config();
 const path = require('path');
 const connection = require('../controllers/connectDB');
+const { getEnvironmentData } = require('worker_threads');
 
 // Hàm tách chuỗi - giữ nguyên
 function tachChuoi(chuoi) {
@@ -49,7 +50,7 @@ function handleDuplicateCourses(firstCourse, courses) {
 
 // Cập nhật hàm renderInfo để xử lý việc gộp các lớp phân lớp
 const renderInfo = (req, res) => {
-  const tableName = process.env.DB_TABLE_NAME;
+  const tableName = process.env.DB_TABLE_QC;
 
   const query = `SELECT * FROM ${tableName}`;
   connection.query(query, (error, results) => {
@@ -76,12 +77,12 @@ const renderInfo = (req, res) => {
 
       const { baseClass, suffix } = extractClassSuffix(courseData.Lop); // Tách lớp chính và phân lớp
 
-      // Khởi tạo courseMap theo giáo viên nếu chưa có
+      // Khởi tạo courseMap theo Giảng viên nếu chưa có
       if (!courseMap[teacher]) {
         courseMap[teacher] = {};
       }
 
-      // Kiểm tra lớp học chính trong courseMap của giáo viên
+      // Kiểm tra lớp học chính trong courseMap của Giảng viên
       if (!courseMap[teacher][baseClass]) {
         courseMap[teacher][baseClass] = [];
       }
@@ -92,7 +93,7 @@ const renderInfo = (req, res) => {
 
     const finalResults = [];
 
-    // Duyệt qua từng giáo viên và từng lớp học
+    // Duyệt qua từng Giảng viên và từng lớp học
     for (const teacher in courseMap) {
       for (const baseClass in courseMap[teacher]) {
         const courses = courseMap[teacher][baseClass];
@@ -106,7 +107,7 @@ const renderInfo = (req, res) => {
         }
       }
     }
-
+    // console.log(finalResults);
     return res.status(200).json(finalResults); // Trả về kết quả sau khi gộp
   });
 };
@@ -189,6 +190,7 @@ const getKhoaAndNameGvmOfKhoa = async (req, res) => {
 
     // console.log(finalResults)
     // return finalResults; // Trả kết quả cuối cùng
+    return res.status(200).json(gvmResults);
     return res.status(200).json(finalResults);
 
   } catch (error) {
