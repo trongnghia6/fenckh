@@ -31,7 +31,7 @@ const login = async (req, res) => {
 
         if (role.includes("daotao")) {
           req.session.role = "daotao"; // Lưu vai trò vào session
-          url = "/daotaoxemhd";
+          url = "/maindt";
         } else if (role.includes("CNTT")) {
           req.session.role = "CNTT"; // Lưu vai trò vào session
           url = "/gvmList";

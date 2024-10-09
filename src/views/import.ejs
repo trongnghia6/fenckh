@@ -77,8 +77,20 @@
         <select class="form-select w-100px mx-2" id="combobox-dot">
           <option value="1">Đợt 1</option>
           <option value="2">Đợt 2</option>
-          <option value="3">Đợt 3</option>
-          <option value="4">Đợt 4</option>
+        </select>
+
+        <!-- Combo box Đợt -->
+        <select class="form-select w-100px mx-2" id="combobox-ki">
+          <option value="1">Kì 1</option>
+          <option value="2">Kì 2</option>
+        </select>
+
+        <!-- Combo box Năm -->
+        <select class="form-select w-100px mx-2" id="combobox-nam">
+          <option value="2024">2024</option>
+          <option value="2024">2025</option>
+          <option value="2024">2026</option>
+          <option value="2024">2027</option>
         </select>
 
         <!-- Combo box với các giá trị CNTT, ATTT, DTVT -->
@@ -172,6 +184,9 @@
         // Lấy giá trị hiện tại từ combo box "Khoa"
         const khoaValue = document.getElementById('combobox-khoa').value;
         const dotValue = document.getElementById('combobox-dot').value;
+        const kiValue = document.getElementById('combobox-ki').value;
+        const namValue = document.getElementById('combobox-nam').value;
+
 
         // Gửi giá trị Khoa để kiểm tra tồn tại
         fetch('http://localhost:3000/check-khoa', {
@@ -189,13 +204,63 @@
           })
           .then(data => {
             if (data.exists) {
-              // Nếu Khoa tồn tại, thông báo cho người dùng
-              alert('Tồn tại dữ liệu cũ!');
+              // Sử dụng confirm để hiển thị thông báo và nhận câu trả lời từ người dùng
+              if (confirm('Tồn tại dữ liệu cũ! Bạn có muốn xóa hết dữ liệu cũ không?')) {
 
-              // Nếu muốn ngăn chặn import, có thể return ở đây
-              // return;
+                fetch('http://localhost:3000/delete-khoa', {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json'
+                  },
+                  body: JSON.stringify({ khoa: khoaValue }) // Gửi giá trị Khoa
+                })
+                  .then(response => {
+                    if (!response.ok) {
+                      throw new Error('Kiểm tra Khoa thất bại');
+                    }
+                    alert('Xóa thành công!');
+                  })
+                // Người dùng ấn "OK", tiếp tục xử lý
+                updatedData = dataTam.map(item => ({
+                  ...item,            // Sao chép các thuộc tính hiện có của đối tượng
+                  Khoa: khoaValue,    // Thêm thuộc tính mới "Khoa" với giá trị từ combo box
+                  Dot: dotValue,       // Thêm thuộc tính mới "Đợt" với giá trị từ combo box "Đợt"
+                  Ki: kiValue,       // Thêm thuộc tính mới "Đợt" với giá trị từ combo box "Đợt"
+                  Nam: namValue       // Thêm thuộc tính mới "Đợt" với giá trị từ combo box "Đợt"
+
+                }));
+
+                // Gửi dữ liệu đã được cập nhật đến API save-data
+                fetch('http://localhost:3000/save-data', {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json'
+                  },
+                  body: JSON.stringify(updatedData) // Gửi dữ liệu đã được cập nhật
+                })
+                  .then(response => {
+                    if (!response.ok) {
+                      throw new Error('Gửi dữ liệu thất bại');
+                    }
+                    return response.json();
+                  })
+                  .then(data => {
+                    if (data.success) {
+                      alert('Import thành công!');
+                    } else {
+                      alert('Import thất bại!');
+                    }
+                  })
+                  .catch(error => {
+                    alert('Gửi dữ liệu thất bại!');
+                    console.error('Error:', error);
+                  });
+              } else {
+                // Người dùng ấn "Cancel", không làm gì cả
+                console.log('Người dùng hủy thao tác import.');
+              }
             } else {
-              // Nếu Khoa không tồn tại, tiến hành thêm giá trị vào từng đối tượng trong dữ liệu
+              // Nếu Khoa không tồn tại, tiếp tục thêm và gửi dữ liệu
               updatedData = dataTam.map(item => ({
                 ...item,            // Sao chép các thuộc tính hiện có của đối tượng
                 Khoa: khoaValue,    // Thêm thuộc tính mới "Khoa" với giá trị từ combo box
@@ -203,30 +268,34 @@
               }));
 
               // Gửi dữ liệu đã được cập nhật đến API save-data
-              return fetch('http://localhost:3000/save-data', {
+              fetch('http://localhost:3000/save-data', {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(updatedData) // Gửi dữ liệu đã được cập nhật
-              });
-            }
-          })
-          .then(response => {
-            if (!response.ok) {
-              throw new Error('Gửi dữ liệu thất bại');
-            }
-            return response.json();
-          })
-          .then(data => {
-            if (data.success) {
-              alert('Import thành công!');
-            } else {
-              alert('Import thất bại!');
+              })
+                .then(response => {
+                  if (!response.ok) {
+                    throw new Error('Gửi dữ liệu thất bại');
+                  }
+                  return response.json();
+                })
+                .then(data => {
+                  if (data.success) {
+                    alert('Import thành công!');
+                  } else {
+                    alert('Import thất bại!');
+                  }
+                })
+                .catch(error => {
+                  alert('Gửi dữ liệu thất bại!');
+                  console.error('Error:', error);
+                });
             }
           })
           .catch(error => {
-            alert('Gửi dữ liệu thất bại!');
+            alert('Kiểm tra khoa thất bại!');
             console.error('Error:', error);
           });
       } else {

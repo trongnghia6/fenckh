@@ -120,8 +120,8 @@ const importTableQC = async (jsonData) => {
       const values = [
         item['Khoa'],                                // Khoa
         item['Dot'],                                 // Đợt
-        HocKi,                                       // Kỳ học (được tách từ chuỗi)
-        NamHoc,                                      // Năm học (được tách từ chuỗi)
+        item['Ki'],                                 // Đợt
+        item['Nam'],                                 // Đợt
         item['GiaoVien'],                            // Tên Giảng viên
         item['SoTinChi'],                            // Số tín chỉ
         item['MaHocPhan'],                           // Mã học phần
@@ -184,6 +184,8 @@ const importTableTam = async (jsonData) => {
     INSERT INTO ${tableName} (
       Khoa,
       Dot,
+      Ki,
+      Nam,
       GiaoVien, 
       SoTinChi, 
       LopHocPhan, 
@@ -194,7 +196,7 @@ const importTableTam = async (jsonData) => {
       HeSoLopDong, 
       QuyChuan, 
       GhiChu
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
   `;
 
   const insertPromises = jsonData.map(item => {
@@ -202,6 +204,8 @@ const importTableTam = async (jsonData) => {
       const values = [
         item['Khoa'],                               // Khoa
         item['Dot'],                                // Đợt
+        item['Ki'],                                // Đợt
+        item['Nam'],                                // Đợt
         item['Giáo Viên'],                          // Tên Giảng viên
         item['Số TC'],                               // Số tín chỉ
         item['Lớp học phần'],                        // Lớp học phần                     
@@ -448,4 +452,30 @@ const checkExistKhoa = async (req, res) => {
   });
 };
 
-module.exports = { handleUploadAndRender, importJSONToDB, importTableQC, importTableTam, checkExistKhoa };
+
+// Hàm xóa row theo trường 'Khoa'
+const deleteRowByKhoa = (req, res) => {
+  const { khoa } = req.body;  // Nhận giá trị từ client thông qua body
+  const tableName = process.env.DB_TABLE_TAM; // Lấy tên bảng từ biến môi trường
+  if (!khoa) {
+    return res.status(400).json({ message: 'Missing required field: Khoa' });
+  }
+
+  // Query SQL để xóa row
+  const sql = `DELETE FROM ${tableName} WHERE Khoa = ?`;
+
+  connection.query(sql, [khoa], (err, results) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ message: 'Error executing query', error: err });
+    }
+
+    if (results.affectedRows === 0) {
+      return res.status(404).json({ message: 'No row found with the given Khoa' });
+    }
+
+    return res.status(200).json({ message: 'Row deleted successfully' });
+  });
+};
+
+module.exports = { handleUploadAndRender, importJSONToDB, importTableQC, importTableTam, checkExistKhoa, deleteRowByKhoa };

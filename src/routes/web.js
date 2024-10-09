@@ -31,7 +31,7 @@ router.post("/abc/create", createUser);
 router.get("/", getLogin);
 router.get("/index", getIndex);
 router.get("/dtxemhd", getDtaoxemhd);
-router.get("/maindt", getHomeMainDT);
+router.get("/maindt", getHomeMainDaoTao);
 router.get("/daotaoxemhd/daotaoduyet", getDtaoduyet);
 router.get("/daotaoxemhd/daotaonhap", getDtaonhap);
 
