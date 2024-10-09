@@ -77,12 +77,12 @@ const renderInfo = (req, res) => {
 
       const { baseClass, suffix } = extractClassSuffix(courseData.Lop); // Tách lớp chính và phân lớp
 
-      // Khởi tạo courseMap theo giáo viên nếu chưa có
+      // Khởi tạo courseMap theo Giảng viên nếu chưa có
       if (!courseMap[teacher]) {
         courseMap[teacher] = {};
       }
 
-      // Kiểm tra lớp học chính trong courseMap của giáo viên
+      // Kiểm tra lớp học chính trong courseMap của Giảng viên
       if (!courseMap[teacher][baseClass]) {
         courseMap[teacher][baseClass] = [];
       }
@@ -93,7 +93,7 @@ const renderInfo = (req, res) => {
 
     const finalResults = [];
 
-    // Duyệt qua từng giáo viên và từng lớp học
+    // Duyệt qua từng Giảng viên và từng lớp học
     for (const teacher in courseMap) {
       for (const baseClass in courseMap[teacher]) {
         const courses = courseMap[teacher][baseClass];

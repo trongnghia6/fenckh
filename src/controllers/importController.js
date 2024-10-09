@@ -122,7 +122,7 @@ const importTableQC = async (jsonData) => {
         item['Dot'],                                 // Đợt
         HocKi,                                       // Kỳ học (được tách từ chuỗi)
         NamHoc,                                      // Năm học (được tách từ chuỗi)
-        item['GiaoVien'],                            // Tên giáo viên
+        item['GiaoVien'],                            // Tên Giảng viên
         item['SoTinChi'],                            // Số tín chỉ
         item['MaHocPhan'],                           // Mã học phần
         Lop,                                         // Lớp học phần (được tách từ chuỗi)
@@ -202,7 +202,7 @@ const importTableTam = async (jsonData) => {
       const values = [
         item['Khoa'],                               // Khoa
         item['Dot'],                                // Đợt
-        item['Giáo Viên'],                          // Tên giáo viên
+        item['Giáo Viên'],                          // Tên Giảng viên
         item['Số TC'],                               // Số tín chỉ
         item['Lớp học phần'],                        // Lớp học phần                     
         item['Số tiết lên lớp theo TKB'],          // LL (cần xác định từ dữ liệu nếu cần)
@@ -255,11 +255,11 @@ const importJSONToDB = async (jsonData) => {
   const columnDVHT = 'DVHT'; // Số tín chỉ
 
   // Các cột cho bảng giangday
-  const columnIdUser = 'id_User'; // ID giáo viên
+  const columnIdUser = 'id_User'; // ID Giảng viên
   const columnMaHocPhanGiangDay = 'MaHocPhan'; // Mã học phần
   const columnMaLopGiangDay = 'MaLop'; // Mã lớp
   const columnIdGVM = 'Id_Gvm'; // ID giảng viên mời
-  const columnGiaoVien = 'GiaoVien'; // Tên giáo viên
+  const columnGiaoVien = 'GiaoVien'; // Tên Giảng viên
   const columnLenLop = 'LenLop'; // LL
   const columnHeSoT7CN = 'HeSoT7CN'; // Hệ số T7/CN
   const columnSoTietCTDT = 'SoTietCTDT'; // Số tiết CTĐT
@@ -297,11 +297,11 @@ const importJSONToDB = async (jsonData) => {
           return;
         }
 
-        // Nếu không tìm thấy giáo viên
+        // Nếu không tìm thấy Giảng viên
         if (results.length === 0) {
           resolve(null); // Không tìm thấy, trả về null
         } else {
-          resolve(results[0].id_User); // Lấy id_User của giáo viên
+          resolve(results[0].id_User); // Lấy id_User của Giảng viên
         }
       });
     });
@@ -373,11 +373,11 @@ const importJSONToDB = async (jsonData) => {
           VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
 
         connection.query(queryGiangDay, [
-          id_User,                               // ID giáo viên
+          id_User,                               // ID Giảng viên
           index,                                   // Mã học phần
           index,                                     // mã lớp
           index,                                   // id gvm
-          item['Giáo Viên'],                    // Tên giáo viên
+          item['Giáo Viên'],                    // Tên Giảng viên
           item['LL'],                         // LL
           item['Hệ số T7/CN'],                     // Hệ số T7/CN
           item['Số tiết CTĐT']                    // Số tiết CTĐT

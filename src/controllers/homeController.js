@@ -50,7 +50,7 @@ const getDtaoduyet = (req, res) => {
   res.render("daotaoduyet.ejs");
 };
 const getDtaoxemhd = (req, res) => {
-  res.render("daotaoxemhd.ejs");
+  res.render("maindt.ejs");
 };
 const getDtaonhap = (req, res) => {
   res.render("daotaonhap.ejs");
