@@ -75,11 +75,6 @@ const postFile = (req, res) => {
   });
 };
 
-const createGVM = (req, res) => {
-  console.log("thanh cong");
-  res.send("ahiahi succes");
-};
-
 // Xuất các hàm để sử dụng trong router
 module.exports = {
   gethomePage,
@@ -93,5 +88,4 @@ module.exports = {
   getDtaonhap,
   getPhongTaiChinh,
   postFile, // Thêm hàm này vào export để sử dụng trong router
-  // createGVM,
 };

@@ -1,0 +1,21 @@
+// Xem thông tin các lớp giảng viên mời
+const express = require("express");
+const router = express.Router();
+
+const {
+  getClassInfoGvm,
+  getGvm,
+
+  // Khoa công nghệ thông tin
+  getClassInfoGvmCNTT,
+  getGvmCNTT,
+} = require("../controllers/classInfoGvmController");
+
+router.get("/classInfoGvm", getClassInfoGvm);
+router.get("/api/gvm", getGvm);
+
+// Khoa công nghệ thông tin
+router.get("/classInfoGvmCNTT", getClassInfoGvmCNTT);
+router.get("/api/gvmCNTT", getGvmCNTT);
+
+module.exports = router;

@@ -114,16 +114,20 @@
 
                                     <!-- Danh sách giảng viên mời -->
                                     <li class="nav-item"></li>
-                                        <a  class="nav-link active" href="/daotaoxemhd/gvmList" role="button">Danh sách giảng viên mời</a>
+                                        <a  class="nav-link active" href="/gvmList" role="button">Danh sách giảng viên mời</a>
                                     </li>
-                                    <!--  -->
 
-                                    <li class="nav-item" role="presentation"></li>
+                                    <!-- Thông tin các lớp giảng viên mời -->
+                                    <li class="nav-item"></li>
+                                        <a  class="nav-link " href="/classInfoGvm" role="button">Thông tin các lớp giảng viên mời</a>
+                                    </li>
+
+                                    <!-- <li class="nav-item" role="presentation"></li>
                                         <a class="nav-link" href="/daotaoxemhd/daotaonhap" id="navbarDropdownMenuLink" role="button" >Nhập</a>
                                     </li>
                                     <li class="nav-item" role="presentation"></li>
                                         <a class="nav-link" href="chatbox.html" id="navbarDropdownMenuLink" role="button" >Chat box</a>
-                                    </li>
+                                    </li>  -->
                                 </ul>
                         </div>
                     </div>
@@ -143,12 +147,12 @@
                                 id="searchInput"
                                 onkeyup="searchClass()"
                               />
-                              <select class="filter" onchange="filterClasses()">
+                              <!-- <select class="filter" onchange="filterClasses()">
                                 <option value="">Công nghệ thông tin</option>
                                 <option value="">An toàn thông tin</option>
                                 <option value="">Điện tử viễn thông</option>
-                                <!-- Các tùy chọn lọc khác -->
-                              </select>
+                                 Các tùy chọn lọc khác
+                              </select> -->
                             </div>
                             <table class="class-table" id="classTable">
                               <thead>
@@ -172,7 +176,7 @@
 
 
                                         <td>
-                                          <button class="action-button edit" onclick="editClass(this, <%= i %>)">
+                                          <button class="action-button edit" onclick="editClass(this, <%= parseInt(gvmLists[i].id_Gvm) - 1 %>)">
                                             ✏️
                                           </button>
                                           <!-- <button class="action-button view" onclick="viewClass(this)">
@@ -270,7 +274,6 @@ function searchClass() {
 
   // Chỉnh sửa gvm
   function editClass(button, index) {
-      alert("Đang chuyển hướng đến update");
       hre = '/updateGvm/'+index;
       window.location.href = hre;
 
@@ -312,7 +315,7 @@ function searchClass() {
  async function viewClass( index) {
 
   gvmLists = await fetchGVMLists();
-  
+
   //alert("ga")
   //alert(JSON.stringify(gvmLists[index]));
   var gvm = gvmLists[index];
