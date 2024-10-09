@@ -122,15 +122,15 @@
 
               <!-- Danh sách giảng viên mời -->
               <li class="nav-item"></li>
-                <a  class="nav-link" href="/daotaoxemhd/gvmList" role="button">Danh sách giảng viên mời</a>
+              <a class="nav-link" href="/daotaoxemhd/gvmList" role="button">Danh sách giảng viên mời</a>
               </li>
-              <!--  -->     
+              <!--  -->
 
               <li class="nav-item" role="presentation"></li>
               <a class="nav-link" href="/daotaoxemhd/daotaonhap" id="navbarDropdownMenuLink" role="button">Nhập</a>
               </li>
 
-         
+
 
               <li class="nav-item" role="presentation"></li>
               <a class="nav-link" href="bang-quy-chuan" id="navbarDropdownMenuLink" role="button">Bảng quy chuẩn</a>
@@ -139,39 +139,41 @@
           </div>
         </div>
       </div>
-      <div class="mx-5 w-80">
-        <div class="d-flex justify-content-start">
-          <div class="dropdown mx-2">
-            <button class="btn btn-outline-primary dropdown-toggle" type="button" id="selectYear"
-              data-bs-toggle="dropdown" aria-expanded="false">
-              Năm
-            </button>
-            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-              <li><a class="dropdown-item year" href="#">2020</a></li>
-              <li><a class="dropdown-item year" href="#">2021</a></li>
-              <li><a class="dropdown-item year" href="#">2022</a></li>
-              <li><a class="dropdown-item year" href="#">2023</a></li>
-              <li><a class="dropdown-item year" href="#">2023</a></li>
-              <li><a class="dropdown-item year" href="#">2024</a></li>
-            </ul>
-          </div>
+      <div class="mx-5" style="width: 100%;">
+        <div class="d-flex justify-content-between align-items-center">
+
+          <!-- Nút chọn file -->
+          <button class="btn btn-outline-primary" id="chooseFile">Chọn file</button>
+
+          <!-- Dropdown nút Đợt -->
           <div class="dropdown mx-2">
             <button class="btn btn-outline-primary dropdown-toggle" type="button" id="selectDot"
               data-bs-toggle="dropdown" aria-expanded="false">
-              Đợt
+              Đợt <span id="selectedDot">1</span>
             </button>
-            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-              <li><a class="dropdown-item dot" href="#">1</a></li>
-              <li><a class="dropdown-item dot" href="#">2</a></li>
-              <li><a class="dropdown-item dot" href="#">3</a></li>
-              <li><a class="dropdown-item dot" href="#">4</a></li>
+            <ul class="dropdown-menu" aria-labelledby="selectDot">
+              <li><a class="dropdown-item dot" href="#" data-value="1">Đợt 1</a></li>
+              <li><a class="dropdown-item dot" href="#" data-value="2">Đợt 2</a></li>
+              <li><a class="dropdown-item dot" href="#" data-value="3">Đợt 3</a></li>
+              <li><a class="dropdown-item dot" href="#" data-value="4">Đợt 4</a></li>
             </ul>
           </div>
-          <div>
-            <button class="btn btn-success">Hiển thị</button>
-          </div>
+
+          <!-- Combo box với các giá trị CNTT, ATTT, DTVT -->
+          <select class="form-select w-25 mx-2" id="comboBox">
+            <option value="CNTT">CNTT</option>
+            <option value="ATTT">ATTT</option>
+            <option value="DTVT">DTVT</option>
+          </select>
+
+          <!-- Nút Import -->
+          <button class="btn btn-outline-primary" id="import">Import</button>
+
         </div>
+
+        <div id="dataTableContainer" class="h-75 mt-3"></div>
       </div>
+
     </div>
   </div>
   <script src="/bootstrap/dist/js/jquery-3.7.1.min.js"></script>
