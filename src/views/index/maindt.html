@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Học Viện Kỹ Thuật Mật Mã</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="../../bootstrap-5.3.3-dist/bootstrap-icons-1.11.3/font/bootstrap-icons.min.css">
+  <style>
+    /* Style cho navbar */
+    .navbar-top {
+        background-color: #f9f5e6; /* Màu nền vàng nhạt */
+        padding: 10px 20px;
+    }
+    .navbar-brand {
+        display: flex;
+        align-items: center;
+        color: #d42f2f; /* Màu chữ đỏ */
+        font-weight: bold;
+        padding-left: 15px;
+        margin-bottom: 10px;
+    }
+    .navbar-brand img {
+        margin-left: 10%;
+        height: 120px; /* Kích thước logo */
+        margin-right: 15px;
+    }
+    .navbar-title {
+        text-align: center;
+        line-height: 1.2;
+    }
+    .navbar-title .main-title {
+        font-size: 1.8rem;
+        color: #d42f2f;
+        font-weight: bold;
+    }
+    .navbar-title .sub-title {
+        font-size: 1.1rem;
+        color: #d5a253;
+    }
+    .navbar-bottom {
+        background-color: blue; /* Màu nền cam */
+         padding: 5px;
+         justify-content: space-around;
+         box-shadow: 0 10px 15px rgba(159, 9, 9, 0.2), 0 4px 6px rgba(185, 12, 12, 0.1); /* Hiệu ứng bóng đổ 3D */
+         position: relative;
+         transform-style: preserve-3d;
+    }
+    .navbar-bottom .nav-link {
+        color: white;
+        font-weight: bold;
+        text-transform: uppercase;
+        padding: 5px 10px;
+        margin-right: 15px;
+    }
+    .navbar-bottom .nav-link:hover {
+        color: black;
+        background-color: #f8f5f4; /* Màu cam đậm hơn khi hover */
+        transform: perspective(500px) translateZ(10px); /* Tạo hiệu ứng nổi 3D */
+        box-shadow: 0 10px 10px rgba(0, 0, 0, 0.3);
+    }
+    .login {
+        color: red;
+        font-weight: bold;
+    }
+</style>
+</head>
+<body>
+<!-- Phần trên của navbar chứa logo và tiêu đề -->
+<nav class="navbar-top">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">
+            <img src="/picture/Logo-Hoc-Vien-Ky-Thuat-Mat-Ma-ACTVN.webp" alt="Logo">
+            <div class="navbar-title">
+              <img src="/picture/dongchu_banner.png" alt="banner">
+            </div>
+        </a>
+    </div>
+</nav>
+
+<!-- Phần dưới của navbar chứa các mục nằm ngang -->
+<nav class="navbar navbar-expand-lg navbar-bottom">
+    <div class="container-fluid">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="./maindt.html">HOME</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/daotaoxemhd/gvmList">Thông tin GD</a>
+                </li>
+                <li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/index/import">Import</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Duyệt</a>
+                </li>
+                <div class="navbar-nav">
+                  <div class="nav-item dropdown">
+                      <a class="nav-link dropdown-toggle bi bi-person" href="/login" id="navbarDropdownUser" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                          Hi, Lê Đức Thuận
+                      </a>
+                  </div>
+            </ul>
+        </div>
+    </div>
+</nav>
+  <!-- 2. Tổng quan -->
+  <div class="container my-4">
+    <div class="row">
+      <div class="col-lg-4 col-md-6">
+        <div class="card text-white bg-primary mb-3">
+          <div class="card-body">
+            <h5 class="card-title">Tổng số học viên</h5>
+            <p class="card-text">200 Học viên</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6">
+        <div class="card text-white bg-success mb-3">
+          <div class="card-body">
+            <h5 class="card-title">Môn học đang hoạt động</h5>
+            <p class="card-text">15 Môn học</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6">
+        <div class="card text-white bg-warning mb-3">
+          <div class="card-body">
+            <h5 class="card-title">Giảng viên</h5>
+            <p class="card-text">30 Giảng viên</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. Danh sách Môn học -->
+  <div class="container my-4">
+    <h3>Danh sách Môn học</h3>
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Tên Môn học</th>
+          <th>Thời gian</th>
+          <th>Giảng viên phụ trách</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th scope="row">1</th>
+          <td>Môn học Lập trình Web</td>
+          <td>3 tháng</td>
+          <td>Nguyễn Văn A</td>
+        </tr>
+        <tr>
+          <th scope="row">2</th>
+          <td>Môn học Lập trình Python</td>
+          <td>2 tháng</td>
+          <td>Trần Văn B</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 4. Danh sách học viên -->
+  <div class="container my-4">
+    <h3>Danh sách học viên</h3>
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Tên học viên</th>
+          <th>Môn học</th>
+          <th>Tiến độ</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th scope="row">1</th>
+          <td>Nguyễn Văn C</td>
+          <td>Lập trình Web</td>
+          <td>70%</td>
+        </tr>
+        <tr>
+          <th scope="row">2</th>
+          <td>Trần Thị D</td>
+          <td>Lập trình Python</td>
+          <td>50%</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 5. Danh sách Giảng viên -->
+  <div class="container my-4">
+    <h3>Danh sách Giảng viên</h3>
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Tên Giảng viên</th>
+          <th>Số Môn học phụ trách</th>
+          <th>Tổng số giờ dạy</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th scope="row">1</th>
+          <td>Nguyễn Văn A</td>
+          <td>5</td>
+          <td>150 giờ</td>
+        </tr>
+        <tr>
+          <th scope="row">2</th>
+          <td>Trần Văn B</td>
+          <td>3</td>
+          <td>100 giờ</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 6. Lịch học -->
+  <div class="container my-4">
+    <h3>Lịch học</h3>
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>Ngày</th>
+          <th>Môn học</th>
+          <th>Giờ học</th>
+          <th>Phòng</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>15/10/2024</td>
+          <td>Lập trình Web</td>
+          <td>8:00 - 10:00</td>
+          <td>Phòng 101</td>
+        </tr>
+        <tr>
+          <td>16/10/2024</td>
+          <td>Lập trình Python</td>
+          <td>10:00 - 12:00</td>
+          <td>Phòng 102</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 7. Báo cáo và thống kê -->
+  <div class="container my-4">
+    <h3>Báo cáo và thống kê</h3>
+    <div class="row">
+      <div class="col-lg-6">
+        <div class="card mb-3">
+          <div class="card-body">
+            <h5 class="card-title">Số lượng học viên theo từng tháng</h5>
+            <canvas id="studentChart"></canvas>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="card mb-3">
+          <div class="card-body">
+            <h5 class="card-title">Tỷ lệ hoàn thành Môn học</h5>
+            <canvas id="completionChart"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    // 7. Báo cáo và thống kê - Vẽ biểu đồ (Sử dụng Chart.js)
+    var ctx1 = document.getElementById('studentChart').getContext('2d');
+    var studentChart = new Chart(ctx1, {
+      type: 'line',
+      data: {
+        labels: ['Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4'],
+        datasets: [{
+          label: 'Học viên',
+          data: [50, 100, 150, 200],
+          borderColor: 'rgba(75, 192, 192, 1)',
+          borderWidth: 1
+        }]
+      }
+    });
+
+    var ctx2 = document.getElementById('completionChart').getContext('2d');
+    var completionChart = new Chart(ctx2, {
+      type: 'pie',
+      data: {
+        labels: ['Hoàn thành', 'Chưa hoàn thành'],
+        datasets: [{
+          data: [75, 25],
+          backgroundColor: ['rgba(75, 192, 192, 1)', 'rgba(255, 99, 132, 1)'],
+          borderWidth: 1
+        }]
+      }
+    });
+  </script>
+  <!-- 8. Chữ mờ và nút quay về đầu trang -->
+<div class="container my-4">
+    <footer class="text-center">
+      <p class="text-muted">© 2024 Phòng Đào Tạo. Tất cả các quyền được bảo lưu.</p>
+      <button onclick="topFunction()" id="backToTopBtn" class="btn btn-secondary">Quay về đầu trang</button>
+    </footer>
+  </div>
+  
+  <script>
+    // Nút quay về đầu trang
+    var backToTopBtn = document.getElementById("backToTopBtn");
+  
+    // Khi nhấn vào nút, cuộn về đầu trang
+    function topFunction() {
+      document.body.scrollTop = 0; // Cho Safari
+      document.documentElement.scrollTop = 0; // Cho Chrome, Firefox, IE và Opera
+    }
+  </script>
+</body>
