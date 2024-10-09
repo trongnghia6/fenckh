@@ -179,14 +179,13 @@
 
         // Lưu dữ liệu giảng viên cùng với mã phòng ban
         nameGvm = await gvmResponse.json();
-        // console.log('Dữ liệu tên giảng viên:', nameGvm); // Kiểm tra dữ liệu
+        console.log('Dữ liệu giảng viên trường :', nameGvm); // Kiểm tra dữ liệu
 
         nameGvm2 = await khoaResponse.json();
-        // console.log('Dữ liệu giảng viên theo khoa:', nameGvm2);
+        console.log('Dữ liệu giảng viên mời theo khoa:', nameGvm2);
 
-        console.log(nameGvm, nameGvm2);
         globalData = await teachingResponse.json();
-        // console.log('Dữ liệu giảng dạy:', globalData);
+        console.log('Tổng hợp bảng dữ liệu:', globalData);
 
         renderTable(globalData); // Gọi hàm renderTable sau khi đã có đủ dữ liệu
       } catch (error) {
@@ -209,16 +208,16 @@
       if (inviteCheckbox.checked) {
         if (!value) {
           // Hiển thị toàn bộ giảng viên của khoa nếu không có giá trị input
-          suggestions = nameGvm2.filter(item => item.ChuyenNganh === maPhongBan).map(item => item.GiangVien);
-          console.log('1' + suggestions);
+          suggestions = nameGvm2.filter(item => item.MaPhongBan === maPhongBan).map(item => item.HoTen);
+          // console.log('1' + suggestions);
         } else {
           // Lọc giảng viên theo khoa và giá trị input
-          suggestions = nameGvm2.filter(item => item.ChuyenNganh === maPhongBan && item.GiangVien.toLowerCase().includes(value)).map(item => item.GiangVien);
+          suggestions = nameGvm2.filter(item => item.MaPhongBan === maPhongBan && item.HoTen.toLowerCase().includes(value)).map(item => item.HoTen);
         }
       } else {
         // Trường hợp checkbox không được check, hiển thị giảng viên theo khoa của dòng
         suggestions = nameGvm.filter(item => item.MaPhongBan === maPhongBan).map(item => item.TenNhanVien);
-        console.log('2' + suggestions);
+        // console.log('2' + suggestions);
 
       }
 
@@ -289,28 +288,16 @@
     }
 
 
-    // Hàm ẩn gợi ý
-    function hideSuggestions() {
-      const suggestionsContainer = document.querySelector('.suggestions');
-      if (suggestionsContainer) {
-        suggestionsContainer.remove();
-      }
-    }
-
-
     // Hàm render bảng
     function renderTable(data) {
-      console.log('Dữ liệu bảng:', data);
       const tableBody = document.getElementById('tableBody');
       tableBody.innerHTML = ''; // Xóa nội dung cũ
-
-      const khoaData = nameGvm2; // Dữ liệu khoa giảng viên
 
       data.forEach((row) => {
         const tableRow = document.createElement('tr');
 
         const lopHocPhanTd = document.createElement('td');
-        lopHocPhanTd.textContent = row.LopHocPhan || '';
+        lopHocPhanTd.textContent = `${row.TenLop} (${row.Lop})` || '';
         tableRow.appendChild(lopHocPhanTd);
 
         const soTcTd = document.createElement('td');
@@ -326,15 +313,11 @@
         inviteCheckbox.type = 'checkbox';
         inviteCheckbox.checked = row.MoiGiang || false;
 
-        // Kiểm tra khoa của dòng hiện tại
-        const matchedKhoa = khoaData.find(item => item.TenHocPhan === row.LopHocPhan);
-        const maPhongBan = matchedKhoa ? matchedKhoa.ChuyenNganh : ''; // Gán mã phòng ban
-
         // Sự kiện khi checkbox thay đổi
         inviteCheckbox.onchange = () => {
           if (inviteCheckbox.checked) {
             // Hiển thị gợi ý nếu checkbox được chọn
-            showSuggestions(giaoVienGiangDayInput, inviteCheckbox, maPhongBan);
+            showSuggestions(giaoVienGiangDayInput, inviteCheckbox, row.Khoa); // Sử dụng row.Khoa
           } else {
             // Nếu checkbox không được chọn, ẩn gợi ý
             hideSuggestions();
@@ -354,14 +337,14 @@
         // Sự kiện để hiển thị gợi ý khi người dùng nhập
         giaoVienGiangDayInput.oninput = () => {
           if (inviteCheckbox.checked) { // Chỉ hiển thị gợi ý nếu checkbox được chọn
-            showSuggestions(giaoVienGiangDayInput, inviteCheckbox, maPhongBan);
+            showSuggestions(giaoVienGiangDayInput, inviteCheckbox, row.Khoa); // Sử dụng row.Khoa
           }
         };
 
         // Thêm sự kiện click vào ô nhập để hiển thị gợi ý
         giaoVienGiangDayInput.onclick = function () {
           if (!inviteCheckbox.checked) { // Hiển thị gợi ý khi click vào ô input nếu checkbox không được chọn
-            showSuggestions(giaoVienGiangDayInput, inviteCheckbox, maPhongBan);
+            showSuggestions(giaoVienGiangDayInput, inviteCheckbox, row.Khoa); // Sử dụng row.Khoa
           }
         };
 
@@ -369,7 +352,7 @@
         tableRow.appendChild(giaoVienGiangDayTd);
 
         const khoaTd = document.createElement('td');
-        khoaTd.textContent = maPhongBan; // Gán giá trị ChuyenNganh
+        khoaTd.textContent = row.Khoa || ''; // Lấy giá trị Khoa trực tiếp từ row
         tableRow.appendChild(khoaTd);
 
         const boMonTd = document.createElement('td');
@@ -388,12 +371,32 @@
       });
     }
 
+
     // Hàm ẩn gợi ý
     function hideSuggestions() {
       const suggestionsContainer = document.querySelector('.suggestions');
       if (suggestionsContainer) {
         suggestionsContainer.remove();
       }
+    }
+
+    function submitData() {
+      const rows = document.querySelectorAll('.row-container');
+
+      rows.forEach((row, index) => {
+        const columns = row.querySelectorAll('.column');
+        const giaoVienGiangDayInput = row.querySelector('input[type="text"]');
+        const inviteCheckbox = row.querySelector('input[type="checkbox"]');
+
+        const giaoVienGiangDay = giaoVienGiangDayInput.value ? giaoVienGiangDayInput.value : "";
+        const moiGiang = inviteCheckbox.checked;
+
+        globalData[index].GiaoVienGiangDay = giaoVienGiangDay;
+        globalData[index].MoiGiang = moiGiang;
+      });
+
+      console.log(globalData);
+      alert("Dữ liệu đã được gửi. Kiểm tra console để xem chi tiết.");
     }
 
     // Hàm khởi động ứng dụng

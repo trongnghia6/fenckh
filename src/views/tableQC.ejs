@@ -202,7 +202,7 @@
         loadingSpinner.innerHTML = '<span class="visually-hidden">Loading...</span>'; // Thêm thông báo ẩn
         document.body.appendChild(loadingSpinner); // Thêm spinner vào body
 
-        fetch('http://localhost:3000/bang-quy-chuan-data') // Thay đổi URL API thành URL thực tế của bạn
+        fetch('http://localhost:3000/bang-tam') // Thay đổi URL API thành URL thực tế của bạn
           .then(response => {
             if (!response.ok) {
               throw new Error('Network response was not ok: ' + response.statusText);
@@ -213,6 +213,8 @@
             // Tạo bảng HTML từ dữ liệu JSON
             let tableHtml = '';
             const headersMap = {
+              'Khoa': 'Khoa',
+              'Dot': 'Đợt',
               'GiaoVien': 'Giảng viên theo TKB',
               'GiaoVienGiangDay': 'Giảng viên giảng dạy',
               'MoiGiang': 'Mời giảng?',

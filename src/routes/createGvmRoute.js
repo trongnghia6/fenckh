@@ -30,10 +30,10 @@ const storage = multer.diskStorage({
     cb(
       null,
       idUser +
-        // file.fieldname +
-        // "-" +
-        // Date.now() +
-        path.extname(file.originalname)
+      // file.fieldname +
+      // "-" +
+      // Date.now() +
+      path.extname(file.originalname)
     );
   },
 });
