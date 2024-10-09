@@ -10,6 +10,12 @@
     color: white;
     text-decoration: none;
 }
+.mg-top{
+    margin-top: 210px !important;
+}
+.w-100px{
+    width: 100px !important;
+}
 .w-20{
     width: 20% !important;
 }
@@ -24,17 +30,9 @@
     align-items: center;
 }
 .active{
-    background-color: #f64c72 !important;
+    background-color: #f6904c !important;
     color: #000 !important;
-}
-.bg-header{
-  background-color: #2f2fa2;
-}
-.bg-custom{
-    background-color: #B8E1FF;
-    border-color: #B8E1FF;
-    border-radius: 10px;
-    border-style: solid;
+    border-radius: 12px;
 }
 .drop-custom{
     background-color: #F99A9C;
@@ -42,302 +40,97 @@
     border-radius: 10px;
     border-style: solid;
 }
-.text-secondary{
-  font-weight: 800;
-  font-size: 20px;
+  /* ui moi */
+  .navbar-top {
+    background-color: #f9f5e6; /* Màu nền vàng nhạt */
+    padding: 10px 20px;
 }
-/* CSS cho kích thước màn hình lớn (desktop) */
-.navbar-nav .btn {
-    width: auto; /* Chiều rộng tự động cho màn hình lớn */
-    height: auto; /* Chiều cao tự động cho màn hình lớn */
-    margin: 0 5px; /* Khoảng cách giữa các nút */
-}
-
-/* CSS cho kích thước màn hình nhỏ (responsive) */
-@media (max-width: 991px) {  /* 991px là kích thước màn hình nhỏ hơn lg */
-    .navbar-nav .btn {
-        width: 90%;  /* Đảm bảo các nút có chiều rộng bằng nhau khi responsive */
-        margin: 5px 0; /* Thêm khoảng cách giữa các nút khi responsive */
-        display: block; /* Đảm bảo các nút hiển thị như block để chúng nằm ngang nhau */
-        
-    }
-}
-/* From Uiverse.io by Yaroslav205728 */ 
-.inputmenu {
+.navbar-brand {
     display: flex;
-    flex-direction: row;
-    font-size: 20px;
-    /* background-color:  #1974d3; */
-    /* background-color: #0D1117; */
-    /* background-image: radial-gradient(circle 248px at center, #16d9e3 0%, #30c7ec 47%, #46aef7 100%);    justify-content: center; */
-    border-radius: 5px
-  }
-  
-  .value {
-    background-color: #242582;
-    border: none;
-    padding: 10px;
-    font-weight: 1000;
-    color: white ;
-    display: flex;
-    position: relative;
-    gap: 5px;
-    cursor: pointer;
-    border-radius: 4px;
-  }
-  .value:not(:active):hover,
-  .value:focus {
-    background-color: #21262C;
-  }
-  
-  .value:focus,
-  .value:active {
-    background-color: #1A1F24;
-    outline: none;
-  }
-  
-  .value::before {
-    content: "";
-    position: absolute;
-    top: 5px;
-    left: -10px;
-    width: 5px;
-    height: 80%;
-    background-color: #2F81F7;
-    border-radius: 5px;
-    opacity: 0;
-  }
-  
-  .value:focus::before,
-  .value:active::before {
-    opacity: 1;
-  }
-  
-  .value svg {
-    width: 15px
-  }
-  /* From Uiverse.io by rahilansari261 */ 
-.form {
-    /* background-color: #15172b; */
-    background-image: linear-gradient(45deg, #ff9a9e 0%, #fad0c4 99%, #fad0c4 100%);
-    border-radius: 20px;
-    box-sizing: border-box;
-    padding: 20px;
-    width: 500px;
-  }
-  
-  .title {
-    color: #eee;
-    font-family: sans-serif;
-    font-size: 36px;
-    font-weight: 600;
-    margin-top: 30px;
-  }
-  
-  .subtitle {
-    color: #eee;
-    font-family: sans-serif;
-    font-size: 16px;
-    font-weight: 600;
-    margin-top: 10px;
-  }
-  
-  .input-container {
-    height: 50px;
-    position: relative;
-    width: 100%;
-  }
-  
-  .ic1 {
-    margin-top: 40px;
-  }
-  
-  .ic2 {
-    margin-top: 30px;
-  }
-  
-  .input {
-    /* background-color: #303245; */
-    background-image: linear-gradient(to top, #fad0c4 0%, #ffd1ff 100%);
-    border-radius: 12px;
-    border: 0;
-    box-sizing: border-box;
-    color: #eee;
-    font-size: 18px;
-    height: 100%;
-    outline: 0;
-    padding: 4px 20px 0;
-    width: 100%;
-  }
-  
-  .cut {
-    /* background-color: #15172b; */
-    border-radius: 10px;
-    height: 20px;
-    left: 20px;
-    position: absolute;
-    top: -20px;
-    transform: translateY(0);
-    transition: transform 200ms;
-    width: 76px;
-  }
-  
-  .cut-short {
-    width: 50px;
-  }
-  
-  .iLabel {
-    color: #65657b;
-    font-family: sans-serif;
-    left: 20px;
-    line-height: 14px;
-    pointer-events: none;
-    position: absolute;
-    transform-origin: 0 50%;
-    transition: transform 200ms, color 200ms;
-    top: 20px;
-  }
-  
-  .input:focus ~ .cut {
-    transform: translateY(8px);
-  }
-  
-  .input:focus ~ .iLabel {
-    transform: translateY(-30px) translateX(10px) scale(0.75);
-  }
-  
-  .input:not(:focus) ~ .iLabel {
-    color: #808097;
-  }
-  
-  .input:focus ~ .iLabel {
-    color: #dc2f55;
-  }
-  
-  .submit {
-    background-color: #08d;
-    border-radius: 12px;
-    border: 0;
-    box-sizing: border-box;
-    color: #eee;
-    cursor: pointer;
-    font-size: 18px;
-    height: 50px;
-    margin-top: 38px;
+    align-items: center;
+    color: #d42f2f; /* Màu chữ đỏ */
+    font-weight: bold;
+    padding-left: 15px;
+    margin-bottom: 10px;
+}
+.navbar-brand img {
+    margin-left: 10%;
+    height: 120px; /* Kích thước logo */
+    margin-right: 15px;
+}
+.navbar-title {
     text-align: center;
-    width: 100%;
-  }
-  
-  .submit:active {
-    background-color: #06b;
-  }
-  /* From Uiverse.io by Pradeepsaranbishnoi */ 
-.radio-button {
-    display: flex;
-    gap: 10px;
-    justify-content: center;
-    margin: 10px;
-    position: relative;
-    align-items: center;
+    line-height: 1.2;
+}
+.navbar-title .main-title {
+    font-size: 1.8rem;
+    color: #d42f2f;
+    font-weight: bold;
+}
+.navbar-title .sub-title {
+    font-size: 1.1rem;
+    color: #d5a253;
+}
+.navbar-bottom {
+    background-color: blue; /* Màu nền cam */
+     padding: 5px;
+     justify-content: space-around;
+     box-shadow: 0 10px 15px rgba(159, 9, 9, 0.2), 0 4px 6px rgba(185, 12, 12, 0.1); /* Hiệu ứng bóng đổ 3D */
+     position: relative;
+     transform-style: preserve-3d;
+}
+.navbar-bottom .nav-link {
     color: white;
+    font-weight: bold;
+    text-transform: uppercase;
+    padding: 5px 10px;
+    margin-right: 15px;
+    border-radius: 12px;
+
+}
+.navbar-bottom .nav-link:hover {
+    color: black;
+    background-color: #f8f5f4; /* Màu cam đậm hơn khi hover */
+    transform: perspective(500px) translateZ(10px); /* Tạo hiệu ứng nổi 3D */
+    box-shadow: 0 10px 10px rgba(0, 0, 0, 0.3);
+    border-radius: 12px;
+}
+.login {
+    color: red;
+    font-weight: bold;
+}
+/* From Uiverse.io by Praashoo7 */ 
+.search {
+    border: none;
+    outline: none;
+    border-radius: 15px;
+    padding: 1em;
+    background-color: #ccc;
+    box-shadow: inset 2px 5px 10px rgba(0,0,0,0.3);
+    transition: 300ms ease-in-out;
   }
   
-  .radio-button input[type="radio"] {
-    position: absolute;
-    opacity: 0;
+  .search:focus {
+    background-color: white;
+    transform: scale(1.05);
+    box-shadow: 13px 13px 100px #969696,
+               -13px -13px 100px #ffffff;
   }
-  
-  .radio {
-    position: relative;
-    display: inline-block;
-    width: 24px;
-    height: 24px;
-    border-radius: 50%;
-    border: 2px solid #ccc;
-    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
-    transform: translateZ(-25px);
-    transition: all 0.3s ease-in-out;
-  }
-  
-  .radio::before {
-    position: absolute;
-    content: '';
-    width: 10px;
-    height: 10px;
-    top: 5px;
-    left: 5px;
-    border-radius: 50%;
-    background-color: #fff;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
-    opacity: 0;
-    transition: all 0.3s ease-in-out;
-  }
-  
-  .radio-button input[type="radio"]:checked + .radio {
-    border-color: #5cb85c;
-    transform: translateZ(0px);
-    background-color: #fff;
-  }
-  
-  .radio-button input[type="radio"]:checked + .radio::before {
-    opacity: 1;
-  }
-  .form-control{
-    /* background-color: #303245; */
-    background-image: linear-gradient(to top, #fad0c4 0%, #ffd1ff 100%);
-  }
-  .form-control:focus {
-    /* background-color: #303245; */
-    background-image: linear-gradient(to top, #fad0c4 0%, #ffd1ff 100%);
-  }
-  /* From Uiverse.io by WhiteNervosa */ 
-.slider {
-    background-color: #ffffff2b;
-    border-radius: 100px;
-    padding: 1px;
-    margin: 10px;
+  /* button */
+  .button {
+    height: 40px;
+    border: 3px solid #315cfd;
+    border-radius: 45px;
+    transition: all 0.3s;
     cursor: pointer;
-    transition: box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1) 0s;
-    align-items: center;
-    position: relative;
-    display: block;
-    width: 51px;
-    height: 29px;
-    box-shadow: rgba(0, 0, 0, 0.62) 0px 0px 5px inset, rgba(0, 0, 0, 0.21) 0px 0px 0px 24px inset,
-          #22cc3f 0px 0px 0px 0px inset, rgba(224, 224, 224, 0.45) 0px 1px 0px 0px;
+    background: white;
+    font-size: 1.2em;
+    font-weight: 550;
   }
   
-  .slider::after {
-    content: "";
-    display: flex;
-    top: 2.3px;
-    left: 2px;
-    width: 26px;
-    height: 26px;
-    background-color: #e3e3e3;
-    border-radius: 200px;
-    position: absolute;
-    box-shadow: transparent 0px 0px 0px 2px, rgba(0, 0, 0, 0.3) 0px 6px 6px;
-    transition: left 300ms cubic-bezier(0.4, 0, 0.2, 1) 0s, background-color 300ms cubic-bezier(0.4, 0, 0.2, 1) 0s;
-    will-change: left, background-color;
+  .button:hover {
+    background: #315cfd;
+    color: white;
+    font-size: 1.5em;
   }
   
-  .switch input[type="checkbox"]:checked + .slider {
-    box-shadow: rgba(0, 0, 0, 0.62) 0px 0px 5px inset, #22cc3f 0px 0px 0px 2px inset, #22cc3f 0px 0px 0px 24px inset,
-          rgba(224, 224, 224, 0.45) 0px 1px 0px 0px;
-  }
-  
-  .switch input[type="checkbox"]:checked + .slider::after {
-    left: 24px;
-  }
-  
-  .switch input[type="checkbox"] {
-    display: none;
-  }
-  .bg-color{
-    background-color:#b9a9d8;
-    /* background-image: linear-gradient(to top, #fdcbf1 0%, #fdcbf1 1%, #e6dee9 100%); */
-  }
-  .bg-test{
-    background-color: #15172b;
-  }

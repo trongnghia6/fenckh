@@ -34,16 +34,157 @@ const convertExcelToJSON = (filePath) => {
   }
 };
 
-// Hàm nhập dữ liệu vào bảng quychuan
 const importTableQC = async (jsonData) => {
-  const tableName = process.env.DB_TABLE_NAME; // Giả sử biến này có giá trị là "quychuan"
+  const tableName = process.env.DB_TABLE_QC; // Giả sử biến này có giá trị là "quychuan"
+
+  function tachChuoi(chuoi) {
+    // Kiểm tra đầu vào
+    if (typeof chuoi !== 'string' || chuoi.trim() === '') {
+      return {
+        TenLop: "",
+        HocKi: null,
+        NamHoc: null,
+        Lop: "",
+      };
+    }
+
+    // Sử dụng biểu thức chính quy để tách chuỗi
+    const regex = /^(.*?)(?:\s*\((.*?)\))?-(\d+)-(\d+)\s*\((.*?)\)$/; // Tách các phần
+    const match = chuoi.match(regex);
+
+    if (!match) {
+      // Trường hợp không khớp với định dạng
+      const regexFallback = /^(.*?)(?:\s*\((.*?)\))?$/; // Trường hợp không có học kỳ và năm
+      const fallbackMatch = chuoi.match(regexFallback);
+      if (fallbackMatch) {
+        const tenHP = fallbackMatch[1].trim(); // Tên học phần
+        const Lop = fallbackMatch[2] ? fallbackMatch[2].trim() : ""; // Lớp
+        return {
+          TenLop: tenHP,
+          HocKi: null, // Thay đổi giá trị mặc định
+          NamHoc: null, // Thay đổi giá trị mặc định
+          Lop,
+        };
+      }
+
+      return {
+        TenLop: "",
+        HocKi: null,
+        NamHoc: null,
+        Lop: "",
+      };
+    }
+
+    // Lấy các thông tin từ kết quả match
+    const tenHP = match[1].trim(); // Tên học phần
+    const HocKi = match[3] ? match[3].trim() : null; // Học kỳ
+    const namHoc = match[4].trim(); // Năm học kèm lớp
+    const NamHoc = "20" + namHoc; // Tạo năm học từ phần thứ ba
+    const Lop = match[5] ? match[5].trim() : ""; // Lớp
+
+    return {
+      TenLop: tenHP,
+      HocKi,
+      NamHoc,
+      Lop,
+    };
+  }
+  // Tạo câu lệnh INSERT động với các trường đầy đủ
+  const queryInsert = `
+    INSERT INTO ${tableName} (
+      Khoa,
+      Dot,
+      KiHoc,
+      NamHoc,
+      GiaoVien, 
+      GiaoVienGiangDay, 
+      MoiGiang, 
+      SoTinChi, 
+      MaHocPhan, 
+      LopHocPhan, 
+      LL, 
+      SoTietCTDT, 
+      HeSoT7CN, 
+      SoSinhVien, 
+      HeSoLopDong, 
+      QuyChuan, 
+      GhiChu
+    ) VALUES (?, ?, ?, ?, ?, NULL, FALSE, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+  `;
+
+  const insertPromises = jsonData.map(item => {
+    return new Promise((resolve, reject) => {
+      // Sử dụng hàm tachChuoi để tách các thông tin từ chuỗi
+      const { HocKi, NamHoc, Lop } = tachChuoi(item['LopHocPhan']);
+
+      const values = [
+        item['Khoa'],                                // Khoa
+        item['Dot'],                                 // Đợt
+        HocKi,                                       // Kỳ học (được tách từ chuỗi)
+        NamHoc,                                      // Năm học (được tách từ chuỗi)
+        item['GiaoVien'],                            // Tên Giảng viên
+        item['SoTinChi'],                            // Số tín chỉ
+        item['MaHocPhan'],                           // Mã học phần
+        Lop,                                         // Lớp học phần (được tách từ chuỗi)
+        item['LL'],                                  // LL (Số tiết theo lịch)
+        item['SoTietCTDT'],                          // Số tiết theo CTĐT
+        item['HeSoT7CN'],                            // Hệ số T7/CN
+        item['SoSinhVien'],                           // Số sinh viên
+        item['HeSoLopDong'],                         // Hệ số lớp đông
+        item['QuyChuan'],                            // Quy chuẩn
+        item['GhiChu']                               // Ghi chú
+      ];
+
+      connection.query(queryInsert, values, (err, results) => {
+        if (err) {
+          console.error('Error:', err);
+          reject(err);
+          return;
+        }
+        resolve(results);
+      });
+    });
+  });
+
+  let results = false;
+  try {
+    await Promise.all(insertPromises);
+
+    // Chạy câu lệnh UPDATE sau khi INSERT thành công
+    const queryUpdate = `
+      UPDATE ${tableName}
+      SET MaHocPhan = CONCAT(Khoa, id);
+    `;
+
+    await new Promise((resolve, reject) => {
+      connection.query(queryUpdate, (err, results) => {
+        if (err) {
+          console.error('Error while updating:', err);
+          reject(err);
+          return;
+        }
+        resolve(results);
+      });
+    });
+
+    results = true;
+  } catch (error) {
+    console.error('Error:', error);
+  }
+
+  return results;
+};
+
+// Hàm nhập dữ liệu vào bảng quychuan
+const importTableTam = async (jsonData) => {
+  const tableName = process.env.DB_TABLE_TAM; // Giả sử biến này có giá trị là "quychuan"
 
   // Tạo câu lệnh INSERT động
   const query = `
     INSERT INTO ${tableName} (
+      Khoa,
+      Dot,
       GiaoVien, 
-      GiaoVienGiangDay, 
-      MoiGiang, 
       SoTinChi, 
       LopHocPhan, 
       LL, 
@@ -53,13 +194,15 @@ const importTableQC = async (jsonData) => {
       HeSoLopDong, 
       QuyChuan, 
       GhiChu
-    ) VALUES (?, NULL, FALSE, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
   `;
 
   const insertPromises = jsonData.map(item => {
     return new Promise((resolve, reject) => {
       const values = [
-        item['Giáo Viên'],                          // Tên giáo viên
+        item['Khoa'],                               // Khoa
+        item['Dot'],                                // Đợt
+        item['Giáo Viên'],                          // Tên Giảng viên
         item['Số TC'],                               // Số tín chỉ
         item['Lớp học phần'],                        // Lớp học phần                     
         item['Số tiết lên lớp theo TKB'],          // LL (cần xác định từ dữ liệu nếu cần)
@@ -112,11 +255,11 @@ const importJSONToDB = async (jsonData) => {
   const columnDVHT = 'DVHT'; // Số tín chỉ
 
   // Các cột cho bảng giangday
-  const columnIdUser = 'id_User'; // ID giáo viên
+  const columnIdUser = 'id_User'; // ID Giảng viên
   const columnMaHocPhanGiangDay = 'MaHocPhan'; // Mã học phần
   const columnMaLopGiangDay = 'MaLop'; // Mã lớp
   const columnIdGVM = 'Id_Gvm'; // ID giảng viên mời
-  const columnGiaoVien = 'GiaoVien'; // Tên giáo viên
+  const columnGiaoVien = 'GiaoVien'; // Tên Giảng viên
   const columnLenLop = 'LenLop'; // LL
   const columnHeSoT7CN = 'HeSoT7CN'; // Hệ số T7/CN
   const columnSoTietCTDT = 'SoTietCTDT'; // Số tiết CTĐT
@@ -154,11 +297,11 @@ const importJSONToDB = async (jsonData) => {
           return;
         }
 
-        // Nếu không tìm thấy giáo viên
+        // Nếu không tìm thấy Giảng viên
         if (results.length === 0) {
           resolve(null); // Không tìm thấy, trả về null
         } else {
-          resolve(results[0].id_User); // Lấy id_User của giáo viên
+          resolve(results[0].id_User); // Lấy id_User của Giảng viên
         }
       });
     });
@@ -230,11 +373,11 @@ const importJSONToDB = async (jsonData) => {
           VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
 
         connection.query(queryGiangDay, [
-          id_User,                               // ID giáo viên
+          id_User,                               // ID Giảng viên
           index,                                   // Mã học phần
           index,                                     // mã lớp
           index,                                   // id gvm
-          item['Giáo Viên'],                    // Tên giáo viên
+          item['Giáo Viên'],                    // Tên Giảng viên
           item['LL'],                         // LL
           item['Hệ số T7/CN'],                     // Hệ số T7/CN
           item['Số tiết CTĐT']                    // Số tiết CTĐT
@@ -267,8 +410,6 @@ const importJSONToDB = async (jsonData) => {
 };
 
 
-
-
 const handleUploadAndRender = async (req, res) => {
   const filePath = path.join(__dirname, '../../uploads', req.file.filename);
 
@@ -280,4 +421,4 @@ const handleUploadAndRender = async (req, res) => {
 
 };
 
-module.exports = { handleUploadAndRender, importJSONToDB, importTableQC };
+module.exports = { handleUploadAndRender, importJSONToDB, importTableQC, importTableTam };

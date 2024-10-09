@@ -5,126 +5,71 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Học Viện Kỹ Thuật Mật Mã</title>
-  <link rel="stylesheet" href="/css/teachingInfo.css" />
-  <link href="/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="/bootstrap/dist/bootstrap-icons-1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="/bootstrap/dist/js/bootstrap.min.js">
-  <style>
-    .background-image {
-      background: url('/picture/OIP.jfif') no-repeat center center;
-      background-size: cover;
-    }
-
-    .grid-center {
-      display: grid;
-      place-items: center;
-    }
-
-    .home-link {
-      color: white;
-      text-decoration: none;
-    }
-
-    .w-20 {
-      width: 20% !important;
-    }
-
-    .column .soTc {
-      width: 25px;
-    }
-
-    .suggestions {
-      border: 1px solid #ccc;
-      max-height: 150px;
-      overflow-y: auto;
-      position: absolute;
-      z-index: 1000;
-      background: white;
-    }
-
-    .suggestions div {
-      padding: 5px;
-      cursor: pointer;
-    }
-
-    .suggestions div:hover {
-      background-color: #f0f0f0;
-    }
-  </style>
+  <link rel="stylesheet" href="/css/teachingInfo.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="/css/styles.css">
 </head>
 
 <body>
-  <header class="bg-primary text-white py-2 background-image">
-    <div class="container">
-      <div class="d-flex">
-        <div>
-          <img src="../../picture/Logo-Hoc-Vien-Ky-Thuat-Mat-Ma-ACTVN.webp" alt="Logo" class="img-fluid"
-            style="height: 102.4px;">
-        </div>
-        <div class="text-center">
-          <h1>HỌC VIỆN KỸ THUẬT MẬT MÃ</h1>
-          <h2>HỆ THỐNG QUẢN LÍ THÔNG TIN CHO GIẢNG VIÊN</h2>
-        </div>
-      </div>
-    </div>
-  </header>
-
-  <nav class="bg-info py-2">
-    <div class="d-flex">
-      <div class="container d-flex justify-content-center grid-center">
-        <div class="btn btn-primary text-nowrap mx-1">
-          <a href="index.html" class="home-link">
-            <i class="bi bi-house"></i> Home
+  <div class="fixed-top">
+    <nav class="navbar-top ">
+      <div class="container-fluid">
+          <a class="navbar-brand" href="#">
+              <img src="/Logo-Hoc-Vien-Ky-Thuat-Mat-Ma-ACTVN.webp" alt="Logo">
+              <div class="navbar-title">
+                <img src="/dongchu_banner.png" alt="banner">
+              </div>
           </a>
-        </div>
-        <div class="dropdown">
-          <button class="btn btn-primary dropdown-toggle mx-1" type="button" id="dropdownMenuButton"
-            data-bs-toggle="dropdown" aria-expanded="false">
-            Quản lí hợp đồng
-          </button>
-          <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-            <li><a class="dropdown-item" href="#">Xem hợp đồng</a></li>
-            <li><a class="dropdown-item" href="#">Thông tin giảng viên mời</a></li>
-            <li><a class="dropdown-item" href="#">Thông tin lớp giảng dạy</a></li>
-            <li><a class="dropdown-item" href="#">Lương hợp đồng</a></li>
-            <li><a class="dropdown-item" href="#">Lịch sử thay đổi</a></li>
-          </ul>
-        </div>
-        <div class="dropdown">
-          <button class="btn btn-primary dropdown-toggle mx-1" type="button" id="dropdownMenuButton"
-            data-bs-toggle="dropdown" aria-expanded="false">
-            Quản lí giảng dạy
-          </button>
-          <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-            <li><a class="dropdown-item" href="#">Quản lí môn học</a></li>
-            <li><a class="dropdown-item" href="#">Quản lí lớp học</a></li>
-            <li><a class="dropdown-item" href="#">Quản lí đề thi</a></li>
-            <li><a class="dropdown-item" href="#">Quản lí coi thi</a></li>
-            <li><a class="dropdown-item" href="#">Quản lí chấm thi</a></li>
-          </ul>
-        </div>
-        <a href="#" class="btn btn-primary mx-1 text-nowrap">Tin Tức</a>
       </div>
-      <div class="my-2 grid-center"><a href="#" class="mx-1 justify-content-end text-nowrap">Hi, Lê Đức...</a>
-      </div>
-    </div>
   </nav>
+  
+  <!-- Phần dưới của navbar chứa các mục nằm ngang -->
+  <nav class="navbar navbar-expand-lg navbar-bottom">
+      <div class="container-fluid">
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+              <ul class="navbar-nav">
+                  <li class="nav-item">
+                      <a class="nav-link" href="/maindt">HOME</a>
+                  </li>
+                  <li class="nav-item">
+                      <a class="nav-link active" href="/maindt/teachingInfo">Thông tin GD</a>
+                  </li>
+                  <li>
+                  <li class="nav-item">
+                      <a class="nav-link" href="/index/import">Import</a>
+                  </li>
+                  <li class="nav-item">
+                      <a class="nav-link" href="#">Duyệt</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="/maindt/tableQC">Bảng quy chuẩn</a>
+                  </li>
+                  <div class="navbar-nav">
+                    <div class="nav-item dropdown">
+                          <a class="nav-link dropdown-toggle" href="/login" id="navbarDropdownUser" data-bs-toggle="dropdown" aria-expanded="false">
+                            Hi, Lê Đức Thuận
+                          </a>
+                          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item" href="#">Thông tin cá nhân</a>
+                            <a class="dropdown-item" href="/">Đăng xuất</a>
+                        </div>
+                    </div>
+              </ul>
+          </div>
+      </div>
+    </nav>
+   </div>  
 
-  <div class="container-fluid my-4">
-    <div class="row">
-      <div class="d-flex">
-        <div class="bg-light mb-4 w-20">
-          <h4>Chủ đề</h4>
-          <ul class="nav nav-tabs list-group" id="myTab" role="tablist">
-            <!-- Nội dung tab sẽ giữ nguyên -->
-          </ul>
-        </div>
-        <div class="mx-3">
-          <button id="infoGvm" class="btn btn-primary mb-3">Xem dữ liệu giảng viên</button>
-          <button onclick="submitData()" class="btn btn-primary mb-3">Cập nhật</button>
-
+  <div class="container my-4 mg-top">
+        <div class="mx-5">
+          <button id="infoGvm" class="button text-nowrap mb-3">Xem dữ liệu giảng viên</button>
+          <button onclick="submitData()" class="button mx-3">Cập nhật</button>
           <input type="text" id="filterName" placeholder="Nhập tên giảng viên để tìm" oninput="filterByName()"
-            class="form-control mb-3" />
+            class="form-control mb-3 search" style="width: 300px;"/>
           <div id="renderInfo">
             <table class="table table-bordered text-center" style="width: 100%;">
               <thead>
@@ -146,12 +91,10 @@
             </table>
           </div>
         </div>
-      </div>
-    </div>
   </div>
 
-  <script src="../../bootstrap-5.3.3-dist/js/jquery-3.7.1.min.js"></script>
-  <script src="../../bootstrap-5.3.3-dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
   <script>
     let globalData = []; // Biến toàn cục để lưu dữ liệu từ server
@@ -179,14 +122,13 @@
 
         // Lưu dữ liệu giảng viên cùng với mã phòng ban
         nameGvm = await gvmResponse.json();
-        // console.log('Dữ liệu tên giảng viên:', nameGvm); // Kiểm tra dữ liệu
+        console.log('Dữ liệu giảng viên trường :', nameGvm); // Kiểm tra dữ liệu
 
         nameGvm2 = await khoaResponse.json();
-        // console.log('Dữ liệu giảng viên theo khoa:', nameGvm2);
+        console.log('Dữ liệu giảng viên mời theo khoa:', nameGvm2);
 
-        console.log(nameGvm, nameGvm2);
         globalData = await teachingResponse.json();
-        // console.log('Dữ liệu giảng dạy:', globalData);
+        console.log('Tổng hợp bảng dữ liệu:', globalData);
 
         renderTable(globalData); // Gọi hàm renderTable sau khi đã có đủ dữ liệu
       } catch (error) {
@@ -209,16 +151,16 @@
       if (inviteCheckbox.checked) {
         if (!value) {
           // Hiển thị toàn bộ giảng viên của khoa nếu không có giá trị input
-          suggestions = nameGvm2.filter(item => item.ChuyenNganh === maPhongBan).map(item => item.GiangVien);
-          console.log('1' + suggestions);
+          suggestions = nameGvm2.filter(item => item.MaPhongBan === maPhongBan).map(item => item.HoTen);
+          // console.log('1' + suggestions);
         } else {
           // Lọc giảng viên theo khoa và giá trị input
-          suggestions = nameGvm2.filter(item => item.ChuyenNganh === maPhongBan && item.GiangVien.toLowerCase().includes(value)).map(item => item.GiangVien);
+          suggestions = nameGvm2.filter(item => item.MaPhongBan === maPhongBan && item.HoTen.toLowerCase().includes(value)).map(item => item.HoTen);
         }
       } else {
         // Trường hợp checkbox không được check, hiển thị giảng viên theo khoa của dòng
         suggestions = nameGvm.filter(item => item.MaPhongBan === maPhongBan).map(item => item.TenNhanVien);
-        console.log('2' + suggestions);
+        // console.log('2' + suggestions);
 
       }
 
@@ -289,28 +231,16 @@
     }
 
 
-    // Hàm ẩn gợi ý
-    function hideSuggestions() {
-      const suggestionsContainer = document.querySelector('.suggestions');
-      if (suggestionsContainer) {
-        suggestionsContainer.remove();
-      }
-    }
-
-
     // Hàm render bảng
     function renderTable(data) {
-      console.log('Dữ liệu bảng:', data);
       const tableBody = document.getElementById('tableBody');
       tableBody.innerHTML = ''; // Xóa nội dung cũ
-
-      const khoaData = nameGvm2; // Dữ liệu khoa giảng viên
 
       data.forEach((row) => {
         const tableRow = document.createElement('tr');
 
         const lopHocPhanTd = document.createElement('td');
-        lopHocPhanTd.textContent = row.LopHocPhan || '';
+        lopHocPhanTd.textContent = `${row.TenLop} (${row.Lop})` || '';
         tableRow.appendChild(lopHocPhanTd);
 
         const soTcTd = document.createElement('td');
@@ -326,15 +256,11 @@
         inviteCheckbox.type = 'checkbox';
         inviteCheckbox.checked = row.MoiGiang || false;
 
-        // Kiểm tra khoa của dòng hiện tại
-        const matchedKhoa = khoaData.find(item => item.TenHocPhan === row.LopHocPhan);
-        const maPhongBan = matchedKhoa ? matchedKhoa.ChuyenNganh : ''; // Gán mã phòng ban
-
         // Sự kiện khi checkbox thay đổi
         inviteCheckbox.onchange = () => {
           if (inviteCheckbox.checked) {
             // Hiển thị gợi ý nếu checkbox được chọn
-            showSuggestions(giaoVienGiangDayInput, inviteCheckbox, maPhongBan);
+            showSuggestions(giaoVienGiangDayInput, inviteCheckbox, row.Khoa); // Sử dụng row.Khoa
           } else {
             // Nếu checkbox không được chọn, ẩn gợi ý
             hideSuggestions();
@@ -354,14 +280,14 @@
         // Sự kiện để hiển thị gợi ý khi người dùng nhập
         giaoVienGiangDayInput.oninput = () => {
           if (inviteCheckbox.checked) { // Chỉ hiển thị gợi ý nếu checkbox được chọn
-            showSuggestions(giaoVienGiangDayInput, inviteCheckbox, maPhongBan);
+            showSuggestions(giaoVienGiangDayInput, inviteCheckbox, row.Khoa); // Sử dụng row.Khoa
           }
         };
 
         // Thêm sự kiện click vào ô nhập để hiển thị gợi ý
         giaoVienGiangDayInput.onclick = function () {
           if (!inviteCheckbox.checked) { // Hiển thị gợi ý khi click vào ô input nếu checkbox không được chọn
-            showSuggestions(giaoVienGiangDayInput, inviteCheckbox, maPhongBan);
+            showSuggestions(giaoVienGiangDayInput, inviteCheckbox, row.Khoa); // Sử dụng row.Khoa
           }
         };
 
@@ -369,7 +295,7 @@
         tableRow.appendChild(giaoVienGiangDayTd);
 
         const khoaTd = document.createElement('td');
-        khoaTd.textContent = maPhongBan; // Gán giá trị ChuyenNganh
+        khoaTd.textContent = row.Khoa || ''; // Lấy giá trị Khoa trực tiếp từ row
         tableRow.appendChild(khoaTd);
 
         const boMonTd = document.createElement('td');
@@ -388,12 +314,32 @@
       });
     }
 
+
     // Hàm ẩn gợi ý
     function hideSuggestions() {
       const suggestionsContainer = document.querySelector('.suggestions');
       if (suggestionsContainer) {
         suggestionsContainer.remove();
       }
+    }
+
+    function submitData() {
+      const rows = document.querySelectorAll('.row-container');
+
+      rows.forEach((row, index) => {
+        const columns = row.querySelectorAll('.column');
+        const giaoVienGiangDayInput = row.querySelector('input[type="text"]');
+        const inviteCheckbox = row.querySelector('input[type="checkbox"]');
+
+        const giaoVienGiangDay = giaoVienGiangDayInput.value ? giaoVienGiangDayInput.value : "";
+        const moiGiang = inviteCheckbox.checked;
+
+        globalData[index].GiaoVienGiangDay = giaoVienGiangDay;
+        globalData[index].MoiGiang = moiGiang;
+      });
+
+      console.log(globalData);
+      alert("Dữ liệu đã được gửi. Kiểm tra console để xem chi tiết.");
     }
 
     // Hàm khởi động ứng dụng
