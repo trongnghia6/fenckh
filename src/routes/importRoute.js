@@ -68,6 +68,7 @@ router.get('/get-table-tam', async (req, res) => {
   }
 });
 
+router.post('/check-khoa', obj.checkExistKhoa);
 
 
 module.exports = router;

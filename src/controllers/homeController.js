@@ -62,6 +62,10 @@ const gethomePage = (req, res) => {
   res.render("homepage.ejs");
 };
 
+const getHomeMainDT = (req, res) => {
+  res.render("maindt.ejs");
+};
+
 // Hàm postFile xử lý upload file Excel
 const postFile = (req, res) => {
   // Sử dụng multer để upload file
@@ -92,6 +96,7 @@ module.exports = {
   getDtaoxemhd,
   getDtaonhap,
   getPhongTaiChinh,
-  postFile, // Thêm hàm này vào export để sử dụng trong router
+  postFile,
+  getHomeMainDT, // Thêm hàm này vào export để sử dụng trong router
   // createGVM,
 };

@@ -12,6 +12,7 @@ const {
   getDtaoxemhd,
   getDtaonhap,
   getPhongTaiChinh,
+  getHomeMainDT,
 } = require("../controllers/homeController");
 
 // const { createGVM } = require("../controllers/DaoTaoController");
@@ -28,6 +29,7 @@ router.post("/abc/create", createUser);
 router.get("/", getLogin);
 router.get("/index", getIndex);
 router.get("/dtxemhd", getDtaoxemhd);
+router.get("/maindt", getHomeMainDT);
 router.get("/daotaoxemhd/daotaoduyet", getDtaoduyet);
 router.get("/daotaoxemhd/daotaonhap", getDtaonhap);
 

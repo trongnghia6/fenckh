@@ -10,106 +10,125 @@
   <style>
     /* Style cho navbar */
     .navbar-top {
-        background-color: #f9f5e6; /* Màu nền vàng nhạt */
-        padding: 10px 20px;
+      background-color: #f9f5e6;
+      /* Màu nền vàng nhạt */
+      padding: 10px 20px;
     }
-    .navbar-brand {
-        display: flex;
-        align-items: center;
-        color: #d42f2f; /* Màu chữ đỏ */
-        font-weight: bold;
-        padding-left: 15px;
-        margin-bottom: 10px;
-    }
-    .navbar-brand img {
-        margin-left: 10%;
-        height: 120px; /* Kích thước logo */
-        margin-right: 15px;
-    }
-    .navbar-title {
-        text-align: center;
-        line-height: 1.2;
-    }
-    .navbar-title .main-title {
-        font-size: 1.8rem;
-        color: #d42f2f;
-        font-weight: bold;
-    }
-    .navbar-title .sub-title {
-        font-size: 1.1rem;
-        color: #d5a253;
-    }
-    .navbar-bottom {
-        background-color: blue; /* Màu nền cam */
-         padding: 5px;
-         justify-content: space-around;
-         box-shadow: 0 10px 15px rgba(159, 9, 9, 0.2), 0 4px 6px rgba(185, 12, 12, 0.1); /* Hiệu ứng bóng đổ 3D */
-         position: relative;
-         transform-style: preserve-3d;
-    }
-    .navbar-bottom .nav-link {
-        color: white;
-        font-weight: bold;
-        text-transform: uppercase;
-        padding: 5px 10px;
-        margin-right: 15px;
-    }
-    .navbar-bottom .nav-link:hover {
-        color: black;
-        background-color: #f8f5f4; /* Màu cam đậm hơn khi hover */
-        transform: perspective(500px) translateZ(10px); /* Tạo hiệu ứng nổi 3D */
-        box-shadow: 0 10px 10px rgba(0, 0, 0, 0.3);
-    }
-    .login {
-        color: red;
-        font-weight: bold;
-    }
-</style>
-</head>
-<body>
-<!-- Phần trên của navbar chứa logo và tiêu đề -->
-<nav class="navbar-top">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="#">
-            <img src="/Logo-Hoc-Vien-Ky-Thuat-Mat-Ma-ACTVN.webp" alt="Logo">
-            <div class="navbar-title">
-              <img src="/dongchu_banner.png" alt="banner">
-            </div>
-        </a>
-    </div>
-</nav>
 
-<!-- Phần dưới của navbar chứa các mục nằm ngang -->
-<nav class="navbar navbar-expand-lg navbar-bottom">
+    .navbar-brand {
+      display: flex;
+      align-items: center;
+      color: #d42f2f;
+      /* Màu chữ đỏ */
+      font-weight: bold;
+      padding-left: 15px;
+      margin-bottom: 10px;
+    }
+
+    .navbar-brand img {
+      margin-left: 10%;
+      height: 120px;
+      /* Kích thước logo */
+      margin-right: 15px;
+    }
+
+    .navbar-title {
+      text-align: center;
+      line-height: 1.2;
+    }
+
+    .navbar-title .main-title {
+      font-size: 1.8rem;
+      color: #d42f2f;
+      font-weight: bold;
+    }
+
+    .navbar-title .sub-title {
+      font-size: 1.1rem;
+      color: #d5a253;
+    }
+
+    .navbar-bottom {
+      background-color: blue;
+      /* Màu nền cam */
+      padding: 5px;
+      justify-content: space-around;
+      box-shadow: 0 10px 15px rgba(159, 9, 9, 0.2), 0 4px 6px rgba(185, 12, 12, 0.1);
+      /* Hiệu ứng bóng đổ 3D */
+      position: relative;
+      transform-style: preserve-3d;
+    }
+
+    .navbar-bottom .nav-link {
+      color: white;
+      font-weight: bold;
+      text-transform: uppercase;
+      padding: 5px 10px;
+      margin-right: 15px;
+    }
+
+    .navbar-bottom .nav-link:hover {
+      color: black;
+      background-color: #f8f5f4;
+      /* Màu cam đậm hơn khi hover */
+      transform: perspective(500px) translateZ(10px);
+      /* Tạo hiệu ứng nổi 3D */
+      box-shadow: 0 10px 10px rgba(0, 0, 0, 0.3);
+    }
+
+    .login {
+      color: red;
+      font-weight: bold;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Phần trên của navbar chứa logo và tiêu đề -->
+  <nav class="navbar-top">
     <div class="container-fluid">
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link" href="/maindt.ejs">HOME</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/daotaoxemhd/gvmList">Thông tin GD</a>
-                </li>
-                <li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/index/import">Import</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Duyệt</a>
-                </li>
-                <div class="navbar-nav">
-                  <div class="nav-item dropdown">
-                      <a class="nav-link dropdown-toggle bi bi-person" href="/login" id="navbarDropdownUser" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                          Hi, Lê Đức Thuận
-                      </a>
-                  </div>
-            </ul>
+      <a class="navbar-brand" href="#">
+        <img src="/Logo-Hoc-Vien-Ky-Thuat-Mat-Ma-ACTVN.webp" alt="Logo">
+        <div class="navbar-title">
+          <img src="/dongchu_banner.png" alt="banner">
         </div>
+      </a>
     </div>
-</nav>
+  </nav>
+
+  <!-- Phần dưới của navbar chứa các mục nằm ngang -->
+  <nav class="navbar navbar-expand-lg navbar-bottom">
+    <div class="container-fluid">
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link" href="/maindt">HOME</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/daotaoxemhd/gvmList">Thông tin GD</a>
+          </li>
+          <li>
+          <li class="nav-item">
+            <a class="nav-link" href="/index/import">Import</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Duyệt</a>
+          </li>
+          <div class="navbar-nav">
+            <div class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle bi bi-person" href="/login" id="navbarDropdownUser" role="button"
+                data-bs-toggle="dropdown" aria-expanded="false">
+                Hi, Lê Đức Thuận
+              </a>
+            </div>
+        </ul>
+      </div>
+    </div>
+  </nav>
   <!-- 2. Tổng quan -->
   <div class="container my-4">
     <div class="row">
@@ -311,17 +330,17 @@
     });
   </script>
   <!-- 8. Chữ mờ và nút quay về đầu trang -->
-<div class="container my-4">
+  <div class="container my-4">
     <footer class="text-center">
       <p class="text-muted">© 2024 Phòng Đào Tạo. Tất cả các quyền được bảo lưu.</p>
       <button onclick="topFunction()" id="backToTopBtn" class="btn btn-secondary">Quay về đầu trang</button>
     </footer>
   </div>
-  
+
   <script>
     // Nút quay về đầu trang
     var backToTopBtn = document.getElementById("backToTopBtn");
-  
+
     // Khi nhấn vào nút, cuộn về đầu trang
     function topFunction() {
       document.body.scrollTop = 0; // Cho Safari

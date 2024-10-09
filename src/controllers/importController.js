@@ -421,4 +421,31 @@ const handleUploadAndRender = async (req, res) => {
 
 };
 
-module.exports = { handleUploadAndRender, importJSONToDB, importTableQC, importTableTam };
+const checkExistKhoa = async (req, res) => {
+  const { khoa } = req.body; // Lấy giá trị Khoa từ yêu cầu client
+  const tableName = process.env.DB_TABLE_TAM; // Lấy tên bảng từ biến môi trường
+
+  // Câu truy vấn kiểm tra sự tồn tại của giá trị Khoa trong bảng
+  const queryCheck = `SELECT EXISTS(SELECT 1 FROM ${tableName} WHERE Khoa = ?) AS exist;`;
+
+  // Sử dụng Promise để kiểm tra sự tồn tại
+  return new Promise((resolve, reject) => {
+    connection.query(queryCheck, [khoa], (err, results) => {
+      if (err) {
+        console.error('Lỗi khi kiểm tra Khoa:', err);
+        return reject(res.status(500).json({ error: 'Lỗi kiểm tra cơ sở dữ liệu' }));
+      }
+
+      // Kết quả trả về từ cơ sở dữ liệu
+      const exist = results[0].exist === 1; // True nếu tồn tại, False nếu không tồn tại
+
+      if (exist) {
+        return resolve(res.status(200).json({ message: 'Khoa đã tồn tại trong cơ sở dữ liệu', exists: true }));
+      } else {
+        return resolve(res.status(200).json({ message: 'Khoa không tồn tại trong cơ sở dữ liệu', exists: false }));
+      }
+    });
+  });
+};
+
+module.exports = { handleUploadAndRender, importJSONToDB, importTableQC, importTableTam, checkExistKhoa };
