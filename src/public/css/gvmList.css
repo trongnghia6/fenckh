@@ -54,7 +54,7 @@
   padding: 8px;
   border: 1px solid #ccc;
   border-radius: 4px;
-  width: fit-content;
+  width: 150px;
 }
 
 .gvmList .class-table {
@@ -149,25 +149,29 @@
 
 /* 
  */
-.modal {
-  display: none;
-  position: fixed;
-  z-index: 1;
-  left: 0;
+ .modal {
+  display: none; /* Modal không hiển thị mặc định */
+  position: fixed; /* Giữ modal ở vị trí cố định trên màn hình */
   top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
-  overflow: auto;
-  background-color: rgba(0, 0, 0, 0.4);
+  background-color: rgba(0, 0, 0, 0.5); /* Màu nền tối phía sau modal */
+  z-index: 1050; /* Đảm bảo modal luôn hiển thị trên tất cả các thành phần khác */
+  justify-content: center;
+  align-items: center;
 }
 
 .modal-content {
-  background-color: #fefefe;
-  margin: 15% auto;
+  background-color: white;
   padding: 20px;
-  border: 1px solid #888;
-  width: 80%;
+  border-radius: 8px;
+  max-width: 600px;
+  width: 100%;
+  z-index: 1060; /* Đảm bảo nội dung modal cũng có độ ưu tiên hiển thị cao */
+  position: relative;
 }
+
 
 .close-button {
   color: #aaa;
