@@ -147,6 +147,13 @@
                                 id="searchInput"
                                 onkeyup="searchClass()"
                               />
+                              <select class="filter" onchange="filterClasses()">
+                                <option value="">Công nghệ thông tin</option>
+                                <option value="">An toàn thông tin</option>
+                                <option value="">Điện tử viễn thông</option>
+                                <option value="">Mật mã</option>
+                                <!-- Các tùy chọn lọc khác -->
+                              </select>
                               <!-- <select class="filter" onchange="filterClasses()">
                                 <option value="">Công nghệ thông tin</option>
                                 <option value="">An toàn thông tin</option>
@@ -316,8 +323,7 @@ function searchClass() {
 
   gvmLists = await fetchGVMLists();
 
-  //alert("ga")
-  //alert(JSON.stringify(gvmLists[index]));
+
   var gvm = gvmLists[index];
   
   // Hiển thị thông tin vào modal
@@ -377,11 +383,23 @@ document.getElementById('modal-ma-so-thue').innerText = gvm.MaSoThue;
 
      // console.log(message)
       // Hiển thị thông báo dựa trên giá trị của message
-      if (message === 'insertSuccess') {
+      /*
+       if (message === 'insertSuccess') {
         alert("Update Success")
       } else if (message === 'insertFalse') {
         alert("Update False")
-      }
+      } 
+        */
+      // Hiển thị thông báo dựa trên giá trị của message
+  if (message === 'insertSuccess') {
+    alert("Thêm giảng viên thành công!");
+  } else if (message === 'magiangvien') {
+    alert("Mã giảng viên đã tồn tại. Vui lòng nhập mã khác.");
+  } else if (message === 'cccd') {
+    alert("Số CCCD đã tồn tại. Vui lòng kiểm tra lại số CCCD.");
+  } else if (message === 'insertFalse') {
+    alert("Đã xảy ra lỗi trong quá trình thêm giảng viên.");
+  }
 
         // Sau khi hiển thị thông báo, xóa query string để tránh hiển thị lại khi refresh
 if (message) {

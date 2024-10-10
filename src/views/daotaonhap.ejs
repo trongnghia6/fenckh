@@ -116,7 +116,7 @@
 
                                     <!-- Danh sách giảng viên mời -->
                                     <li class="nav-item"></li>
-                                        <a  class="nav-link" href="/daotaoxemhd/gvmList" role="button">Danh sách giảng viên mời</a>
+                                        <a  class="nav-link" href="/gvmList" role="button">Danh sách giảng viên mời</a>
                                     </li>
                                     
                                     <!-- Thông tin các lớp giảng viên mời -->
@@ -138,14 +138,14 @@
                 </div>
                 <div class="w-80 daotaonhap">
                     <div class="m-3">
-                         <form action="/daotaoxemhd/daotaonhap/cccd" enctype="multipart/form-data" class="form d-flex flex-column" method="POST" >
+                         <form action="/daotaonhap" enctype="multipart/form-data" class="form d-flex flex-column" method="POST" >
                             <!-- //enctype="multipart/form-data" -->
                             <!-- Nút quay lại -->
                             <button type="button" class="btn btn-success" onclick="goBack()">Quay lại Danh sách giảng viên mời</button>
                             <br>
                             <br>                 
                             <fieldset>
-                                <a>Mã giảng viên mời:<input required class="input m-2 w-20 form-control" type="text" name="Id_GVM" id="id_GVM"></a>
+                                <!-- <a>Mã giảng viên mời:<input required class="input m-2 w-20 form-control" type="text" name="MaGvm" id="MaGvm"></a> -->
                                 <a>Họ tên:<input required class="input m-2 w-20 form-control" type="text" name="HoTen" id="HoTen"></a>
                                 <a>Giới tính:<select class="input m-2 form-control" style="width: 100px;" name="GioiTinh" id="gioitinh">
                                     <option value="Nam">Nam</option>
@@ -167,6 +167,8 @@
                                 <a>Số tài khoản: <input required class="input m-2 w-20 form-control" type="text" name="STK" id="stk"></a>
                                 <a>Ngân hàng: <input required class="input m-2 w-20 form-control" type="text" name="NganHang" id="nganHang"></a>
                              
+                                <a>Bằng tốt nghiệp loại: <input required class="input m-2 w-20 form-control" type="text" name="BangTotNghiepLoai" id="BangTotNghiepLoai"></a>
+
                                 <!-- <a>Mặt trước cccd: <input class="input m-2 form-control" type="file" name="truocCCCD" id="truocCCCD"></a> -->
                                 <div>
                                     <label>Mặt trước CCCD:</label>
@@ -176,7 +178,10 @@
                                     <label>Mặt sau cccd: </label>
                                     <input required class="input m-2 form-control" type="file" name="sauCCCD" id="sauCCCD">
                                 </div>
-
+                                <div>
+                                    <label>Bằng tốt nghiệp: </label>
+                                    <input required class="input m-2 form-control" type="file" name="bangTotNghiep" id="bangTotNghiep">
+                                </div>
                                 <!-- Thêm phần upload file lý lịch (PDF) -->
                                 <div>
                                     <label>File lý lịch (PDF):</label>
@@ -199,6 +204,7 @@
                                  </div>
                                 
                                 <!-- <a>Mã bộ môn: <input class="input m-2 w-20 form-control" type="text" name="maBoMon" id="maBoMon"></a> -->
+
 
                                 <a>Tình trạng giảng dạy:<select class="input m-2 form-control" name="tinhTrangGiangDay" id="tinhTrang" style="width: 100px;">
                                     <option value="true">Đang giảng dạy</option>
@@ -272,12 +278,17 @@
         // Lấy phần tử div để hiển thị thông báo
         const messageDiv = document.getElementById('message');
 
-       // console.log(message)
+       
         // Hiển thị thông báo dựa trên giá trị của message
         if (message === 'insertSuccess') {
           alert("insertSuccess")
-        } else if (message === 'insertFalse') {
-          alert("insertFalse")
+        } else (message === 'insertFalse') {
+            alert("insertFalse")
+        }
+
+        // Quay lại trang cũ
+        function goBack() {
+            window.history.back(); // Quay lại trang trước đó
         }
 
         // Sau khi hiển thị thông báo, xóa query string để tránh hiển thị lại khi refresh
@@ -287,10 +298,7 @@
             window.history.replaceState({}, document.title, newUrl);
         }
 
-        // Quay lại trang cũ
-        function goBack() {
-            window.history.back(); // Quay lại trang trước đó
-        }
+
 
     </script>
       

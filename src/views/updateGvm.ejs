@@ -150,7 +150,7 @@
                                 <div class="d_none">
                                     <a>Id:<input class="input" type="text" name="IdGvm" id="IdGvm" value="<%= value.id_Gvm %>"></a>
                                 </div>
-                                <a>Mã giảng viên mời:<input required class="input m-2 w-20 form-control" type="text" name="MaGvm" id="MaGvm" value="<%= value.MaGvm %>"></a>
+                                <!-- <a>Mã giảng viên mời:<input required class="input m-2 w-20 form-control" type="text" name="MaGvm" id="MaGvm" value="<%= value.MaGvm %>"></a> -->
                                 <a>Họ tên:<input required class="input m-2 w-20 form-control" type="text" name="HoTen" id="HoTen" value="<%= value.HoTen %>"></a>
                                 <a>Giới tính:<select class="input m-2 form-control" style="width: 100px;" name="GioiTinh" id="gioitinh">
                                     <option value="Nam">Nam</option>
@@ -172,6 +172,8 @@
                                 <a>Hệ số lương: <input required class="input m-2 w-20 form-control" type="text" name="HeSoLuong" id="hsl" value="<%= value.HSL %>"></a>
                                 <a>Số tài khoản: <input required class="input m-2 w-20 form-control" type="text" name="STK" id="stk" value="<%= value.STK %>"></a>
                                 <a>Ngân hàng: <input required class="input m-2 w-20 form-control" type="text" name="NganHang" id="nganHang" value="<%= value.NganHang %>"></a>
+                                <a>Bằng tốt nghiệp loại: <input required class="input m-2 w-20 form-control" type="text" name="BangTotNghiepLoai" id="BangTotNghiepLoai" value="<%= value.BangTotNghiepLoai %>"></a>
+
                                 <!-- <div>
                                     <label>Mặt trước CCCD:</label>
                                     <input class="input m-2 form-control" type="file" name="truocCCCD" value="<%= value.MatTruocCCCD %>"/>
@@ -198,7 +200,8 @@
                                 
                                 <div>
                                     <label>File lý lịch (PDF):</label> <%= value.FileLyLich %>                                 
-                                    <input required class="input m-2 form-control" type="file" name="FileLyLich" id="FileLyLich" value="<%= value.FileLyLich %>">
+                                    <input class="input m-2 form-control" type="file" name="FileLyLich" id="FileLyLich" value="<%= value.FileLyLich %>">
+                                    <input type="hidden" name="oldFileLyLich" value="<%= value.FileLyLich %>">
                                 </div>
 
                                  <div>

@@ -19,6 +19,8 @@ const storage = multer.diskStorage({
       cb(null, appRoot + "/src/public/images/userIdCardPhotos/frontPhotos/");
     } else if (file.fieldname == "sauCCCD") {
       cb(null, appRoot + "/src/public/images/userIdCardPhotos/backPhotos/");
+    } else if (file.fieldname == "bangTotNghiep") {
+      cb(null, appRoot + "/src/public/images/certificates");
     } else if (file.fieldname == "FileLyLich") {
       // Xử lý file PDF
       cb(null, appRoot + "/src/public/resumes/");
@@ -30,16 +32,15 @@ const storage = multer.diskStorage({
     cb(
       null,
       idUser +
-      // file.fieldname +
-      // "-" +
-      // Date.now() +
-      path.extname(file.originalname)
+        // file.fieldname +
+        // "-" +
+        // Date.now() +
+        path.extname(file.originalname)
     );
   },
 });
 
 const imageFilter = function (req, file, cb) {
-  console.log("filename: ", file.fieldname);
   if (file == undefined) return;
   // Accept images only
   if (
@@ -62,10 +63,11 @@ let upload = multer({ storage: storage, fileFilter: imageFilter });
 //   handleUploadFile
 // );
 router.post(
-  "/daotaoxemhd/daotaonhap/cccd",
+  "/daotaonhap",
   upload.fields([
     { name: "truocCCCD", maxCount: 1 },
     { name: "sauCCCD", maxCount: 1 },
+    { name: "bangTotNghiep", maxCount: 1 },
     { name: "FileLyLich", maxCount: 1 }, // Thêm dòng này để upload file PDF
   ]),
   handleUploadFile

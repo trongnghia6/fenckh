@@ -167,6 +167,7 @@
                                 <option value="">Công nghệ thông tin</option>
                                 <option value="">An toàn thông tin</option>
                                 <option value="">Điện tử viễn thông</option>
+                                <option value="">Mật mã</option>
                                 <!-- Các tùy chọn lọc khác -->
                               </select>
                             </div>
@@ -266,6 +267,8 @@
                                 <p><strong>Nơi công tác:</strong> <span id="modal-noi-cong-tac"></span></p>
                                 <p><strong>Chức vụ:</strong> <span id="modal-chuc-vu"></span></p>
                                 <p><strong>Mã số thuế:</strong> <span id="modal-ma-so-thue"></span></p>
+                                <p><strong>Tốt nghiệp loại:</strong> <span id="modal-tot-nghiep-loai"></span></p>
+
                             </div>
                         </div>
                         
@@ -302,7 +305,7 @@ function searchClass() {
   async function fetchGVMLists() {
    
     try {
-        const response = await fetch('/api/gvm');
+        const response = await fetch('/api/classInfoGvm');
        
         if (!response.ok) {
             throw new Error('Network response was not ok');
@@ -319,6 +322,8 @@ function searchClass() {
  async function viewClass( index) {
 
   gvmLists = await fetchGVMLists();
+
+  index = parseInt(index);
 
   var gvm = gvmLists[index];
   
@@ -338,6 +343,8 @@ document.getElementById('modal-heso-luong').innerText = gvm.HSL;//
 document.getElementById('modal-noi-cong-tac').innerText = gvm.NoiCongTac;
 document.getElementById('modal-chuc-vu').innerText = gvm.ChucVu;
 document.getElementById('modal-ma-so-thue').innerText = gvm.MaSoThue;
+document.getElementById('modal-tot-nghiep-loai').innerText = gvm.TotNghiepLoai;
+
   // Hiển thị modal
   document.getElementById('modal').style.display = 'flex';
 }
