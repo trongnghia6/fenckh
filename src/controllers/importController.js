@@ -101,7 +101,8 @@ const importTableQC = async (jsonData) => {
       MoiGiang, 
       SoTinChi, 
       MaHocPhan, 
-      LopHocPhan, 
+      LopHocPhan,
+      TenLop, 
       LL, 
       SoTietCTDT, 
       HeSoT7CN, 
@@ -109,23 +110,24 @@ const importTableQC = async (jsonData) => {
       HeSoLopDong, 
       QuyChuan, 
       GhiChu
-    ) VALUES (?, ?, ?, ?, ?, NULL, FALSE, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+    ) VALUES (?, ?, ?, ?, ?, NULL, FALSE, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
   `;
 
   const insertPromises = jsonData.map(item => {
     return new Promise((resolve, reject) => {
       // Sử dụng hàm tachChuoi để tách các thông tin từ chuỗi
-      const { HocKi, NamHoc, Lop } = tachChuoi(item['LopHocPhan']);
+      const { TenLop, HocKi, NamHoc, Lop } = tachChuoi(item['LopHocPhan']);
 
       const values = [
         item['Khoa'],                                // Khoa
         item['Dot'],                                 // Đợt
-        HocKi,                                       // Kỳ học (được tách từ chuỗi)
-        NamHoc,                                      // Năm học (được tách từ chuỗi)
+        item['Ki'],                                 // Đợt
+        item['Nam'],                                 // Đợt
         item['GiaoVien'],                            // Tên Giảng viên
         item['SoTinChi'],                            // Số tín chỉ
         item['MaHocPhan'],                           // Mã học phần
-        Lop,                                         // Lớp học phần (được tách từ chuỗi)
+        TenLop,                                         // Lớp học phần (được tách từ chuỗi)
+        Lop,
         item['LL'],                                  // LL (Số tiết theo lịch)
         item['SoTietCTDT'],                          // Số tiết theo CTĐT
         item['HeSoT7CN'],                            // Hệ số T7/CN
@@ -184,6 +186,8 @@ const importTableTam = async (jsonData) => {
     INSERT INTO ${tableName} (
       Khoa,
       Dot,
+      Ki,
+      Nam,
       GiaoVien, 
       SoTinChi, 
       LopHocPhan, 
@@ -194,7 +198,7 @@ const importTableTam = async (jsonData) => {
       HeSoLopDong, 
       QuyChuan, 
       GhiChu
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
   `;
 
   const insertPromises = jsonData.map(item => {
@@ -202,6 +206,8 @@ const importTableTam = async (jsonData) => {
       const values = [
         item['Khoa'],                               // Khoa
         item['Dot'],                                // Đợt
+        item['Ki'],                                // Đợt
+        item['Nam'],                                // Đợt
         item['Giáo Viên'],                          // Tên Giảng viên
         item['Số TC'],                               // Số tín chỉ
         item['Lớp học phần'],                        // Lớp học phần                     
@@ -409,7 +415,6 @@ const importJSONToDB = async (jsonData) => {
   return results;
 };
 
-
 const handleUploadAndRender = async (req, res) => {
   const filePath = path.join(__dirname, '../../uploads', req.file.filename);
 
@@ -421,4 +426,56 @@ const handleUploadAndRender = async (req, res) => {
 
 };
 
-module.exports = { handleUploadAndRender, importJSONToDB, importTableQC, importTableTam };
+const checkExistKhoa = async (req, res) => {
+  const { khoa } = req.body; // Lấy giá trị Khoa từ yêu cầu client
+  const tableName = process.env.DB_TABLE_TAM; // Lấy tên bảng từ biến môi trường
+
+  // Câu truy vấn kiểm tra sự tồn tại của giá trị Khoa trong bảng
+  const queryCheck = `SELECT EXISTS(SELECT 1 FROM ${tableName} WHERE Khoa = ?) AS exist;`;
+
+  // Sử dụng Promise để kiểm tra sự tồn tại
+  return new Promise((resolve, reject) => {
+    connection.query(queryCheck, [khoa], (err, results) => {
+      if (err) {
+        console.error('Lỗi khi kiểm tra Khoa:', err);
+        return reject(res.status(500).json({ error: 'Lỗi kiểm tra cơ sở dữ liệu' }));
+      }
+
+      // Kết quả trả về từ cơ sở dữ liệu
+      const exist = results[0].exist === 1; // True nếu tồn tại, False nếu không tồn tại
+
+      if (exist) {
+        return resolve(res.status(200).json({ message: 'Khoa đã tồn tại trong cơ sở dữ liệu', exists: true }));
+      } else {
+        return resolve(res.status(200).json({ message: 'Khoa không tồn tại trong cơ sở dữ liệu', exists: false }));
+      }
+    });
+  });
+};
+
+// Hàm xóa row theo trường 'Khoa'
+const deleteRowByKhoa = (req, res) => {
+  const { khoa } = req.body;  // Nhận giá trị từ client thông qua body
+  const tableName = process.env.DB_TABLE_TAM; // Lấy tên bảng từ biến môi trường
+  if (!khoa) {
+    return res.status(400).json({ message: 'Missing required field: Khoa' });
+  }
+
+  // Query SQL để xóa row
+  const sql = `DELETE FROM ${tableName} WHERE Khoa = ?`;
+
+  connection.query(sql, [khoa], (err, results) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ message: 'Error executing query', error: err });
+    }
+
+    if (results.affectedRows === 0) {
+      return res.status(404).json({ message: 'No row found with the given Khoa' });
+    }
+
+    return res.status(200).json({ message: 'Row deleted successfully' });
+  });
+};
+
+module.exports = { handleUploadAndRender, importJSONToDB, importTableQC, importTableTam, checkExistKhoa, deleteRowByKhoa };

@@ -2,7 +2,8 @@ const express = require('express');
 const multer = require('multer');
 const obj = require('../controllers/importController'); // Import hàm xử lý file từ controller
 const obj2 = require('../controllers/getTableDBController'); // Import hàm xử lý file từ controller
-
+const role = require('../controllers/middlewares'); // Check role
+const getMainHTML = require('../controllers/homeController');
 // const test = require('../controllers/fileController');
 
 
@@ -13,14 +14,11 @@ const upload = multer({
   dest: 'uploads/' // Đường dẫn thư mục lưu trữ file
 });
 
-// Route GET để render trang upload file
-router.get('/import', (req, res) => {
-  res.render('import'); // render file 'import.ejs' trong thư mục 'views'
-});
+// render trang import
+router.get('/import', role.checkDaotaoRoleThiHanh, getMainHTML.getImport);
 
 // Route POST để xử lý upload file Excel
-router.post('/import', upload.single('excelFile'), obj.handleUploadAndRender);
-
+router.post('/import', role.checkDaotaoRoleThiHanh, upload.single('excelFile'), obj.handleUploadAndRender);
 
 // Định tuyến cho POST request tới /index / save - data
 router.post('/save-data', async (req, res) => {
@@ -67,6 +65,10 @@ router.get('/get-table-tam', async (req, res) => {
     res.status(500).json({ message: 'Lỗi khi lấy dữ liệu' });
   }
 });
+
+router.post('/check-khoa', role.checkDaotaoRoleThiHanh, obj.checkExistKhoa);
+
+router.post('/delete-khoa', role.checkDaotaoRoleThiHanh, obj.deleteRowByKhoa);
 
 
 
