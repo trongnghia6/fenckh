@@ -5,7 +5,7 @@ const obj2 = require('../controllers/getTableDBController'); // Import hàm xử
 
 
 // render site info
-router.get('/index/info', (req, res) => {
+router.get('/info', (req, res) => {
   res.render('teachingInfo');
 });
 

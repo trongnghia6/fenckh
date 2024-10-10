@@ -415,7 +415,6 @@ const importJSONToDB = async (jsonData) => {
   return results;
 };
 
-
 const handleUploadAndRender = async (req, res) => {
   const filePath = path.join(__dirname, '../../uploads', req.file.filename);
 
@@ -453,7 +452,6 @@ const checkExistKhoa = async (req, res) => {
     });
   });
 };
-
 
 // Hàm xóa row theo trường 'Khoa'
 const deleteRowByKhoa = (req, res) => {
