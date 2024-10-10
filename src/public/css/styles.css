@@ -133,4 +133,17 @@
     color: white;
     font-size: 1.5em;
   }
-  
+  .selectop{
+    border: 3px solid #315cfd;
+    border-radius: 12px;
+    font-size: 1.2em;
+    font-weight: 550;
+  }
+  .input-group{
+    border: 5px solid #5b77e0;
+    border-radius: 12px;
+  }
+  .input-group-text{
+    background-color: #5b77e0;
+    border: none;
+  }

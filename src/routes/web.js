@@ -32,7 +32,7 @@ router.get("/", getLogin);
 router.get("/index", getIndex);
 router.get("/dtxemhd", getDtaoxemhd);
 router.get("/maindt", getHomeMainDaoTao);
-router.get("/daotaoxemhd/daotaoduyet", getDtaoduyet);
+router.get("/daotaoduyet", getDtaoduyet);
 router.get("/daotaoxemhd/daotaonhap", getDtaonhap);
 
 //router.post("/daotaoxemhd/daotaonhap/createGVM", handleUploadFile);

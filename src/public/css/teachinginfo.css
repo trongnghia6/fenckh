@@ -131,8 +131,20 @@
 
 .table th,
 .table td {
-  width: auto;
   /* Để các cột tự động điều chỉnh độ rộng theo nội dung */
   text-align: center;
   /* Canh giữa nội dung cho đồng bộ */
+}
+table-bordered {
+  border: 1px solid #ddd !important;
+}
+
+table caption {
+	padding: .5em 0;
+}
+
+@media screen and (max-width: 767px) {
+  table caption {
+    display: none;
+  }
 }
