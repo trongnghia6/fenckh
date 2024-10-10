@@ -144,7 +144,7 @@
             let tableHtml = '<table class="table table-bordered"><thead><tr>';
 
             // Lấy tiêu đề từ đối tượng JSON đầu tiên (trừ "Ghi chú")
-            const headers = Object.keys(data[0]).filter(key => key !== 'Ghi chú');
+            const headers = Object.keys(data[0]).filter(key => key !== 'Ghi chú' || key !== 'TT');
             headers.forEach(header => {
               tableHtml += `<th>${header}</th>`;
             });
@@ -246,6 +246,7 @@
                   })
                   .then(data => {
                     if (data.success) {
+                      console.log(updatedData);
                       alert('Import thành công!');
                     } else {
                       alert('Import thất bại!');
@@ -264,7 +265,9 @@
               updatedData = dataTam.map(item => ({
                 ...item,            // Sao chép các thuộc tính hiện có của đối tượng
                 Khoa: khoaValue,    // Thêm thuộc tính mới "Khoa" với giá trị từ combo box
-                Dot: dotValue       // Thêm thuộc tính mới "Đợt" với giá trị từ combo box "Đợt"
+                Dot: dotValue,      // Thêm thuộc tính mới "Đợt" với giá trị từ combo box "Đợt"
+                Ki: kiValue,       // Thêm thuộc tính mới "Đợt" với giá trị từ combo box "Đợt"
+                Nam: namValue       // Thêm thuộc tính mới "Đợt" với giá trị từ combo box "Đợt"
               }));
 
               // Gửi dữ liệu đã được cập nhật đến API save-data
@@ -283,6 +286,7 @@
                 })
                 .then(data => {
                   if (data.success) {
+                    console.log(updatedData);
                     alert('Import thành công!');
                   } else {
                     alert('Import thất bại!');

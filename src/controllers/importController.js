@@ -28,6 +28,9 @@ const convertExcelToJSON = (filePath) => {
         return acc;
       }, {});
     });
+
+    console.log(jsonObjects);
+
     return jsonObjects;
   } catch (err) {
     throw new Error('Cannot read file!: ' + err.message);
@@ -211,7 +214,7 @@ const importTableTam = async (jsonData) => {
         item['Giáo Viên'],                          // Tên Giảng viên
         item['Số TC'],                               // Số tín chỉ
         item['Lớp học phần'],                        // Lớp học phần                     
-        item['Số tiết lên lớp theo TKB'],          // LL (cần xác định từ dữ liệu nếu cần)
+        item['Số tiết lên lớp giờ HC'],          // LL (cần xác định từ dữ liệu nếu cần)
         item['Số tiết theo CTĐT'],                  // Số tiết CTĐT
         item['Hệ số lên lớp ngoài giờ HC/ Thạc sĩ/ Tiến sĩ'], // Hệ số T7/CN
         item['Số SV'],                               // Số sinh viên

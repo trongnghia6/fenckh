@@ -15,6 +15,7 @@ const {
   getHomeMainDaoTao,
   getTeachingInfo,
   getXemBangQC,
+  getMainKhoa,
 } = require("../controllers/homeController");
 
 // const { createGVM } = require("../controllers/DaoTaoController");
@@ -24,13 +25,9 @@ const {
   handleUploadFile,
 } = require("../controllers/createGvmController");
 
-router.get("/homePage", gethomePage);
-router.get("/abc", getAbc);
-router.post("/abc/create", createUser);
-/////////////////////////////////
 router.get("/", getLogin);
 router.get("/index", getIndex);
-router.get("/dtxemhd", getDtaoxemhd);
+// router.get("/dtxemhd", getDtaoxemhd);
 router.get("/maindt", getHomeMainDaoTao);
 router.get("/daotaoxemhd/daotaoduyet", getDtaoduyet);
 router.get("/daotaoxemhd/daotaonhap", getDtaonhap);
@@ -43,5 +40,9 @@ router.get("/PhongTaiChinh", getPhongTaiChinh);
 router.get("/maindt", getHomeMainDaoTao);
 router.get("/maindt/teachingInfo", getTeachingInfo);
 router.get("/maindt/tableQC", getXemBangQC);
+
+// src of L
+router.get("/khoaCNTT", getMainKhoa);
+
 
 module.exports = router;

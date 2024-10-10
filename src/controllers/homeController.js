@@ -49,8 +49,8 @@ const getImport = (req, res) => {
 const getDtaoduyet = (req, res) => {
   res.render("daotaoduyet.ejs");
 };
-const getDtaoxemhd = (req, res) => {
-  res.render("maindt.ejs");
+const getMainKhoa = (req, res) => {
+  res.render("gvmList.ejs");
 };
 const getDtaonhap = (req, res) => {
   res.render("daotaonhap.ejs");
@@ -93,7 +93,7 @@ module.exports = {
   getIndex,
   getImport,
   getDtaoduyet,
-  getDtaoxemhd,
+  getMainKhoa,
   getDtaonhap,
   getPhongTaiChinh,
   postFile,

@@ -33,10 +33,16 @@ const login = async (req, res) => {
           req.session.role = "daotao_thihanh"; // Lưu vai trò vào session
           url = "/maindt";
         } else if (role.includes("daotao_xem")) {
-          req.session.role = "daotao_xem"; // Lưu vai trò vào session
+          req.session.role = "daotao_xem";
           url = "/maindt";
-        } else if (role.includes("ATTT")) {
-          req.session.role = "ATTT";
+        } else if (role.includes("cntt_thihanh")) {
+          req.session.role = "cntt_thihanh";
+          url = "/gvmList";
+        } else if (role.includes("attt_thihanh")) {
+          req.session.role = "attt_thihanh";
+          url = "/gvmList";
+        } else if (role.includes("dtvt_thihanh")) {
+          req.session.role = "dtvt_thihanh";
           url = "/gvmList";
         }
 

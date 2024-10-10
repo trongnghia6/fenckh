@@ -14,7 +14,7 @@ router.get('/info2', (req, res) => {
 });
 
 // Đổi từ GET sang POST
-router.post('/index/teaching-info', (req, res) => obj.renderInfo(req, res));
+router.post('/teaching-info', (req, res) => obj.renderInfo(req, res));
 
 
 // gọi hàm lấy dữ liệu tên giảng giảng viên mời
