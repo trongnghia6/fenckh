@@ -49,6 +49,7 @@ const router = express.Router();
 const getClassInfoGvm = async (req, res) => {
   let query;
   const role = req.session.role;
+
   if (role == "daotao") {
     query = `SELECT * from quychuan JOIN gvmoi
     on quychuan.GiaoVien = gvmoi.HoTen`;
@@ -86,7 +87,7 @@ const getClassInfoGvm = async (req, res) => {
 //Lấy danh sách giảng viên mời để show chi tiết
 const getGvm = async (req, res) => {
   const query2 = `select * from gvmoi`;
-  console.log("jglksjgls");
+
   const connection2 = await createConnection();
 
   const [results2, fields2] = await connection2.query(query2);
@@ -104,7 +105,6 @@ const getGvm = async (req, res) => {
 module.exports = {
   getClassInfoGvm,
   getGvm,
-
   // Khoa công nghệ thông tin
   // getClassInfoGvmCNTT,
   // getGvmCNTT,

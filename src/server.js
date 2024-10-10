@@ -45,7 +45,10 @@ app.use(
     secret: "your-secret-key",
     resave: false,
     saveUninitialized: true,
-    cookie: { maxAge: 6000000 }, // Session sẽ hết hạn sau 60 giây không hoạt động
+    // Đặt true nếu bạn sử dụng HTTPS
+    cookie: { maxAge: 6000000 }, // Session sẽ hết hạn sau 100 phút không hoạt động
+
+    // cookie: { secure: true, maxAge: 6000000 }, // Session sẽ hết hạn sau 100 phút không hoạt động
   })
 );
 

@@ -12,6 +12,8 @@ const {
 } = require("../controllers/classInfoGvmController");
 
 router.get("/classInfoGvm", getClassInfoGvm);
+
+// Lấy danh sách giảng viên mời đưa ra script
 router.get("/api/classInfoGvm", getGvm);
 
 // Khoa công nghệ thông tin

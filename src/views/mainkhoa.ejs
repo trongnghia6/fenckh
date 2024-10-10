@@ -33,9 +33,8 @@
       <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
         <ul class="navbar-nav">
           <li class="nav-item">
-            <a class="nav-link active" href="/maindt">HOME</a>
+            <a class="nav-link active" href="/mainkhoa">HOME</a>
           </li>
-
           <li class="nav-item">
             <a class="nav-link" onclick="ThongTinGD()" href="">Thông tin GD</a>
           </li>
@@ -44,18 +43,17 @@
             <!-- <a class="nav-link" href="/import">Import danh sách giảng viên mời</a> -->
             <a class="nav-link" onclick="Import()" href="">Import</a>
           </li>
-
+          <!-- <li class="nav-item">
+            <a class="nav-link" href="#">Duyệt</a>
+          </li> -->
           <li class="nav-item">
             <a class="nav-link" href="/gvmList">Danh sách giảng viên mời</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="/classInfoGvm">Thông tin lớp giảng viên mời</a>
           </li>
-
+          <!--  -->
           <!-- <li class="nav-item">
-            <a class="nav-link" href="#">Duyệt</a>
-          </li>
-          <li class="nav-item">
             <a class="nav-link" href="/maindt/tableQC">Bảng quy chuẩn</a>
           </li> -->
           <div class="navbar-nav">
@@ -293,4 +291,31 @@
       document.documentElement.scrollTop = 0; // Cho Chrome, Firefox, IE và Opera
     }
   </script>
+
+  <!-- Phần phân quyền -->
+   <script>
+    async function fetchRole() {
+        try {
+            const response = await fetch('/api/getRole');
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            const role = await response.json();
+            return role;
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    }
+
+    async function ThongTinGD(){
+        let role = await fetchRole();
+        alert("role "+role)
+        if (role == 'CNTT'){
+            window.location.href = "/info"; // Chuyển hướng đến trang mong muốn
+        } else if (role == 'daotao'){
+            window.location.href = "/info2"; // Chuyển hướng đến trang mong muốn
+        }  // thêm quyền vào đây
+    }
+
+   </script>
 </body>

@@ -37,13 +37,14 @@ const login = async (req, res) => {
           url = "/maindt";
         } else if (role.includes("CNTT")) {
           req.session.role = "CNTT"; // Lưu vai trò vào session
-          url = "/gvmList";
+          console.log("req.session.role = ", req.session.role);
+          url = "/mainkhoa";
         } else if (role.includes("ATTT")) {
           req.session.role = "ATTT";
           url = "/gvmList";
         } else if (role.includes("CNTT")) {
           req.session.role = "CNTT";
-          url = "/gvmList";
+          url = "/mainkhoa";
         }
 
         // Trả về phản hồi thành công với url

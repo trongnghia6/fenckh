@@ -45,11 +45,20 @@
               <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
                   <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link" href="/daotaoxemhd" role="button">Xem hợp đồng</a>
+                      <a class="nav-link" href="/mainkhoa">HOME</a>
                     </li>
+
                     <li class="nav-item">
-                        <a  class="nav-link" href="/daotaoxemhd/daotaoduyet" role="button">Xem yêu cầu duyệt</a>
+                      <a class="nav-link" onclick="ThongTinGD()" href="">Thông tin GD</a>
                     </li>
+                    <!-- <li> -->
+                    <li class="nav-item"> 
+                      <!-- <a class="nav-link" href="/import">Import danh sách giảng viên mời</a> -->
+                      <a class="nav-link" onclick="Import()" href="">Import</a>
+                    </li>
+                    <!-- <li class="nav-item">
+                        <a class="nav-link" href="/daotaoxemhd" role="button">Xem hợp đồng</a>
+                    </li> -->
       
                     <!-- Danh sách giảng viên mời -->
                     <li class="nav-item"></li>
@@ -232,20 +241,17 @@ function searchClass() {
  
 
   async function fetchGVMLists() {
-   
     try {
         const response = await fetch('/api/classInfoGvm');
-       
         if (!response.ok) {
             throw new Error('Network response was not ok');
         }
-
         const gvmLists = await response.json();
         return gvmLists;
     } catch (error) {
         console.error('Error fetching data:', error);
     }
-}
+  }
  
 
  async function viewClass( index) {

@@ -10,30 +10,23 @@ const upload = multer({
 });
 
 // Các hàm khác
-const getAbc = (req, res) => {
-  res.send("What do you want");
-};
 
-const getHomePage = (req, res) => {
-  return res.render("homePage.ejs");
-};
-
-const createUser = (req, res) => {
-  let maPhongBan = req.body.fname;
-  let maBoMon = req.body.lname;
-  let tenBoMon = req.body.email;
-  let all = [maPhongBan, maBoMon, tenBoMon];
-  console.log(all);
-  connection.query(
-    ` INSERT INTO bomon (MaPhongBan, MaBoMon, TenBoMon)
-    VALUES (?, ?, ?) `,
-    [maPhongBan, maBoMon, tenBoMon],
-    function (err, results) {
-      console.log(results);
-      res.send("Insert succeed");
-    }
-  );
-};
+// const createUser = (req, res) => {
+//   let maPhongBan = req.body.fname;
+//   let maBoMon = req.body.lname;
+//   let tenBoMon = req.body.email;
+//   let all = [maPhongBan, maBoMon, tenBoMon];
+//   console.log(all);
+//   connection.query(
+//     ` INSERT INTO bomon (MaPhongBan, MaBoMon, TenBoMon)
+//     VALUES (?, ?, ?) `,
+//     [maPhongBan, maBoMon, tenBoMon],
+//     function (err, results) {
+//       console.log(results);
+//       res.send("Insert succeed");
+//     }
+//   );
+// };
 
 const getLogin = (req, res) => {
   res.render("login.ejs");
@@ -71,6 +64,24 @@ const getXemBangQC = (req, res) => {
   res.render("tableQC.ejs");
 };
 
+// Khoa
+const getMainKhoa = (req, res) => {
+  res.render("mainkhoa.ejs");
+};
+
+// Lấy role
+const getRole = (req, res) => {
+  let role = req.session.role;
+
+  console.log("role = ", role);
+  try {
+    res.json(role); // Trả về danh sách giảng viên mời
+  } catch (error) {
+    console.error("Error fetching GVM list:", error);
+    res.status(500).json({ message: "Internal Server Error" }); // Xử lý lỗi
+  }
+};
+
 // Hàm postFile xử lý upload file Excel
 const postFile = (req, res) => {
   // Sử dụng multer để upload file
@@ -87,8 +98,6 @@ const postFile = (req, res) => {
 // Xuất các hàm để sử dụng trong router
 module.exports = {
   gethomePage,
-  getAbc,
-  createUser,
   getLogin,
   getIndex,
   getImport,
@@ -100,6 +109,9 @@ module.exports = {
   getHomeMainDaoTao,
   getTeachingInfo,
   getXemBangQC,
-  // Thêm hàm này vào export để sử dụng trong router
-  // createGVM,
+  // Khoa
+  getMainKhoa,
+
+  // Lấy role
+  getRole,
 };
