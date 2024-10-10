@@ -35,6 +35,9 @@ const login = async (req, res) => {
         } else if (role.includes("daotao_xem")) {
           req.session.role = "daotao_xem"; // Lưu vai trò vào session
           url = "/maindt";
+        } else if (role.includes("CNTT")) {
+          req.session.role = "CNTT"; // Lưu vai trò vào session
+          url = "/gvmList";
         } else if (role.includes("ATTT")) {
           req.session.role = "ATTT";
           url = "/gvmList";
