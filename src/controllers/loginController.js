@@ -38,6 +38,9 @@ const login = async (req, res) => {
         } else if (role.includes("ATTT")) {
           req.session.role = "ATTT";
           url = "/gvmList";
+        } else if (role.includes("CNTT")) {
+          req.session.role = "CNTT";
+          url = "/gvmList";
         }
 
         // Trả về phản hồi thành công với url
