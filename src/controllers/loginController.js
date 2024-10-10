@@ -29,12 +29,12 @@ const login = async (req, res) => {
         let url;
         const role = roles[0].Quyen;
 
-        if (role.includes("daotao")) {
-          req.session.role = "daotao"; // Lưu vai trò vào session
-          url = "/daotaoxemhd";
-        } else if (role.includes("CNTT")) {
-          req.session.role = "CNTT"; // Lưu vai trò vào session
-          url = "/gvmList";
+        if (role.includes("daotao_thihanh") || role.includes("daotao")) {
+          req.session.role = "daotao_thihanh"; // Lưu vai trò vào session
+          url = "/maindt";
+        } else if (role.includes("daotao_xem")) {
+          req.session.role = "daotao_xem"; // Lưu vai trò vào session
+          url = "/maindt";
         } else if (role.includes("ATTT")) {
           req.session.role = "ATTT";
           url = "/gvmList";
