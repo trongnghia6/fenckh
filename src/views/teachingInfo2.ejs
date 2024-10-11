@@ -106,44 +106,42 @@
   </div>
 
   <div class="container my-4 mg-top">
-    <div class="mx-5">
-      <!-- Combo box Đợt -->
-      <select class="form-select w-100px mx-2" id="combobox-dot">
-        <option value="1">Đợt 1</option>
-        <option value="2">Đợt 2</option>
-      </select>
-
-      <!-- Combo box Đợt -->
-      <select class="form-select w-100px mx-2" id="combobox-ki">
-        <option value="1">Kì 1</option>
-        <option value="2">Kì 2</option>
-      </select>
-
-      <!-- Combo box Năm -->
-      <select class="form-select w-100px mx-2" id="combobox-nam">
-        <option value="2024">2024</option>
-        <option value="2025">2025</option>
-        <option value="2026">2026</option>
-        <option value="2027">2027</option>
-      </select>
-
-      <div class="d-flex my-3">
-        <div class="input-group mx-2">
-          <label for="startDate" class="input-group-text">Ngày bắt đầu</label>
-          <input type="date" id="startDate" class="form-control" />
+    <div>
+      <div class="d-flex justify-content-between">
+        <div class="d-flex justify-content-center">
+          <select class="form-select w-100px mx-2 selectop" id="combobox-dot">
+            <option value="1">Đợt 1</option>
+            <option value="2">Đợt 2</option>
+          </select>
+  
+          <!-- Combo box Đợt -->
+          <select class="form-select w-100px mx-2 selectop" id="combobox-ki">
+            <option value="1">Kì 1</option>
+            <option value="2">Kì 2</option>
+          </select>
+  
+          <!-- Combo box Năm -->
+          <select class="form-select w-100px mx-2 selectop" id="combobox-nam">
+            <option value="2024">2024</option>
+            <option value="2025">2025</option>
+            <option value="2026">2026</option>
+            <option value="2027">2027</option>
+          </select>
+          <button id="infoGvm" class="button text-nowrap">Xem dữ liệu giảng viên</button>
         </div>
-        <div class="input-group mx-2">
-          <label for="endDate" class="input-group-text">Ngày kết thúc</label>
-          <input type="date" id="endDate" class="form-control" />
+        <div>
+          <button onclick="submitData()" class="button mx-3 text-nowrap" >Gửi tài Chính </button>
         </div>
       </div>
+      
 
-      <button id="infoGvm" class="button text-nowrap mb-3">Xem dữ liệu giảng viên</button>
-      <button onclick="submitData()" class="button mx-3">Gửi đào tạo</button>
-      <input type="text" id="filterName" placeholder="Tìm theo giảng viên TKB" oninput="filterByName()"
-        class="form-control mb-3 search" style="width: 300px;" />
-      <input type="text" id="filterClass" placeholder="Tìm theo tên học phần" oninput="filterByClass()"
-        class="form-control mb-3 search" style="width: 300px;" />
+      <div class="d-flex my-3" style="height: 70px;">
+        <input type="text" id="filterName" placeholder="Tìm theo giảng viên TKB" oninput="filterByName()"
+          class="form-control m-2 search" style="width: 300px;" />
+        <input type="text" id="filterClass" placeholder="Tìm theo tên học phần" oninput="filterByClass()"
+          class="form-control m-2 search" style="width: 300px;" />
+      </div>
+    </div>
       <div id="renderInfo">
         <table class="table table-bordered text-center" style="width: 100%;">
           <thead>

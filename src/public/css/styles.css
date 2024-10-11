@@ -152,3 +152,8 @@
     border-radius: 12px;
     height: fit-content;
   }
+  table ,th ,td{
+    border: 2px solid black !important;
+    border-collapse: collapse;
+    font-size: 12px;
+  }
