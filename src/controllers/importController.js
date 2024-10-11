@@ -28,6 +28,9 @@ const convertExcelToJSON = (filePath) => {
         return acc;
       }, {});
     });
+
+    console.log(jsonObjects);
+
     return jsonObjects;
   } catch (err) {
     throw new Error('Cannot read file!: ' + err.message);
@@ -211,7 +214,7 @@ const importTableTam = async (jsonData) => {
         item['Giáo Viên'],                          // Tên Giảng viên
         item['Số TC'],                               // Số tín chỉ
         item['Lớp học phần'],                        // Lớp học phần                     
-        item['Số tiết lên lớp theo TKB'],          // LL (cần xác định từ dữ liệu nếu cần)
+        item['Số tiết lên lớp giờ HC'],          // LL (cần xác định từ dữ liệu nếu cần)
         item['Số tiết theo CTĐT'],                  // Số tiết CTĐT
         item['Hệ số lên lớp ngoài giờ HC/ Thạc sĩ/ Tiến sĩ'], // Hệ số T7/CN
         item['Số SV'],                               // Số sinh viên
@@ -478,4 +481,102 @@ const deleteRowByKhoa = (req, res) => {
   });
 };
 
-module.exports = { handleUploadAndRender, importJSONToDB, importTableQC, importTableTam, checkExistKhoa, deleteRowByKhoa };
+
+const updateChecked = async (req, res) => {
+  const role = req.session.role;
+  const tableName = process.env.DB_TABLE_QC; // Giả sử biến này có giá trị là "quychuan"
+
+  if (role === 'cntt_thihanh' || role === 'attt_thihanh' || role === 'dtvt_thihanh') {
+    const jsonData = req.body; // Lấy dữ liệu từ req.body
+
+    // Tạo mảng các Promise cho từng item trong jsonData
+    const updatePromises = jsonData.map(item => {
+      return new Promise((resolve, reject) => {
+        const { Khoa, Dot, KiHoc, NamHoc, GiaoVien, GiaoVienGiangDay, MoiGiang, SoTinChi, MaHocPhan, LopHocPhan, TenLop, BoMon, LL, SoTietCTDT, HeSoT7CN, SoSinhVien, HeSoLopDong, QuyChuan, GhiChu, KhoaDuyet, DaoTaoDuyet, TaiChinhDuyet, NgayBatDau, NgayKetThuc } = item;
+        const ID = item.ID;
+        // Xây dựng câu lệnh cập nhật
+        const queryUpdate = `
+          UPDATE ${tableName}
+          SET 
+            Khoa = ?, 
+            Dot = ?, 
+            KiHoc = ?, 
+            NamHoc = ?, 
+            GiaoVien = ?, 
+            GiaoVienGiangDay = ?, 
+            MoiGiang = ?, 
+            SoTinChi = ?, 
+            MaHocPhan = ?, 
+            LopHocPhan = ?, 
+            TenLop = ?, 
+            BoMon = ?, 
+            LL = ?, 
+            SoTietCTDT = ?, 
+            HeSoT7CN = ?, 
+            SoSinhVien = ?, 
+            HeSoLopDong = ?, 
+            QuyChuan = ?, 
+            GhiChu = ?,
+            KhoaDuyet = ?,
+            DaoTaoDuyet = ?,
+            TaiChinhDuyet = ?,
+            NgayBatDau = ?,
+            NgayKetThuc = ?
+          WHERE ID = ${ID};  -- Điều kiện cập nhật
+        `;
+
+        // Tạo mảng các giá trị tương ứng với câu lệnh
+        const values = [
+          Khoa,
+          Dot,
+          KiHoc,
+          NamHoc,
+          GiaoVien,
+          GiaoVienGiangDay,
+          MoiGiang,
+          SoTinChi,
+          MaHocPhan,
+          LopHocPhan,
+          TenLop,
+          BoMon,
+          LL,
+          SoTietCTDT,
+          HeSoT7CN,
+          SoSinhVien,
+          HeSoLopDong,
+          QuyChuan,
+          GhiChu,
+          KhoaDuyet,
+          DaoTaoDuyet,
+          TaiChinhDuyet,
+          NgayBatDau,
+          NgayKetThuc,
+        ];
+
+        // console.log(values[0]);
+
+        // Thực hiện truy vấn cập nhật
+        connection.query(queryUpdate, values, (err, results) => {
+          if (err) {
+            console.error('Error:', err);
+            reject(err);
+            return;
+          }
+          resolve(results);
+        });
+      });
+    });
+
+    try {
+      await Promise.all(updatePromises);
+      console.log('Cập nhật thành công');
+      res.status(200).json({ message: 'Cập nhật thành công' });
+    } catch (error) {
+      console.error('Lỗi cập nhật:', error);
+      res.status(500).json({ error: 'Có lỗi xảy ra khi cập nhật dữ liệu' });
+    }
+  } else {
+    res.status(403).json({ error: 'Bạn không có quyền thực hiện hành động này' });
+  }
+};
+module.exports = { handleUploadAndRender, importJSONToDB, importTableQC, importTableTam, checkExistKhoa, deleteRowByKhoa, updateChecked };

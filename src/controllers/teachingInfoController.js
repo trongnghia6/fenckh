@@ -120,15 +120,35 @@ function handleDuplicateCourses(firstCourse, courses) {
 //   });
 // };
 const renderInfo = (req, res) => {
+  const role = req.session.role;
   const { Dot, Ki, Nam } = req.body; // Lấy giá trị khoa, dot, ki từ body của yêu cầu
   const tableName = process.env.DB_TABLE_QC;
+  let query = '';
 
-  // console.log(Dot, Ki, Nam);
+  console.log(Dot, Ki, Nam);
   // Xây dựng câu truy vấn SQL sử dụng các tham số
-  const query = `
+  if (role == 'daotao_thihanh') {
+    query = `
     SELECT * FROM ${tableName}
-    WHERE Dot = ? AND KiHoc = ? AND NamHoc = ?
+    WHERE Dot = ? AND KiHoc = ? AND NamHoc = ?;
   `;
+  } else if (role == 'cntt_thihanh') {
+    query = `
+    SELECT * FROM ${tableName}
+    WHERE Dot = ? AND KiHoc = ? AND NamHoc = ? AND Khoa = 'CNTT';
+  `;
+  } else if (role == 'attt_thihanh') {
+    query = `
+    SELECT * FROM ${tableName}
+    WHERE Dot = ? AND KiHoc = ? AND NamHoc = ? AND Khoa = 'ATTT';
+  `;
+  } else if (role == 'dtvt_thihanh') {
+    query = `
+    SELECT * FROM ${tableName}
+    WHERE Dot = ? AND KiHoc = ? AND NamHoc = ? AND Khoa = 'DTVT';
+  `;
+  }
+
 
   // Thực thi câu truy vấn với các tham số an toàn
   connection.query(query, [Dot, Ki, Nam], (error, results) => {
@@ -139,7 +159,6 @@ const renderInfo = (req, res) => {
     if (results.length === 0) {
       return res.status(404).json({ message: "No data found" });
     }
-
     return res.status(200).json(results); // Trả về kết quả tương ứng với đợt, kì, năm
   });
 };

@@ -17,15 +17,20 @@
   <div class="fullscr">
     <div class="container w-40">
     <div class="d-flex">
-      <img src="/picture/Logo-Hoc-Vien-Ky-Thuat-Mat-Ma-ACTVN.webp" alt="" class="img-fluid" width="20%"
+      <img src="/Logo-Hoc-Vien-Ky-Thuat-Mat-Ma-ACTVN.webp" alt="" class="img-fluid" width="20%"
         style="object-fit: contain" />
-      <img src="../picture/dongchu_banner.png" alt="" class="img-fluid" width="80%" style="object-fit: contain" />
+      <img src="/dongchu_banner.png" alt="" class="img-fluid" width="80%" style="object-fit: contain" />
     </div>
-    <div class="heading">Sign In</div>
     <form action="/login" class="form">
-      <input required="" class="input" type="text" name="username" id="username" placeholder="Username" />
-      <input required="" class="input" type="password" name="password" id="password" placeholder="Password" />
-      <div class="remember-me-container">
+      <div class="input-group">
+        <input required="" class="input-group__input" type="text" name="username" id="username" />
+        <label for="username" class="input-group__label">Username</label>
+      </div>
+      <div class="input-group">
+        <input required="" class="input-group__input" type="password" name="password" id="password" />
+        <label for="password" class="input-group__label">Password</label>
+      </div>
+        <div class="remember-me-container">
         <input type="checkbox" id="remember-me" name="remember-me" />
         <label for="remember-me">Remember Me</label>
       </div>

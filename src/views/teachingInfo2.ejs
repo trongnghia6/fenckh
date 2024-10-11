@@ -69,7 +69,7 @@
               <a class="nav-link" onclick="ThongTinGD()" href="">Thông tin GD</a>
             </li>
             <!-- <li> -->
-            <li class="nav-item"> 
+            <li class="nav-item">
               <!-- <a class="nav-link" href="/import">Import danh sách giảng viên mời</a> -->
               <a class="nav-link" onclick="Import()" href="">Import</a>
             </li>
@@ -230,7 +230,7 @@
       const [gvmResponse, khoaResponse, teachingResponse] = await Promise.all([
         fetch('http://localhost:3000/index/name-gvm'),
         fetch('http://localhost:3000/index/name-gvm-khoa'),
-        fetch('http://localhost:3000/index/teaching-info', {
+        fetch('http://localhost:3000/teaching-info', {
           method: 'POST', // Sử dụng phương thức POST
           headers: {
             'Content-Type': 'application/json', // Đặt Content-Type là application/json
@@ -320,7 +320,7 @@
       const khoaCheckbox = document.createElement('input');
       khoaCheckbox.type = 'checkbox';
       khoaCheckbox.name = 'khoa'; // Thêm thuộc tính name
-      khoaCheckbox.checked = row.KhoaChecked || false; // Dùng một trường cho checkbox
+      khoaCheckbox.checked = row.KhoaDuyet || false; // Dùng một trường cho checkbox
       khoaCheckbox.onchange = () => updateCheckAll('khoa'); // Gọi hàm khi checkbox thay đổi
       khoaCheckboxTd.appendChild(khoaCheckbox);
       tableRow.appendChild(khoaCheckboxTd);
@@ -330,7 +330,7 @@
       const daoTaoCheckbox = document.createElement('input');
       daoTaoCheckbox.type = 'checkbox';
       daoTaoCheckbox.name = 'daoTao'; // Thêm thuộc tính name
-      daoTaoCheckbox.checked = row.DaoTaoChecked || false; // Dùng một trường cho checkbox
+      daoTaoCheckbox.checked = row.DaoTaoDuyet || false; // Dùng một trường cho checkbox
       daoTaoCheckbox.onchange = () => updateCheckAll('daoTao'); // Gọi hàm khi checkbox thay đổi
       daoTaoCheckboxTd.appendChild(daoTaoCheckbox);
       tableRow.appendChild(daoTaoCheckboxTd);
@@ -340,7 +340,7 @@
       const taiChinhCheckbox = document.createElement('input');
       taiChinhCheckbox.type = 'checkbox';
       taiChinhCheckbox.name = 'taiChinh'; // Thêm thuộc tính name
-      taiChinhCheckbox.checked = row.TaiChinhChecked || false; // Dùng một trường cho checkbox
+      taiChinhCheckbox.checked = row.TaiChinhDuyet || false; // Dùng một trường cho checkbox
       taiChinhCheckbox.onchange = () => updateCheckAll('taiChinh'); // Gọi hàm khi checkbox thay đổi
       taiChinhCheckboxTd.appendChild(taiChinhCheckbox);
       tableRow.appendChild(taiChinhCheckboxTd);
@@ -348,9 +348,6 @@
       tableBody.appendChild(tableRow);
     });
   }
-
-
-
 
 
   function submitData() {

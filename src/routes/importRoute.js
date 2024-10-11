@@ -21,7 +21,7 @@ router.get('/import', role.checkDaotaoRoleThiHanh, getMainHTML.getImport);
 router.post('/import', role.checkDaotaoRoleThiHanh, upload.single('excelFile'), obj.handleUploadAndRender);
 
 // Định tuyến cho POST request tới /index / save - data
-router.post('/save-data', async (req, res) => {
+router.post('/save-data', role.checkDaotaoRoleThiHanh, async (req, res) => {
   try {
     // Gọi hàm xử lý dữ liệu import
     const result = await obj.importTableTam(req.body);
@@ -39,7 +39,7 @@ router.post('/save-data', async (req, res) => {
 });
 
 // Định tuyến cho POST request tới /index / save - data
-router.post('/ban-hanh', async (req, res) => {
+router.post('/ban-hanh', role.checkDaotaoRoleThiHanh, async (req, res) => {
   try {
     // Gọi hàm xử lý dữ liệu import
     const result = await obj.importTableQC(req.body);

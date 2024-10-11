@@ -13,16 +13,16 @@
 <body>
   <div class="fixed-top">
     <!-- Phần trên của navbar chứa logo và tiêu đề -->
-  <nav class="navbar-top ">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="#">
-        <img src="/Logo-Hoc-Vien-Ky-Thuat-Mat-Ma-ACTVN.webp" alt="Logo">
-        <div class="navbar-title">
-          <img src="/dongchu_banner.png" alt="banner">
-        </div>
-      </a>
-    </div>
-  </nav>
+    <nav class="navbar-top ">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">
+          <img src="/Logo-Hoc-Vien-Ky-Thuat-Mat-Ma-ACTVN.webp" alt="Logo">
+          <div class="navbar-title">
+            <img src="/dongchu_banner.png" alt="banner">
+          </div>
+        </a>
+      </div>
+    </nav>
 
   <!-- Phần dưới của navbar chứa các mục nằm ngang -->
   <nav class="navbar navbar-expand-lg navbar-bottom sticky-top">
@@ -37,45 +37,47 @@
             <a class="nav-link active" onclick="Home()" href="">HOME</a>
           </li>
 
-          <li class="nav-item">
-            <a class="nav-link" onclick="ThongTinGD()" href="">Thông tin GD</a>
-          </li>
-          <!-- <li> -->
-          <li class="nav-item"> 
-            <!-- <a class="nav-link" href="/import">Import danh sách giảng viên mời</a> -->
-            <a class="nav-link" onclick="Import()" href="">Import</a>
-          </li>
+            <li class="nav-item">
+              <a class="nav-link" onclick="ThongTinGD('http://localhost:3000/info2')"
+                href="http://localhost:3000/info2">Thông tin GD</a>
+            </li>
+            <!-- <li> -->
+            <li class="nav-item">
+              <!-- <a class="nav-link" href="/import">Import danh sách giảng viên mời</a> -->
+              <a class="nav-link" onclick="Import('http://localhost:3000/import')"
+                href="http://localhost:3000/import">Import</a>
+            </li>
 
-          <li class="nav-item">
-            <a class="nav-link" href="/gvmList">Danh sách giảng viên mời</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/classInfoGvm">Thông tin lớp giảng viên mời</a>
-          </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/gvmList">Danh sách giảng viên mời</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/classInfoGvm">Thông tin lớp giảng viên mời</a>
+            </li>
 
-          <!-- <li class="nav-item">
+            <!-- <li class="nav-item">
             <a class="nav-link" href="#">Duyệt</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="/maindt/tableQC">Bảng quy chuẩn</a>
           </li> -->
-          <div class="navbar-nav">
-            <div class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="/login" id="navbarDropdownUser" data-bs-toggle="dropdown"
-                aria-expanded="false">
-                Hi, Lê Đức Thuận
-              </a>
-              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a class="dropdown-item" href="#">Thông tin cá nhân</a>
-                <a class="dropdown-item" href="/">Đăng xuất</a>
+            <div class="navbar-nav">
+              <div class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="/login" id="navbarDropdownUser" data-bs-toggle="dropdown"
+                  aria-expanded="false">
+                  Hi, Lê Đức Thuận
+                </a>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                  <a class="dropdown-item" href="#">Thông tin cá nhân</a>
+                  <a class="dropdown-item" href="/">Đăng xuất</a>
+                </div>
               </div>
-            </div>
-        </ul>
+          </ul>
+        </div>
       </div>
-    </div>
-  </nav>
+    </nav>
   </div>
-  
+
 
 
   <!-- 2. Tổng quan -->
@@ -249,6 +251,19 @@
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <script>
+    // handle event click 
+    const Import = (href) => {
+      window.location.href = href;
+    };
+
+    const ThongTinGD = (href) => {
+      window.location.href = href;
+    };
+
+
+  </script>
   <script>
     // 7. Báo cáo và thống kê - Vẽ biểu đồ (Sử dụng Chart.js)
     var ctx1 = document.getElementById('studentChart').getContext('2d');
