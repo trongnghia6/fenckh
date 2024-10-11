@@ -147,3 +147,8 @@
     background-color: #5b77e0;
     border: none;
   }
+  .border{
+    border: 5px solid #007bff !important;
+    border-radius: 12px;
+    height: fit-content;
+  }
