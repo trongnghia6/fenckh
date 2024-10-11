@@ -8,10 +8,21 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="../../bootstrap-5.3.3-dist/bootstrap-icons-1.11.3/font/bootstrap-icons.min.css">
   <link rel="stylesheet" href="/css/styles.css">
+  <style>
+    .navbar-bottom {
+      position: sticky;
+      top: 0;
+      z-index: 1030; /* Đảm bảo navbar nằm trên các phần tử khác khi cuộn */
+    }
+
+    .container-fluid .row{
+      margin-top: 20px;
+    }
+  </style>
 </head>
 
 <body>
-  <div class="fixed-top">
+
     <nav class="navbar-top ">
       <div class="container-fluid">
         <a class="navbar-brand" href="#">
@@ -24,7 +35,7 @@
     </nav>
   
     <!-- Phần dưới của navbar chứa các mục nằm ngang -->
-    <nav class="navbar navbar-expand-lg navbar-bottom sticky-top">
+    <nav class="navbar navbar-expand-lg navbar-bottom ">
       <div class="container-fluid">
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
           aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -33,7 +44,7 @@
         <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
           <ul class="navbar-nav">
             <li class="nav-item">
-              <a class="nav-link active" onclick="Home()" href="/mainkhoa">HOME</a>
+              <a class="nav-link active" href="/mainkhoa">HOME</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" onclick="ThongTinGD()" href="">Thông tin GD</a>
@@ -71,13 +82,13 @@
         </div>
       </div>
     </nav>
-  </div>
+
   <!-- Phần trên của navbar chứa logo và tiêu đề -->
   
 
 
   <!-- 2. Tổng quan -->
-  <div class="container my-4 mg-top">
+  <div class="container-fluid">
     <div class="row">
       <div class="col-lg-4 col-md-6">
         <div class="card text-white bg-primary mb-3">
@@ -311,34 +322,14 @@
     }
 
     async function ThongTinGD(){
-        const role = await fetchRole();
-        
-        if (role.includes("CNTT")){
+        let role = await fetchRole();
+        alert("role "+role)
+        if (role == 'CNTT'){
             window.location.href = "/info"; // Chuyển hướng đến trang mong muốn
-        } else if (role.includes("DAOTAO")){
+        } else if (role == 'daotao'){
             window.location.href = "/info2"; // Chuyển hướng đến trang mong muốn
         }  // thêm quyền vào đây
     }
-
-    async function Import(){
-      const role = await fetchRole();
-
-      if (role.includes("CNTT")){
-          window.location.href = "/importGvmList"; // Chuyển hướng đến trang mong muốn
-      } else if (role.includes("DAOTAO")){
-          window.location.href = "/import"; // Chuyển hướng đến trang mong muốn
-      }  // thêm quyền vào đây
-  }
-
-  async function Home(){
-    const role = await fetchRole();
-
-    if (role.includes("CNTT")){
-        window.location.href = "/mainkhoa"; // Chuyển hướng đến trang mong muốn
-    } else if (role.includes("DAOTAO")){
-        window.location.href = "/maindt"; // Chuyển hướng đến trang mong muốn
-    }  // thêm quyền vào đây
-  }
 
    </script>
 </body>
