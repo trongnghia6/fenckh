@@ -125,7 +125,7 @@ const renderInfo = (req, res) => {
   const tableName = process.env.DB_TABLE_QC;
   let query = '';
 
-  // console.log(Dot, Ki, Nam);
+  console.log(Dot, Ki, Nam);
   // Xây dựng câu truy vấn SQL sử dụng các tham số
   if (role == 'daotao_thihanh') {
     query = `

@@ -2,6 +2,8 @@ const express = require("express");
 const router = express.Router();
 const obj = require("../controllers/teachingInfoController"); // Import hàm xử lý file từ controller
 const obj2 = require("../controllers/getTableDBController"); // Import hàm xử lý file từ controller
+const obj3 = require("../controllers/importController"); // Import hàm xử lý file từ controller
+
 
 // render site info
 router.get("/info", obj.getTeachingInfo1);
@@ -24,5 +26,8 @@ router.get("/index/name-gvm", (req, res) => obj.getNameGV(req, res));
 router.get("/index/name-gvm-khoa", (req, res) =>
   obj.getKhoaAndNameGvmOfKhoa(req, res)
 );
+
+router.post("/check-teaching", (req, res) => obj3.updateChecked(req, res))
+
 
 module.exports = router;

@@ -42,9 +42,9 @@ const getImport = (req, res) => {
 const getDtaoduyet = (req, res) => {
   res.render("daotaoduyet.ejs");
 };
-const getMainKhoa = (req, res) => {
-  res.render("gvmList.ejs");
-};
+// const getMainKhoa = (req, res) => {
+//   res.render("gvmList.ejs");
+// };
 const getDtaonhap = (req, res) => {
   res.render("daotaonhap.ejs");
 };
