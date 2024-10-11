@@ -5,14 +5,16 @@ body {
   margin: 0px;
   padding: 0px;
 }
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
   font-family: Arial, sans-serif;
 }
+
 body {
-  background-image: url("/nen.jpg");
+  background-image: url("/image.png");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -29,11 +31,9 @@ div {
   width: 50%;
   max-width: 600px;
   background: #f8f9fd;
-  background: linear-gradient(
-    0deg,
-    rgb(255, 255, 255) 0%,
-    rgb(244, 247, 251) 100%
-  );
+  background: linear-gradient(0deg,
+      rgb(255, 255, 255) 0%,
+      rgb(244, 247, 251) 100%);
   border-radius: 40px;
   padding: 25px 35px;
   border: 5px solid rgb(255, 255, 255);
@@ -49,7 +49,8 @@ div {
 * {
   margin: 0;
   padding: 0;
-  box-sizing: border-box; /* Đảm bảo không bị tràn ra ngoài container */
+  box-sizing: border-box;
+  /* Đảm bảo không bị tràn ra ngoài container */
 }
 
 .input-group {
@@ -60,15 +61,18 @@ div {
 .input-group__input {
   width: 100%;
   font: inherit;
-  color: #000; /* Đổi màu chữ để dễ nhìn hơn */
-  padding: 15px 20px; /* Padding đều 20px cho cả trái và phải */
+  color: #000;
+  /* Đổi màu chữ để dễ nhìn hơn */
+  padding: 15px 20px;
+  /* Padding đều 20px cho cả trái và phải */
   border: none;
   border-radius: 20px;
   outline: 2px solid transparent;
   background: white;
   box-shadow: #79cbf1 0px 10px 10px -5px;
   transition: outline-color 500ms;
-  box-sizing: border-box; /* Đảm bảo padding và border không làm thay đổi kích thước */
+  box-sizing: border-box;
+  /* Đảm bảo padding và border không làm thay đổi kích thước */
 }
 
 .input-group__input:focus {
@@ -78,22 +82,27 @@ div {
 .input-group__label {
   font-size: 20px;
   position: absolute;
-  top: 50%; /* Đặt ở giữa chiều cao input */
-  left: 20px; /* Đặt bên trái input với khoảng cách 20px */
-  transform: translateY(-50%); /* Điều chỉnh vị trí */
+  top: 50%;
+  /* Đặt ở giữa chiều cao input */
+  left: 20px;
+  /* Đặt bên trái input với khoảng cách 20px */
+  transform: translateY(-50%);
+  /* Điều chỉnh vị trí */
   color: #666;
   transition: transform 500ms, scale 500ms;
   cursor: text;
 }
 
-.input-group__input:focus + .input-group__label,
-.input-group__input:valid + .input-group__label {
+.input-group__input:focus+.input-group__label,
+.input-group__input:valid+.input-group__label {
   padding-inline: 5px;
   transform: translate(10px, -180%);
   scale: 0.75;
   background-color: white;
-  border-radius: 10px; /* Thêm border-radius cho label khi nó di chuyển */
+  border-radius: 10px;
+  /* Thêm border-radius cho label khi nó di chuyển */
 }
+
 .remember-me-container {
   margin-left: 20px;
   margin-top: 20px;
@@ -115,11 +124,9 @@ div {
   display: block;
   width: 100%;
   font-weight: bold;
-  background: linear-gradient(
-    45deg,
-    rgb(16, 137, 211) 0%,
-    rgb(18, 177, 209) 100%
-  );
+  background: linear-gradient(45deg,
+      rgb(16, 137, 211) 0%,
+      rgb(18, 177, 209) 100%);
   color: white;
   padding-block: 15px;
   margin: 20px auto;
@@ -151,12 +158,14 @@ div {
     padding-block: 12px;
   }
 }
+
 /* Reset CSS */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
+
 header {
   background: linear-gradient(90deg, #007bff 0%, #0056b3 100%);
 }
@@ -193,6 +202,7 @@ nav {
 .col {
   display: inline;
 }
+
 body.login-page {
   background-image: url("nen.jpg");
   background-size: cover;
@@ -201,10 +211,12 @@ body.login-page {
   height: 100vh;
   margin: 0;
 }
+
 .w-40 {
   width: 40% !important;
 }
-.fullscr{
+
+.fullscr {
   height: 100%;
   display: grid;
   align-items: center;
