@@ -12,11 +12,12 @@ body {
   font-family: Arial, sans-serif;
 }
 body {
-  background-color: #f4f4f4;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  background-image: url("/image.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
   height: 100vh;
+  margin: 0;
 }
 
 div {
@@ -175,4 +176,9 @@ body.login-page {
 }
 .w-40 {
   width: 40% !important;
+}
+.fullscr{
+  height: 100%;
+  display: grid;
+  align-items: center;
 }
