@@ -12,7 +12,7 @@ body {
   font-family: Arial, sans-serif;
 }
 body {
-  background-image: url("/image.png");
+  background-image: url("/nen.jpg");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -41,33 +41,59 @@ div {
   margin: 20px;
 }
 
-.heading {
-  text-align: center;
-  font-weight: 900;
-  font-size: 30px;
-  color: rgb(16, 137, 211);
-}
-
 .form {
   margin-top: 20px;
 }
 
-.form .input {
-  width: 100%;
-  background: white;
-  border: none;
-  padding: 15px 20px;
-  border-radius: 20px;
+/* Reset CSS */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box; /* Đảm bảo không bị tràn ra ngoài container */
+}
+
+.input-group {
+  position: relative;
   margin-top: 15px;
+}
+
+.input-group__input {
+  width: 100%;
+  font: inherit;
+  color: #000; /* Đổi màu chữ để dễ nhìn hơn */
+  padding: 15px 20px; /* Padding đều 20px cho cả trái và phải */
+  border: none;
+  border-radius: 20px;
+  outline: 2px solid transparent;
+  background: white;
   box-shadow: #79cbf1 0px 10px 10px -5px;
-  border-inline: 2px solid transparent;
+  transition: outline-color 500ms;
+  box-sizing: border-box; /* Đảm bảo padding và border không làm thay đổi kích thước */
 }
 
-.form .input:focus {
-  outline: none;
-  border-inline: 2px solid #12b1d1;
+.input-group__input:focus {
+  outline-color: #12b1d1;
 }
 
+.input-group__label {
+  font-size: 20px;
+  position: absolute;
+  top: 50%; /* Đặt ở giữa chiều cao input */
+  left: 20px; /* Đặt bên trái input với khoảng cách 20px */
+  transform: translateY(-50%); /* Điều chỉnh vị trí */
+  color: #666;
+  transition: transform 500ms, scale 500ms;
+  cursor: text;
+}
+
+.input-group__input:focus + .input-group__label,
+.input-group__input:valid + .input-group__label {
+  padding-inline: 5px;
+  transform: translate(10px, -150%);
+  scale: 0.8;
+  background-color: white;
+  border-radius: 10px; /* Thêm border-radius cho label khi nó di chuyển */
+}
 .remember-me-container {
   margin-left: 20px;
   margin-top: 20px;
@@ -82,6 +108,7 @@ div {
 .remember-me-container label {
   font-size: 14px;
   color: #666;
+  cursor: pointer;
 }
 
 .form .login-button {
