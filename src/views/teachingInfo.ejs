@@ -115,13 +115,13 @@
             <option value="1">Đợt 1</option>
             <option value="2">Đợt 2</option>
           </select>
-  
+
           <!-- Combo box Đợt -->
           <select class="form-select w-100px mx-2 selectop" id="combobox-ki">
             <option value="1">Kì 1</option>
             <option value="2">Kì 2</option>
           </select>
-  
+
           <!-- Combo box Năm -->
           <select class="form-select w-100px mx-2 selectop" id="combobox-nam">
             <option value="2024">2024</option>
@@ -132,10 +132,10 @@
           <button id="infoGvm" class="button text-nowrap">Xem dữ liệu giảng viên</button>
         </div>
         <div>
-          <button onclick="submitData()" class="button mx-3">Gửi đào tạo</button>
+          <button onclick="submitData()" class="button mx-3">Gửi duyệt</button>
         </div>
       </div>
-      
+
 
       <div class="d-flex my-3" style="height: 70px;">
         <input type="text" id="filterName" placeholder="Tìm theo giảng viên TKB" oninput="filterByName()"
@@ -164,7 +164,7 @@
               <th style="width: 100px;">Bộ môn</th>
               <th style="width: 50px;">Số tiết LL</th>
               <th style="width: 50px;">Số tiết QC</th>
-              <th style="width: 50px;">
+              <th style="width: 50px;" id="khoaColumn">
                 <div class="form-check">
                   <input class="form-check-input" type="checkbox" id="checkAllKhoa" onclick="checkAll('khoa')">
                   <label class="form-check-label" for="checkAllKhoa">Khoa</label>
@@ -215,8 +215,6 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-
-
 <script>
   let globalData = []; // Biến toàn cục để lưu dữ liệu từ server
   let nameGv = []; // Biến toàn cục để lưu tất cả tên giảng viên
@@ -233,8 +231,6 @@
       const dotValue = document.getElementById('combobox-dot').value;
       const kiValue = document.getElementById('combobox-ki').value;
       const namValue = document.getElementById('combobox-nam').value;
-
-
 
       // Tạo đối tượng dữ liệu để gửi
       const requestData = {
@@ -273,9 +269,9 @@
       console.log('Tổng hợp bảng dữ liệu:', globalData[0]);
       // console.table(globalData);
 
-      renderTable(globalData); // Gọi hàm renderTable sau khi đã có đủ dữ liệu
+      const role = await fetchRole();
 
-
+      renderTable(globalData, role); // Gọi hàm renderTable sau khi đã có đủ dữ liệu
       calculateTotals();
     } catch (error) {
       console.error('Đã có lỗi xảy ra:', error);
@@ -344,7 +340,7 @@
   }
 
   // Hàm render bảng
-  function renderTable(data) {
+  function renderTable(data, role) {
     const tableBody = document.getElementById('tableBody');
     tableBody.innerHTML = ''; // Xóa nội dung cũ
 
@@ -365,19 +361,16 @@
 
       const moiGiangTd = document.createElement('td');
       const inviteCheckbox = document.createElement('input');
-      inviteCheckbox.name = 'moigiang'; // Thêm thuộc tính name
+      inviteCheckbox.name = 'moigiang';
       inviteCheckbox.type = 'checkbox';
       inviteCheckbox.checked = row.MoiGiang || false;
 
-      // Sự kiện khi checkbox thay đổi
       inviteCheckbox.onchange = () => {
         if (inviteCheckbox.checked) {
-          // Hiển thị gợi ý nếu checkbox được chọn
-          showSuggestions(giaoVienGiangDayInput, inviteCheckbox); // Gọi hàm để hiển thị gợi ý
+          showSuggestions(giaoVienGiangDayInput, inviteCheckbox);
         } else {
-          // Nếu checkbox không được chọn, ẩn gợi ý
           hideSuggestions();
-          giaoVienGiangDayInput.value = ''; // Tùy chọn: xóa ô nhập liệu nếu checkbox không được chọn
+          giaoVienGiangDayInput.value = '';
         }
       };
 
@@ -390,12 +383,10 @@
       giaoVienGiangDayInput.placeholder = 'Nhập tên giảng viên';
       giaoVienGiangDayInput.value = row.GiaoVienGiangDay || '';
 
-      // Cập nhật sự kiện input cho ô nhập giảng viên
       giaoVienGiangDayInput.oninput = () => {
         showSuggestions(giaoVienGiangDayInput, inviteCheckbox);
       };
 
-      // Cập nhật sự kiện click cho ô nhập giảng viên
       giaoVienGiangDayInput.onclick = function () {
         showSuggestions(giaoVienGiangDayInput, inviteCheckbox);
       };
@@ -404,15 +395,15 @@
       tableRow.appendChild(giaoVienGiangDayTd);
 
       const khoaTd = document.createElement('td');
-      khoaTd.textContent = row.Khoa || ''; // Lấy giá trị Khoa trực tiếp từ row
+      khoaTd.textContent = row.Khoa || '';
       tableRow.appendChild(khoaTd);
 
-      const boMonTd = document.createElement('td'); // Tạo ô Bộ môn
-      const boMonInput = document.createElement('input'); // Tạo input cho Bộ môn
-      boMonInput.type = 'text'; // Đặt loại là text
-      boMonInput.value = row.BoMon || ''; // Lấy giá trị từ row
-      boMonInput.placeholder = 'Nhập tên bộ môn'; // Thêm placeholder nếu cần
-      boMonTd.appendChild(boMonInput); // Thêm input vào ô
+      const boMonTd = document.createElement('td');
+      const boMonInput = document.createElement('input');
+      boMonInput.type = 'text';
+      boMonInput.value = row.BoMon || '';
+      boMonInput.placeholder = 'Nhập tên bộ môn';
+      boMonTd.appendChild(boMonInput);
       tableRow.appendChild(boMonTd);
 
       const soTietLLTd = document.createElement('td');
@@ -423,35 +414,19 @@
       soTietQCTd.textContent = row.QuyChuan || '';
       tableRow.appendChild(soTietQCTd);
 
-      // Checkbox cho Khoa
-      const khoaCheckboxTd = document.createElement('td');
-      const khoaCheckbox = document.createElement('input');
-      khoaCheckbox.type = 'checkbox';
-      khoaCheckbox.name = 'khoa'; // Thêm thuộc tính name
-      khoaCheckbox.checked = row.KhoaDuyet || false; // Dùng một trường cho checkbox
-      khoaCheckbox.onchange = () => updateCheckAll('khoa'); // Gọi hàm khi checkbox thay đổi
-      khoaCheckboxTd.appendChild(khoaCheckbox);
-      tableRow.appendChild(khoaCheckboxTd);
+      // Điều kiện để ẩn checkbox của "Khoa" nếu role không phải là "CNTT_ALL"
+      if (role === 'CNTT_ALL') {
+        const khoaCheckboxTd = document.createElement('td');
+        const khoaCheckbox = document.createElement('input');
+        khoaCheckbox.type = 'checkbox';
+        khoaCheckbox.name = 'khoa';
+        khoaCheckbox.checked = row.KhoaDuyet || false;
+        khoaCheckbox.onchange = () => updateCheckAll('khoa');
+        khoaCheckboxTd.appendChild(khoaCheckbox);
+        tableRow.appendChild(khoaCheckboxTd);
+      }
 
-      // // Checkbox cho Đào Tạo
-      // const daoTaoCheckboxTd = document.createElement('td');
-      // const daoTaoCheckbox = document.createElement('input');
-      // daoTaoCheckbox.type = 'checkbox';
-      // daoTaoCheckbox.name = 'daoTao'; // Thêm thuộc tính name
-      // daoTaoCheckbox.checked = row.DaoTaoChecked || false; // Dùng một trường cho checkbox
-      // daoTaoCheckbox.onchange = () => updateCheckAll('daoTao'); // Gọi hàm khi checkbox thay đổi
-      // daoTaoCheckboxTd.appendChild(daoTaoCheckbox);
-      // tableRow.appendChild(daoTaoCheckboxTd);
-
-      // // Checkbox cho Tài Chính
-      // const taiChinhCheckboxTd = document.createElement('td');
-      // const taiChinhCheckbox = document.createElement('input');
-      // taiChinhCheckbox.type = 'checkbox';
-      // taiChinhCheckbox.name = 'taiChinh'; // Thêm thuộc tính name
-      // taiChinhCheckbox.checked = row.TaiChinhChecked || false; // Dùng một trường cho checkbox
-      // taiChinhCheckbox.onchange = () => updateCheckAll('taiChinh'); // Gọi hàm khi checkbox thay đổi
-      // taiChinhCheckboxTd.appendChild(taiChinhCheckbox);
-      // tableRow.appendChild(taiChinhCheckboxTd);
+      tableBody.appendChild(tableRow);
 
       tableBody.appendChild(tableRow);
     });
@@ -507,7 +482,7 @@
 
 
     // Kiểm tra dữ liệu đã được cập nhật trong globalData
-    console.log(globalData);
+    console.log('Dữ liệu gửi đi: ' + JSON.stringify(globalData, null, 2));
 
     // Gửi dữ liệu đến server
     fetch('http://localhost:3000/check-teaching', {
@@ -525,7 +500,6 @@
       })
       .then(data => {
         // Xử lý dữ liệu phản hồi từ server (nếu cần)
-        console.log('Dữ liệu phản hồi từ server:', data);
         alert('Cập nhật thành công!');
       })
       .catch(error => {
@@ -635,52 +609,64 @@
   init();
 </script>
 
-  <!-- Phần phân quyền -->
-  <script>
-    async function fetchRole() {
-        try {
-            const response = await fetch('/api/getRole');
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            const role = await response.json();
-            return role;
-        } catch (error) {
-            console.error('Error fetching data:', error);
-        }
+<!-- Phần phân quyền -->
+<script>
+  async function fetchRole() {
+    try {
+      const response = await fetch('/api/getRole');
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      const role = await response.json();
+      return role;
+    } catch (error) {
+      console.error('Error fetching data:', error);
     }
-
-    async function ThongTinGD(){
-        const role = await fetchRole();
-        
-        if (role.includes("CNTT")){
-            window.location.href = "/info"; // Chuyển hướng đến trang mong muốn
-        } else if (role.includes("DAOTAO")){
-            window.location.href = "/info2"; // Chuyển hướng đến trang mong muốn
-        }  // thêm quyền vào đây
-    }
-
-    async function Import(){
-      const role = await fetchRole();
-
-      if (role.includes("CNTT")){
-          window.location.href = "/importGvmList"; // Chuyển hướng đến trang mong muốn
-      } else if (role.includes("DAOTAO")){
-          window.location.href = "/import"; // Chuyển hướng đến trang mong muốn
-      }  // thêm quyền vào đây
   }
 
-  async function Home(){
+  // ở đây
+  window.onload = async function () {
     const role = await fetchRole();
 
-    if (role.includes("CNTT")){
-        window.location.href = "/mainkhoa"; // Chuyển hướng đến trang mong muốn
-    } else if (role.includes("DAOTAO")){
-        window.location.href = "/maindt"; // Chuyển hướng đến trang mong muốn
+    if (role !== 'CNTT_ALL') {
+      // Ẩn cột 'khoaColumn'
+      document.getElementById('khoaColumn').style.display = 'none';
+    }
+  };
+
+
+  async function ThongTinGD() {
+    const role = await fetchRole();
+    console.log(role);
+
+    if (role.includes("DAOTAO") || role.includes("XEM")) {
+      window.location.href = "/info2"; // Chuyển hướng đến trang mong muốn
+    } else {
+      window.location.href = "/info"; // Chuyển hướng đến trang mong muốn
+    }
+  }
+
+  async function Import() {
+    const role = await fetchRole();
+
+    if (role.includes("CNTT")) {
+      window.location.href = "/importGvmList"; // Chuyển hướng đến trang mong muốn
+    } else if (role.includes("DAOTAO")) {
+      window.location.href = "/import"; // Chuyển hướng đến trang mong muốn
     }  // thêm quyền vào đây
   }
 
-   </script>
+  async function Home() {
+    const role = await fetchRole();
+
+    if (role.includes("CNTT")) {
+      window.location.href = "/mainkhoa"; // Chuyển hướng đến trang mong muốn
+    } else if (role.includes("DAOTAO")) {
+      window.location.href = "/maindt"; // Chuyển hướng đến trang mong muốn
+    }  // thêm quyền vào đây
+  }
+
+</script>
 
 </body>
 

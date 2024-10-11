@@ -126,30 +126,43 @@ const renderInfo = (req, res) => {
   let query = '';
 
   const roleDaoTaoALL = process.env.DAOTAO_ALL;
+  const roleTaiChinhALL = process.env.TAICHINH_ALL;
+
   const roleCNTTAll = process.env.CNTT_ALL;
   const roleATTTAll = process.env.ATTT_ALL;
+  const roleDTVTAll = process.env.DTVT_ALL;
 
-  console.log('role' + roleCNTTAll);
+  // const roleDaoTaoThiHanh = process.env.THIHANH;
+  const roleCNTTThiHanh = process.env.CNTT_THIHANH;
+  const roleATTTThiHanh = process.env.ATTT_THIHANH;
+  const roleDTVTThiHanh = process.env.DTVT_THIHANH;
 
 
-  console.log(Dot, Ki, Nam);
+  const roleDaoTaoXem = process.env.DAOTAO_XEM;
+  const roleTaiChinhXem = process.env.TAICHINH_XEM;
+  const roleCNTTXem = process.env.CNTT_XEM;
+  const roleATTTXem = process.env.ATTT_XEM;
+  const roleDTVTXem = process.env.DTVT_XEM;
+
+
+
   // Xây dựng câu truy vấn SQL sử dụng các tham số
-  if (role == roleDaoTaoALL) {
+  if (role == roleDaoTaoALL || role == roleDaoTaoXem || role == roleTaiChinhALL || role == roleTaiChinhXem) {
     query = `
     SELECT * FROM ${tableName}
     WHERE Dot = ? AND KiHoc = ? AND NamHoc = ?;
   `;
-  } else if (role == roleCNTTAll) {
+  } else if (role == roleCNTTAll || role == roleCNTTThiHanh || role == roleCNTTXem) {
     query = `
     SELECT * FROM ${tableName}
     WHERE Dot = ? AND KiHoc = ? AND NamHoc = ? AND Khoa = 'CNTT';
   `;
-  } else if (role == 'attt_thihanh') {
+  } else if (role == roleATTTAll || role == roleATTTThiHanh || role == roleATTTXem) {
     query = `
     SELECT * FROM ${tableName}
     WHERE Dot = ? AND KiHoc = ? AND NamHoc = ? AND Khoa = 'ATTT';
   `;
-  } else if (role == 'dtvt_thihanh') {
+  } else if (role == roleDTVTAll || role == roleDTVTThiHanh || role == roleDTVTXem) {
     query = `
     SELECT * FROM ${tableName}
     WHERE Dot = ? AND KiHoc = ? AND NamHoc = ? AND Khoa = 'DTVT';
