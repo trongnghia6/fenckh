@@ -102,3 +102,7 @@ const tableQc = require("./routes/gvmRoute");
 app.use("/", importFile); // cấu hình import
 app.use("/", infoGvm); // cấu hình import
 app.use("/", tableQc); // cấu hình import
+
+// truyền json kích thước lớn
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ limit: '50mb', extended: true }));

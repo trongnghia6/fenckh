@@ -125,14 +125,21 @@ const renderInfo = (req, res) => {
   const tableName = process.env.DB_TABLE_QC;
   let query = '';
 
+  const roleDaoTaoALL = process.env.DAOTAO_ALL;
+  const roleCNTTAll = process.env.CNTT_ALL;
+  const roleATTTAll = process.env.ATTT_ALL;
+
+  console.log('role' + roleCNTTAll);
+
+
   console.log(Dot, Ki, Nam);
   // Xây dựng câu truy vấn SQL sử dụng các tham số
-  if (role == 'daotao_thihanh') {
+  if (role == roleDaoTaoALL) {
     query = `
     SELECT * FROM ${tableName}
     WHERE Dot = ? AND KiHoc = ? AND NamHoc = ?;
   `;
-  } else if (role == 'cntt_thihanh') {
+  } else if (role == roleCNTTAll) {
     query = `
     SELECT * FROM ${tableName}
     WHERE Dot = ? AND KiHoc = ? AND NamHoc = ? AND Khoa = 'CNTT';

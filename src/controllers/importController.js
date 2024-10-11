@@ -484,9 +484,13 @@ const deleteRowByKhoa = (req, res) => {
 
 const updateChecked = async (req, res) => {
   const role = req.session.role;
+  const roleDaoTaoALL = process.env.DAOTAO_ALL;
+  const roleCNTTAll = process.env.CNTT_ALL;
+
+
   const tableName = process.env.DB_TABLE_QC; // Giả sử biến này có giá trị là "quychuan"
 
-  if (role === 'cntt_thihanh' || role === 'attt_thihanh' || role === 'dtvt_thihanh') {
+  if (role == roleCNTTAll || role === 'attt_thihanh' || role === 'dtvt_thihanh') {
     const jsonData = req.body; // Lấy dữ liệu từ req.body
 
     // Tạo mảng các Promise cho từng item trong jsonData
