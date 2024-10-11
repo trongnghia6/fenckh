@@ -20,6 +20,7 @@ const createGvmRoutes = require("./routes/createGvmRoute");
 const gvmList = require("./routes/gvmListRoute");
 const updateGvm = require("./routes/updateGvmRoute");
 const classInfoGvm = require("./routes/classInfoGvmRoute");
+const importGvmList = require("./routes/importGvmListRoute");
 
 const app = express();
 const port = process.env.port || 8888;
@@ -63,6 +64,7 @@ app.use("/", createGvmRoutes);
 app.use("/", gvmList);
 app.use("/", updateGvm);
 app.use("/", classInfoGvm);
+app.use("/", importGvmList);
 
 app.listen(port, hostname, () => {
   console.log(`Server running on http://localhost:${port}`);

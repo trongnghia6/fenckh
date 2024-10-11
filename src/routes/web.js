@@ -44,7 +44,7 @@ router.get("/index/import", getImport);
 router.get("/PhongTaiChinh", getPhongTaiChinh);
 //phong dao tao
 router.get("/maindt", getHomeMainDaoTao);
-router.get("/maindt/teachingInfo", getTeachingInfo);
+router.get("/teachingInfo", getTeachingInfo);
 router.get("/maindt/tableQC", getXemBangQC);
 
 // Khoa

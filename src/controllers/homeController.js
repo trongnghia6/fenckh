@@ -49,7 +49,7 @@ const getDtaonhap = (req, res) => {
   res.render("daotaonhap.ejs");
 };
 const getPhongTaiChinh = (req, res) => {
-  res.render("PhongTaiChinh.ejs");
+  res.render("mainTC.ejs");
 };
 const gethomePage = (req, res) => {
   res.render("homepage.ejs");

@@ -55,13 +55,6 @@ const imageFilter = function (req, file, cb) {
 
 let upload = multer({ storage: storage, fileFilter: imageFilter });
 
-//router.post("/daotaoxemhd/daotaonhap/createGVM", createGVM);
-// router.post(
-//   "/daotaoxemhd/daotaonhap/cccd",
-//   upload.single("truocCCCD"),
-//   upload.single("sauCCCD"),
-//   handleUploadFile
-// );
 router.post(
   "/daotaonhap",
   upload.fields([
