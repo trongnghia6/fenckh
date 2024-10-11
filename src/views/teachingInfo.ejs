@@ -63,7 +63,7 @@
         <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
           <ul class="navbar-nav">
             <li class="nav-item">
-              <a class="nav-link" href="/maindt">HOME</a>
+              <a class="nav-link" onclick="Home()" href="">HOME</a>
             </li>
 
             <li class="nav-item">
@@ -634,6 +634,53 @@
   // Hàm khởi động ứng dụng
   init();
 </script>
+
+  <!-- Phần phân quyền -->
+  <script>
+    async function fetchRole() {
+        try {
+            const response = await fetch('/api/getRole');
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            const role = await response.json();
+            return role;
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    }
+
+    async function ThongTinGD(){
+        const role = await fetchRole();
+        
+        if (role.includes("CNTT")){
+            window.location.href = "/info"; // Chuyển hướng đến trang mong muốn
+        } else if (role.includes("DAOTAO")){
+            window.location.href = "/info2"; // Chuyển hướng đến trang mong muốn
+        }  // thêm quyền vào đây
+    }
+
+    async function Import(){
+      const role = await fetchRole();
+
+      if (role.includes("CNTT")){
+          window.location.href = "/importGvmList"; // Chuyển hướng đến trang mong muốn
+      } else if (role.includes("DAOTAO")){
+          window.location.href = "/import"; // Chuyển hướng đến trang mong muốn
+      }  // thêm quyền vào đây
+  }
+
+  async function Home(){
+    const role = await fetchRole();
+
+    if (role.includes("CNTT")){
+        window.location.href = "/mainkhoa"; // Chuyển hướng đến trang mong muốn
+    } else if (role.includes("DAOTAO")){
+        window.location.href = "/maindt"; // Chuyển hướng đến trang mong muốn
+    }  // thêm quyền vào đây
+  }
+
+   </script>
 
 </body>
 

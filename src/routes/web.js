@@ -33,8 +33,8 @@ router.get("/homePage", gethomePage);
 /////////////////////////////////
 router.get("/", getLogin);
 router.get("/index", getIndex);
-// router.get("/dtxemhd", getDtaoxemhd);
-router.get("/maindt", getHomeMainDaoTao);
+//router.get("/dtxemhd", getDtaoxemhd);
+//router.get("/maindt", getHomeMainDaoTao);
 router.get("/daotaoduyet", getDtaoduyet);
 router.get("/daotaoxemhd/daotaonhap", getDtaonhap);
 
