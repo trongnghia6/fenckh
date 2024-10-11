@@ -1,10 +1,9 @@
-
-const XLSX = require('xlsx');
-const fs = require('fs');
-require('dotenv').config();
-const path = require('path');
-const connection = require('./connectDB');
-const { json } = require('express');
+const XLSX = require("xlsx");
+const fs = require("fs");
+require("dotenv").config();
+const path = require("path");
+const connection = require("./connectDB");
+const { json } = require("express");
 
 // Middleware kiểm tra người dùng đã đăng nhập và có quyền "daotao"
 const checkDaotaoRoleThiHanh = (req, res, next) => {
@@ -14,14 +13,14 @@ const checkDaotaoRoleThiHanh = (req, res, next) => {
   }
 
   // Kiểm tra nếu quyền của người dùng là "daotao"
-  if (req.session.role !== "daotao_thihanh") {
-    return res.status(403).json({ message: "Bạn không có quyền truy cập chức năng này." });
+  if (req.session.role == "DAOTAO_XEM") {
+    return res
+      .status(403)
+      .json({ message: "Bạn không có quyền truy cập chức năng này." });
   }
 
   // Nếu đã đăng nhập và có quyền "daotao", cho phép tiếp tục
   next();
 };
 
-
-
-module.exports = { checkDaotaoRoleThiHanh }
+module.exports = { checkDaotaoRoleThiHanh };

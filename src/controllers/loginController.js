@@ -29,21 +29,21 @@ const login = async (req, res) => {
         let url;
         const role = roles[0].Quyen;
 
-        if (role.includes("daotao_thihanh") || role.includes("daotao")) {
-          req.session.role = "daotao_thihanh"; // Lưu vai trò vào session
+        if (role.includes("DAOTAO_ALL")) {
+          req.session.role = "DAOTAO_ALL"; // Lưu vai trò vào session
           url = "/maindt";
-        } else if (role.includes("daotao_xem")) {
-          req.session.role = "daotao_xem"; // Lưu vai trò vào session
+        } else if (role.includes("DAOTAO_XEM")) {
+          req.session.role = "DAOTAO_XEM"; // Lưu vai trò vào session
           url = "/maindt";
-        } else if (role.includes("CNTT")) {
-          req.session.role = "CNTT"; // Lưu vai trò vào session
+        } else if (role.includes("CNTT_ALL")) {
+          req.session.role = "CNTT_ALL"; // Lưu vai trò vào session
           console.log("req.session.role = ", req.session.role);
           url = "/mainkhoa";
-        } else if (role.includes("ATTT")) {
-          req.session.role = "ATTT";
-          url = "/gvmList";
-        } else if (role.includes("CNTT")) {
-          req.session.role = "CNTT";
+        } else if (role.includes("ATTT_ALL")) {
+          req.session.role = "ATTT_ALL";
+          url = "/mainkhoa";
+        } else if (role.includes("DTVT_ALL")) {
+          req.session.role = "DTVT_ALL";
           url = "/mainkhoa";
         }
 
