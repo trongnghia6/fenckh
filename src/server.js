@@ -30,12 +30,25 @@ configViewEngine(app);
 
 // cấu hình session cho login
 app.use(express.urlencoded({ extended: true }));
+// app.use(
+//   session({
+//     secret: "your_secret_key",
+//     resave: false,
+//     saveUninitialized: true,
+//     cookie: { secure: false }, // set secure: true nếu bạn sử dụng HTTPS
+//   })
+// );
+
+// Thiết lập session trong Express
 app.use(
   session({
-    secret: "your_secret_key",
+    secret: "your-secret-key",
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: false }, // set secure: true nếu bạn sử dụng HTTPS
+    // Đặt true nếu bạn sử dụng HTTPS
+    cookie: { maxAge: 6000000 }, // Session sẽ hết hạn sau 100 phút không hoạt động
+
+    // cookie: { secure: true, maxAge: 6000000 }, // Session sẽ hết hạn sau 100 phút không hoạt động
   })
 );
 

@@ -44,6 +44,9 @@ const login = async (req, res) => {
         } else if (role.includes("dtvt_thihanh")) {
           req.session.role = "dtvt_thihanh";
           url = "/gvmList";
+        } else if (role.includes("CNTT")) {
+          req.session.role = "CNTT";
+          url = "/mainkhoa";
         }
 
         // Trả về phản hồi thành công với url

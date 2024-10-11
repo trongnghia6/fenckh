@@ -3,8 +3,6 @@ const router = express.Router();
 
 const {
   gethomePage,
-  getAbc,
-  createUser,
   getLogin,
   getIndex,
   getImport,
@@ -15,21 +13,29 @@ const {
   getHomeMainDaoTao,
   getTeachingInfo,
   getXemBangQC,
+  // Khoa
   getMainKhoa,
+
+  // Lấy role
+  getRole,
 } = require("../controllers/homeController");
 
 // const { createGVM } = require("../controllers/DaoTaoController");
 
-const {
-  createGVM,
-  handleUploadFile,
-} = require("../controllers/createGvmController");
+// const {
+//   createGVM,
+//   handleUploadFile,
+// } = require("../controllers/createGvmController");
 
+router.get("/homePage", gethomePage);
+// router.get("/abc", getAbc);
+// router.post("/abc/create", createUser);
+/////////////////////////////////
 router.get("/", getLogin);
 router.get("/index", getIndex);
 // router.get("/dtxemhd", getDtaoxemhd);
 router.get("/maindt", getHomeMainDaoTao);
-router.get("/daotaoxemhd/daotaoduyet", getDtaoduyet);
+router.get("/daotaoduyet", getDtaoduyet);
 router.get("/daotaoxemhd/daotaonhap", getDtaonhap);
 
 //router.post("/daotaoxemhd/daotaonhap/createGVM", handleUploadFile);
@@ -41,8 +47,10 @@ router.get("/maindt", getHomeMainDaoTao);
 router.get("/maindt/teachingInfo", getTeachingInfo);
 router.get("/maindt/tableQC", getXemBangQC);
 
-// src of L
-router.get("/khoaCNTT", getMainKhoa);
+// Khoa
+router.get("/mainkhoa", getMainKhoa);
 
+// Lấy role
+router.get("/api/getRole", getRole);
 
 module.exports = router;

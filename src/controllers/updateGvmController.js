@@ -23,8 +23,6 @@ const getUpdateGvm = async (req, res) => {
 const upload = multer().single("truocCCCD");
 
 const postUpdateGvm = async (req, res) => {
-  console.log("req.body: ", req.body);
-
   // Lấy các thông tin từ form
   let IdGvm = req.body.IdGvm;
   let MaGvm = req.body.MaGvm.toUpperCase();
@@ -45,15 +43,17 @@ const postUpdateGvm = async (req, res) => {
   let HeSoLuong = req.body.HeSoLuong;
   let STK = req.body.STK;
   let NganHang = req.body.NganHang;
+  let BangTotNghiepLoai = req.body.BangTotNghiepLoai;
 
   let oldTruocCCCD = req.body.oldTruocCCCD;
   let oldSauCCCD = req.body.oldSauCCCD;
+  let oldFileLyLich = req.body.oldFileLyLich;
 
   const MaPhongBan = Array.isArray(req.body.maPhongBan)
     ? req.body.maPhongBan.join(",") // Nếu là mảng
     : req.body.maPhongBan || ""; // Nếu là chuỗi hoặc không có giá trị
 
-  let tinhTrangGiangDay = req.body.tinhTrangGiangDay;
+  let tinhTrangGiangDay = req.body.tinhTrangGiangDay ? 1 : 0;
 
   upload(req, res, function (err) {
     // Kiểm tra lỗi của Multer hoặc các vấn đề liên quan đến file upload
@@ -74,7 +74,7 @@ const postUpdateGvm = async (req, res) => {
     // let sauCCCD = req.files["sauCCCD"]
     //   ? req.files["sauCCCD"][0].filename
     //   : null;
-    console.log("truocCCCD", oldTruocCCCD);
+
     // Lấy giá trị của các file đã upload (nếu có), nếu không có thì giữ nguyên đường dẫn cũ
     let truocCCCD = req.files["truocCCCD"]
       ? req.files["truocCCCD"][0].filename
@@ -84,7 +84,7 @@ const postUpdateGvm = async (req, res) => {
       : oldSauCCCD; // Giữ nguyên đường dẫn cũ nếu không chọn file mới
     let FileLyLich = req.files["FileLyLich"]
       ? req.files["FileLyLich"][0].filename
-      : null;
+      : oldFileLyLich;
 
     // Truy vấn để update dữ liệu vào cơ sở dữ liệu
     const query = `UPDATE gvmoi SET 
@@ -105,6 +105,7 @@ const postUpdateGvm = async (req, res) => {
     HSL = ?,
     STK = ?,
     NganHang = ?,
+    BangTotNghiepLoai = ?,
     MatTruocCCCD = ?,
     MatSauCCCD = ?,
     FileLyLich = ?,
@@ -131,6 +132,7 @@ const postUpdateGvm = async (req, res) => {
         HeSoLuong,
         STK,
         NganHang,
+        BangTotNghiepLoai,
         truocCCCD, // Ảnh mặt trước CCCD
         sauCCCD, // Ảnh mặt sau CCCD
         FileLyLich, // Giả sử đây là vị trí của FileLyLich (có thể cập nhật sau)
@@ -142,9 +144,9 @@ const postUpdateGvm = async (req, res) => {
       function (err, results) {
         if (err) {
           console.error("Error executing query: ", err);
-          return res.redirect("daotaoxemhd/gvmList?message=insertFalse");
+          return res.redirect("/gvmList?message=insertFalse");
         }
-        res.redirect("daotaoxemhd/gvmList?message=insertSuccess");
+        res.redirect("/gvmList?message=insertSuccess");
       }
     );
   });

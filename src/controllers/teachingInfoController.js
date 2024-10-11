@@ -1,9 +1,9 @@
-const XLSX = require('xlsx');
-const fs = require('fs');
-require('dotenv').config();
-const path = require('path');
-const connection = require('./connectDB');
-const { getEnvironmentData } = require('worker_threads');
+const XLSX = require("xlsx");
+const fs = require("fs");
+require("dotenv").config();
+const path = require("path");
+const connection = require("./connectDB");
+const { getEnvironmentData } = require("worker_threads");
 
 // Hàm tách chuỗi - giữ nguyên
 function tachChuoi(chuoi) {
@@ -28,17 +28,23 @@ function extractClassSuffix(lop) {
   if (match) {
     return {
       baseClass: match[1], // Lớp chính (ví dụ: A18C604)
-      suffix: match[2] || '', // Phân lớp (.1, .2,...)
+      suffix: match[2] || "", // Phân lớp (.1, .2,...)
     };
   }
-  return { baseClass: lop, suffix: '' }; // Nếu không có phân lớp
+  return { baseClass: lop, suffix: "" }; // Nếu không có phân lớp
 }
 
 // Hàm gộp các học phần trùng
 function handleDuplicateCourses(firstCourse, courses) {
   const totalLL = courses.reduce((sum, course) => sum + course.LL, 0);
-  const totalSoTietCTDT = courses.reduce((sum, course) => sum + course.SoTietCTDT, 0);
-  const totalQuyChuan = courses.reduce((sum, course) => sum + course.QuyChuan, 0);
+  const totalSoTietCTDT = courses.reduce(
+    (sum, course) => sum + course.SoTietCTDT,
+    0
+  );
+  const totalQuyChuan = courses.reduce(
+    (sum, course) => sum + course.QuyChuan,
+    0
+  );
 
   return {
     ...firstCourse,
@@ -61,7 +67,6 @@ function handleDuplicateCourses(firstCourse, courses) {
 //     if (results.length === 0) {
 //       return res.status(404).json({ message: 'No data found' });
 //     }
-
 
 //     return res.status(200).json(results); // Trả về kết quả sau khi gộp
 
@@ -148,30 +153,28 @@ const renderInfo = (req, res) => {
   // Thực thi câu truy vấn với các tham số an toàn
   connection.query(query, [Dot, Ki, Nam], (error, results) => {
     if (error) {
-      return res.status(500).json({ error: 'Internal server error' });
+      return res.status(500).json({ error: "Internal server error" });
     }
 
     if (results.length === 0) {
-      return res.status(404).json({ message: 'No data found' });
+      return res.status(404).json({ message: "No data found" });
     }
     return res.status(200).json(results); // Trả về kết quả tương ứng với đợt, kì, năm
   });
 };
 
-
 // Hàm lấy tất cả tên giảng viên từ cơ sở dữ liệu
 const getNameGV = (req, res) => {
-
   // Truy vấn để lấy danh sách giảng viên mời
-  const query = 'SELECT DISTINCT TenNhanVien,MaPhongBan FROM nhanvien;';
+  const query = "SELECT DISTINCT TenNhanVien,MaPhongBan FROM nhanvien;";
 
   connection.query(query, (error, results) => {
     if (error) {
-      return res.status(500).json({ error: 'Internal server error' });
+      return res.status(500).json({ error: "Internal server error" });
     }
 
     if (results.length === 0) {
-      return res.status(404).json({ message: 'No teachers found' });
+      return res.status(404).json({ message: "No teachers found" });
     }
 
     // Lấy đầy đủ tên giảng viên từ cột HoTen và trả về kết quả
@@ -190,8 +193,10 @@ const getKhoaAndNameGvmOfKhoa = async (req, res) => {
 
       connection.query(queryGVM, (error, results) => {
         if (error) {
-          console.error('Lỗi truy vấn cơ sở dữ liệu:', error);
-          return reject(new Error('Không thể truy xuất dữ liệu từ cơ sở dữ liệu.'));
+          console.error("Lỗi truy vấn cơ sở dữ liệu:", error);
+          return reject(
+            new Error("Không thể truy xuất dữ liệu từ cơ sở dữ liệu.")
+          );
         }
         resolve(results); // Trả về kết quả truy vấn
       });
@@ -199,12 +204,26 @@ const getKhoaAndNameGvmOfKhoa = async (req, res) => {
 
     // Trả về dữ liệu lấy từ bảng gvmoi
     return res.status(200).json(gvmResults);
-
   } catch (error) {
-    console.error('Lỗi trong hàm getKhoaAndNameGvmOfKhoa:', error);
-    return res.status(500).json({ error: 'Đã xảy ra lỗi trong quá trình xử lý dữ liệu.' });
+    console.error("Lỗi trong hàm getKhoaAndNameGvmOfKhoa:", error);
+    return res
+      .status(500)
+      .json({ error: "Đã xảy ra lỗi trong quá trình xử lý dữ liệu." });
   }
 };
 
+const getTeachingInfo1 = (req, res) => {
+  res.render("teachingInfo.ejs");
+};
 
-module.exports = { renderInfo, getNameGV, getKhoaAndNameGvmOfKhoa };
+const getTeachingInfo2 = (req, res) => {
+  res.render("teachingInfo2.ejs");
+};
+
+module.exports = {
+  renderInfo,
+  getNameGV,
+  getKhoaAndNameGvmOfKhoa,
+  getTeachingInfo1,
+  getTeachingInfo2,
+};

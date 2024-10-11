@@ -8,7 +8,7 @@ let gvmLists;
 let query;
 const getGvmList = async (req, res) => {
   const role = req.session.role;
-
+  console.log("gà ", req.session.role);
   if (role == "daotao") {
     query = `select * from gvmoi`;
   } else {

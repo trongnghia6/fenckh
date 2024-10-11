@@ -47,12 +47,21 @@ const router = express.Router();
 // };
 
 const getClassInfoGvm = async (req, res) => {
-  const query = `SELECT * from quychuan JOIN gvmoi
-                on quychuan.GiaoVien = gvmoi.HoTen 
-                ORDER BY GiaoVien`; // Sắp xếp theo tên giảng viên
+  let query;
+  const role = req.session.role;
+
+  if (role == "daotao") {
+    query = `SELECT * from quychuan JOIN gvmoi
+    on quychuan.GiaoVien = gvmoi.HoTen`;
+    //ORDER BY GiaoVien`; // Sắp xếp theo tên giảng viên
+  } else {
+    query = `SELECT * from quychuan JOIN gvmoi
+    on quychuan.GiaoVien = gvmoi.HoTen
+    where MaPhongBan = '${role}'`;
+  }
+
   const connection = await createConnection();
   const [results, fields] = await connection.query(query);
-
   // Nhóm các môn học theo giảng viên
   const groupedByTeacher = results.reduce((acc, current) => {
     const teacher = current.GiaoVien;
@@ -66,50 +75,24 @@ const getClassInfoGvm = async (req, res) => {
   res.render("classInfoGvm.ejs", { GiangDay: groupedByTeacher });
 };
 
-// Lấy danh sách giảng viên mời để show chi tiết
+// const getGvm = async (req, res) => {
+//   try {
+//     res.json(gvm); // Trả về danh sách giảng viên mời
+//   } catch (error) {
+//     console.error("Error fetching GVM list:", error);
+//     res.status(500).json({ message: "Internal Server Error" }); // Xử lý lỗi
+//   }
+// };
+
+//Lấy danh sách giảng viên mời để show chi tiết
 const getGvm = async (req, res) => {
   const query2 = `select * from gvmoi`;
 
   const connection2 = await createConnection();
 
   const [results2, fields2] = await connection2.query(query2);
-  try {
-    res.json(results2); // Trả về danh sách giảng viên mời
-  } catch (error) {
-    console.error("Error fetching GVM list:", error);
-    res.status(500).json({ message: "Internal Server Error" }); // Xử lý lỗi
-  }
-};
 
-// Khoa công nghệ thông tin =================================
-const getClassInfoGvmCNTT = async (req, res) => {
-  const query = `SELECT * from quychuan JOIN gvmoi
-                on quychuan.GiaoVien = gvmoi.HoTen
-                WHERE gvmoi.MaPhongBan = 'CNTT'
-                ORDER BY GiaoVien`; // Sắp xếp theo tên giảng viên
-  const connection = await createConnection();
-  const [results, fields] = await connection.query(query);
-
-  // Nhóm các môn học theo giảng viên
-  const groupedByTeacher = results.reduce((acc, current) => {
-    const teacher = current.GiaoVien;
-    if (!acc[teacher]) {
-      acc[teacher] = [];
-    }
-    acc[teacher].push(current);
-    return acc;
-  }, {});
-
-  res.render("classInfoGvm.ejs", { GiangDay: groupedByTeacher });
-};
-
-// Lấy danh sách giảng viên mời để show chi tiết
-const getGvmCNTT = async (req, res) => {
-  const query2 = `select * from gvmoi where MaPhongBan = 'CNTT'`;
-
-  const connection2 = await createConnection();
-
-  const [results2, fields2] = await connection2.query(query2);
+  console.log("result2: ", results2);
   try {
     res.json(results2); // Trả về danh sách giảng viên mời
   } catch (error) {
@@ -122,8 +105,7 @@ const getGvmCNTT = async (req, res) => {
 module.exports = {
   getClassInfoGvm,
   getGvm,
-
   // Khoa công nghệ thông tin
-  getClassInfoGvmCNTT,
-  getGvmCNTT,
+  // getClassInfoGvmCNTT,
+  // getGvmCNTT,
 };

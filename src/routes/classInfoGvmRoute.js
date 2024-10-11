@@ -7,15 +7,17 @@ const {
   getGvm,
 
   // Khoa công nghệ thông tin
-  getClassInfoGvmCNTT,
-  getGvmCNTT,
+  // getClassInfoGvmCNTT,
+  // getGvmCNTT,
 } = require("../controllers/classInfoGvmController");
 
 router.get("/classInfoGvm", getClassInfoGvm);
-router.get("/api/gvm", getGvm);
+
+// Lấy danh sách giảng viên mời đưa ra script
+router.get("/api/classInfoGvm", getGvm);
 
 // Khoa công nghệ thông tin
-router.get("/classInfoGvmCNTT", getClassInfoGvmCNTT);
-router.get("/api/gvmCNTT", getGvmCNTT);
+// router.get("/classInfoGvmCNTT", getClassInfoGvmCNTT);
+// router.get("/api/gvmCNTT", getGvmCNTT);
 
 module.exports = router;
