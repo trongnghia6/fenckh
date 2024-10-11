@@ -49,15 +49,15 @@ const router = express.Router();
 const getClassInfoGvm = async (req, res) => {
   let query;
   const role = req.session.role;
-
-  if (role == "daotao") {
+  const parts = role.split("_");
+  if (role.includes("DAOTAO")) {
     query = `SELECT * from quychuan JOIN gvmoi
     on quychuan.GiaoVien = gvmoi.HoTen`;
     //ORDER BY GiaoVien`; // Sắp xếp theo tên giảng viên
   } else {
     query = `SELECT * from quychuan JOIN gvmoi
     on quychuan.GiaoVien = gvmoi.HoTen
-    where MaPhongBan = '${role}'`;
+    where MaPhongBan = '${parts[0]}'`;
   }
 
   const connection = await createConnection();

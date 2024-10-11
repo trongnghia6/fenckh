@@ -8,11 +8,11 @@ let gvmLists;
 let query;
 const getGvmList = async (req, res) => {
   const role = req.session.role;
-  console.log("gà ", req.session.role);
-  if (role == "daotao") {
+  const parts = role.split("_");
+  if (role.includes("DAOTAO")) {
     query = `select * from gvmoi`;
   } else {
-    query = `SELECT * FROM gvmoi WHERE MaPhongBan = '${role}'`;
+    query = `SELECT * FROM gvmoi WHERE MaPhongBan = '${parts[0]}'`;
   }
 
   const connection = await createConnection();

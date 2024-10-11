@@ -24,18 +24,18 @@
       </div>
     </nav>
 
-    <!-- Phần dưới của navbar chứa các mục nằm ngang -->
-    <nav class="navbar navbar-expand-lg navbar-bottom sticky-top">
-      <div class="container-fluid">
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-          aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
-          <ul class="navbar-nav">
-            <li class="nav-item">
-              <a class="nav-link active" href="/maindt">HOME</a>
-            </li>
+  <!-- Phần dưới của navbar chứa các mục nằm ngang -->
+  <nav class="navbar navbar-expand-lg navbar-bottom sticky-top">
+    <div class="container-fluid">
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link active" onclick="Home()" href="">HOME</a>
+          </li>
 
             <li class="nav-item">
               <a class="nav-link" onclick="ThongTinGD('http://localhost:3000/info2')"
@@ -311,4 +311,52 @@
       document.documentElement.scrollTop = 0; // Cho Chrome, Firefox, IE và Opera
     }
   </script>
+
+  <!-- Phần phân quyền -->
+  <script>
+    async function fetchRole() {
+        try {
+            const response = await fetch('/api/getRole');
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            const role = await response.json();
+            return role;
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    }
+
+    async function ThongTinGD(){
+        const role = await fetchRole();
+        
+        if (role.includes("CNTT")){
+            window.location.href = "/info"; // Chuyển hướng đến trang mong muốn
+        } else if (role.includes("DAOTAO")){
+            window.location.href = "/info2"; // Chuyển hướng đến trang mong muốn
+        }  // thêm quyền vào đây
+    }
+
+    async function Import(){
+      const role = await fetchRole();
+
+      if (role.includes("CNTT")){
+          window.location.href = "/importGvmList"; // Chuyển hướng đến trang mong muốn
+      } else if (role.includes("DAOTAO")){
+          window.location.href = "/import"; // Chuyển hướng đến trang mong muốn
+      }  // thêm quyền vào đây
+  }
+
+  async function Home(){
+    const role = await fetchRole();
+
+    if (role.includes("CNTT")){
+        window.location.href = "/mainkhoa"; // Chuyển hướng đến trang mong muốn
+    } else if (role.includes("DAOTAO")){
+        window.location.href = "/maindt"; // Chuyển hướng đến trang mong muốn
+    }  // thêm quyền vào đây
+  }
+
+   </script>
+
 </body>

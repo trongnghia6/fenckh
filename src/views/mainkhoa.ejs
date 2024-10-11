@@ -8,10 +8,21 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="../../bootstrap-5.3.3-dist/bootstrap-icons-1.11.3/font/bootstrap-icons.min.css">
   <link rel="stylesheet" href="/css/styles.css">
+  <style>
+    .navbar-bottom {
+      position: sticky;
+      top: 0;
+      z-index: 1030; /* Đảm bảo navbar nằm trên các phần tử khác khi cuộn */
+    }
+
+    .container-fluid .row{
+      margin-top: 20px;
+    }
+  </style>
 </head>
 
 <body>
-  <div class="fixed-top">
+
     <nav class="navbar-top ">
       <div class="container-fluid">
         <a class="navbar-brand" href="#">
@@ -24,7 +35,7 @@
     </nav>
   
     <!-- Phần dưới của navbar chứa các mục nằm ngang -->
-    <nav class="navbar navbar-expand-lg navbar-bottom sticky-top">
+    <nav class="navbar navbar-expand-lg navbar-bottom ">
       <div class="container-fluid">
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
           aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -71,13 +82,13 @@
         </div>
       </div>
     </nav>
-  </div>
+
   <!-- Phần trên của navbar chứa logo và tiêu đề -->
   
 
 
   <!-- 2. Tổng quan -->
-  <div class="container my-4 mg-top">
+  <div class="container-fluid">
     <div class="row">
       <div class="col-lg-4 col-md-6">
         <div class="card text-white bg-primary mb-3">
