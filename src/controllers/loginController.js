@@ -48,7 +48,7 @@ const login = async (req, res) => {
         }
 
         // Trả về phản hồi thành công với url
-        return res.status(200).json({ url });
+        return res.status(200).json({ url, role });
       } else {
         return res.status(401).json({ message: "Mật khẩu không chính xác" });
       }

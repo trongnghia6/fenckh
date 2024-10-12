@@ -63,16 +63,16 @@
         <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
           <ul class="navbar-nav">
             <li class="nav-item">
-              <a class="nav-link" onclick="Home()" href="">HOME</a>
+              <a class="nav-link" id="Home" href="">HOME</a>
             </li>
 
             <li class="nav-item">
-              <a class="nav-link" onclick="ThongTinGD()" href="">Thông tin GD</a>
+              <a class="nav-link active" id="ThongTinGD" href="">Thông tin GD</a>
             </li>
             <!-- <li> -->
             <li class="nav-item">
               <!-- <a class="nav-link" href="/import">Import danh sách giảng viên mời</a> -->
-              <a class="nav-link" onclick="Import()" href="">Import</a>
+              <a class="nav-link" id="Import" href="">Import</a>
             </li>
 
             <li class="nav-item">
@@ -636,7 +636,7 @@
 </script>
 
   <!-- Phần phân quyền -->
-  <script>
+  <!-- <script>
     async function fetchRole() {
         try {
             const response = await fetch('/api/getRole');
@@ -680,8 +680,59 @@
     }  // thêm quyền vào đây
   }
 
-   </script>
+   </script> -->
 
+      <!-- Phần phân quyền -->
+      <script>
+        document.addEventListener('DOMContentLoaded', () => {
+          // Thêm sự kiện click cho phần tử có id "import"
+          const importLink = document.getElementById("Import");
+          
+          importLink.addEventListener("click", function(event) {
+              event.preventDefault(); // Ngăn chặn hành vi mặc định của liên kết
+              
+              const role = localStorage.getItem("userRole"); // Lấy role từ localStorage
+              
+              if (role.includes("DAOTAO"||role.includes("TAICHINH"))){
+                window.location.href = "/import";
+              } else {
+                window.location.href = "/importGvmList";
+              }
+          });
+    
+          // Thêm sự kiện click cho phần tử có id="ThongTinGD"
+          const ThongTinGD = document.getElementById("ThongTinGD");
+          
+          ThongTinGD.addEventListener("click", function(event) {
+              event.preventDefault(); // Ngăn chặn hành vi mặc định của liên kết
+              
+              const role = localStorage.getItem("userRole"); // Lấy role từ localStorage
+                      
+              if (role.includes("DAOTAO"||role.includes("TAICHINH"))){
+                window.location.href = "/info2";
+              } else {
+                window.location.href = "/info";
+              }
+          });
+    
+          // Thêm sự kiện click cho phần tử có id="Home"
+    
+          const Home = document.getElementById("Home");
+          
+          Home.addEventListener("click", function(event) {
+              event.preventDefault(); // Ngăn chặn hành vi mặc định của liên kết
+              
+              const role = localStorage.getItem("userRole"); // Lấy role từ localStorage
+              
+              if (role.includes("DAOTAO"||role.includes("TAICHINH"))){
+                window.location.href = "/maindt";
+              } else {
+                window.location.href = "/mainkhoa";
+              }
+          });
+      });
+    
+       </script>
 </body>
 
 </html>
