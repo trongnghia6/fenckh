@@ -360,7 +360,7 @@
   }
 
   async function submitData() {
-    const role = await fetchRole();
+    const role = localStorage.getItem("userRole")
     const rows = document.querySelectorAll('#tableBody tr'); // Lấy tất cả các hàng trong bảng
 
     rows.forEach((row, index) => {
