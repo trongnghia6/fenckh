@@ -481,12 +481,27 @@ const deleteRowByKhoa = (req, res) => {
   });
 };
 
-
 const updateChecked = async (req, res) => {
   const role = req.session.role;
+  const roleDaoTaoALL = process.env.DAOTAO_ALL;
+  const roleCNTTAll = process.env.CNTT_ALL;
+  const roleATTTAll = process.env.ATTT_ALL;
+  const roleDTVTAll = process.env.DTVT_ALL;
+
+  // const roleDaoTaoThiHanh = process.env.THIHANH;
+  const roleCNTTThiHanh = process.env.CNTT_THIHANH;
+  const roleATTTThiHanh = process.env.ATTT_THIHANH;
+  const roleDTVTThiHanh = process.env.DTVT_THIHANH;
+
+
+  const roleDaoTaoXem = process.env.DAOTAO_XEM;
+  const roleCNTTXem = process.env.CNTT_XEM;
+  const roleATTTXem = process.env.ATTT_XEM;
+  const roleDTVTXem = process.env.DTVT_XEM;
+
   const tableName = process.env.DB_TABLE_QC; // Giả sử biến này có giá trị là "quychuan"
 
-  if (role === 'cntt_thihanh' || role === 'attt_thihanh' || role === 'dtvt_thihanh') {
+  if (role.includes("THIHANH") || role.includes("ALL")) {
     const jsonData = req.body; // Lấy dữ liệu từ req.body
 
     // Tạo mảng các Promise cho từng item trong jsonData
@@ -579,4 +594,112 @@ const updateChecked = async (req, res) => {
     res.status(403).json({ error: 'Bạn không có quyền thực hiện hành động này' });
   }
 };
-module.exports = { handleUploadAndRender, importJSONToDB, importTableQC, importTableTam, checkExistKhoa, deleteRowByKhoa, updateChecked };
+
+const updateAllTeachingInfo = async (req, res) => {
+  const query2 = `
+    SELECT 
+      qc.*, 
+      gvmoi.*, 
+      SUBSTRING_INDEX(qc.GiaoVienGiangDay, ' - ', 1) AS TenGiangVien
+    FROM quychuan qc
+    JOIN gvmoi ON SUBSTRING_INDEX(qc.GiaoVienGiangDay, ' - ', 1) = gvmoi.HoTen
+    GROUP BY gvmoi.HoTen;
+  `;
+
+  const getDanhXung = (gioiTinh) => {
+    return gioiTinh === 'Nam' ? 'Ông' : gioiTinh === 'Nữ' ? 'Bà' : '';
+  };
+
+  try {
+    const [dataJoin] = await connection.promise().query(query2);
+
+    // Chuẩn bị dữ liệu để chèn từng loạt
+    const insertValues = dataJoin.map(item => {
+      const {
+        id_Gvm,
+        DienThoai,
+        Email,
+        MaSoThue,
+        HoTen,
+        NgaySinh,
+        HSL,
+        CCCD,
+        NoiCapCCCD,
+        DiaChi,
+        SoTK,
+        NganHang,
+        NgayBatDau,
+        NgayKetThuc,
+        KiHoc,
+        SoTiet,
+        SoTien,
+        TruThue10,
+        Dot,
+        NamHoc,
+        MaPhongBan,
+        MaBoMon,
+        KhoaDuyet,
+        DaoTaoDuyet,
+        TaiChinhDuyet,
+        GioiTinh
+      } = item;
+
+      const DanhXung = getDanhXung(GioiTinh);
+
+      return [
+        id_Gvm,
+        DienThoai,
+        Email,
+        MaSoThue,
+        DanhXung,
+        HoTen,
+        NgaySinh,
+        HSL,
+        CCCD,
+        NoiCapCCCD,
+        DiaChi,
+        SoTK,
+        NganHang,
+        NgayBatDau,
+        NgayKetThuc,
+        KiHoc,
+        SoTiet,
+        SoTien,
+        TruThue10,
+        Dot,
+        NamHoc,
+        MaPhongBan,
+        MaBoMon,
+        KhoaDuyet,
+        DaoTaoDuyet,
+        TaiChinhDuyet
+      ];
+    });
+
+    // Định nghĩa câu lệnh chèn
+    const queryInsert = `
+      INSERT INTO hopdonggvmoi (
+        id_Gvm, DienThoai, Email, MaSoThue, DanhXung, HoTen, NgaySinh, HSL, CCCD, NoiCapCCCD,
+        DiaChi, SoTK, NganHang, NgayBatDau, NgayKetThuc, KiHoc, SoTiet, SoTien, TruThue10,
+        Dot, NamHoc, MaPhongBan, MaBoMon, KhoaDuyet, DaoTaoDuyet, TaiChinhDuyet
+      ) VALUES ?;
+    `;
+
+    // Thực hiện câu lệnh chèn
+    await connection.promise().query(queryInsert, [insertValues]);
+
+    res.status(200).json({ message: 'Dữ liệu đã được chèn thành công!' });
+  } catch (err) {
+    console.error(err); // Ghi lại lỗi để gỡ lỗi
+    res.status(500).json({ error: 'Đã xảy ra lỗi trong quá trình cập nhật thông tin.' });
+  }
+};
+
+
+
+
+
+module.exports = {
+  handleUploadAndRender, importJSONToDB, importTableQC, importTableTam,
+  checkExistKhoa, deleteRowByKhoa, updateChecked, updateAllTeachingInfo
+};

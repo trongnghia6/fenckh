@@ -5,6 +5,25 @@ require("dotenv").config();
 const login = async (req, res) => {
   const { username, password } = req.body;
 
+  const roleDaoTaoALL = process.env.DAOTAO_ALL;
+  const roleTaiChinhALL = process.env.TAICHINH_ALL;
+
+  const roleCNTTAll = process.env.CNTT_ALL;
+  const roleATTTAll = process.env.ATTT_ALL;
+  const roleDTVTAll = process.env.DTVT_ALL;
+
+  // const roleDaoTaoThiHanh = process.env.THIHANH;
+  const roleCNTTThiHanh = process.env.CNTT_THIHANH;
+  const roleATTTThiHanh = process.env.ATTT_THIHANH;
+  const roleDTVTThiHanh = process.env.DTVT_THIHANH;
+
+
+  const roleDaoTaoXem = process.env.DAOTAO_XEM;
+  const roleTaiChinhXem = process.env.TAICHINH_XEM;
+  const roleCNTTXem = process.env.CNTT_XEM;
+  const roleATTTXem = process.env.ATTT_XEM;
+  const roleDTVTXem = process.env.DTVT_XEM;
+
   try {
     // Truy vấn người dùng từ cơ sở dữ liệu
     const [users] = await connection
@@ -27,25 +46,57 @@ const login = async (req, res) => {
           .query("SELECT Quyen FROM role WHERE TenDangNhap = ?", [username]);
 
         let url;
-        const role = roles[0].Quyen;
+        // console.log();
+        // console.log("đến đây r");
 
-        if (role.includes("DAOTAO_ALL")) {
-          req.session.role = "DAOTAO_ALL"; // Lưu vai trò vào session
+
+        const role = roles[0].Quyen;
+        console.log('role đăng nhập : ' + role);
+        if (role.includes(roleDaoTaoALL)) {
+          req.session.role = roleDaoTaoALL; // Lưu vai trò vào session
           url = "/maindt";
-        } else if (role.includes("DAOTAO_XEM")) {
-          req.session.role = "DAOTAO_XEM"; // Lưu vai trò vào session
+        } else if (role.includes(roleDaoTaoXem)) {
+          req.session.role = roleDaoTaoXem; // Lưu vai trò vào session
           url = "/maindt";
-        } else if (role.includes("CNTT_ALL")) {
-          req.session.role = "CNTT_ALL"; // Lưu vai trò vào session
-          console.log("req.session.role = ", req.session.role);
+          // } else if (role.includes(roleDaoTaoThiHanh)) {
+          //   req.session.role = roleDaoTaoThiHanh; // Lưu vai trò vào session
+          //   url = "/maindt";
+        } else if (role.includes(roleCNTTAll)) {
+          req.session.role = roleCNTTAll; // Lưu vai trò vào session
           url = "/mainkhoa";
-        } else if (role.includes("ATTT_ALL")) {
-          req.session.role = "ATTT_ALL";
+        } else if (role.includes(roleCNTTXem)) {
+          req.session.role = roleCNTTXem; // Lưu vai trò vào session
           url = "/mainkhoa";
-        } else if (role.includes("DTVT_ALL")) {
-          req.session.role = "DTVT_ALL";
+        } else if (role.includes(roleCNTTThiHanh)) {
+          req.session.role = roleCNTTThiHanh; // Lưu vai trò vào session
           url = "/mainkhoa";
+        } else if (role.includes(roleATTTAll)) {
+          req.session.role = roleATTTAll;
+          url = "/mainkhoa";
+        } else if (role.includes(roleATTTXem)) {
+          req.session.role = roleATTTXem;
+          url = "/mainkhoa";
+        } else if (role.includes(roleATTTThiHanh)) {
+          req.session.role = roleATTTThiHanh;
+          url = "/mainkhoa";
+        } else if (role.includes(roleDTVTAll)) {
+          req.session.role = roleDTVTAll;
+          url = "/mainkhoa";
+        } else if (role.includes(roleDTVTXem)) {
+          req.session.role = roleDTVTXem;
+          url = "/mainkhoa";
+        } else if (role.includes(roleDTVTThiHanh)) {
+          req.session.role = roleDTVTThiHanh;
+          url = "/mainkhoa";
+        } else if (role.includes(roleTaiChinhALL)) {
+          req.session.role = roleTaiChinhALL;
+          url = "/maindt";
+        } else if (role.includes(roleTaiChinhXem)) {
+          req.session.role = roleTaiChinhXem;
+          url = "/maindt";
         }
+
+
 
         // Trả về phản hồi thành công với url
         return res.status(200).json({ url, role });

@@ -318,16 +318,16 @@
       alert("Đã xảy ra lỗi trong quá trình thêm giảng viên.");
     }
 
-        // Sau khi hiển thị thông báo, xóa query string để tránh hiển thị lại khi refresh
-if (message) {
-  // Sử dụng window.history để xóa query string mà không refresh lại trang
-  const newUrl = window.location.origin + window.location.pathname;
-  window.history.replaceState({}, document.title, newUrl);
-}
+    // Sau khi hiển thị thông báo, xóa query string để tránh hiển thị lại khi refresh
+    if (message) {
+      // Sử dụng window.history để xóa query string mà không refresh lại trang
+      const newUrl = window.location.origin + window.location.pathname;
+      window.history.replaceState({}, document.title, newUrl);
+    }
 
-    </script>
+  </script>
 
-      <!-- Phần phân quyền -->
+  <!-- Phần phân quyền -->
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       // Thêm sự kiện click cho phần tử có id "import"
@@ -377,7 +377,7 @@ if (message) {
       });
   });
 
-   </script>
+  </script>
 </body>
 
 </html>

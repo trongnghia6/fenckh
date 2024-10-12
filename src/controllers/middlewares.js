@@ -4,6 +4,8 @@ require("dotenv").config();
 const path = require("path");
 const connection = require("./connectDB");
 const { json } = require("express");
+const roleDaoTaoALL = process.env.DAOTAO_ALL;
+
 
 // Middleware kiểm tra người dùng đã đăng nhập và có quyền "daotao"
 const checkDaotaoRoleThiHanh = (req, res, next) => {
@@ -13,7 +15,7 @@ const checkDaotaoRoleThiHanh = (req, res, next) => {
   }
 
   // Kiểm tra nếu quyền của người dùng là "daotao"
-  if (req.session.role == "DAOTAO_XEM") {
+  if (req.session.role != roleDaoTaoALL) {
     return res
       .status(403)
       .json({ message: "Bạn không có quyền truy cập chức năng này." });
