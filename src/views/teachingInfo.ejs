@@ -142,12 +142,12 @@
         <input type="text" id="filterClass" placeholder="Tìm theo tên học phần" oninput="filterByClass()"
           class="form-control m-2 search" style="width: 300px;" />
         <div class="input-group m-2" style="width: 350px;">
-          <label for="startDate" class="input-group-text">Ngày bắt đầu</label>
-          <input type="date" id="startDate" class="form-control" />
+          <label for="startDate"  class="input-group-text">Ngày bắt đầu</label>
+          <input required type="date" id="startDate" class="form-control" />
         </div>
         <div class="input-group m-2" style="width: 350px;">
           <label for="endDate" class="input-group-text">Ngày kết thúc</label>
-          <input type="date" id="endDate" class="form-control" />
+          <input required type="date" id="endDate" class="form-control" />
         </div>
       </div>
       <div id="renderInfo">
@@ -608,69 +608,6 @@
   init();
 </script>
 
-  <!-- Phần phân quyền -->
-  <!-- <script>
-    async function fetchRole() {
-        try {
-            const response = await fetch('/api/getRole');
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            const role = await response.json();
-            return role;
-        } catch (error) {
-            console.error('Error fetching data:', error);
-        }
-    }
-
-  window.onload = async function () {
-    const role = await fetchRole();
-
-    // Nếu role là 1 trong 3 giá trị sau thì hiển thị cột, ngược lại thì ẩn
-    if (role === 'CNTT_ALL' || role === 'ATTT_ALL' || role === 'DTVT_ALL') {
-      // Hiển thị cột 'khoaColumn'
-      document.getElementById('khoaColumn').style.display = 'table-cell';
-    } else {
-      // Ẩn cột 'khoaColumn'
-      document.getElementById('khoaColumn').style.display = 'none';
-    }
-  };
-
-
-
-  async function ThongTinGD() {
-    const role = await fetchRole();
-    console.log(role);
-
-    if (role.includes("DAOTAO") || role.includes("XEM")) {
-      window.location.href = "/info2"; // Chuyển hướng đến trang mong muốn
-    } else {
-      window.location.href = "/info"; // Chuyển hướng đến trang mong muốn
-    }
-  }
-
-  async function Import() {
-    const role = await fetchRole();
-
-    if (role.includes("CNTT")) {
-      window.location.href = "/importGvmList"; // Chuyển hướng đến trang mong muốn
-    } else if (role.includes("DAOTAO")) {
-      window.location.href = "/import"; // Chuyển hướng đến trang mong muốn
-    }  // thêm quyền vào đây
-  }
-
-  async function Home() {
-    const role = await fetchRole();
-
-    if (role.includes("CNTT")) {
-      window.location.href = "/mainkhoa"; // Chuyển hướng đến trang mong muốn
-    } else if (role.includes("DAOTAO")) {
-      window.location.href = "/maindt"; // Chuyển hướng đến trang mong muốn
-    }  // thêm quyền vào đây
-  }
-
-   </script> -->
-
       <!-- Phần phân quyền -->
       <script>
         window.onload = async function () {
@@ -695,7 +632,7 @@
               
               const role = localStorage.getItem("userRole"); // Lấy role từ localStorage
               
-              if (role.includes("DAOTAO"||role.includes("TAICHINH"))){
+              if (role.includes("DAOTAO")||role.includes("TAICHINH")){
                 window.location.href = "/import";
               } else {
                 window.location.href = "/importGvmList";
@@ -710,7 +647,7 @@
               
               const role = localStorage.getItem("userRole"); // Lấy role từ localStorage
                       
-              if (role.includes("DAOTAO"||role.includes("TAICHINH"))){
+              if (role.includes("DAOTAO")||role.includes("TAICHINH")){
                 window.location.href = "/info2";
               } else {
                 window.location.href = "/info";
@@ -726,7 +663,7 @@
               
               const role = localStorage.getItem("userRole"); // Lấy role từ localStorage
               
-              if (role.includes("DAOTAO"||role.includes("TAICHINH"))){
+              if (role.includes("DAOTAO")||role.includes("TAICHINH")){
                 window.location.href = "/maindt";
               } else {
                 window.location.href = "/mainkhoa";

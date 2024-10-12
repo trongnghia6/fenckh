@@ -155,9 +155,9 @@
                                                     <td rowspan="<%= courses.length %>"><%= teacher %></td> <!-- Tên giảng viên -->
                                                     <% index++; %>
                                                 <% } %>
-                                                <td><%= course.LopHocPhan %></td> <!-- Tên học phần -->
+                                                <td><%= course.Lop %></td> <!-- Tên học phần -->
                                                 <td><%= course.Lop %></td> <!-- Tên lớp -->
-                                                <td><%= course.SoTinChi %></td> <!-- Số tín chỉ -->
+                                                <td><%= course.SoTC %></td> <!-- Số tín chỉ -->
                                                 <td><%= course.QuyChuan %></td> <!-- Số tiết -->
                                                 <!-- Tổng số tiết -->
                                                 <% if (courseIndex === 0) { %> 
@@ -173,28 +173,7 @@
                                         <% }); %>
                                     <% } %>
                                 </tbody>
-                            </table>
-                            <!-- <div id="modal" class="modal" style="display: none">
-                                <div class="modal-content">
-                                    <span class="close-button" onclick="closeModal()">×</span>
-                                    <h2 id="modal-title">Chi tiết giảng viên mời</h2>
-                                    <br>
-                                    <p><strong>Mã giảng viên:</strong> <span id="modal-ma-gv"></span></p>
-                                    <p><strong>Họ tên:</strong> <span id="modal-ho-ten"></span></p>
-                                    <p><strong>Ngày sinh:</strong> <span id="modal-ngay-sinh"></span></p>
-                                    <p><strong>CCCD:</strong> <span id="modal-cccd"></span></p>
-                                    <p><strong>Ngày cấp CCCD:</strong> <span id="modal-ngay-cap"></span></p>
-                                    <p><strong>Nơi cấp CCCD:</strong> <span id="modal-noi-cap"></span></p>
-                                    <p><strong>Địa chỉ theo CCCD:</strong> <span id="modal-dia-chi-cccd"></span></p>
-                                    <p><strong>Số tài khoản:</strong> <span id="modal-so-tk"></span></p>
-                                    <p><strong>Ngân hàng:</strong> <span id="modal-ngan-hang"></span></p>
-                                    <p><strong>Email:</strong> <span id="modal-email"></span></p>
-                                    <p><strong>Hệ số lương:</strong> <span id="modal-heso-luong"></span></p>
-                                    <p><strong>Nơi công tác:</strong> <span id="modal-noi-cong-tac"></span></p>
-                                    <p><strong>Chức vụ:</strong> <span id="modal-chuc-vu"></span></p>
-                                    <p><strong>Mã số thuế:</strong> <span id="modal-ma-so-thue"></span></p>
-                                </div>
-                            </div> -->
+                            </table>          
                             <!-- <div class="pagination">
                               <span>10 / trang</span>
                               <button class="page-button">1</button>
@@ -353,7 +332,7 @@ if (message) {
           
           const role = localStorage.getItem("userRole"); // Lấy role từ localStorage
           
-          if (role.includes("DAOTAO"||role.includes("TAICHINH"))){
+          if (role.includes("DAOTAO")||role.includes("TAICHINH")){
             window.location.href = "/import";
           } else {
             window.location.href = "/importGvmList";
@@ -368,7 +347,7 @@ if (message) {
           
           const role = localStorage.getItem("userRole"); // Lấy role từ localStorage
                   
-          if (role.includes("DAOTAO"||role.includes("TAICHINH"))){
+          if (role.includes("DAOTAO")||role.includes("TAICHINH")){
             window.location.href = "/info2";
           } else {
             window.location.href = "/info";
@@ -384,7 +363,7 @@ if (message) {
           
           const role = localStorage.getItem("userRole"); // Lấy role từ localStorage
           
-          if (role.includes("DAOTAO"||role.includes("TAICHINH"))){
+          if (role.includes("DAOTAO")||role.includes("TAICHINH")){
             window.location.href = "/maindt";
           } else {
             window.location.href = "/mainkhoa";

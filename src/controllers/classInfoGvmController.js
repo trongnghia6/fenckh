@@ -5,66 +5,26 @@ const createConnection = require("../config/databaseAsync");
 
 const router = express.Router();
 
-// const getClassInfoGvm = async (req, res) => {
-//   const query = `select * from quychuan`;
-
-//   const connection = await createConnection();
-
-//   const [results, fields] = await connection.query(query);
-//   //gvmLists = results;
-
-//   res.render("classInfoGvm.ejs", { GiangDay: results });
-// };
-
-// const getClassInfoGvm = async (req, res) => {
-//   const query = `SELECT * FROM quychuan ORDER BY GiaoVien`; // Sắp xếp theo tên giảng viên
-//   const connection = await createConnection();
-//   const [results, fields] = await connection.query(query);
-
-//   // Nhóm các môn học theo giảng viên
-//   const groupedByTeacher = results.reduce((acc, current) => {
-//     const teacher = current.GiaoVien;
-//     if (!acc[teacher]) {
-//       acc[teacher] = [];
-//     }
-//     acc[teacher].push(current);
-//     return acc;
-//   }, {});
-
-//   // Phần show chi tiết giảng viên mời
-//   const query2 = `select * from gvmoi`;
-
-//   //const connection = await createConnection();
-
-//   const [results2, fields2] = await connection.query(query2);
-
-//   console.log(results2);
-//   // res.render("classInfoGvm.ejs", { GiangDay: groupedByTeacher });
-//   res.render("classInfoGvm.ejs", {
-//     GiangDay: groupedByTeacher,
-//     gvmLists: results2,
-//   });
-// };
-
 const getClassInfoGvm = async (req, res) => {
   let query;
   const role = req.session.role;
   const parts = role.split("_");
   if (role.includes("DAOTAO")) {
-    query = `SELECT * from quychuan JOIN gvmoi
-    on quychuan.GiaoVien = gvmoi.HoTen`;
+    query = `SELECT * from giangday JOIN gvmoi
+    on giangday.id_Gvm = gvmoi.id_Gvm`;
     //ORDER BY GiaoVien`; // Sắp xếp theo tên giảng viên
   } else {
-    query = `SELECT * from quychuan JOIN gvmoi
-    on quychuan.GiaoVien = gvmoi.HoTen
-    where MaPhongBan = '${parts[0]}'`;
+    query = `SELECT * 
+    FROM giangday 
+    JOIN gvmoi ON giangday.id_Gvm = gvmoi.id_Gvm 
+    WHERE MaPhongBan LIKE '${parts[0]}%'`;
   }
 
   const connection = await createConnection();
   const [results, fields] = await connection.query(query);
   // Nhóm các môn học theo giảng viên
   const groupedByTeacher = results.reduce((acc, current) => {
-    const teacher = current.GiaoVien;
+    const teacher = current.GiangVien;
     if (!acc[teacher]) {
       acc[teacher] = [];
     }

@@ -421,6 +421,25 @@
       });
   }
 
+  // Phương
+  async function submitData2() {
+    fetch('/submitData2', {
+      method: 'POST', // Dùng POST nếu bạn muốn gửi tín hiệu theo yêu cầu HTTP POST
+      //headers: {
+      //  'Content-Type': 'application/json'
+      //}
+    })
+    .then(response => response.json())
+    .then(data => {
+      console.log('Signal sent successfully:', data);
+      // Xử lý phản hồi từ server, ví dụ: hiển thị thông báo thành công
+    })
+    .catch((error) => {
+      console.error('Error sending signal:', error);
+      // Xử lý lỗi, ví dụ: hiển thị thông báo lỗi
+    });
+  }
+  // Phương
 
   function filterByName() {
     const input = document.getElementById('filterName');
@@ -555,7 +574,7 @@
           
           const role = localStorage.getItem("userRole"); // Lấy role từ localStorage
           
-          if (role.includes("DAOTAO"||role.includes("TAICHINH"))){
+          if (role.includes("DAOTAO")||role.includes("TAICHINH")){
             window.location.href = "/import";
           } else {
             window.location.href = "/importGvmList";
@@ -570,7 +589,7 @@
           
           const role = localStorage.getItem("userRole"); // Lấy role từ localStorage
                   
-          if (role.includes("DAOTAO"||role.includes("TAICHINH"))){
+          if (role.includes("DAOTAO")||role.includes("TAICHINH")){
             window.location.href = "/info2";
           } else {
             window.location.href = "/info";
@@ -586,7 +605,7 @@
           
           const role = localStorage.getItem("userRole"); // Lấy role từ localStorage
           
-          if (role.includes("DAOTAO"||role.includes("TAICHINH"))){
+          if (role.includes("DAOTAO")||role.includes("TAICHINH")){
             window.location.href = "/maindt";
           } else {
             window.location.href = "/mainkhoa";
