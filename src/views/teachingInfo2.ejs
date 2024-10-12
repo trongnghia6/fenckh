@@ -138,8 +138,8 @@
       </div> -->
 
       <button id="infoGvm" class="button text-nowrap mb-3">Xem dữ liệu giảng viên</button>
-      <button onclick="submitData()" class="button mx-3">Gửi duyệt</button>
-      <button onclick="submitData2()" class="button mx-3">Cập nhật</button>
+      <button onclick="submitData()" class="button mx-3">Gửi</button>
+      <button onclick="submitData2()" class="button mx-3" id="update-qc" display="none">Cập nhật</button>
       <input type="text" id="filterName" placeholder="Tìm theo giảng viên TKB" oninput="filterByName()"
         class="form-control mb-3 search" style="width: 300px;" />
       <input type="text" id="filterClass" placeholder="Tìm theo tên học phần" oninput="filterByClass()"
@@ -542,22 +542,25 @@
     }
   }
 
-  // ở đây
   window.onload = async function () {
     const role = await fetchRole();
 
-    if (role == 'DAOTAO_ALL') {
-      // Ẩn cột 'khoaColumn'
+    if (role === 'DAOTAO_ALL') {
+      // Ẩn cột 'taiChinhColumn'
       document.getElementById('taiChinhColumn').style.display = 'none';
-    } else if (role == 'TAICHINH_ALL') {
+    } else if (role === 'TAICHINH_ALL') {
       // Ẩn cột 'khoaColumn'
       document.getElementById('khoaColumn').style.display = 'none';
+      // Hiển thị nút 'Cập nhật'
+      document.getElementById('update-qc').style.display = 'inline-block'; // Sử dụng 'inline-block' để hiển thị nút
     } else if (role.includes("XEM")) {
+      // Ẩn tất cả các cột
       document.getElementById('khoaColumn').style.display = 'none';
       document.getElementById('daoTaoColumn').style.display = 'none';
       document.getElementById('taiChinhColumn').style.display = 'none';
     }
   };
+
 
   async function ThongTinGD() {
     const role = await fetchRole();

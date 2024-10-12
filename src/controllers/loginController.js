@@ -46,11 +46,12 @@ const login = async (req, res) => {
           .query("SELECT Quyen FROM role WHERE TenDangNhap = ?", [username]);
 
         let url;
-        console.log(roleCNTTThiHanh);
+        // console.log();
         // console.log("đến đây r");
 
 
         const role = roles[0].Quyen;
+        console.log('role đăng nhập : ' + role);
         if (role.includes(roleDaoTaoALL)) {
           req.session.role = roleDaoTaoALL; // Lưu vai trò vào session
           url = "/maindt";

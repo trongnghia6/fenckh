@@ -29,5 +29,7 @@ router.get("/index/name-gvm-khoa", (req, res) =>
 
 router.post("/check-teaching", (req, res) => obj3.updateChecked(req, res))
 
+router.get("/update-all-info", (req, res) => obj3.updateAllTeachingInfo(req, res))
+
 
 module.exports = router;
