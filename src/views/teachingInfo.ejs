@@ -269,8 +269,8 @@
       console.log('Tổng hợp bảng dữ liệu:', globalData[0]);
       // console.table(globalData);
 
-      const role = await fetchRole();
-
+      //const role = await fetchRole();
+      role = localStorage.getItem("userRole")
       renderTable(globalData, role); // Gọi hàm renderTable sau khi đã có đủ dữ liệu
       calculateTotals();
     } catch (error) {
@@ -674,6 +674,19 @@
 
       <!-- Phần phân quyền -->
       <script>
+        window.onload = async function () {
+          const role = localStorage.getItem("userRole")
+      
+          // Nếu role là 1 trong 3 giá trị sau thì hiển thị cột, ngược lại thì ẩn
+          if (role === 'CNTT_ALL' || role === 'ATTT_ALL' || role === 'DTVT_ALL') {
+            // Hiển thị cột 'khoaColumn'
+            document.getElementById('khoaColumn').style.display = 'table-cell';
+          } else {
+            // Ẩn cột 'khoaColumn'
+            document.getElementById('khoaColumn').style.display = 'none';
+          }
+        };
+
         document.addEventListener('DOMContentLoaded', () => {
           // Thêm sự kiện click cho phần tử có id "import"
           const importLink = document.getElementById("Import");

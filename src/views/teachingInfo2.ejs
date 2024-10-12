@@ -254,7 +254,8 @@
       globalData = await teachingResponse.json();
       console.log('Tổng hợp bảng dữ liệu:', globalData);
 
-      const role = await fetchRole();
+      //const role = await fetchRole();
+      const role = localStorage.getItem("userRole");
       renderTable(globalData, role); // Gọi hàm renderTable sau khi đã có đủ dữ liệu
 
 
@@ -528,75 +529,27 @@
   init();
 </script>
 
-  <!-- Phần phân quyền -->
-  <!-- <script>
-    async function fetchRole() {
-        try {
-            const response = await fetch('/api/getRole');
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            const role = await response.json();
-            return role;
-        } catch (error) {
-            console.error('Error fetching data:', error);
-        }
-    }
-
-  window.onload = async function () {
-    const role = await fetchRole();
-
-    if (role === 'DAOTAO_ALL') {
-      // Ẩn cột 'taiChinhColumn'
-      document.getElementById('taiChinhColumn').style.display = 'none';
-    } else if (role === 'TAICHINH_ALL') {
-      // Ẩn cột 'khoaColumn'
-      document.getElementById('khoaColumn').style.display = 'none';
-      // Hiển thị nút 'Cập nhật'
-      document.getElementById('update-qc').style.display = 'inline-block'; // Sử dụng 'inline-block' để hiển thị nút
-    } else if (role.includes("XEM")) {
-      // Ẩn tất cả các cột
-      document.getElementById('khoaColumn').style.display = 'none';
-      document.getElementById('daoTaoColumn').style.display = 'none';
-      document.getElementById('taiChinhColumn').style.display = 'none';
-    }
-  };
-
-
-  async function ThongTinGD() {
-    const role = await fetchRole();
-
-    if (role.includes("CNTT")) {
-      window.location.href = "/info"; // Chuyển hướng đến trang mong muốn
-    } else if (role.includes("DAOTAO")) {
-      window.location.href = "/info2"; // Chuyển hướng đến trang mong muốn
-    }  // thêm quyền vào đây
-  }
-
-  async function Import() {
-    const role = await fetchRole();
-
-    if (role.includes("CNTT")) {
-      window.location.href = "/importGvmList"; // Chuyển hướng đến trang mong muốn
-    } else if (role.includes("DAOTAO")) {
-      window.location.href = "/import"; // Chuyển hướng đến trang mong muốn
-    }  // thêm quyền vào đây
-  }
-
-  async function Home() {
-    const role = await fetchRole();
-
-    if (role.includes("CNTT")) {
-      window.location.href = "/mainkhoa"; // Chuyển hướng đến trang mong muốn
-    } else if (role.includes("DAOTAO")) {
-      window.location.href = "/maindt"; // Chuyển hướng đến trang mong muốn
-    }  // thêm quyền vào đây
-  }
-
-   </script> -->
-
          <!-- Phần phân quyền -->
   <script>
+    window.onload = async function () {
+      const role = localStorage.getItem("userRole")
+  
+      if (role === 'DAOTAO_ALL') {
+        // Ẩn cột 'taiChinhColumn'
+        document.getElementById('taiChinhColumn').style.display = 'none';
+      } else if (role === 'TAICHINH_ALL') {
+        // Ẩn cột 'khoaColumn'
+        document.getElementById('khoaColumn').style.display = 'none';
+        // Hiển thị nút 'Cập nhật'
+        document.getElementById('update-qc').style.display = 'inline-block'; // Sử dụng 'inline-block' để hiển thị nút
+      } else if (role.includes("XEM")) {
+        // Ẩn tất cả các cột
+        document.getElementById('khoaColumn').style.display = 'none';
+        document.getElementById('daoTaoColumn').style.display = 'none';
+        document.getElementById('taiChinhColumn').style.display = 'none';
+      }
+    };
+
     document.addEventListener('DOMContentLoaded', () => {
       // Thêm sự kiện click cho phần tử có id "import"
       const importLink = document.getElementById("Import");
