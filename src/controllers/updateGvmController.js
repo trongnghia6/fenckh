@@ -25,7 +25,7 @@ const upload = multer().single("truocCCCD");
 const postUpdateGvm = async (req, res) => {
   // Lấy các thông tin từ form
   let IdGvm = req.body.IdGvm;
-  let MaGvm = req.body.MaGvm.toUpperCase();
+  //let MaGvm = req.body.MaGvm.toUpperCase();
   let HoTen = req.body.HoTen;
   let GioiTinh = req.body.GioiTinh;
   let NgaySinh = req.body.NgaySinh;
@@ -88,7 +88,6 @@ const postUpdateGvm = async (req, res) => {
 
     // Truy vấn để update dữ liệu vào cơ sở dữ liệu
     const query = `UPDATE gvmoi SET 
-    MaGvm = ?,
     HoTen = ?,
     GioiTinh = ?,
     NgaySinh = ?,
@@ -115,7 +114,6 @@ const postUpdateGvm = async (req, res) => {
     connection.query(
       query,
       [
-        MaGvm,
         HoTen,
         GioiTinh,
         NgaySinh,

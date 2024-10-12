@@ -123,7 +123,7 @@ const renderInfo = (req, res) => {
   const role = req.session.role;
   const { Dot, Ki, Nam } = req.body; // Lấy giá trị khoa, dot, ki từ body của yêu cầu
   const tableName = process.env.DB_TABLE_QC;
-  let query = '';
+  let query = "";
 
   const roleDaoTaoALL = process.env.DAOTAO_ALL;
   const roleTaiChinhALL = process.env.TAICHINH_ALL;
@@ -137,38 +137,51 @@ const renderInfo = (req, res) => {
   const roleATTTThiHanh = process.env.ATTT_THIHANH;
   const roleDTVTThiHanh = process.env.DTVT_THIHANH;
 
-
   const roleDaoTaoXem = process.env.DAOTAO_XEM;
   const roleTaiChinhXem = process.env.TAICHINH_XEM;
   const roleCNTTXem = process.env.CNTT_XEM;
   const roleATTTXem = process.env.ATTT_XEM;
   const roleDTVTXem = process.env.DTVT_XEM;
 
-
-
   // Xây dựng câu truy vấn SQL sử dụng các tham số
-  if (role == roleDaoTaoALL || role == roleDaoTaoXem || role == roleTaiChinhALL || role == roleTaiChinhXem) {
+  if (
+    role == roleDaoTaoALL ||
+    role == roleDaoTaoXem ||
+    role == roleTaiChinhALL ||
+    role == roleTaiChinhXem
+  ) {
     query = `
     SELECT * FROM ${tableName}
     WHERE Dot = ? AND KiHoc = ? AND NamHoc = ?;
   `;
-  } else if (role == roleCNTTAll || role == roleCNTTThiHanh || role == roleCNTTXem) {
+  } else if (
+    role == roleCNTTAll ||
+    role == roleCNTTThiHanh ||
+    role == roleCNTTXem
+  ) {
     query = `
     SELECT * FROM ${tableName}
     WHERE Dot = ? AND KiHoc = ? AND NamHoc = ? AND Khoa = 'CNTT';
   `;
-  } else if (role == roleATTTAll || role == roleATTTThiHanh || role == roleATTTXem) {
+  } else if (
+    role == roleATTTAll ||
+    role == roleATTTThiHanh ||
+    role == roleATTTXem
+  ) {
     query = `
     SELECT * FROM ${tableName}
     WHERE Dot = ? AND KiHoc = ? AND NamHoc = ? AND Khoa = 'ATTT';
   `;
-  } else if (role == roleDTVTAll || role == roleDTVTThiHanh || role == roleDTVTXem) {
+  } else if (
+    role == roleDTVTAll ||
+    role == roleDTVTThiHanh ||
+    role == roleDTVTXem
+  ) {
     query = `
     SELECT * FROM ${tableName}
     WHERE Dot = ? AND KiHoc = ? AND NamHoc = ? AND Khoa = 'DTVT';
   `;
   }
-
 
   // Thực thi câu truy vấn với các tham số an toàn
   connection.query(query, [Dot, Ki, Nam], (error, results) => {

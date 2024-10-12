@@ -9,9 +9,11 @@ const readXlsxFile = require("read-excel-file");
 const {
   getImportGvmList,
   convertExcelToJSON,
+  saveToDB,
 } = require("../controllers/importGvmListController");
 
 router.get("/importGvmList", getImportGvmList);
+router.post("/saveToDB", saveToDB);
 
 // Route để tải lên file
 router.post("/postImportGvmList", upload.single("file"), convertExcelToJSON);
