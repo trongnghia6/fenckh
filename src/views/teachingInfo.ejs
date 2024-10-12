@@ -53,27 +53,27 @@
     </div>
   </nav>
 
-    <!-- Phần dưới của navbar chứa các mục nằm ngang -->
-    <nav class="navbar navbar-expand-lg navbar-bottom">
-      <div class="container-fluid">
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-          aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
-          <ul class="navbar-nav">
-            <li class="nav-item">
-              <a class="nav-link" id="Home" href="">HOME</a>
-            </li>
+  <!-- Phần dưới của navbar chứa các mục nằm ngang -->
+  <nav class="navbar navbar-expand-lg navbar-bottom">
+    <div class="container-fluid">
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link" id="Home" href="">HOME</a>
+          </li>
 
-            <li class="nav-item">
-              <a class="nav-link active" id="ThongTinGD" href="">Thông tin GD</a>
-            </li>
-            <!-- <li> -->
-            <li class="nav-item">
-              <!-- <a class="nav-link" href="/import">Import danh sách giảng viên mời</a> -->
-              <a class="nav-link" id="Import" href="">Import</a>
-            </li>
+          <li class="nav-item">
+            <a class="nav-link active" id="ThongTinGD" href="">Thông tin GD</a>
+          </li>
+          <!-- <li> -->
+          <li class="nav-item">
+            <!-- <a class="nav-link" href="/import">Import danh sách giảng viên mời</a> -->
+            <a class="nav-link" id="Import" href="">Import</a>
+          </li>
 
           <li class="nav-item">
             <a class="nav-link" href="/gvmList">Danh sách giảng viên mời</a>
@@ -129,10 +129,10 @@
             <option value="2026">2026</option>
             <option value="2027">2027</option>
           </select>
-          <button id="infoGvm" class="button text-nowrap">Xem dữ liệu giảng viên</button>
-          <button onclick="submitData()" class="button mx-3">Gửi duyệt</button>
+          <button id="infoGvm" class="button text-nowrap">Xem dữ liệu</button>
+          <button onclick="submitData()" class="button mx-3">Cập nhật</button>
         </div>
-        
+
       </div>
 
 
@@ -608,20 +608,20 @@
   init();
 </script>
 
-      <!-- Phần phân quyền -->
-      <script>
-        window.onload = async function () {
-          const role = localStorage.getItem("userRole")
-      
-          // Nếu role là 1 trong 3 giá trị sau thì hiển thị cột, ngược lại thì ẩn
-          if (role === 'CNTT_ALL' || role === 'ATTT_ALL' || role === 'DTVT_ALL') {
-            // Hiển thị cột 'khoaColumn'
-            document.getElementById('khoaColumn').style.display = 'table-cell';
-          } else {
-            // Ẩn cột 'khoaColumn'
-            document.getElementById('khoaColumn').style.display = 'none';
-          }
-        };
+<!-- Phần phân quyền -->
+<script>
+  window.onload = async function () {
+    const role = localStorage.getItem("userRole")
+
+    // Nếu role là 1 trong 3 giá trị sau thì hiển thị cột, ngược lại thì ẩn
+    if (role === 'CNTT_ALL' || role === 'ATTT_ALL' || role === 'DTVT_ALL') {
+      // Hiển thị cột 'khoaColumn'
+      document.getElementById('khoaColumn').style.display = 'table-cell';
+    } else {
+      // Ẩn cột 'khoaColumn'
+      document.getElementById('khoaColumn').style.display = 'none';
+    }
+  };
 
         document.addEventListener('DOMContentLoaded', () => {
           // Thêm sự kiện click cho phần tử có id "import"
