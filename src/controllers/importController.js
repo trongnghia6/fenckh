@@ -596,107 +596,210 @@ const updateChecked = async (req, res) => {
 };
 
 const updateAllTeachingInfo = async (req, res) => {
-  const query2 = `
-    SELECT 
-      qc.*, 
-      gvmoi.*, 
-      SUBSTRING_INDEX(qc.GiaoVienGiangDay, ' - ', 1) AS TenGiangVien
-    FROM quychuan qc
-    JOIN gvmoi ON SUBSTRING_INDEX(qc.GiaoVienGiangDay, ' - ', 1) = gvmoi.HoTen
-    GROUP BY gvmoi.HoTen;
-  `;
+  // const query2 = `
+  //   SELECT 
+  //     qc.*, 
+  //     gvmoi.*, 
+  //     SUBSTRING_INDEX(qc.GiaoVienGiangDay, ' - ', 1) AS TenGiangVien
+  //   FROM quychuan qc
+  //   JOIN gvmoi ON SUBSTRING_INDEX(qc.GiaoVienGiangDay, ' - ', 1) = gvmoi.HoTen
+  //   GROUP BY gvmoi.HoTen;
+  // `;
 
-  const getDanhXung = (gioiTinh) => {
-    return gioiTinh === 'Nam' ? 'Ông' : gioiTinh === 'Nữ' ? 'Bà' : '';
-  };
+  // const getDanhXung = (gioiTinh) => {
+  //   return gioiTinh === 'Nam' ? 'Ông' : gioiTinh === 'Nữ' ? 'Bà' : '';
+  // };
 
-  try {
-    const [dataJoin] = await connection.promise().query(query2);
+  // try {
+  //   const [dataJoin] = await connection.promise().query(query2);
 
-    // Chuẩn bị dữ liệu để chèn từng loạt
-    const insertValues = dataJoin.map(item => {
-      const {
-        id_Gvm,
-        DienThoai,
-        Email,
-        MaSoThue,
-        HoTen,
-        NgaySinh,
-        HSL,
-        CCCD,
-        NoiCapCCCD,
-        DiaChi,
-        SoTK,
-        NganHang,
-        NgayBatDau,
-        NgayKetThuc,
-        KiHoc,
-        SoTiet,
-        SoTien,
-        TruThue10,
-        Dot,
-        NamHoc,
-        MaPhongBan,
-        MaBoMon,
-        KhoaDuyet,
-        DaoTaoDuyet,
-        TaiChinhDuyet,
-        GioiTinh
-      } = item;
+  //   // Chuẩn bị dữ liệu để chèn từng loạt
+  //   const insertValues = dataJoin.map(item => {
+  //     const {
+  //       id_Gvm,
+  //       DienThoai,
+  //       Email,
+  //       MaSoThue,
+  //       HoTen,
+  //       NgaySinh,
+  //       HSL,
+  //       CCCD,
+  //       NoiCapCCCD,
+  //       DiaChi,
+  //       SoTK,
+  //       NganHang,
+  //       NgayBatDau,
+  //       NgayKetThuc,
+  //       KiHoc,
+  //       SoTiet,
+  //       SoTien,
+  //       TruThue10,
+  //       Dot,
+  //       NamHoc,
+  //       MaPhongBan,
+  //       MaBoMon,
+  //       KhoaDuyet,
+  //       DaoTaoDuyet,
+  //       TaiChinhDuyet,
+  //       GioiTinh
+  //     } = item;
 
-      const DanhXung = getDanhXung(GioiTinh);
+  //     const DanhXung = getDanhXung(GioiTinh);
 
-      return [
-        id_Gvm,
-        DienThoai,
-        Email,
-        MaSoThue,
-        DanhXung,
-        HoTen,
-        NgaySinh,
-        HSL,
-        CCCD,
-        NoiCapCCCD,
-        DiaChi,
-        SoTK,
-        NganHang,
-        NgayBatDau,
-        NgayKetThuc,
-        KiHoc,
-        SoTiet,
-        SoTien,
-        TruThue10,
-        Dot,
-        NamHoc,
-        MaPhongBan,
-        MaBoMon,
-        KhoaDuyet,
-        DaoTaoDuyet,
-        TaiChinhDuyet
-      ];
-    });
+  //     return [
+  //       id_Gvm,
+  //       DienThoai,
+  //       Email,
+  //       MaSoThue,
+  //       DanhXung,
+  //       HoTen,
+  //       NgaySinh,
+  //       HSL,
+  //       CCCD,
+  //       NoiCapCCCD,
+  //       DiaChi,
+  //       SoTK,
+  //       NganHang,
+  //       NgayBatDau,
+  //       NgayKetThuc,
+  //       KiHoc,
+  //       SoTiet,
+  //       SoTien,
+  //       TruThue10,
+  //       Dot,
+  //       NamHoc,
+  //       MaPhongBan,
+  //       MaBoMon,
+  //       KhoaDuyet,
+  //       DaoTaoDuyet,
+  //       TaiChinhDuyet
+  //     ];
+  //   });
 
-    // Định nghĩa câu lệnh chèn
-    const queryInsert = `
-      INSERT INTO hopdonggvmoi (
-        id_Gvm, DienThoai, Email, MaSoThue, DanhXung, HoTen, NgaySinh, HSL, CCCD, NoiCapCCCD,
-        DiaChi, SoTK, NganHang, NgayBatDau, NgayKetThuc, KiHoc, SoTiet, SoTien, TruThue10,
-        Dot, NamHoc, MaPhongBan, MaBoMon, KhoaDuyet, DaoTaoDuyet, TaiChinhDuyet
-      ) VALUES ?;
+  //   // Định nghĩa câu lệnh chèn
+  //   const queryInsert = `
+  //     INSERT INTO hopdonggvmoi (
+  //       id_Gvm, DienThoai, Email, MaSoThue, DanhXung, HoTen, NgaySinh, HSL, CCCD, NoiCapCCCD,
+  //       DiaChi, SoTK, NganHang, NgayBatDau, NgayKetThuc, KiHoc, SoTiet, SoTien, TruThue10,
+  //       Dot, NamHoc, MaPhongBan, MaBoMon, KhoaDuyet, DaoTaoDuyet, TaiChinhDuyet
+  //     ) VALUES ?;
+  //   `;
+
+  //   // Thực hiện câu lệnh chèn
+  //   await connection.promise().query(queryInsert, [insertValues]);
+
+  //   res.status(200).json({ message: 'Dữ liệu đã được chèn thành công!' });
+  // } catch (err) {
+  //   console.error(err); // Ghi lại lỗi để gỡ lỗi
+  //   res.status(500).json({ error: 'Đã xảy ra lỗi trong quá trình cập nhật thông tin.' });
+  // }
+
+
+
+  const updateAllTeachingInfo = async (req, res) => {
+    const query2 = `
+      SELECT
+        qc.*, 
+        gvmoi.*, 
+        SUBSTRING_INDEX(qc.GiaoVienGiangDay, ' - ', 1) AS TenGiangVien
+      FROM quychuan qc
+      JOIN gvmoi ON SUBSTRING_INDEX(qc.GiaoVienGiangDay, ' - ', 1) = gvmoi.HoTen
+      GROUP BY gvmoi.HoTen;
     `;
 
-    // Thực hiện câu lệnh chèn
-    await connection.promise().query(queryInsert, [insertValues]);
+    const getDanhXung = (gioiTinh) => {
+      return gioiTinh === "Nam" ? "Ông" : gioiTinh === "Nữ" ? "Bà" : "";
+    };
 
-    res.status(200).json({ message: 'Dữ liệu đã được chèn thành công!' });
-  } catch (err) {
-    console.error(err); // Ghi lại lỗi để gỡ lỗi
-    res.status(500).json({ error: 'Đã xảy ra lỗi trong quá trình cập nhật thông tin.' });
-  }
+    try {
+      const [dataJoin] = await connection.promise().query(query2);
+
+      // Chuẩn bị dữ liệu để chèn từng loạt
+      const insertValues = dataJoin.map((item) => {
+        const {
+          id_Gvm,
+          DienThoai,
+          Email,
+          MaSoThue,
+          HoTen,
+          NgaySinh,
+          HSL,
+          CCCD,
+          NoiCapCCCD,
+          DiaChi,
+          STK,
+          NganHang,
+          NgayBatDau,
+          NgayKetThuc,
+          KiHoc,
+          QuyChuan,
+          //SoTien,
+          //TruThue,
+          Dot,
+          NamHoc,
+          MaPhongBan,
+          //MaBoMon,
+          KhoaDuyet,
+          DaoTaoDuyet,
+          TaiChinhDuyet,
+          GioiTinh,
+        } = item;
+
+        const DanhXung = getDanhXung(GioiTinh);
+        let SoTien = QuyChuan * 1000000;
+        let TruThue = 0;
+        MaBoMon = 0;
+        return [
+          id_Gvm,
+          DienThoai,
+          Email,
+          MaSoThue,
+          DanhXung,
+          HoTen,
+          NgaySinh,
+          HSL,
+          CCCD,
+          NoiCapCCCD,
+          DiaChi,
+          STK,
+          NganHang,
+          NgayBatDau,
+          NgayKetThuc,
+          KiHoc,
+          QuyChuan,
+          SoTien,
+          TruThue,
+          Dot,
+          NamHoc,
+          MaPhongBan,
+          MaBoMon,
+          KhoaDuyet,
+          DaoTaoDuyet,
+          TaiChinhDuyet,
+        ];
+      });
+
+      // Định nghĩa câu lệnh chèn
+      const queryInsert = `
+        INSERT INTO hopdonggvmoi (
+          id_Gvm, DienThoai, Email, MaSoThue, DanhXung, HoTen, NgaySinh, HSL, CCCD, NoiCapCCCD,
+          DiaChi, STK, NganHang, NgayBatDau, NgayKetThuc, KiHoc, SoTiet, SoTien, TruThue,
+          Dot, NamHoc, MaPhongBan, MaBoMon, KhoaDuyet, DaoTaoDuyet, TaiChinhDuyet
+        ) VALUES ?;
+      `;
+
+      // Thực hiện câu lệnh chèn
+      await connection.promise().query(queryInsert, [insertValues]);
+      console
+      res.status(200).json({ message: "Dữ liệu đã được chèn thành công!" });
+    } catch (err) {
+      console.error(err); // Ghi lại lỗi để gỡ lỗi
+      res
+        .status(500)
+        .json({ error: "Đã xảy ra lỗi trong quá trình cập nhật thông tin." });
+    }
+  };
 };
-
-
-
 
 
 module.exports = {

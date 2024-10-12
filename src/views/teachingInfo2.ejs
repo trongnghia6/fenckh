@@ -53,27 +53,27 @@
     </div>
   </nav>
 
-    <!-- Phần dưới của navbar chứa các mục nằm ngang -->
-    <nav class="navbar navbar-expand-lg navbar-bottom">
-      <div class="container-fluid">
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-          aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
-          <ul class="navbar-nav">
-            <li class="nav-item">
-              <a class="nav-link" id="Home" href="">HOME</a>
-            </li>
+  <!-- Phần dưới của navbar chứa các mục nằm ngang -->
+  <nav class="navbar navbar-expand-lg navbar-bottom">
+    <div class="container-fluid">
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link" id="Home" href="">HOME</a>
+          </li>
 
-            <li class="nav-item">
-              <a class="nav-link active" id="ThongTinGD" href="">Thông tin GD</a>
-            </li>
-            <!-- <li> -->
-            <li class="nav-item">
-              <!-- <a class="nav-link" href="/import">Import danh sách giảng viên mời</a> -->
-              <a class="nav-link" id="Import" href="">Import</a>
-            </li>
+          <li class="nav-item">
+            <a class="nav-link active" id="ThongTinGD" href="">Thông tin GD</a>
+          </li>
+          <!-- <li> -->
+          <li class="nav-item">
+            <!-- <a class="nav-link" href="/import">Import danh sách giảng viên mời</a> -->
+            <a class="nav-link" id="Import" href="">Import</a>
+          </li>
 
           <li class="nav-item">
             <a class="nav-link" href="/gvmList">Danh sách giảng viên mời</a>
@@ -128,10 +128,12 @@
             <option value="2026">2026</option>
             <option value="2027">2027</option>
           </select>
-          <button id="infoGvm" class="button text-nowrap">Xem dữ liệu giảng viên</button>
-          <button onclick="submitData()" class="button mx-3">Gửi</button>
-          <button onclick="submitData2()" class="button mx-3" id="update-qc" display="none">Cập nhật</button>
-        </div> 
+          <button id="infoGvm" class="button text-nowrap">Xem dữ liệu</button>
+          <button onclick="submitData()" class="button mx-3">Cập nhật</button>
+          <!-- <button onclick="submitData2()" class="button mx-3" id="update-qc" display="none">Cập nhật</button> -->
+          <button onclick="submitData2()" class="button mx-3" id="update-qc" style="display: none;">Hoàn thành dữ
+            liệu</button>
+        </div>
       </div>
 
 
@@ -252,6 +254,7 @@
 
       //const role = await fetchRole();
       const role = localStorage.getItem("userRole");
+      console.log(role);
       renderTable(globalData, role); // Gọi hàm renderTable sau khi đã có đủ dữ liệu
 
 
@@ -525,76 +528,76 @@
   init();
 </script>
 
-         <!-- Phần phân quyền -->
-  <script>
-    window.onload = async function () {
-      const role = localStorage.getItem("userRole")
-  
-      if (role === 'DAOTAO_ALL') {
-        // Ẩn cột 'taiChinhColumn'
-        document.getElementById('taiChinhColumn').style.display = 'none';
-      } else if (role === 'TAICHINH_ALL') {
-        // Ẩn cột 'khoaColumn'
-        document.getElementById('khoaColumn').style.display = 'none';
-        // Hiển thị nút 'Cập nhật'
-        document.getElementById('update-qc').style.display = 'inline-block'; // Sử dụng 'inline-block' để hiển thị nút
-      } else if (role.includes("XEM")) {
-        // Ẩn tất cả các cột
-        document.getElementById('khoaColumn').style.display = 'none';
-        document.getElementById('daoTaoColumn').style.display = 'none';
-        document.getElementById('taiChinhColumn').style.display = 'none';
+<!-- Phần phân quyền -->
+<script>
+  window.onload = async function () {
+    const role = localStorage.getItem("userRole")
+
+    if (role === 'DAOTAO_ALL') {
+      // Ẩn cột 'taiChinhColumn'
+      document.getElementById('taiChinhColumn').style.display = 'none';
+    } else if (role === 'TAICHINH_ALL') {
+      // Ẩn cột 'khoaColumn'
+      document.getElementById('khoaColumn').style.display = 'none';
+      // Hiển thị nút 'Cập nhật'
+      document.getElementById('update-qc').style.display = 'inline-block'; // Sử dụng 'inline-block' để hiển thị nút
+    } else if (role.includes("XEM")) {
+      // Ẩn tất cả các cột
+      document.getElementById('khoaColumn').style.display = 'none';
+      document.getElementById('daoTaoColumn').style.display = 'none';
+      document.getElementById('taiChinhColumn').style.display = 'none';
+    }
+  };
+
+  document.addEventListener('DOMContentLoaded', () => {
+    // Thêm sự kiện click cho phần tử có id "import"
+    const importLink = document.getElementById("Import");
+
+    importLink.addEventListener("click", function (event) {
+      event.preventDefault(); // Ngăn chặn hành vi mặc định của liên kết
+
+      const role = localStorage.getItem("userRole"); // Lấy role từ localStorage
+
+      if (role.includes("DAOTAO" || role.includes("TAICHINH"))) {
+        window.location.href = "/import";
+      } else {
+        window.location.href = "/importGvmList";
       }
-    };
+    });
 
-    document.addEventListener('DOMContentLoaded', () => {
-      // Thêm sự kiện click cho phần tử có id "import"
-      const importLink = document.getElementById("Import");
-      
-      importLink.addEventListener("click", function(event) {
-          event.preventDefault(); // Ngăn chặn hành vi mặc định của liên kết
-          
-          const role = localStorage.getItem("userRole"); // Lấy role từ localStorage
-          
-          if (role.includes("DAOTAO"||role.includes("TAICHINH"))){
-            window.location.href = "/import";
-          } else {
-            window.location.href = "/importGvmList";
-          }
-      });
+    // Thêm sự kiện click cho phần tử có id="ThongTinGD"
+    const ThongTinGD = document.getElementById("ThongTinGD");
 
-      // Thêm sự kiện click cho phần tử có id="ThongTinGD"
-      const ThongTinGD = document.getElementById("ThongTinGD");
-      
-      ThongTinGD.addEventListener("click", function(event) {
-          event.preventDefault(); // Ngăn chặn hành vi mặc định của liên kết
-          
-          const role = localStorage.getItem("userRole"); // Lấy role từ localStorage
-                  
-          if (role.includes("DAOTAO"||role.includes("TAICHINH"))){
-            window.location.href = "/info2";
-          } else {
-            window.location.href = "/info";
-          }
-      });
+    ThongTinGD.addEventListener("click", function (event) {
+      event.preventDefault(); // Ngăn chặn hành vi mặc định của liên kết
 
-      // Thêm sự kiện click cho phần tử có id="Home"
+      const role = localStorage.getItem("userRole"); // Lấy role từ localStorage
 
-      const Home = document.getElementById("Home");
-      
-      Home.addEventListener("click", function(event) {
-          event.preventDefault(); // Ngăn chặn hành vi mặc định của liên kết
-          
-          const role = localStorage.getItem("userRole"); // Lấy role từ localStorage
-          
-          if (role.includes("DAOTAO"||role.includes("TAICHINH"))){
-            window.location.href = "/maindt";
-          } else {
-            window.location.href = "/mainkhoa";
-          }
-      });
+      if (role.includes("DAOTAO" || role.includes("TAICHINH"))) {
+        window.location.href = "/info2";
+      } else {
+        window.location.href = "/info";
+      }
+    });
+
+    // Thêm sự kiện click cho phần tử có id="Home"
+
+    const Home = document.getElementById("Home");
+
+    Home.addEventListener("click", function (event) {
+      event.preventDefault(); // Ngăn chặn hành vi mặc định của liên kết
+
+      const role = localStorage.getItem("userRole"); // Lấy role từ localStorage
+
+      if (role.includes("DAOTAO" || role.includes("TAICHINH"))) {
+        window.location.href = "/maindt";
+      } else {
+        window.location.href = "/mainkhoa";
+      }
+    });
   });
 
-   </script>
+</script>
 </body>
 
 </html>
