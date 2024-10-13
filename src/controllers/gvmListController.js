@@ -17,7 +17,8 @@ const getGvmList = async (req, res) => {
   if (role.includes("DAOTAO")) {
     query = `select * from gvmoi`;
   } else {
-    query = `SELECT * FROM gvmoi WHERE MaPhongBan = '${parts[0]}'`;
+    // query = `SELECT * FROM gvmoi WHERE MaPhongBan = '${parts[0]}'`;
+    query = `SELECT * FROM gvmoi WHERE MaPhongBan LIKE '%${parts[0]}%'`;
   }
 
   const connection = await createConnection();

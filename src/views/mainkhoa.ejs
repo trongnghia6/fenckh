@@ -8,18 +8,7 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="../../bootstrap-5.3.3-dist/bootstrap-icons-1.11.3/font/bootstrap-icons.min.css">
   <link rel="stylesheet" href="/css/styles.css">
-  <style>
-    .navbar-bottom {
-      position: sticky;
-      top: 0;
-      z-index: 1030;
-      /* Đảm bảo navbar nằm trên các phần tử khác khi cuộn */
-    }
-
-    .container-fluid .row {
-      margin-top: 20px;
-    }
-  </style>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
 <body>
@@ -45,15 +34,16 @@
       <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
         <ul class="navbar-nav">
           <li class="nav-item">
-            <a class="nav-link active" onclick="Home()" href="">HOME</a>
+            <a class="nav-link active" id="Home" href="">HOME</a>
           </li>
+
           <li class="nav-item">
-            <a class="nav-link" onclick="ThongTinGD()" href="">Thông tin GD</a>
+            <a class="nav-link" id="ThongTinGD" href="">Thông tin GD</a>
           </li>
           <!-- <li> -->
           <li class="nav-item">
             <!-- <a class="nav-link" href="/import">Import danh sách giảng viên mời</a> -->
-            <a class="nav-link" onclick="Import()" href="">Import</a>
+            <a class="nav-link" id="Import" href="">Import</a>
           </li>
           <!-- <li class="nav-item">
               <a class="nav-link" href="#">Duyệt</a>
@@ -87,224 +77,99 @@
       </div>
     </div>
   </nav>
+  </div>
+
 
   <!-- Phần trên của navbar chứa logo và tiêu đề -->
+  <div class="container my-4">
+    <!-- Tiêu đề dashboard -->
+    <h1 class="text-center">Dashboard Giảng Dạy Khoa</h1>
 
-
-
-  <!-- 2. Tổng quan -->
-  <div class="container-fluid">
-    <div class="row">
-      <div class="col-lg-4 col-md-6">
-        <div class="card text-white bg-primary mb-3">
+    <!-- 1. Tổng quan về số lớp và số tiết giảng dạy -->
+    <div class="row my-4">
+      <div class="col-lg-6 col-md-12">
+        <div class="card text-white bg-info mb-3">
           <div class="card-body">
-            <h5 class="card-title">Tổng số học viên</h5>
-            <p class="card-text">200 Học viên</p>
+            <h5 class="card-title">Tổng số lớp giảng dạy</h5>
+            <p class="card-text">20 Lớp</p>
           </div>
         </div>
       </div>
-      <div class="col-lg-4 col-md-6">
-        <div class="card text-white bg-success mb-3">
+      <div class="col-lg-6 col-md-12">
+        <div class="card text-white bg-danger mb-3">
           <div class="card-body">
-            <h5 class="card-title">Môn học đang hoạt động</h5>
-            <p class="card-text">15 Môn học</p>
-          </div>
-        </div>
-      </div>
-      <div class="col-lg-4 col-md-6">
-        <div class="card text-white bg-warning mb-3">
-          <div class="card-body">
-            <h5 class="card-title">Giảng viên</h5>
-            <p class="card-text">30 Giảng viên</p>
+            <h5 class="card-title">Tổng số tiết giảng dạy</h5>
+            <p class="card-text">200 Tiết</p>
           </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- 3. Danh sách Môn học -->
-  <div class="container my-4">
-    <h3>Danh sách Môn học</h3>
-    <table class="table table-bordered">
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>Tên Môn học</th>
-          <th>Thời gian</th>
-          <th>Giảng viên phụ trách</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <th scope="row">1</th>
-          <td>Môn học Lập trình Web</td>
-          <td>3 tháng</td>
-          <td>Nguyễn Văn A</td>
-        </tr>
-        <tr>
-          <th scope="row">2</th>
-          <td>Môn học Lập trình Python</td>
-          <td>2 tháng</td>
-          <td>Trần Văn B</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+    <!-- 2. Danh sách các lớp giảng dạy -->
+    <div class="container my-4">
+      <h3>Danh sách các lớp giảng dạy</h3>
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Tên lớp</th>
+            <th>Môn học</th>
+            <th>Số tiết giảng dạy</th>
+            <th>Giáo viên phụ trách</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">1</th>
+            <td>Class A</td>
+            <td>Toán Cao Cấp</td>
+            <td>45</td>
+            <td>Nguyễn Văn A</td>
+          </tr>
+          <tr>
+            <th scope="row">2</th>
+            <td>Class B</td>
+            <td>Lý Thuyết Mạng</td>
+            <td>30</td>
+            <td>Trần Thị B</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
 
-  <!-- 4. Danh sách học viên -->
-  <div class="container my-4">
-    <h3>Danh sách học viên</h3>
-    <table class="table table-bordered">
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>Tên học viên</th>
-          <th>Môn học</th>
-          <th>Tiến độ</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <th scope="row">1</th>
-          <td>Nguyễn Văn C</td>
-          <td>Lập trình Web</td>
-          <td>70%</td>
-        </tr>
-        <tr>
-          <th scope="row">2</th>
-          <td>Trần Thị D</td>
-          <td>Lập trình Python</td>
-          <td>50%</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+    <!-- 3. Thống kê số tiết giảng dạy theo giáo viên -->
+    <div class="container my-4">
+      <h3>Thống kê số tiết giảng dạy theo giáo viên</h3>
+      <canvas id="teachingHoursChart"></canvas>
+    </div>
 
-  <!-- 5. Danh sách Giảng viên -->
-  <div class="container my-4">
-    <h3>Danh sách Giảng viên</h3>
-    <table class="table table-bordered">
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>Tên Giảng viên</th>
-          <th>Số Môn học phụ trách</th>
-          <th>Tổng số giờ dạy</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <th scope="row">1</th>
-          <td>Nguyễn Văn A</td>
-          <td>5</td>
-          <td>150 giờ</td>
-        </tr>
-        <tr>
-          <th scope="row">2</th>
-          <td>Trần Văn B</td>
-          <td>3</td>
-          <td>100 giờ</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-
-  <!-- 6. Lịch học -->
-  <div class="container my-4">
-    <h3>Lịch học</h3>
-    <table class="table table-bordered">
-      <thead>
-        <tr>
-          <th>Ngày</th>
-          <th>Môn học</th>
-          <th>Giờ học</th>
-          <th>Phòng</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>15/10/2024</td>
-          <td>Lập trình Web</td>
-          <td>8:00 - 10:00</td>
-          <td>Phòng 101</td>
-        </tr>
-        <tr>
-          <td>16/10/2024</td>
-          <td>Lập trình Python</td>
-          <td>10:00 - 12:00</td>
-          <td>Phòng 102</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-
-  <!-- 7. Báo cáo và thống kê -->
-  <div class="container my-4">
-    <h3>Báo cáo và thống kê</h3>
-    <div class="row">
-      <div class="col-lg-6">
-        <div class="card mb-3">
-          <div class="card-body">
-            <h5 class="card-title">Số lượng học viên theo từng tháng</h5>
-            <canvas id="studentChart"></canvas>
-          </div>
-        </div>
-      </div>
-      <div class="col-lg-6">
-        <div class="card mb-3">
-          <div class="card-body">
-            <h5 class="card-title">Tỷ lệ hoàn thành Môn học</h5>
-            <canvas id="completionChart"></canvas>
-          </div>
-        </div>
-      </div>
+    <!-- 4. Nút quay về đầu trang -->
+    <div class="container my-4">
+      <footer class="text-center">
+        <button onclick="topFunction()" id="backToTopBtn" class="btn btn-secondary">Quay về đầu trang</button>
+      </footer>
     </div>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script>
-    // 7. Báo cáo và thống kê - Vẽ biểu đồ (Sử dụng Chart.js)
-    var ctx1 = document.getElementById('studentChart').getContext('2d');
-    var studentChart = new Chart(ctx1, {
-      type: 'line',
+    // 3. Thống kê số tiết giảng dạy theo giáo viên (Sử dụng Chart.js)
+    var ctx = document.getElementById('teachingHoursChart').getContext('2d');
+    var teachingHoursChart = new Chart(ctx, {
+      type: 'bar',
       data: {
-        labels: ['Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4'],
+        labels: ['Nguyễn Văn A', 'Trần Thị B', 'Lê Văn C'],
         datasets: [{
-          label: 'Học viên',
-          data: [50, 100, 150, 200],
-          borderColor: 'rgba(75, 192, 192, 1)',
+          label: 'Số tiết giảng dạy',
+          data: [45, 30, 25],
+          backgroundColor: ['rgba(75, 192, 192, 0.2)', 'rgba(255, 99, 132, 0.2)', 'rgba(54, 162, 235, 0.2)'],
+          borderColor: ['rgba(75, 192, 192, 1)', 'rgba(255, 99, 132, 1)', 'rgba(54, 162, 235, 1)'],
           borderWidth: 1
         }]
       }
     });
-
-    var ctx2 = document.getElementById('completionChart').getContext('2d');
-    var completionChart = new Chart(ctx2, {
-      type: 'pie',
-      data: {
-        labels: ['Hoàn thành', 'Chưa hoàn thành'],
-        datasets: [{
-          data: [75, 25],
-          backgroundColor: ['rgba(75, 192, 192, 1)', 'rgba(255, 99, 132, 1)'],
-          borderWidth: 1
-        }]
-      }
-    });
-  </script>
-  <!-- 8. Chữ mờ và nút quay về đầu trang -->
-  <div class="container my-4">
-    <footer class="text-center">
-      <p class="text-muted">© 2024 Phòng Đào Tạo. Tất cả các quyền được bảo lưu.</p>
-      <button onclick="topFunction()" id="backToTopBtn" class="btn btn-secondary">Quay về đầu trang</button>
-    </footer>
-  </div>
-
-  <script>
     // Nút quay về đầu trang
-    var backToTopBtn = document.getElementById("backToTopBtn");
-
-    // Khi nhấn vào nút, cuộn về đầu trang
     function topFunction() {
       document.body.scrollTop = 0; // Cho Safari
       document.documentElement.scrollTop = 0; // Cho Chrome, Firefox, IE và Opera
@@ -312,7 +177,7 @@
   </script>
 
   <!-- Phần phân quyền -->
-  <script>
+  <!-- <script>
     async function fetchRole() {
       try {
         const response = await fetch('/api/getRole');
@@ -328,12 +193,13 @@
 
     async function ThongTinGD() {
       const role = await fetchRole();
+      console.log(role);
 
-      if (role.includes("CNTT")) {
-        window.location.href = "/info"; // Chuyển hướng đến trang mong muốn
-      } else if (role.includes("DAOTAO")) {
+      if (role.includes("DAOTAO") || role.includes("XEM") || role.includes("TAICHINH")) {
         window.location.href = "/info2"; // Chuyển hướng đến trang mong muốn
-      }  // thêm quyền vào đây
+      } else {
+        window.location.href = "/info"; // Chuyển hướng đến trang mong muốn
+      }
     }
 
     async function Import() {
@@ -353,8 +219,61 @@
         window.location.href = "/mainkhoa"; // Chuyển hướng đến trang mong muốn
       } else if (role.includes("DAOTAO")) {
         window.location.href = "/maindt"; // Chuyển hướng đến trang mong muốn
-      }  // thêm quyền vào đây
-    }
+    }  // thêm quyền vào đây
+  }
+
+   </script> -->
+
+  <!-- Phần phân quyền -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Thêm sự kiện click cho phần tử có id "import"
+      const importLink = document.getElementById("Import");
+      
+      importLink.addEventListener("click", function(event) {
+          event.preventDefault(); // Ngăn chặn hành vi mặc định của liên kết
+          
+          const role = localStorage.getItem("userRole"); // Lấy role từ localStorage
+          
+          if (role.includes("DAOTAO")||role.includes("TAICHINH")){
+            window.location.href = "/import";
+          } else {
+            window.location.href = "/importGvmList";
+          }
+      });
+
+      // Thêm sự kiện click cho phần tử có id="ThongTinGD"
+      const ThongTinGD = document.getElementById("ThongTinGD");
+      
+      ThongTinGD.addEventListener("click", function(event) {
+          event.preventDefault(); // Ngăn chặn hành vi mặc định của liên kết
+          
+          const role = localStorage.getItem("userRole"); // Lấy role từ localStorage
+                  
+          if (role.includes("DAOTAO")||role.includes("TAICHINH")){
+            window.location.href = "/info2";
+          } else {
+            window.location.href = "/info";
+          }
+      });
+
+      // Thêm sự kiện click cho phần tử có id="Home"
+
+      const Home = document.getElementById("Home");
+      
+      Home.addEventListener("click", function(event) {
+          event.preventDefault(); // Ngăn chặn hành vi mặc định của liên kết
+          
+          const role = localStorage.getItem("userRole"); // Lấy role từ localStorage
+          
+          if (role.includes("DAOTAO")||role.includes("TAICHINH")){
+            window.location.href = "/maindt";
+          } else {
+            window.location.href = "/mainkhoa";
+          }
+      });
+    });
 
   </script>
+
 </body>

@@ -133,6 +133,9 @@
     color: white;
     font-size: 1.5em;
   }
+    .form-select{
+    cursor: pointer;
+  }
   .selectop{
     border: 3px solid #315cfd;
     border-radius: 12px;
@@ -146,4 +149,14 @@
   .input-group-text{
     background-color: #5b77e0;
     border: none;
+  }
+  .border{
+    border: 5px solid #007bff !important;
+    border-radius: 12px;
+    height: fit-content;
+  }
+  table ,th ,td{
+    border: 2px solid black !important;
+    border-collapse: collapse;
+    font-size: 12px;
   }
