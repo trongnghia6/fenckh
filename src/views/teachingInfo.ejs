@@ -107,7 +107,7 @@
   </nav>
   </div>
 
-  <div class="container my-4 mg-top" style="max-width: max-content;">
+  <div class="container my-4" style="max-width: max-content;">
     <div class="" style="width:1300px;">
       <div class="d-flex justify-content-between">
         <div class="d-flex justify-content-center">
@@ -141,11 +141,11 @@
           class="form-control m-2 search" style="width: 300px;" />
         <input type="text" id="filterClass" placeholder="Tìm theo tên học phần" oninput="filterByClass()"
           class="form-control m-2 search" style="width: 300px;" />
-        <div class="input-group m-2" style="width: 350px;">
-          <label for="startDate"  class="input-group-text">Ngày bắt đầu</label>
+        <div class="input-group m-2" style="width: 350px; display: none;" id="batdau">
+          <label for="startDate" class="input-group-text">Ngày bắt đầu</label>
           <input required type="date" id="startDate" class="form-control" />
         </div>
-        <div class="input-group m-2" style="width: 350px;">
+        <div class="input-group m-2" style="width: 350px; display: none;" id="ketthuc">
           <label for="endDate" class="input-group-text">Ngày kết thúc</label>
           <input required type="date" id="endDate" class="form-control" />
         </div>
@@ -157,7 +157,7 @@
               <th style="width: 200px;">Học phần</th>
               <th style="width: 50px;">Số TC</th>
               <th style="width: 200px;">GV theo TKB</th>
-              <th style="width: 50px;">GV mời?</th>
+              <th style="width: 50px;">Mời giảng?</th>
               <th style="width: 100px;">GV giảng dạy</th>
               <th style="width: 50px;">Khoa</th>
               <th style="width: 100px;">Bộ môn</th>
@@ -499,7 +499,9 @@
       })
       .then(data => {
         // Xử lý dữ liệu phản hồi từ server (nếu cần)
-        alert('Cập nhật thành công!');
+        // alert('Cập nhật thành công!');
+        alert(data.message);
+
       })
       .catch(error => {
         console.error('Có lỗi xảy ra:', error);
@@ -613,6 +615,11 @@
   window.onload = async function () {
     const role = localStorage.getItem("userRole")
 
+    // chỉ cho nhập ngày bắt đầu ngày kết thúc với role thi hành
+    if (role.includes('THIHANH')) {
+      document.getElementById('batdau').style.display = '';
+      document.getElementById('ketthuc').style.display = '';
+    }
     // Nếu role là 1 trong 3 giá trị sau thì hiển thị cột, ngược lại thì ẩn
     if (role === 'CNTT_ALL' || role === 'ATTT_ALL' || role === 'DTVT_ALL') {
       // Hiển thị cột 'khoaColumn'
@@ -623,55 +630,55 @@
     }
   };
 
-        document.addEventListener('DOMContentLoaded', () => {
-          // Thêm sự kiện click cho phần tử có id "import"
-          const importLink = document.getElementById("Import");
-          
-          importLink.addEventListener("click", function(event) {
-              event.preventDefault(); // Ngăn chặn hành vi mặc định của liên kết
-              
-              const role = localStorage.getItem("userRole"); // Lấy role từ localStorage
-              
-              if (role.includes("DAOTAO")||role.includes("TAICHINH")){
-                window.location.href = "/import";
-              } else {
-                window.location.href = "/importGvmList";
-              }
-          });
-    
-          // Thêm sự kiện click cho phần tử có id="ThongTinGD"
-          const ThongTinGD = document.getElementById("ThongTinGD");
-          
-          ThongTinGD.addEventListener("click", function(event) {
-              event.preventDefault(); // Ngăn chặn hành vi mặc định của liên kết
-              
-              const role = localStorage.getItem("userRole"); // Lấy role từ localStorage
-                      
-              if (role.includes("DAOTAO")||role.includes("TAICHINH")){
-                window.location.href = "/info2";
-              } else {
-                window.location.href = "/info";
-              }
-          });
-    
-          // Thêm sự kiện click cho phần tử có id="Home"
-    
-          const Home = document.getElementById("Home");
-          
-          Home.addEventListener("click", function(event) {
-              event.preventDefault(); // Ngăn chặn hành vi mặc định của liên kết
-              
-              const role = localStorage.getItem("userRole"); // Lấy role từ localStorage
-              
-              if (role.includes("DAOTAO")||role.includes("TAICHINH")){
-                window.location.href = "/maindt";
-              } else {
-                window.location.href = "/mainkhoa";
-              }
-          });
-      });
-    
-       </script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // Thêm sự kiện click cho phần tử có id "import"
+    const importLink = document.getElementById("Import");
+
+    importLink.addEventListener("click", function (event) {
+      event.preventDefault(); // Ngăn chặn hành vi mặc định của liên kết
+
+      const role = localStorage.getItem("userRole"); // Lấy role từ localStorage
+
+      if (role.includes("DAOTAO") || role.includes("TAICHINH")) {
+        window.location.href = "/import";
+      } else {
+        window.location.href = "/importGvmList";
+      }
+    });
+
+    // Thêm sự kiện click cho phần tử có id="ThongTinGD"
+    const ThongTinGD = document.getElementById("ThongTinGD");
+
+    ThongTinGD.addEventListener("click", function (event) {
+      event.preventDefault(); // Ngăn chặn hành vi mặc định của liên kết
+
+      const role = localStorage.getItem("userRole"); // Lấy role từ localStorage
+
+      if (role.includes("DAOTAO") || role.includes("TAICHINH")) {
+        window.location.href = "/info2";
+      } else {
+        window.location.href = "/info";
+      }
+    });
+
+    // Thêm sự kiện click cho phần tử có id="Home"
+
+    const Home = document.getElementById("Home");
+
+    Home.addEventListener("click", function (event) {
+      event.preventDefault(); // Ngăn chặn hành vi mặc định của liên kết
+
+      const role = localStorage.getItem("userRole"); // Lấy role từ localStorage
+
+      if (role.includes("DAOTAO") || role.includes("TAICHINH")) {
+        window.location.href = "/maindt";
+      } else {
+        window.location.href = "/mainkhoa";
+      }
+    });
+  });
+
+</script>
 </body>
 
 </html>

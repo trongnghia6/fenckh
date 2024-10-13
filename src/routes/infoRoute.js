@@ -27,7 +27,7 @@ router.get("/index/name-gvm-khoa", (req, res) =>
   obj.getKhoaAndNameGvmOfKhoa(req, res)
 );
 
-router.post("/check-teaching", (req, res) => obj3.updateChecked(req, res))
+router.post("/check-teaching", (req, res) => obj3.updateQC(req, res))
 
 router.get("/update-all-info", (req, res) => obj3.updateAllTeachingInfo(req, res))
 

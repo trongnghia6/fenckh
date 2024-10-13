@@ -562,33 +562,34 @@ const updateChecked = async (req, res) => {
         const ID = item.ID;
         // Xây dựng câu lệnh cập nhật
         const queryUpdate = `
-          UPDATE ${tableName}
-          SET 
-            Khoa = ?, 
-            Dot = ?, 
-            KiHoc = ?, 
-            NamHoc = ?, 
-            GiaoVien = ?, 
-            GiaoVienGiangDay = ?, 
-            MoiGiang = ?, 
-            SoTinChi = ?, 
-            MaHocPhan = ?, 
-            LopHocPhan = ?, 
-            TenLop = ?, 
-            BoMon = ?, 
-            LL = ?, 
-            SoTietCTDT = ?, 
-            HeSoT7CN = ?, 
-            SoSinhVien = ?, 
-            HeSoLopDong = ?, 
-            QuyChuan = ?, 
-            GhiChu = ?,
-            KhoaDuyet = ?,
-            DaoTaoDuyet = ?,
-            TaiChinhDuyet = ?,
-            NgayBatDau = ?,
-            NgayKetThuc = ?
-          WHERE ID = ${ID};  -- Điều kiện cập nhật
+         UPDATE ${tableName}
+SET 
+    Khoa = ?, 
+    Dot = ?, 
+    KiHoc = ?, 
+    NamHoc = ?, 
+    GiaoVien = ?, 
+    GiaoVienGiangDay = ?, 
+    MoiGiang = ?, 
+    SoTinChi = ?, 
+    MaHocPhan = ?, 
+    LopHocPhan = ?, 
+    TenLop = ?, 
+    BoMon = ?, 
+    LL = ?, 
+    SoTietCTDT = ?, 
+    HeSoT7CN = ?, 
+    SoSinhVien = ?, 
+    HeSoLopDong = ?, 
+    QuyChuan = ?, 
+    GhiChu = ?,
+    KhoaDuyet = ?,
+    DaoTaoDuyet = ?,
+    TaiChinhDuyet = ?,
+    NgayBatDau = ?,
+    NgayKetThuc = ?
+WHERE ID = ${ID}
+AND (KhoaDuyet = FALSE OR DaoTaoDuyet = FALSE OR TaiChinhDuyet = FALSE);  -- Điều kiện cập nhật
         `;
 
         // Tạo mảng các giá trị tương ứng với câu lệnh
@@ -641,10 +642,164 @@ const updateChecked = async (req, res) => {
       console.error("Lỗi cập nhật:", error);
       res.status(500).json({ error: "Có lỗi xảy ra khi cập nhật dữ liệu" });
     }
+
   } else {
     res
       .status(403)
       .json({ error: "Bạn không có quyền thực hiện hành động này" });
+  }
+
+};
+
+const updateQC = async (req, res) => {
+  const role = req.session.role;
+
+  // Kiểm tra xem người dùng có quyền thực hiện hành động này không
+  if (!role.includes("THIHANH") && !role.includes("ALL")) {
+    return res.status(403).json({ error: "Bạn không có quyền thực hiện hành động này" });
+  }
+
+  const tableName = process.env.DB_TABLE_QC; // Giả sử biến này có giá trị là "quychuan"
+  const jsonData = req.body; // Lấy dữ liệu từ req.body
+
+  // Hàm trợ giúp để promisify connection.query
+  const queryAsync = (query, values) => {
+    return new Promise((resolve, reject) => {
+      connection.query(query, values, (err, results) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(results);
+        }
+      });
+    });
+  };
+
+  try {
+    // Biến để lưu các ID đã hoàn thiện
+    let completedIDs = [];
+
+    // Duyệt qua từng phần tử trong jsonData
+    for (let item of jsonData) {
+      const {
+        ID,
+        Khoa,
+        Dot,
+        KiHoc,
+        NamHoc,
+        GiaoVien,
+        GiaoVienGiangDay,
+        MoiGiang,
+        SoTinChi,
+        MaHocPhan,
+        LopHocPhan,
+        TenLop,
+        BoMon,
+        LL,
+        SoTietCTDT,
+        HeSoT7CN,
+        SoSinhVien,
+        HeSoLopDong,
+        QuyChuan,
+        GhiChu,
+        KhoaDuyet,
+        DaoTaoDuyet,
+        TaiChinhDuyet,
+        NgayBatDau,
+        NgayKetThuc,
+      } = item;
+
+      // Truy vấn kiểm tra nếu bản ghi đã được duyệt đầy đủ
+      const approvalQuery = `SELECT KhoaDuyet, DaoTaoDuyet, TaiChinhDuyet FROM ${tableName} WHERE ID = ?`;
+      const approvalResult = await queryAsync(approvalQuery, [ID]);
+
+      if (approvalResult.length > 0) {
+        const { KhoaDuyet, DaoTaoDuyet, TaiChinhDuyet } = approvalResult[0];
+
+        // Kiểm tra nếu tất cả 3 cột đều được duyệt
+        if (KhoaDuyet === 1 && DaoTaoDuyet === 1 && TaiChinhDuyet === 1) {
+          // Thêm ID vào danh sách hoàn thiện
+          completedIDs.push(ID);
+          continue; // Bỏ qua bản ghi này và tiếp tục với bản ghi tiếp theo
+        }
+      }
+
+      // Nếu chưa duyệt đầy đủ, tiến hành cập nhật
+      const updateQuery = `
+        UPDATE ${tableName}
+        SET 
+          Khoa = ?, 
+          Dot = ?, 
+          KiHoc = ?, 
+          NamHoc = ?, 
+          GiaoVien = ?, 
+          GiaoVienGiangDay = ?, 
+          MoiGiang = ?, 
+          SoTinChi = ?, 
+          MaHocPhan = ?, 
+          LopHocPhan = ?, 
+          TenLop = ?, 
+          BoMon = ?, 
+          LL = ?, 
+          SoTietCTDT = ?, 
+          HeSoT7CN = ?, 
+          SoSinhVien = ?, 
+          HeSoLopDong = ?, 
+          QuyChuan = ?, 
+          GhiChu = ?,
+          KhoaDuyet = ?,
+          DaoTaoDuyet = ?,
+          TaiChinhDuyet = ?,
+          NgayBatDau = ?,
+          NgayKetThuc = ?
+        WHERE ID = ?
+          AND (KhoaDuyet = 0 OR DaoTaoDuyet = 0 OR TaiChinhDuyet = 0)
+      `;
+
+      const updateValues = [
+        Khoa,
+        Dot,
+        KiHoc,
+        NamHoc,
+        GiaoVien,
+        GiaoVienGiangDay,
+        MoiGiang,
+        SoTinChi,
+        MaHocPhan,
+        LopHocPhan,
+        TenLop,
+        BoMon,
+        LL,
+        SoTietCTDT,
+        HeSoT7CN,
+        SoSinhVien,
+        HeSoLopDong,
+        QuyChuan,
+        GhiChu,
+        KhoaDuyet,
+        DaoTaoDuyet,
+        TaiChinhDuyet,
+        NgayBatDau,
+        NgayKetThuc,
+        ID
+      ];
+
+      await queryAsync(updateQuery, updateValues);
+    }
+
+    // Trả về thông báo cho các ID đã hoàn thiện
+    if (completedIDs.length > 0) {
+      return res.status(200).json({
+        message: "Dữ liệu đã hoàn thiện, không thể cập nhật"
+      });
+    }
+
+    // Nếu tất cả cập nhật thành công
+    res.status(200).json({ message: "Cập nhật thành công" });
+
+  } catch (error) {
+    console.error("Lỗi cập nhật:", error);
+    res.status(500).json({ error: "Có lỗi xảy ra khi cập nhật dữ liệu" });
   }
 };
 
@@ -760,7 +915,7 @@ const getGvmId = async (HoTen) => {
 };
 
 const getNhanvienId = async (HoTen) => {
-  const query = "SELECT id_User FROM `nhanvien` WHERE HoTen = ?";
+  const query = "SELECT id_User FROM `nhanvien` WHERE TenNhanVien = ?";
   const [rows] = await connection.promise().query(query, [HoTen]);
 
   return rows[0].id_User;
@@ -1217,8 +1372,6 @@ const insertGiangDay = async () => {
 
     // Thực hiện câu lệnh chèn
     await connection.promise().query(queryInsert, [insertValues]);
-    console.log("done");
-
     // Trả về kết quả thành công
     return { success: true, message: "Dữ liệu đã được chèn thành công!" };
   } catch (err) {
@@ -1265,4 +1418,5 @@ module.exports = {
   updateChecked,
   updateAllTeachingInfo,
   submitData2,
+  updateQC,
 };

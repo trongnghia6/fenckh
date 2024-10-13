@@ -4,14 +4,14 @@ const obj2 = require('../controllers/importGvmController');
 const router = express.Router();
 
 // Route GET để render trang upload file
-router.get('/bang-quy-chuan', (req, res) => {
+router.get('/tableQC', (req, res) => {
   res.render('tableQC'); // render file 'tableQC.ejs' trong thư mục 'views'
 });
 
 // Route để lấy dữ liệu từ bảng quy chuẩn
 router.get('/bang-tam', async (req, res) => {
   try {
-    const data = await obj.getTableTam(); // Gọi hàm lấy dữ liệu
+    const data = await obj.getTableQC(); // Gọi hàm lấy dữ liệu
     res.json(data); // Trả về dữ liệu dưới dạng JSON
   } catch (error) {
     console.error('Lỗi khi lấy dữ liệu:', error);
