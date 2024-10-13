@@ -1,14 +1,12 @@
 const express = require("express");
 const router = express.Router();
 
-const { getGvmList, getGvm } = require("../controllers/gvmListController");
+const gvmListController = require("../controllers/gvmListController"); // Định nghĩa biến gvmListController
 
 // Đào tạo
-router.get("/gvmList", getGvmList);
-router.get("/api/gvm", getGvm);
-
-// Khoa công nghệ thông tin
-// router.get("/khoaCNTT", getGvmListCNTT);
+router.get("/gvmList", gvmListController.getGvmList);
+router.get("/api/gvm", gvmListController.getGvm);
+router.get("/gvm/export-excel", gvmListController.exportGvmToExcel);// router.get("/khoaCNTT", getGvmListCNTT);
 // router.get("/api/gvmKhoaCNTT", getGvmCNTT);
 
 module.exports = router;

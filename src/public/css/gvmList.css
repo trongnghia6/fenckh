@@ -146,6 +146,20 @@
   font-size: 24px;
   cursor: pointer;
 }
+.gvmList .export {
+  background-color: #4CAF50; /* Màu xanh lá cây */
+  color: #ffffff; /* Màu trắng */
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 5px;
+  margin-left: 10px; /* Khoảng cách giữa nút xuất dữ liệu và nút thêm giảng viên mời */
+}
+
+.gvmList .export:hover {
+  background-color: #3e8e41; /* Màu xanh lá cây đậm hơn */
+}
 
 /* 
  */
