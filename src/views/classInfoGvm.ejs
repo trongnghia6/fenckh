@@ -182,6 +182,7 @@
                   <th>Số tín chỉ</th>
                   <th>Số tiết</th>
                   <th>Tổng số tiết</th>
+                  <th>Khoa</th>
                   <th>Chi tiết giảng viên mời</th>
                 </tr>
               </thead>
@@ -210,6 +211,7 @@
                                                 <% if (courseIndex === 0) { %> 
                                                     <!-- Gộp dòng với rowspan bằng số lượng khóa học của giảng viên -->
                                                     <td rowspan="<%= courses.length %>"><%= totalSoTiet %></td> <!-- Tổng số tiết -->
+                                                    <td><%= course.MaPhongBan %></td>
                                                     <td rowspan="<%= courses.length %>">
                                                         <button class="action-button view" onclick="viewClass('<%= parseInt(course.id_Gvm) - 1 %>')">👁️</button> <!-- Nút xem chi tiết -->
                                                     </td>

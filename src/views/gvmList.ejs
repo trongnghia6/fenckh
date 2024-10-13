@@ -138,6 +138,7 @@
                 <th>Mã giảng viên mời</th>
                 <th>Tên giảng viên mời</th>
                 <th>Ngày sinh</th>
+                <th>Khoa</th>
                 <th>Hành động</th>
               </tr>
             </thead>
@@ -157,6 +158,9 @@
                   <% const options={ year: 'numeric' , month: '2-digit' , day: '2-digit' }; %>
                     <td>
                       <%= new Date(gvmLists[i].NgaySinh).toLocaleDateString('vi-VN', options) %>
+                    </td>
+                    <td>
+                      <%= gvmLists[i].MaPhongBan %>
                     </td>
 
 
