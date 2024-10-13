@@ -90,6 +90,10 @@
           <li class="nav-item"></li>
           <a class="nav-link " href="/classInfoGvm" role="button">Thông tin các lớp giảng viên mời</a>
           </li>
+          <!-- Thông tin HD giảng viên mời-->>
+          <li class="nav-item"></li>
+          <a class="nav-link " href="/infoHDGvm" role="button">Thông tin HD Gvm</a>
+          </li>
           <div class="navbar-nav">
             <div class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="/login" id="navbarDropdownUser" data-bs-toggle="dropdown"
@@ -135,7 +139,7 @@
               </tr>
             </thead>
             <tbody>
-              <% for (var i=0; i < gvmLists.length; i++) { %>
+              <% for (var i=0; i < gvmLists.length; i++) {%>
                 <tr>
                   <td>
                     <%= i+1 %>

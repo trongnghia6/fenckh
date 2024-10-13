@@ -1,150 +1,194 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Học Viện Kỹ Thuật Mật Mã</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="/css/styles.css">
-    <link rel="stylesheet" href="/css/gvmList.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Học Viện Kỹ Thuật Mật Mã</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="/css/styles.css">
+  <link rel="stylesheet" href="/css/gvmList.css">
 
-    <style>
-        .teacher-group {
-          border: 2px solid black; /* Viền đen xung quanh nhóm giảng viên */
-          border-collapse: separate;
-          margin-bottom: 10px;
-        }
-        .teacher-group td, .teacher-group th {
-          padding: 8px;
-          text-align: left;
-          border: 2px solid black; /* Viền đen xung quanh nhóm giảng viên */
-
-        }
-      </style>
-
-        <!-- Phân quyền -->
-<script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const role = localStorage.getItem("userRole");
-
-    // Ẩn phần lọc khoa nếu role là Khoa
-    const filterByDepartment = document.getElementById('filterByDepartment');
-
-
-    if (!role.includes("DAOTAO")&&!role.includes("TAICHINH")){
-      filterByDepartment.style.display = 'none';
+  <style>
+    .teacher-group {
+      border: 2px solid black;
+      /* Viền đen xung quanh nhóm giảng viên */
+      border-collapse: separate;
+      margin-bottom: 10px;
     }
 
+    .teacher-group td,
+    .teacher-group th {
+      padding: 8px;
+      text-align: left;
+      border: 2px solid black;
+      /* Viền đen xung quanh nhóm giảng viên */
 
-});
-</script>
+    }
+  </style>
+
+  <!-- Phân quyền -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const role = localStorage.getItem("userRole");
+
+      // Ẩn phần lọc khoa nếu role là Khoa
+      const filterByDepartment = document.getElementById('filterByDepartment');
+
+
+      if (!role.includes("DAOTAO") && !role.includes("TAICHINH")) {
+        filterByDepartment.style.display = 'none';
+      }
+
+
+    });
+  </script>
 
 </head>
+
 <body>
-        <nav class="navbar-top ">
-          <div class="container-fluid">
-              <a class="navbar-brand" href="#">
-                  <img src="/Logo-Hoc-Vien-Ky-Thuat-Mat-Ma-ACTVN.webp" alt="Logo">
-                  <div class="navbar-title">
-                    <img src="/dongchu_banner.png" alt="banner">
-                  </div>
-              </a>
-          </div>
-      </nav>
-      
-      <!-- Phần dưới của navbar chứa các mục nằm ngang -->
-      <nav class="navbar navbar-expand-lg navbar-bottom sticky-top">
-          <div class="container-fluid">
-              <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                  <span class="navbar-toggler-icon"></span>
-              </button>
-              <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
-                  <ul class="navbar-nav">
-                    <li class="nav-item">
-                      <a class="nav-link" id="Home" href="">HOME</a>
-                    </li>
-        
-                    <li class="nav-item">
-                      <a class="nav-link" id="ThongTinGD" href="">Thông tin GD</a>
-                    </li>
-                    <!-- <li> -->
-                    <li class="nav-item">
-                      <!-- <a class="nav-link" href="/import">Import danh sách giảng viên mời</a> -->
-                      <a class="nav-link" id="Import" href="">Import</a>
-                    </li>
-                    <!-- <li class="nav-item">
+  <nav class="navbar-top ">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">
+        <img src="/Logo-Hoc-Vien-Ky-Thuat-Mat-Ma-ACTVN.webp" alt="Logo">
+        <div class="navbar-title">
+          <img src="/dongchu_banner.png" alt="banner">
+        </div>
+      </a>
+    </div>
+  </nav>
+
+  <!-- Phần dưới của navbar chứa các mục nằm ngang -->
+  <nav class="navbar navbar-expand-lg navbar-bottom sticky-top">
+    <div class="container-fluid">
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link" id="Home" href="">HOME</a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link" id="ThongTinGD" href="">Thông tin GD</a>
+          </li>
+          <!-- <li> -->
+          <li class="nav-item">
+            <!-- <a class="nav-link" href="/import">Import danh sách giảng viên mời</a> -->
+            <a class="nav-link" id="Import" href="">Import</a>
+          </li>
+          <!-- <li class="nav-item">
                         <a class="nav-link" href="/daotaoxemhd" role="button">Xem hợp đồng</a>
                     </li> -->
-      
-                    <!-- Danh sách giảng viên mời -->
-                    <li class="nav-item"></li>
-                        <a  class="nav-link" href="/gvmList" role="button">Danh sách giảng viên mời</a>
-                    </li>
-      
-                    <!-- Thông tin các lớp giảng viên mời -->
-                    <li class="nav-item"></li>
-                        <a  class="nav-link active" href="/classInfoGvm" role="button">Thông tin các lớp giảng viên mời</a>
-                    </li>
-                      <div class="navbar-nav">
-                        <div class="nav-item dropdown">
-                              <a class="nav-link dropdown-toggle" href="/login" id="navbarDropdownUser" data-bs-toggle="dropdown" aria-expanded="false">
-                                Hi, Lê Đức Thuận
-                              </a>
-                              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                  <a class="dropdown-item" href="#">Thông tin cá nhân</a>
-                                  <a class="dropdown-item" href="/">Đăng xuất</a>
-                              </div>
-                        </div>
-                  </ul>
+
+          <!-- Danh sách giảng viên mời -->
+          <li class="nav-item"></li>
+          <a class="nav-link" href="/gvmList" role="button">Danh sách giảng viên mời</a>
+          </li>
+
+          <!-- Thông tin các lớp giảng viên mời -->
+          <li class="nav-item"></li>
+          <a class="nav-link active" href="/classInfoGvm" role="button">Thông tin các lớp giảng viên mời</a>
+          </li>
+          <!-- Thông tin HD giảng viên mời-->>
+          <li class="nav-item"></li>
+          <a class="nav-link " href="/infoHDGvm" role="button"> Thông tin HD Gvm </a>
+          </li>
+          <div class="navbar-nav">
+            <div class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="/login" id="navbarDropdownUser" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                Hi, Lê Đức Thuận
+              </a>
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="dropdown-item" href="#">Thông tin cá nhân</a>
+                <a class="dropdown-item" href="/">Đăng xuất</a>
               </div>
-          </div>
-        </nav>
+            </div>
+        </ul>
+      </div>
+    </div>
+  </nav>
 
-    <div class="container-fluid ">
-             <div class="d-flex justify-content-center">
-                <!-- Main content -->
-                <div class="gvmList ">
-                    <div class="m-3">
-                        <div class="container">
-                            <h1>THÔNG TIN CÁC LỚP GIẢNG VIÊN MỜI</h1>
-                            <div class="header-actions">
-                              <!-- <button class="add-class" onclick="addClass()">+ Thêm giảng viên mời</button> -->
-                              <input
-                                type="text"
-                                placeholder="Tìm kiếm theo Tên..."
-                                class="search"
-                                id="searchInput"
-                                onkeyup="searchClass()"
-                              />
-                              <select id="filterByDepartment" class="filter" onchange="filterClasses()">
-                                <option value="">Công nghệ thông tin</option>
-                                <option value="">An toàn thông tin</option>
-                                <option value="">Điện tử viễn thông</option>
-                                <option value="">Mật mã</option>
-                                <!-- Các tùy chọn lọc khác -->
-                              </select>
-                            </div>
-                            
-                            <table class="class-table" id="classTable">
-                                <thead>
-                                    <tr>
-                                        <th>STT</th>
-                                        <th>Giảng viên</th>
-                                        <th>Môn học</th>
-                                        <th>Tên lớp</th>
-                                        <th>Số tín chỉ</th>
-                                        <th>Số tiết</th>
-                                        <th>Tổng số tiết</th>
-                                        <th>Chi tiết giảng viên mời</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="teacher-group">
+  <div class="container-fluid ">
+    <div class="d-flex justify-content-center">
+      <!-- Main content -->
+      <div class="gvmList ">
+        <div class="m-3">
+          <div class="container">
+            <h1>THÔNG TIN CÁC LỚP GIẢNG VIÊN MỜI</h1>
+            <div class="header-actions">
+              <!-- <button class="add-class" onclick="addClass()">+ Thêm giảng viên mời</button> -->
+              <input type="text" placeholder="Tìm kiếm theo Tên..." class="search" id="searchInput"
+                onkeyup="searchClass()" />
+              <!-- <button class="export" onclick="exportSelectedData()">Xuất dữ liệu</button> -->
+              <select class="filter" id="departmentFilter" onchange="filterGvmByDepartment()">
+                <option value="">Tất cả khoa</option>
+                <option value="CNTT">Công nghệ thông tin</option>
+                <option value="ATTT">An toàn thông tin</option>
+                <option value="DTVT">Điện tử viễn thông</option>
+                <option value="MM">Mật mã</option>
+              </select>
+              <script>
+                function filterGvmByDepartment() {
+                  let select = document.getElementById("departmentFilter");
+                  let department = select.value;
+                  let table = document.getElementById("classTable");
+                  let tr = table.getElementsByTagName("tr");
+                  let infoTableBody = document.getElementById("infoTableBody");
 
-                                    <% let index = 1; %>
-                                    <% for (let teacher in GiangDay) { %>
-                                        <% let courses = GiangDay[teacher]; %>
-                                        <% let totalSoTiet = courses.reduce((total, course) => total + course.QuyChuan, 0); %> <!-- Tính tổng số tiết -->
+                  // Xóa nội dung cũ của bảng
+                  infoTableBody.innerHTML = "";
+
+                  let filteredRows = Array.prototype.filter.call(tr, function (row) {
+                    let td = row.getElementsByTagName("td")[5]; // Giả sử cột Khoa là cột thứ 6
+                    if (td) {
+                      let txtValue = td.textContent || td.innerText;
+                      return department === "Tất cả khoa" || txtValue === department;
+                    }
+                    return false;
+                  });
+
+                  filteredRows.forEach(function (row) {
+                    // Hiển thị thông tin ở bảng
+                    let infoRow = document.createElement("tr");
+                    infoTableBody.appendChild(infoRow);
+
+                    let cells = row.getElementsByTagName("td");
+                    for (let j = 0; j < cells.length; j++) {
+                      let cell = cells[j];
+                      let infoCell = document.createElement("td");
+                      infoCell.textContent = cell.textContent;
+                      infoRow.appendChild(infoCell);
+                    }
+                  });
+                }
+              </script>
+            </div>
+
+            <table class="class-table" id="classTable">
+              <thead>
+                <tr>
+                  <th>STT</th>
+                  <th>Giảng viên</th>
+                  <th>Môn học</th>
+                  <th>Tên lớp</th>
+                  <th>Số tín chỉ</th>
+                  <th>Số tiết</th>
+                  <th>Tổng số tiết</th>
+                  <th>Chi tiết giảng viên mời</th>
+                </tr>
+              </thead>
+              <tbody class="teacher-group">
+
+                <% let index=1; %>
+                  <% for (let teacher in GiangDay) { %>
+                    <% let courses=GiangDay[teacher]; %>
+                      <% let totalSoTiet=courses.reduce((total, course)=> total + course.QuyChuan, 0); %>
+                        <!-- Tính tổng số tiết -->
 
                 
                                         <% courses.forEach((course, courseIndex) => { %>
@@ -155,7 +199,7 @@
                                                     <td rowspan="<%= courses.length %>"><%= teacher %></td> <!-- Tên giảng viên -->
                                                     <% index++; %>
                                                 <% } %>
-                                                <td><%= course.Lop %></td> <!-- Tên học phần -->
+                                                <td><%= course.TenHocPhan %></td> <!-- Tên học phần -->
                                                 <td><%= course.Lop %></td> <!-- Tên lớp -->
                                                 <td><%= course.SoTC %></td> <!-- Số tín chỉ -->
                                                 <td><%= course.QuyChuan %></td> <!-- Số tiết -->
@@ -178,201 +222,201 @@
                               <span>10 / trang</span>
                               <button class="page-button">1</button>
                             </div> -->
-                          </div>
-                      
-                          
-                          <div id="modal" class="modal" style="display: none">
-                            <div class="modal-content">
-                                <span class="close-button" onclick="closeModal()">×</span>
-                                <h2 id="modal-title">Chi tiết giảng viên mời</h2>
-                                <br>
-                                <p><strong>Mã giảng viên:</strong> <span id="modal-ma-gv"></span></p>
-                                <p><strong>Họ tên:</strong> <span id="modal-ho-ten"></span></p>
-                                <p><strong>Ngày sinh:</strong> <span id="modal-ngay-sinh"></span></p>
-                                <p><strong>CCCD:</strong> <span id="modal-cccd"></span></p>
-                                <p><strong>Ngày cấp CCCD:</strong> <span id="modal-ngay-cap"></span></p>
-                                <p><strong>Nơi cấp CCCD:</strong> <span id="modal-noi-cap"></span></p>
-                                <p><strong>Địa chỉ theo CCCD:</strong> <span id="modal-dia-chi-cccd"></span></p>
-                                <p><strong>Số tài khoản:</strong> <span id="modal-so-tk"></span></p>
-                                <p><strong>Ngân hàng:</strong> <span id="modal-ngan-hang"></span></p>
-                                <p><strong>Email:</strong> <span id="modal-email"></span></p>
-                                <p><strong>Hệ số lương:</strong> <span id="modal-heso-luong"></span></p>
-                                <p><strong>Nơi công tác:</strong> <span id="modal-noi-cong-tac"></span></p>
-                                <p><strong>Chức vụ:</strong> <span id="modal-chuc-vu"></span></p>
-                                <p><strong>Mã số thuế:</strong> <span id="modal-ma-so-thue"></span></p>
-                                <p><strong>Tốt nghiệp loại:</strong> <span id="modal-tot-nghiep-loai"></span></p>
+          </div>
 
-                            </div>
-                        </div>
-                        
 
-                    </div>
-                </div>
-            </div>    
-     </div>
-    <script src="/bootstrap/dist/js/jquery-3.7.1.min.js"></script>
-    <script src="/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+          <div id="modal" class="modal" style="display: none">
+            <div class="modal-content">
+              <span class="close-button" onclick="closeModal()">×</span>
+              <h2 id="modal-title">Chi tiết giảng viên mời</h2>
+              <br>
+              <p><strong>Mã giảng viên:</strong> <span id="modal-ma-gv"></span></p>
+              <p><strong>Họ tên:</strong> <span id="modal-ho-ten"></span></p>
+              <p><strong>Ngày sinh:</strong> <span id="modal-ngay-sinh"></span></p>
+              <p><strong>CCCD:</strong> <span id="modal-cccd"></span></p>
+              <p><strong>Ngày cấp CCCD:</strong> <span id="modal-ngay-cap"></span></p>
+              <p><strong>Nơi cấp CCCD:</strong> <span id="modal-noi-cap"></span></p>
+              <p><strong>Địa chỉ theo CCCD:</strong> <span id="modal-dia-chi-cccd"></span></p>
+              <p><strong>Số tài khoản:</strong> <span id="modal-so-tk"></span></p>
+              <p><strong>Ngân hàng:</strong> <span id="modal-ngan-hang"></span></p>
+              <p><strong>Email:</strong> <span id="modal-email"></span></p>
+              <p><strong>Hệ số lương:</strong> <span id="modal-heso-luong"></span></p>
+              <p><strong>Nơi công tác:</strong> <span id="modal-noi-cong-tac"></span></p>
+              <p><strong>Chức vụ:</strong> <span id="modal-chuc-vu"></span></p>
+              <p><strong>Mã số thuế:</strong> <span id="modal-ma-so-thue"></span></p>
+              <p><strong>Tốt nghiệp loại:</strong> <span id="modal-tot-nghiep-loai"></span></p>
 
-    <script>
-        // Tìm kiếm giảng viên mời theo tên
-function searchClass() {
-    let input = document.getElementById("searchInput").value.toLowerCase();
-    let table = document.getElementById("classTable");
-    let tr = table.getElementsByTagName("tr");
-  
-    for (let i = 1; i < tr.length; i++) {
-      let td = tr[i].getElementsByTagName("td")[1];
-      if (td) {
-        let textValue = td.textContent || td.innerText;
-        if (textValue.toLowerCase().indexOf(input) > -1) {
-          tr[i].style.display = "";
-        } else {
-          tr[i].style.display = "none";
+            </div>
+          </div>
+
+
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="/bootstrap/dist/js/jquery-3.7.1.min.js"></script>
+  <script src="/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    // Tìm kiếm giảng viên mời theo tên
+    function searchClass() {
+      let input = document.getElementById("searchInput").value.toLowerCase();
+      let table = document.getElementById("classTable");
+      let tr = table.getElementsByTagName("tr");
+
+      for (let i = 1; i < tr.length; i++) {
+        let td = tr[i].getElementsByTagName("td")[1];
+        if (td) {
+          let textValue = td.textContent || td.innerText;
+          if (textValue.toLowerCase().indexOf(input) > -1) {
+            tr[i].style.display = "";
+          } else {
+            tr[i].style.display = "none";
+          }
         }
       }
     }
-  }
-  
- 
 
-  async function fetchGVMLists() {
-    try {
+
+
+    async function fetchGVMLists() {
+      try {
         const response = await fetch('/api/classInfoGvm');
         if (!response.ok) {
-            throw new Error('Network response was not ok');
+          throw new Error('Network response was not ok');
         }
         const gvmLists = await response.json();
         return gvmLists;
-    } catch (error) {
+      } catch (error) {
         console.error('Error fetching data:', error);
-    }
-  }
- 
-
- async function viewClass( index) {
-
-  gvmLists = await fetchGVMLists();
-
-  index = parseInt(index);
-
-  var gvm = gvmLists[index];
-  
-  
-  // Hiển thị thông tin vào modal
-document.getElementById('modal-ma-gv').innerText = gvm.MaGvm;
-document.getElementById('modal-ho-ten').innerText = gvm.HoTen;
-document.getElementById('modal-ngay-sinh').innerText = new Date(gvm.NgaySinh).toLocaleDateString('vi-VN');
-document.getElementById('modal-cccd').innerText = gvm.CCCD;
-document.getElementById('modal-ngay-cap').innerText = new Date(gvm.NgayCapCCCD).toLocaleDateString('vi-VN');
-document.getElementById('modal-noi-cap').innerText = gvm.NoiCapCCCD;
-document.getElementById('modal-dia-chi-cccd').innerText = gvm.DiaChi;
-document.getElementById('modal-so-tk').innerText = gvm.STK;
-document.getElementById('modal-ngan-hang').innerText = gvm.NganHang;
-document.getElementById('modal-email').innerText = gvm.Email;
-document.getElementById('modal-heso-luong').innerText = gvm.HSL;//
-document.getElementById('modal-noi-cong-tac').innerText = gvm.NoiCongTac;
-document.getElementById('modal-chuc-vu').innerText = gvm.ChucVu;
-document.getElementById('modal-ma-so-thue').innerText = gvm.MaSoThue;
-document.getElementById('modal-tot-nghiep-loai').innerText = gvm.TotNghiepLoai;
-
-  // Hiển thị modal
-  document.getElementById('modal').style.display = 'flex';
-}
-  
-
-  
-  // Đóng modal
-  function closeModal() {
-    document.getElementById("modal").style.display = "none";
-  }
-  
-  // Thêm sự kiện khi nhấn ra ngoài modal để đóng modal
-  window.onclick = function (event) {
-    let modal = document.getElementById("modal");
-    if (event.target == modal) {
-      modal.style.display = "none";
-    }
-  };
-  
-    </script>
-
-    <script>
-      // Lấy query string từ URL
-      const urlParams = new URLSearchParams(window.location.search);
-      const message = urlParams.get('message');
-      
-      // Lấy phần tử div để hiển thị thông báo
-      const messageDiv = document.getElementById('message');
-
-     // console.log(message)
-      // Hiển thị thông báo dựa trên giá trị của message
-      if (message === 'insertSuccess') {
-        alert("Update Success")
-      } else if (message === 'insertFalse') {
-        alert("Update False")
       }
+    }
 
-        // Sau khi hiển thị thông báo, xóa query string để tránh hiển thị lại khi refresh
-if (message) {
-  // Sử dụng window.history để xóa query string mà không refresh lại trang
-  const newUrl = window.location.origin + window.location.pathname;
-  window.history.replaceState({}, document.title, newUrl);
-}
 
-    </script>
+    async function viewClass(index) {
 
-          <!-- Phần phân quyền -->
+      gvmLists = await fetchGVMLists();
+
+      index = parseInt(index);
+
+      var gvm = gvmLists[index];
+
+
+      // Hiển thị thông tin vào modal
+      document.getElementById('modal-ma-gv').innerText = gvm.MaGvm;
+      document.getElementById('modal-ho-ten').innerText = gvm.HoTen;
+      document.getElementById('modal-ngay-sinh').innerText = new Date(gvm.NgaySinh).toLocaleDateString('vi-VN');
+      document.getElementById('modal-cccd').innerText = gvm.CCCD;
+      document.getElementById('modal-ngay-cap').innerText = new Date(gvm.NgayCapCCCD).toLocaleDateString('vi-VN');
+      document.getElementById('modal-noi-cap').innerText = gvm.NoiCapCCCD;
+      document.getElementById('modal-dia-chi-cccd').innerText = gvm.DiaChi;
+      document.getElementById('modal-so-tk').innerText = gvm.STK;
+      document.getElementById('modal-ngan-hang').innerText = gvm.NganHang;
+      document.getElementById('modal-email').innerText = gvm.Email;
+      document.getElementById('modal-heso-luong').innerText = gvm.HSL;//
+      document.getElementById('modal-noi-cong-tac').innerText = gvm.NoiCongTac;
+      document.getElementById('modal-chuc-vu').innerText = gvm.ChucVu;
+      document.getElementById('modal-ma-so-thue').innerText = gvm.MaSoThue;
+      document.getElementById('modal-tot-nghiep-loai').innerText = gvm.TotNghiepLoai;
+
+      // Hiển thị modal
+      document.getElementById('modal').style.display = 'flex';
+    }
+
+
+
+    // Đóng modal
+    function closeModal() {
+      document.getElementById("modal").style.display = "none";
+    }
+
+    // Thêm sự kiện khi nhấn ra ngoài modal để đóng modal
+    window.onclick = function (event) {
+      let modal = document.getElementById("modal");
+      if (event.target == modal) {
+        modal.style.display = "none";
+      }
+    };
+
+  </script>
+
+  <script>
+    // Lấy query string từ URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const message = urlParams.get('message');
+
+    // Lấy phần tử div để hiển thị thông báo
+    const messageDiv = document.getElementById('message');
+
+    // console.log(message)
+    // Hiển thị thông báo dựa trên giá trị của message
+    if (message === 'insertSuccess') {
+      alert("Update Success")
+    } else if (message === 'insertFalse') {
+      alert("Update False")
+    }
+
+    // Sau khi hiển thị thông báo, xóa query string để tránh hiển thị lại khi refresh
+    if (message) {
+      // Sử dụng window.history để xóa query string mà không refresh lại trang
+      const newUrl = window.location.origin + window.location.pathname;
+      window.history.replaceState({}, document.title, newUrl);
+    }
+
+  </script>
+
+  <!-- Phần phân quyền -->
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       // Thêm sự kiện click cho phần tử có id "import"
       const importLink = document.getElementById("Import");
-      
-      importLink.addEventListener("click", function(event) {
-          event.preventDefault(); // Ngăn chặn hành vi mặc định của liên kết
-          
-          const role = localStorage.getItem("userRole"); // Lấy role từ localStorage
-          
-          if (role.includes("DAOTAO")||role.includes("TAICHINH")){
-            window.location.href = "/import";
-          } else {
-            window.location.href = "/importGvmList";
-          }
+
+      importLink.addEventListener("click", function (event) {
+        event.preventDefault(); // Ngăn chặn hành vi mặc định của liên kết
+
+        const role = localStorage.getItem("userRole"); // Lấy role từ localStorage
+
+        if (role.includes("DAOTAO") || role.includes("TAICHINH")) {
+          window.location.href = "/import";
+        } else {
+          window.location.href = "/importGvmList";
+        }
       });
 
       // Thêm sự kiện click cho phần tử có id="ThongTinGD"
       const ThongTinGD = document.getElementById("ThongTinGD");
-      
-      ThongTinGD.addEventListener("click", function(event) {
-          event.preventDefault(); // Ngăn chặn hành vi mặc định của liên kết
-          
-          const role = localStorage.getItem("userRole"); // Lấy role từ localStorage
-                  
-          if (role.includes("DAOTAO")||role.includes("TAICHINH")){
-            window.location.href = "/info2";
-          } else {
-            window.location.href = "/info";
-          }
+
+      ThongTinGD.addEventListener("click", function (event) {
+        event.preventDefault(); // Ngăn chặn hành vi mặc định của liên kết
+
+        const role = localStorage.getItem("userRole"); // Lấy role từ localStorage
+
+        if (role.includes("DAOTAO") || role.includes("TAICHINH")) {
+          window.location.href = "/info2";
+        } else {
+          window.location.href = "/info";
+        }
       });
 
       // Thêm sự kiện click cho phần tử có id="Home"
 
       const Home = document.getElementById("Home");
-      
-      Home.addEventListener("click", function(event) {
-          event.preventDefault(); // Ngăn chặn hành vi mặc định của liên kết
-          
-          const role = localStorage.getItem("userRole"); // Lấy role từ localStorage
-          
-          if (role.includes("DAOTAO")||role.includes("TAICHINH")){
-            window.location.href = "/maindt";
-          } else {
-            window.location.href = "/mainkhoa";
-          }
-      });
-  });
 
-   </script>
+      Home.addEventListener("click", function (event) {
+        event.preventDefault(); // Ngăn chặn hành vi mặc định của liên kết
+
+        const role = localStorage.getItem("userRole"); // Lấy role từ localStorage
+
+        if (role.includes("DAOTAO") || role.includes("TAICHINH")) {
+          window.location.href = "/maindt";
+        } else {
+          window.location.href = "/mainkhoa";
+        }
+      });
+    });
+
+  </script>
 
 </body>
-</html>
 
+</html>
