@@ -68,6 +68,10 @@
                     <li class="nav-item"></li>
                         <a  class="nav-link active" href="/classInfoGvm" role="button">Thông tin các lớp giảng viên mời</a>
                     </li>
+                    <!-- Thông tin HD giảng viên mời-->>
+                    <li class="nav-item"></li>
+                        <a  class="nav-link active" href="/infoHDGvm" role="button">Thông tin HD Gvm</a>
+                    </li>
                       <div class="navbar-nav">
                         <div class="nav-item dropdown">
                               <a class="nav-link dropdown-toggle" href="/login" id="navbarDropdownUser" data-bs-toggle="dropdown" aria-expanded="false">
@@ -99,13 +103,34 @@
                                 id="searchInput"
                                 onkeyup="searchClass()"
                               />
-                              <select class="filter" onchange="filterClasses()">
-                                <option value="">Công nghệ thông tin</option>
-                                <option value="">An toàn thông tin</option>
-                                <option value="">Điện tử viễn thông</option>
-                                <option value="">Mật mã</option>
-                                <!-- Các tùy chọn lọc khác -->
+                              <button class="export" onclick="exportSelectedData()">Xuất dữ liệu</button>
+                              <select class="filter" id="departmentFilter" onchange="filterGvmByDepartment()">
+                                <option value="">Tất cả khoa</option>
+                                <option value="CNTT">Công nghệ thông tin</option>
+                                <option value="ATTT">An toàn thông tin</option>
+                                <option value="DTVT">Điện tử viễn thông</option>
+                                <option value="MM">Mật mã</option>
                               </select>
+                              <script>
+                                function filterGvmByDepartment() {
+                                  let select = document.getElementById("departmentFilter");
+                                  let department = select.value.toUpperCase();
+                                  let table = document.getElementById("classTable");
+                                  let tr = table.getElementsByTagName("tr");
+                  
+                                  for (let i = 1; i < tr.length; i++) {
+                                    let td = tr[i].getElementsByTagName("td")[5]; // Giả sử cột Khoa là cột thứ 6
+                                    if (td) {
+                                      let txtValue = td.textContent || td.innerText;
+                                      if (department === "" || txtValue.toUpperCase() === department) {
+                                        tr[i].style.display = "";
+                                      } else {
+                                        tr[i].style.display = "none";
+                                      }
+                                    }
+                                  }
+                                } 
+                              </script>
                             </div>
                             
                             <table class="class-table" id="classTable">
@@ -130,6 +155,7 @@
 
                 
                                         <% courses.forEach((course, courseIndex) => { %>
+                                          <td><%= course.MaPhongBan %></td>
                                             <tr>
                                                 <% if (courseIndex === 0) { %> 
                                                     <!-- Gộp dòng với rowspan bằng số lượng khóa học của giảng viên -->

@@ -17,10 +17,12 @@ const configViewEngine = require("./config/viewEngine");
 // Cấu hình đường dẫn routes
 const webRoutes = require("./routes/web");
 const createGvmRoutes = require("./routes/createGvmRoute");
-const gvmList = require("./routes/gvmListRoute");
+const gvmListRoutes = require('./routes/gvmListRoute');
 const updateGvm = require("./routes/updateGvmRoute");
 const classInfoGvm = require("./routes/classInfoGvmRoute");
 const importGvmList = require("./routes/importGvmListRoute");
+const infoHDGvmRoutes = require('./routes/infoHDGvmRoute');
+
 
 const app = express();
 const port = process.env.port || 8888;
@@ -61,10 +63,13 @@ app.use(express.urlencoded({ extended: true })); // for form data
 app.use("/", webRoutes);
 app.use("/", login);
 app.use("/", createGvmRoutes);
-app.use("/", gvmList);
+app.use('/', gvmListRoutes);
 app.use("/", updateGvm);
 app.use("/", classInfoGvm);
 app.use("/", importGvmList);
+app.use('/', infoHDGvmRoutes);
+
+
 
 app.listen(port, hostname, () => {
   console.log(`Server running on http://localhost:${port}`);

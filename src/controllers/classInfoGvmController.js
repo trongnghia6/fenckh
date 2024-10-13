@@ -75,6 +75,7 @@ const getClassInfoGvm = async (req, res) => {
   res.render("classInfoGvm.ejs", { GiangDay: groupedByTeacher });
 };
 
+
 // const getGvm = async (req, res) => {
 //   try {
 //     res.json(gvm); // Trả về danh sách giảng viên mời
@@ -100,11 +101,93 @@ const getGvm = async (req, res) => {
     res.status(500).json({ message: "Internal Server Error" }); // Xử lý lỗi
   }
 };
+const getSampleClassInfoGvm = async (req, res) => {
+  console.log('Dữ liệu được truyền đến view:', classInfoGvm);
+ 
+  const classInfoGvm = [];
+
+  // Thông tin tự nghĩ về các lớp giảng viên
+  classInfoGvm.push({
+    GiaoVien: "Nguyễn Văn A",
+    LopHocPhan: "Toán Cao Cấp",
+    Lop: "TC101",
+    SoTinChi: 3,
+    QuyChuan: 45,
+    id_Gvm: 1,
+  });
+
+  classInfoGvm.push({
+    GiaoVien: "Nguyễn Văn A",
+    LopHocPhan: "Vật Lý Đại Cương",
+    Lop: "VL201",
+    SoTinChi: 4,
+    QuyChuan: 60,
+    id_Gvm: 2,
+  });
+
+  classInfoGvm.push({
+    GiaoVien: "Trần Thị B",
+    LopHocPhan: "Hóa Học Cơ Bản",
+    Lop: "HH301",
+    SoTinChi: 3,
+    QuyChuan: 45,
+    id_Gvm: 3,
+  });
+
+  classInfoGvm.push({
+    GiaoVien: "Trần Thị B",
+    LopHocPhan: "Lập Trình C++",
+    Lop: "LT401",
+    SoTinChi: 4,
+    QuyChuan: 60,
+    id_Gvm: 4,
+  });
+
+  classInfoGvm.push({
+    GiaoVien: "Lê Đức C",
+    LopHocPhan: "Cơ Sở Dữ Liệu",
+    Lop: "CSDL501",
+    SoTinChi: 3,
+    QuyChuan: 45,
+    id_Gvm: 5,
+  });
+
+  classInfoGvm.push({
+    GiaoVien: "Lê Đức C",
+    LopHocPhan: "Mạng Máy Tính",
+    Lop: "MMT601",
+    SoTinChi: 4,
+    QuyChuan: 60,
+    id_Gvm: 6,
+  });
+
+  classInfoGvm.push({
+    GiaoVien: "Phạm Thị D",
+    LopHocPhan: "An Toàn Thông Tin",
+    Lop: "ATT701",
+    SoTinChi: 3,
+    QuyChuan: 45,
+    id_Gvm: 7,
+  });
+
+  classInfoGvm.push({
+    GiaoVien: "Phạm Thị D",
+    LopHocPhan: "Kỹ Thuật Mạng",
+    Lop: "KTM801",
+    SoTinChi: 4,
+    QuyChuan: 60,
+    id_Gvm: 8,
+  });
+
+  // Sử dụng mảng classInfoGvm để hiển thị thông tin các lớp giảng viên
+  res.render("classInfoGvm.ejs", { GiangDay: classInfoGvm });
+};
 
 // Xuất các hàm để sử dụng trong router
 module.exports = {
   getClassInfoGvm,
   getGvm,
+  getSampleClassInfoGvm,
   // Khoa công nghệ thông tin
   // getClassInfoGvmCNTT,
   // getGvmCNTT,

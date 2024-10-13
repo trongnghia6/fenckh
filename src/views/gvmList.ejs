@@ -67,6 +67,10 @@
           <li class="nav-item"></li>
           <a class="nav-link " href="/classInfoGvm" role="button">Thông tin các lớp giảng viên mời</a>
           </li>
+          <!-- Thông tin HD giảng viên mời-->>
+          <li class="nav-item"></li>
+          <a class="nav-link active" href="/infoHDGvm" role="button">Thông tin HD Gvm</a>
+          </li>
           <div class="navbar-nav">
             <div class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="/login" id="navbarDropdownUser" data-bs-toggle="dropdown"
@@ -91,15 +95,52 @@
           <h1>DANH SÁCH GIẢNG VIÊN MỜI</h1>
           <div class="header-actions">
             <button class="add-class" onclick="addClass()">+ Thêm giảng viên mời</button>
+            <!-- gvmList.ejs -->
+            <button class="action-button export" onclick="window.location.href='/gvm/export-excel'">
+              Xuất dữ liệu
+            </button>
+            <script>
+              function exportSelectedData() {
+                fetch('/export-excel')
+                  .then(response => response.blob())
+                  .then(blob => {
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'gvmList.xlsx';
+                    a.click();
+                  });
+              }</script>
             <input type="text" placeholder="Tìm kiếm theo Tên..." class="search" id="searchInput"
               onkeyup="searchClass()" />
-            <select class="filter" onchange="filterClasses()">
-              <option value="">Công nghệ thông tin</option>
-              <option value="">An toàn thông tin</option>
-              <option value="">Điện tử viễn thông</option>
-              <option value="">Mật mã</option>
-              <!-- Các tùy chọn lọc khác -->
+            <select class="filter" id="departmentFilter" onchange="filterGvmByDepartment()">
+              <option value="">Tất cả khoa</option>
+              <option value="CNTT">Công nghệ thông tin</option>
+              <option value="ATTT">An toàn thông tin</option>
+              <option value="DTVT">Điện tử viễn thông</option>
+              <option value="MM">Mật mã</option>
             </select>
+            <script>
+              function filterGvmByDepartment() {
+                let select = document.getElementById("departmentFilter");
+                let department = select.value.toUpperCase();
+                let table = document.getElementById("classTable");
+                let tr = table.getElementsByTagName("tr");
+
+                for (let i = 1; i < tr.length; i++) {
+                  let td = tr[i].getElementsByTagName("td")[5]; // Giả sử cột Khoa là cột thứ 6
+                  if (td) {
+                    let txtValue = td.textContent || td.innerText;
+                    if (department === "" || txtValue.toUpperCase() === department) {
+                      tr[i].style.display = "";
+                    } else {
+                      tr[i].style.display = "none";
+                    }
+                  }
+                }
+              }
+            </script>
+
             <!-- <select class="filter" onchange="filterClasses()">
                                 <option value="">Công nghệ thông tin</option>
                                 <option value="">An toàn thông tin</option>
@@ -118,7 +159,7 @@
               </tr>
             </thead>
             <tbody>
-              <% for (var i=0; i < gvmLists.length; i++) { %>
+              <% for (var i=0; i < gvmLists.length; i++) {%>
                 <tr>
                   <td>
                     <%= i+1 %>
@@ -129,29 +170,32 @@
                   <td>
                     <%= gvmLists[i].HoTen %>
                   </td>
-                  <!-- <td><%= gvmLists[i].NgaySinh.toLocaleDateString('en-US') %></td> -->
-                  <% const options={ year: 'numeric' , month: '2-digit' , day: '2-digit' }; %>
-                    <td>
-                      <%= new Date(gvmLists[i].NgaySinh).toLocaleDateString('vi-VN', options) %>
-                    </td>
+                  <td>
+                    <% const options={ year: 'numeric' , month: '2-digit' , day: '2-digit' }; %>
+                      <% const date=new Date(gvmLists[i].NgaySinh); %>
+                        <% if (!isNaN(date.getTime())) { %>
+                          <%= date.toLocaleDateString('en-US', options) %>
+                            <% } else { %>
+                              Invalid Date
+                              <% } %>
+                  </td>
+                  <td><%= gvmLists[i].MaPhongBan %></td><td><%= gvmLists[i].MaPhongBan %></td>
+                  <td>
+                    <button class="action-button edit"
+                      onclick="editClass(this, <%= parseInt(gvmLists[i].id_Gvm) - 1 %>)">
+                      ✏️
+                    </button>
+                    <!-- <button class="action-button view" onclick="viewClass(this)">
+                      👁️
+                    </button> -->
+                    <button class="action-button view" onclick="viewClass(<%= i %>)">
+                      👁️
+                    </button>
 
-
-                    <td>
-                      <button class="action-button edit"
-                        onclick="editClass(this, <%= parseInt(gvmLists[i].id_Gvm) - 1 %>)">
-                        ✏️
-                      </button>
-                      <!-- <button class="action-button view" onclick="viewClass(this)">
-                                            👁️
-                                          </button> -->
-                      <button class="action-button view" onclick="viewClass(<%= i %>)">
-                        👁️
-                      </button>
-
-                      <!-- <button class="action-button delete" onclick="deleteClass(this)">
-                                            🗑️
-                                          </button> -->
-                    </td>
+                    <!-- <button class="action-button delete" onclick="deleteClass(this)">
+                      🗑️
+                    </button> -->
+                  </td>
                 </tr>
                 <% } %>
             </tbody>
