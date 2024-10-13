@@ -130,9 +130,64 @@
     color: white;
     font-size: 1.5em;
   }
-    .form-select{
-    cursor: pointer;
-  }
+  /*Sửa 1 vài button ở teaching info và import*/ 
+#infoGvm, #save-data-all, #update-qc, #chooseFile, #import, #ban-hanh{
+  --color: #0077ff;
+  font-family: inherit;
+  display: inline-block;
+  width: 6em;
+  height: 2.6em;
+  line-height: 2.5em;
+  overflow: hidden;
+  cursor: pointer;
+  margin: 20px;
+  font-size: 17px;
+  z-index: 1;
+  color: var(--color);
+  border: 2px solid var(--color);
+  border-radius: 6px;
+  position: relative;
+  transition: 0.7s;
+}
+button#chooseFile, button#import, button#ban-hanh{
+  padding-top: 0;
+}
+#infoGvm{
+  width: 190px;
+}
+#ban-hanh{
+  width: 150px;
+}
+#infoGvm::before, #save-data-all::before, #update-qc::before, #chooseFile::before, #import::before, #ban-hanh::before {
+  position: absolute;
+  content: "";
+  background: var(--color);
+  width: 250px;
+  height: 200px;
+  z-index: -1;
+  border-radius: 50%;
+}
+
+#infoGvm:hover, #save-data-all:hover, #update-qc:hover, #chooseFile:hover, #import:hover, #ban-hanh:hover {
+  color: white;
+}
+
+#infoGvm:before, #save-data-all:before, #update-qc:before, #chooseFile:before, #import:before, #ban-hanh:before {
+  top: 100%;
+  left: 100%;
+  transition: 0.3s all;
+}
+
+#infoGvm:hover::before, #save-data-all:hover::before, #update-qc:hover::before, #chooseFile:hover::before, #import:hover::before, #ban-hanh:hover::before {
+  top: -30px;
+  left: -30px;
+}
+
+.form-select{
+  cursor: pointer;
+  height: 2.6em;
+  margin-top: 18px;
+}
   .selectop{
     border: 3px solid #315cfd;
     border-radius: 12px;
