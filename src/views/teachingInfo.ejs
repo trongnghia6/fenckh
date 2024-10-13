@@ -88,9 +88,13 @@
           <li class="nav-item">
             <a class="nav-link" href="/classInfoGvm">Thông tin lớp giảng viên mời</a>
           </li>
-           <!-- Thông tin HD giảng viên mời-->>
-           <li class="nav-item"></li>
+            <!-- Thông tin HD giảng viên mời-->
+           <li class="nav-item">
            <a  class="nav-link " href="/infoHDGvm" role="button">Thông tin HD Gvm</a>
+     </li>
+          <!--  -->
+          <li class="nav-item">
+            <a class="nav-link" href="/tableQC">Bảng quy chuẩn</a>
        </li>
 
 
@@ -205,7 +209,7 @@
               <td></td>
               <td></td>
               <td></td>
-              <td style="display: none;"></td>
+              <td id="ankhoa"></td>
             </tr>
           </tbody>
         </table>
@@ -638,6 +642,7 @@
     } else {
       // Ẩn cột 'khoaColumn'
       document.getElementById('khoaColumn').style.display = 'none';
+      document.getElementById('ankhoa').style.display = 'none';
     }
   };
 
