@@ -190,51 +190,35 @@
                       <% let totalSoTiet=courses.reduce((total, course)=> total + course.QuyChuan, 0); %>
                         <!-- Tính tổng số tiết -->
 
-
-                        <% courses.forEach((course, courseIndex)=> { %>
-                          <tr>
-                            <% if (courseIndex===0) { %>
-                              <!-- Gộp dòng với rowspan bằng số lượng khóa học của giảng viên -->
-                              <td rowspan="<%= courses.length %>">
-                                <%= index %>
-                              </td> <!-- Số thứ tự -->
-                              <td rowspan="<%= courses.length %>">
-                                <%= teacher %>
-                              </td> <!-- Tên giảng viên -->
-                              <% index++; %>
-                                <% } %>
-                                  <td>
-                                    <%= course.Lop %>
-                                  </td> <!-- Tên học phần -->
-                                  <td>
-                                    <%= course.Lop %>
-                                  </td> <!-- Tên lớp -->
-                                  <td>
-                                    <%= course.SoTC %>
-                                  </td> <!-- Số tín chỉ -->
-                                  <td>
-                                    <%= course.QuyChuan %>
-                                  </td> <!-- Số tiết -->
-                                  <!-- Tổng số tiết -->
-                                  <% if (courseIndex===0) { %>
-                                    <!-- Gộp dòng với rowspan bằng số lượng khóa học của giảng viên -->
-                                    <td rowspan="<%= courses.length %>">
-                                      <%= totalSoTiet %>
-                                    </td> <!-- Tổng số tiết -->
-                                    <td rowspan="<%= courses.length %>">
-                                      <button class="action-button view"
-                                        onclick="viewClass('<%= parseInt(course.id_Gvm) - 1 %>')">👁️</button>
-                                      <!-- Nút xem chi tiết -->
-                                    </td>
-
+                
+                                        <% courses.forEach((course, courseIndex) => { %>
+                                            <tr>
+                                                <% if (courseIndex === 0) { %> 
+                                                    <!-- Gộp dòng với rowspan bằng số lượng khóa học của giảng viên -->
+                                                    <td rowspan="<%= courses.length %>"><%= index %></td> <!-- Số thứ tự -->
+                                                    <td rowspan="<%= courses.length %>"><%= teacher %></td> <!-- Tên giảng viên -->
+                                                    <% index++; %>
+                                                <% } %>
+                                                <td><%= course.TenHocPhan %></td> <!-- Tên học phần -->
+                                                <td><%= course.Lop %></td> <!-- Tên lớp -->
+                                                <td><%= course.SoTC %></td> <!-- Số tín chỉ -->
+                                                <td><%= course.QuyChuan %></td> <!-- Số tiết -->
+                                                <!-- Tổng số tiết -->
+                                                <% if (courseIndex === 0) { %> 
+                                                    <!-- Gộp dòng với rowspan bằng số lượng khóa học của giảng viên -->
+                                                    <td rowspan="<%= courses.length %>"><%= totalSoTiet %></td> <!-- Tổng số tiết -->
+                                                    <td rowspan="<%= courses.length %>">
+                                                        <button class="action-button view" onclick="viewClass('<%= parseInt(course.id_Gvm) - 1 %>')">👁️</button> <!-- Nút xem chi tiết -->
+                                                    </td>
+                                                    
+                                                <% } %>
+                                            </tr>
+                                           
+                                        <% }); %>
                                     <% } %>
-                          </tr>
-
-                          <% }); %>
-                            <% } %>
-              </tbody>
-            </table>
-            <!-- <div class="pagination">
+                                </tbody>
+                            </table>          
+                            <!-- <div class="pagination">
                               <span>10 / trang</span>
                               <button class="page-button">1</button>
                             </div> -->

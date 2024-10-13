@@ -17,11 +17,12 @@ const getClassInfoGvm = async (req, res) => {
     query = `SELECT * 
     FROM giangday 
     JOIN gvmoi ON giangday.id_Gvm = gvmoi.id_Gvm 
-    WHERE MaPhongBan LIKE '${parts[0]}%'`;
+    WHERE MaHocPhan LIKE '${parts[0]}%'`;
   }
 
   const connection = await createConnection();
   const [results, fields] = await connection.query(query);
+  //console.log("danh sách = ", results);
   // Nhóm các môn học theo giảng viên
   const groupedByTeacher = results.reduce((acc, current) => {
     const teacher = current.GiangVien;
