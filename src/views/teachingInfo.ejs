@@ -9,6 +9,7 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
   <link rel="stylesheet" href="/css/styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
   <style>
     .table>:not(caption)>*>*{
       border-bottom-width: 2px;
@@ -60,50 +61,35 @@
   </nav>
 
   <!-- Phần dưới của navbar chứa các mục nằm ngang -->
-  <nav class="navbar navbar-expand-lg navbar-bottom">
+  <nav class="navbar navbar-expand-lg navbar-bottom sticky-top">
     <div class="container-fluid">
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
         aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+        
         <ul class="navbar-nav">
           <li class="nav-item">
-            <a class="nav-link" id="Home" href="">HOME</a>
+            <a class="nav-link active" id="Home" href=""><i class="fa-solid fa-house"></i></a>
           </li>
 
-          <li class="nav-item">
-            <a class="nav-link active" id="ThongTinGD" href="">Thông tin GD</a>
-          </li>
-          <!-- <li> -->
-          <li class="nav-item">
-            <!-- <a class="nav-link" href="/import">Import danh sách giảng viên mời</a> -->
-            <a class="nav-link" id="Import" href="">Import</a>
-          </li>
-
-          <li class="nav-item">
-            <a class="nav-link" href="/gvmList">Danh sách giảng viên mời</a>
-          </li>
-
-          <li class="nav-item">
-            <a class="nav-link" href="/classInfoGvm">Thông tin lớp giảng viên mời</a>
-          </li>
-            <!-- Thông tin HD giảng viên mời-->
-           <li class="nav-item">
-           <a  class="nav-link " href="/infoHDGvm" role="button">Thông tin HD Gvm</a>
-     </li>
-          <!--  -->
-          <li class="nav-item">
-            <a class="nav-link" href="/tableQC">Bảng quy chuẩn</a>
-       </li>
-
-
-          <!-- <li class="nav-item">
-              <a class="nav-link" href="#">Duyệt</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/maindt/tableQC">Bảng quy chuẩn</a>
-            </li> -->
+          <div class="navbar-nav">
+            <div class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="/login" id="navbarDropdownUser" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                Giảng Viên
+              </a>
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="nav-link" id="ThongTinGD" href="">Thông tin giảng dạy</a>
+                <a class="nav-link" id="Import" href="">Thêm bảng quy chuẩn</a>
+                <a class="nav-link" href="/gvmList">Danh sách giảng viên mời</a>
+                <a class="nav-link" href="/classInfoGvm">Thông tin lớp giảng viên mời</a>
+                <a  class="nav-link " href="/infoHDGvm" role="button">Thông tin hợp đồng giảng viên mời</a>
+                <a class="nav-link" href="/tableTam">Bảng quy chuẩn dự kiến</a>
+                <a class="nav-link" href="/tableTam">Bảng quy chuẩn chính thức</a>
+              </div>
+            </div>
           <div class="navbar-nav">
             <div class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="/login" id="navbarDropdownUser" data-bs-toggle="dropdown"
@@ -115,12 +101,10 @@
                 <a class="dropdown-item" href="/">Đăng xuất</a>
               </div>
             </div>
-          </div>
         </ul>
       </div>
     </div>
   </nav>
-  </div>
 
   <div class="container my-4" style="max-width: max-content;">
     <div class="" style="width:1300px;">
