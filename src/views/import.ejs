@@ -9,6 +9,7 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
   <link rel="stylesheet" href="/css/styles.css">
   <link rel="stylesheet" href="/css/import.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 
 </head>
 
@@ -27,71 +28,53 @@
   </nav>
 
   <!-- Phần dưới của navbar chứa các mục nằm ngang -->
-  <nav class="navbar navbar-expand-lg navbar-bottom">
+  <nav class="navbar navbar-expand-lg navbar-bottom sticky-top">
     <div class="container-fluid">
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
         aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+
         <ul class="navbar-nav">
           <li class="nav-item">
-            <a class="nav-link" id="Home" href="">HOME</a>
+            <a class="nav-link active" id="Home" href=""><i class="fa-solid fa-house"></i></a>
           </li>
 
-          <li class="nav-item">
-            <a class="nav-link" id="ThongTinGD" href="">Thông tin GD</a>
-          </li>
-          <!-- <li> -->
-          <li class="nav-item">
-            <!-- <a class="nav-link" href="/import">Import danh sách giảng viên mời</a> -->
-            <a class="nav-link active" id="Import" href="">Thêm bảng quy chuẩn</a>
-          </li>
-          <!-- Danh sách giảng viên mời -->
-          <li class="nav-item">
-            <a class="nav-link" href="/gvmList" role="button">Danh sách giảng viên mời</a>
-          </li>
-
-          <!-- Thông tin các lớp giảng viên mời -->
-          <li class="nav-item">
-            <a class="nav-link " href="/classInfoGvm" role="button">Thông tin các lớp giảng viên mời</a>
-          </li>
-          <!-- Thông tin HD giảng viên mời-->
-          <li class="nav-item">
-            <a class="nav-link " href="/infoHDGvm" role="button">Thông tin HD Gvm</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/tableTam">Bảng quy chuẩn dự kiến</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/tableQC">Bảng quy chuẩn chính thức</a>
-          </li>
-
-          <!-- <li class="nav-item">
-              <a class="nav-link" href="#">Duyệt</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/maindt/tableQC">Bảng quy chuẩn</a>
-            </li> -->
           <div class="navbar-nav">
             <div class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="/login" id="navbarDropdownUser" data-bs-toggle="dropdown"
                 aria-expanded="false">
-                Hi, Lê Đức Thuận
+                Giảng Viên
               </a>
               <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a class="dropdown-item" href="#">Thông tin cá nhân</a>
-                <a class="dropdown-item" href="/">Đăng xuất</a>
+                <a class="nav-link" id="ThongTinGD" href="">Thông tin giảng dạy</a>
+                <a class="nav-link" id="Import" href="">Thêm bảng quy chuẩn</a>
+                <a class="nav-link" href="/gvmList">Danh sách giảng viên mời</a>
+                <a class="nav-link" href="/classInfoGvm">Thông tin lớp giảng viên mời</a>
+                <a class="nav-link " href="/infoHDGvm" role="button">Thông tin hợp đồng giảng viên mời</a>
+                <a class="nav-link" href="/tableTam">Bảng quy chuẩn dự kiến</a>
+                <a class="nav-link" href="/tableTam">Bảng quy chuẩn chính thức</a>
               </div>
             </div>
+            <div class="navbar-nav">
+              <div class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="/login" id="navbarDropdownUser" data-bs-toggle="dropdown"
+                  aria-expanded="false">
+                  Hi, Lê Đức Thuận
+                </a>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                  <a class="dropdown-item" href="#">Thông tin cá nhân</a>
+                  <a class="dropdown-item" href="/">Đăng xuất</a>
+                </div>
+              </div>
         </ul>
       </div>
     </div>
   </nav>
-  </div>
 
 
-  <div class="container-fluid my-1 d-flex justify-content-start">
+  <div class="container-fluid m-4 box d-flex justify-content-start">
     <div class="mx-2">
       <div class="d-flex justify-content-between">
         <button class="btn btn-outline-primary button" id="chooseFile">Chọn file</button>
@@ -122,10 +105,23 @@
           <option value="DTVT">DTVT</option>
         </select>
         <button class="btn btn-outline-primary button" id="import">Thêm</button>
-        <button class="btn btn-outline-primary button" id="viewtam">Xem dữ liệu</button>
+        <button class="btn btn-outline-primary button" id="viewtam">Xem bảng quy chuẩn dự kiến</button>
 
         <!-- <button class="btn btn-outline-primary" id="importFile">Import</button> -->
       </div>
+      <!-- Modal -->
+      <div id="action-modal" style="display:none;">
+        <div
+          style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); display: flex; justify-content: center; align-items: center;">
+          <div style="background: white; padding: 20px; border-radius: 8px; max-width: 300px; text-align: center;">
+            <p>Tồn tại dữ liệu cũ của! Bạn muốn xóa dữ liệu cũ hay chèn thêm dữ liệu mới?</p>
+            <button id="btn-delete" style="margin-right: 10px;">Xóa</button>
+            <button id="btn-append">Chèn</button>
+            <button id="btn-cancel">Hủy</button>
+          </div>
+        </div>
+      </div>
+
       <div id="dataTableContainer" class="h-75"></div>
     </div>
   </div>
@@ -199,105 +195,258 @@
       fileInput.click();
     });
 
+    // document.getElementById('import').addEventListener('click', function () {
+    //   let updatedData = [];
+    //   if (dataTam.length != 0) {
+    //     // Lấy giá trị hiện tại từ combo box "Khoa"
+    //     const khoaValue = document.getElementById('combobox-khoa').value;
+    //     const dotValue = document.getElementById('combobox-dot').value;
+    //     const kiValue = document.getElementById('combobox-ki').value;
+    //     const namValue = document.getElementById('combobox-nam').value;
+
+
+    //     // Gửi giá trị Khoa để kiểm tra tồn tại
+    //     fetch('http://localhost:3000/check-khoa', {
+    //       method: 'POST',
+    //       headers: {
+    //         'Content-Type': 'application/json'
+    //       },
+    //       body: JSON.stringify({ khoa: khoaValue }) // Gửi giá trị Khoa
+    //     })
+    //       .then(response => {
+    //         if (!response.ok) {
+    //           throw new Error('Kiểm tra Khoa thất bại');
+    //         }
+    //         return response.json(); // Chuyển đổi phản hồi sang JSON
+    //       })
+    //       .then(data => {
+    //         if (data.exists) {
+    //           // Sử dụng confirm để hiển thị thông báo và nhận câu trả lời từ người dùng
+    //           if (confirm('Tồn tại dữ liệu cũ! Bạn có muốn xóa dữ liệu cũ hay chèn thêm?')) {
+
+    //             fetch('http://localhost:3000/delete-khoa', {
+    //               method: 'POST',
+    //               headers: {
+    //                 'Content-Type': 'application/json'
+    //               },
+    //               body: JSON.stringify({ khoa: khoaValue }) // Gửi giá trị Khoa
+    //             })
+    //               .then(response => {
+    //                 if (!response.ok) {
+    //                   throw new Error('Kiểm tra Khoa thất bại');
+    //                 }
+    //                 alert('Xóa thành công!');
+    //               })
+    //             // Người dùng ấn "OK", tiếp tục xử lý
+    //             updatedData = dataTam.map(item => ({
+    //               ...item,            // Sao chép các thuộc tính hiện có của đối tượng
+    //               Khoa: khoaValue,    // Thêm thuộc tính mới "Khoa" với giá trị từ combo box
+    //               Dot: dotValue,       // Thêm thuộc tính mới "Đợt" với giá trị từ combo box "Đợt"
+    //               Ki: kiValue,       // Thêm thuộc tính mới "Đợt" với giá trị từ combo box "Đợt"
+    //               Nam: namValue       // Thêm thuộc tính mới "Đợt" với giá trị từ combo box "Đợt"
+
+    //             }));
+
+    //             // Gửi dữ liệu đã được cập nhật đến API save-data
+    //             fetch('http://localhost:3000/save-data', {
+    //               method: 'POST',
+    //               headers: {
+    //                 'Content-Type': 'application/json'
+    //               },
+    //               body: JSON.stringify(updatedData) // Gửi dữ liệu đã được cập nhật
+    //             })
+    //               .then(response => {
+    //                 if (!response.ok) {
+    //                   throw new Error('Gửi dữ liệu thất bại');
+    //                 }
+    //                 return response.json();
+    //               })
+    //               .then(data => {
+    //                 if (data.success) {
+    //                   console.log(updatedData);
+    //                   alert('Import thành công!');
+    //                 } else {
+    //                   alert('Import thất bại!');
+    //                 }
+    //               })
+    //               .catch(error => {
+    //                 alert('Gửi dữ liệu thất bại!');
+    //                 console.error('Error:', error);
+    //               });
+    //           } else {
+    //             // Người dùng ấn "Cancel", không làm gì cả
+    //             console.log('');
+    //           }
+    //         } else {
+    //           // Nếu Khoa không tồn tại, tiếp tục thêm và gửi dữ liệu
+    //           updatedData = dataTam.map(item => ({
+    //             ...item,            // Sao chép các thuộc tính hiện có của đối tượng
+    //             Khoa: khoaValue,    // Thêm thuộc tính mới "Khoa" với giá trị từ combo box
+    //             Dot: dotValue,      // Thêm thuộc tính mới "Đợt" với giá trị từ combo box "Đợt"
+    //             Ki: kiValue,       // Thêm thuộc tính mới "Đợt" với giá trị từ combo box "Đợt"
+    //             Nam: namValue       // Thêm thuộc tính mới "Đợt" với giá trị từ combo box "Đợt"
+    //           }));
+
+    //           // Gửi dữ liệu đã được cập nhật đến API save-data
+    //           fetch('http://localhost:3000/save-data', {
+    //             method: 'POST',
+    //             headers: {
+    //               'Content-Type': 'application/json'
+    //             },
+    //             body: JSON.stringify(updatedData) // Gửi dữ liệu đã được cập nhật
+    //           })
+    //             .then(response => {
+    //               if (!response.ok) {
+    //                 throw new Error('Gửi dữ liệu thất bại');
+    //               }
+    //               return response.json();
+    //             })
+    //             .then(data => {
+    //               if (data.success) {
+    //                 console.log(updatedData);
+    //                 alert('Import thành công!');
+    //               } else {
+    //                 alert('Import thất bại!');
+    //               }
+    //             })
+    //             .catch(error => {
+    //               alert('Gửi dữ liệu thất bại!');
+    //               console.error('Error:', error);
+    //             });
+    //         }
+    //       })
+    //       .catch(error => {
+    //         alert('Kiểm tra khoa thất bại!');
+    //         console.error('Error:', error);
+    //       });
+    //   } else {
+    //     alert('Vui lòng chọn file!');
+    //     return;
+    //   }
+    // });
+
     document.getElementById('import').addEventListener('click', function () {
       let updatedData = [];
-      if (dataTam.length != 0) {
-        // Lấy giá trị hiện tại từ combo box "Khoa"
+
+      if (dataTam.length !== 0) {
+        // Lấy giá trị hiện tại từ combo box "Khoa", "Đợt", "Kì", "Năm"
         const khoaValue = document.getElementById('combobox-khoa').value;
         const dotValue = document.getElementById('combobox-dot').value;
         const kiValue = document.getElementById('combobox-ki').value;
         const namValue = document.getElementById('combobox-nam').value;
 
-
-        // Gửi giá trị Khoa để kiểm tra tồn tại
+        // Gửi giá trị để kiểm tra sự tồn tại của dữ liệu khoa
         fetch('http://localhost:3000/check-khoa', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
           },
-          body: JSON.stringify({ khoa: khoaValue }) // Gửi giá trị Khoa
+          body: JSON.stringify({
+            khoa: khoaValue,
+            dot: dotValue,
+            ki: kiValue,
+            nam: namValue
+          })
         })
           .then(response => {
             if (!response.ok) {
-              throw new Error('Kiểm tra Khoa thất bại');
+              throw new Error('Kiểm tra dữ liệu thất bại');
             }
-            return response.json(); // Chuyển đổi phản hồi sang JSON
+            return response.json();
           })
           .then(data => {
             if (data.exists) {
-              // Sử dụng confirm để hiển thị thông báo và nhận câu trả lời từ người dùng
-              if (confirm('Tồn tại dữ liệu cũ! Bạn có muốn xóa hết dữ liệu cũ không?')) {
+              // Hiển thị modal để người dùng chọn giữa Xóa hoặc Chèn
+              const modal = document.getElementById('action-modal');
+              modal.style.display = 'block';
 
+              // Xử lý sự kiện khi người dùng chọn "Xóa"
+              document.getElementById('btn-delete').addEventListener('click', function () {
+                modal.style.display = 'none'; // Ẩn modal
                 fetch('http://localhost:3000/delete-khoa', {
                   method: 'POST',
                   headers: {
                     'Content-Type': 'application/json'
                   },
-                  body: JSON.stringify({ khoa: khoaValue }) // Gửi giá trị Khoa
+                  body: JSON.stringify({
+                    khoa: khoaValue,
+                    dot: dotValue,
+                    ki: kiValue,
+                    nam: namValue
+                  })
                 })
                   .then(response => {
                     if (!response.ok) {
-                      throw new Error('Kiểm tra Khoa thất bại');
+                      throw new Error('Xóa dữ liệu thất bại');
                     }
                     alert('Xóa thành công!');
                   })
-                // Người dùng ấn "OK", tiếp tục xử lý
-                updatedData = dataTam.map(item => ({
-                  ...item,            // Sao chép các thuộc tính hiện có của đối tượng
-                  Khoa: khoaValue,    // Thêm thuộc tính mới "Khoa" với giá trị từ combo box
-                  Dot: dotValue,       // Thêm thuộc tính mới "Đợt" với giá trị từ combo box "Đợt"
-                  Ki: kiValue,       // Thêm thuộc tính mới "Đợt" với giá trị từ combo box "Đợt"
-                  Nam: namValue       // Thêm thuộc tính mới "Đợt" với giá trị từ combo box "Đợt"
+                  .catch(error => {
+                    alert('Xóa dữ liệu thất bại!');
+                    console.error('Error:', error);
+                  });
+              });
 
+              // Xử lý sự kiện khi người dùng chọn "Chèn"
+              document.getElementById('btn-append').addEventListener('click', function () {
+                modal.style.display = 'none'; // Ẩn modal
+                updatedData = dataTam.map(item => ({
+                  ...item,
+                  Khoa: khoaValue,
+                  Dot: dotValue,
+                  Ki: kiValue,
+                  Nam: namValue
                 }));
 
-                // Gửi dữ liệu đã được cập nhật đến API save-data
+                // Gửi dữ liệu đã được cập nhật để chèn thêm vào cơ sở dữ liệu
                 fetch('http://localhost:3000/save-data', {
                   method: 'POST',
                   headers: {
                     'Content-Type': 'application/json'
                   },
-                  body: JSON.stringify(updatedData) // Gửi dữ liệu đã được cập nhật
+                  body: JSON.stringify(updatedData)
                 })
                   .then(response => {
                     if (!response.ok) {
-                      throw new Error('Gửi dữ liệu thất bại');
+                      throw new Error('Chèn dữ liệu thất bại');
                     }
                     return response.json();
                   })
                   .then(data => {
                     if (data.success) {
-                      console.log(updatedData);
-                      alert('Import thành công!');
+                      alert('Chèn thêm thành công!');
                     } else {
-                      alert('Import thất bại!');
+                      alert('Chèn thêm thất bại!');
                     }
                   })
                   .catch(error => {
-                    alert('Gửi dữ liệu thất bại!');
+                    alert('Chèn thêm dữ liệu thất bại!');
                     console.error('Error:', error);
                   });
-              } else {
-                // Người dùng ấn "Cancel", không làm gì cả
-                console.log('Người dùng hủy thao tác import.');
-              }
+              });
+
+              // Xử lý sự kiện khi người dùng chọn "Hủy"
+              document.getElementById('btn-cancel').addEventListener('click', function () {
+                modal.style.display = 'none'; // Ẩn modal
+              });
+
             } else {
               // Nếu Khoa không tồn tại, tiếp tục thêm và gửi dữ liệu
               updatedData = dataTam.map(item => ({
-                ...item,            // Sao chép các thuộc tính hiện có của đối tượng
-                Khoa: khoaValue,    // Thêm thuộc tính mới "Khoa" với giá trị từ combo box
-                Dot: dotValue,      // Thêm thuộc tính mới "Đợt" với giá trị từ combo box "Đợt"
-                Ki: kiValue,       // Thêm thuộc tính mới "Đợt" với giá trị từ combo box "Đợt"
-                Nam: namValue       // Thêm thuộc tính mới "Đợt" với giá trị từ combo box "Đợt"
+                ...item,
+                Khoa: khoaValue,
+                Dot: dotValue,
+                Ki: kiValue,
+                Nam: namValue
               }));
 
-              // Gửi dữ liệu đã được cập nhật đến API save-data
+              // Gửi dữ liệu đã được cập nhật để lưu
               fetch('http://localhost:3000/save-data', {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(updatedData) // Gửi dữ liệu đã được cập nhật
+                body: JSON.stringify(updatedData)
               })
                 .then(response => {
                   if (!response.ok) {
@@ -307,7 +456,6 @@
                 })
                 .then(data => {
                   if (data.success) {
-                    console.log(updatedData);
                     alert('Import thành công!');
                   } else {
                     alert('Import thất bại!');
@@ -328,6 +476,9 @@
         return;
       }
     });
+
+
+
   </script>
 
   <script>
@@ -350,84 +501,45 @@
     }
 
     // Gọi hàm fetchData để lấy dữ liệu khi click
-    document.getElementByIhanh').addEventListener('click', async function () {
-    await fetchData(); // Gọi để lấy dữ liệu trước
+    document.getElementById('ban-hanh').addEventListener('click', async function () {
+      await fetchData(); // Gọi để lấy dữ liệu trước
 
-    // Sau khi lấy dữ liệu, gửi dữ liệu đã cập nhật đến server
-    console.log('Dữ liệu sẽ được gửi:', dataQC);
-    fetch('http://localhost:30hanh', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(dataQC) // Gửi dữ liệu đã được cập nhật
-    })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Gửi dữ liệu thất bại');
-        }
-        return response.json();
+      // Sau khi lấy dữ liệu, gửi dữ liệu đã cập nhật đến server
+      console.log('Dữ liệu sẽ được gửi:', dataQC);
+      fetch('http://localhost:3000/ban-hanh', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(dataQC) // Gửi dữ liệu đã được cập nhật
       })
-      .then(data => {
-        if (data.success) {
-          alert('Ban hành thành công!');
-        } else {
-          alert('Ban hành thất bại!');
-        }
-      })
-      .catch(error => {
-        alert('Gửi dữ liệu thất bại!');
-        console.error('Error:', error);
-      });
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Gửi dữ liệu thất bại');
+          }
+          return response.json();
+        })
+        .then(data => {
+          if (data.success) {
+            alert('Ban hành thành công!');
+          } else {
+            alert('Ban hành thất bại!');
+          }
+        })
+        .catch(error => {
+          alert('Gửi dữ liệu thất bại!');
+          console.error('Error:', error);
+        });
     });
   </script>
 
-  <!-- Phần phân quyền -->
-  <!-- <script>
-        async function fetchRole() {
-            try {
-                const response = await fetch('/api/getRole');
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                const role = await response.json();
-                return role;
-            } catch (error) {
-                console.error('Error fetching data:', error);
-            }
-        }
-    
-        async function ThongTinGD(){
-            const role = await fetchRole();
-            
-            if (role.includes("CNTT")){
-                window.location.href = "/info"; // Chuyển hướng đến trang mong muốn
-            } else if (role.includes("DAOTAO")){
-                window.location.href = "/info2"; // Chuyển hướng đến trang mong muốn
-            }  // thêm quyền vào đây
-        }
-    
-        async function Import(){
-          const role = await fetchRole();
-    
-          if (role.includes("CNTT")){
-              window.location.href = "/importGvmList"; // Chuyển hướng đến trang mong muốn
-          } else if (role.includes("DAOTAO")){
-              window.location.href = "/import"; // Chuyển hướng đến trang mong muốn
-          }  // thêm quyền vào đây
-      }
-    
-      async function Home(){
-        const role = await fetchRole();
-    
-        if (role.includes("CNTT")){
-            window.location.href = "/mainkhoa"; // Chuyển hướng đến trang mong muốn
-        } else if (role.includes("DAOTAO")){
-            window.location.href = "/maindt"; // Chuyển hướng đến trang mong muốn
-        }  // thêm quyền vào đây
-      }
-    
-       </script> -->
+
+  <script>
+    document.getElementById('viewtam').onclick = function () {
+      window.location.href = 'http://localhost:3000/tableTam'; // Thay URL bằng trang bạn muốn chuyển hướng đến
+    }
+  </script>
+
 
   <!-- Phần phân quyền -->
   <script>
