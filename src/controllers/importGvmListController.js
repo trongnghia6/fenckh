@@ -167,10 +167,8 @@ const saveToDB = async (req, res) => {
     const data = JSON.parse(req.body.data); // Lấy dữ liệu từ request (dữ liệu đã render ra)
 
     // Lấy Mã giảng viên mời = Mã Khoa + _GVM_ + id
-    const role = req.session.role;
-    const parts = role.split("_"); // Mã khoa
 
-    const MaPhongBan = parts[0]; // Mã Phòng ban
+    const MaPhongBan = req.session.MaPhongBan;
     const TinhTrangGiangDay = 1; // Tình trạng giảng dạy
 
     if (data && data.length > 0) {

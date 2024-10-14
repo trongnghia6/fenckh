@@ -31,13 +31,13 @@
   <!-- Phân quyền -->
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      const role = localStorage.getItem("userRole");
-
+      //const role = localStorage.getItem("userRole");
+      const MaPhongBan = localStorage.getItem("MaPhongBan")
       // Ẩn phần lọc khoa nếu role là Khoa
       const filterByDepartment = document.getElementById('filterByDepartment');
 
 
-      if (!role.includes("DAOTAO") && !role.includes("TAICHINH")) {
+      if (!MaPhongBan.includes("DAOTAO") && !MaPhongBan.includes("TAICHINH")) {
         filterByDepartment.style.display = 'none';
       }
 
@@ -399,11 +399,11 @@
       importLink.addEventListener("click", function (event) {
         event.preventDefault(); // Ngăn chặn hành vi mặc định của liên kết
 
-        const role = localStorage.getItem("userRole"); // Lấy role từ localStorage
+        const isKhoa = localStorage.getItem("isKhoa"); // Lấy role từ localStorage
 
-        if (role.includes("DAOTAO") || role.includes("TAICHINH")) {
+        if (!isKhoa) { // Nếu là đào tạo hoặc tài chính
           window.location.href = "/import";
-        } else {
+        } else { // Nếu là khoa
           window.location.href = "/importGvmList";
         }
       });
@@ -414,9 +414,9 @@
       ThongTinGD.addEventListener("click", function (event) {
         event.preventDefault(); // Ngăn chặn hành vi mặc định của liên kết
 
-        const role = localStorage.getItem("userRole"); // Lấy role từ localStorage
+        const isKhoa = localStorage.getItem("isKhoa"); // Lấy role từ localStorage
 
-        if (role.includes("DAOTAO") || role.includes("TAICHINH")) {
+        if (!isKhoa) { // Nếu là đào tạo hoặc tài chính
           window.location.href = "/info2";
         } else {
           window.location.href = "/info";
@@ -430,9 +430,9 @@
       Home.addEventListener("click", function (event) {
         event.preventDefault(); // Ngăn chặn hành vi mặc định của liên kết
 
-        const role = localStorage.getItem("userRole"); // Lấy role từ localStorage
+        const isKhoa = localStorage.getItem("isKhoa")
 
-        if (role.includes("DAOTAO") || role.includes("TAICHINH")) {
+        if (!isKhoa) { // Nếu là đào tạo hoặc tài chính
           window.location.href = "/maindt";
         } else {
           window.location.href = "/mainkhoa";

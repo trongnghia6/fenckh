@@ -273,38 +273,58 @@
 
   </script>
 
-  <script>    
-    async function ThongTinGD(){
-      const role = localStorage.getItem("userRole");
+ <!-- Phần phân quyền -->
+ <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Thêm sự kiện click cho phần tử có id "import"
+      const importLink = document.getElementById("Import");
+
+      importLink.addEventListener("click", function (event) {
+        event.preventDefault(); // Ngăn chặn hành vi mặc định của liên kết
+
+        const isKhoa = localStorage.getItem("isKhoa"); // Lấy role từ localStorage
+
+        if (!isKhoa) { // Nếu là đào tạo hoặc tài chính
+          window.location.href = "/import";
+        } else { // Nếu là khoa
+          window.location.href = "/importGvmList";
+        }
+      });
+
+      // Thêm sự kiện click cho phần tử có id="ThongTinGD"
+      const ThongTinGD = document.getElementById("ThongTinGD");
+
+      ThongTinGD.addEventListener("click", function (event) {
+        event.preventDefault(); // Ngăn chặn hành vi mặc định của liên kết
+
+        const isKhoa = localStorage.getItem("isKhoa"); // Lấy role từ localStorage
+
         
-        if (role.includes("DAOTAO"||role.includes("TAICHINH"))){
+        if (!isKhoa) { // Nếu là đào tạo hoặc tài chính
           window.location.href = "/info2";
         } else {
           window.location.href = "/info";
         }
-    }
+      });
 
-    async function Import(){
-      const role = localStorage.getItem("userRole");
+      // Thêm sự kiện click cho phần tử có id="Home"
 
-      if (role.includes("DAOTAO"||role.includes("TAICHINH"))){
-        window.location.href = "/import";
-      } else {
-        window.location.href = "/importGvmList";
-      }
-  }
+      const Home = document.getElementById("Home");
 
-  async function Home(){
-    const role = localStorage.getItem("userRole");
+      Home.addEventListener("click", function (event) {
+        event.preventDefault(); // Ngăn chặn hành vi mặc định của liên kết
 
-    if (role.includes("DAOTAO"||role.includes("TAICHINH"))){
-      window.location.href = "/maindt";
-    } else {
-      window.location.href = "/mainkhoa";
-    }
-  }
+        const isKhoa = localStorage.getItem("isKhoa")
 
-   </script>
+        if (!isKhoa) { // Nếu là đào tạo hoặc tài chính
+          window.location.href = "/maindt";
+        } else {
+          window.location.href = "/mainkhoa";
+        }
+      });
+    });
+
+  </script>
 
 </body>
 </html>

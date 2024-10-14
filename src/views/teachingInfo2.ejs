@@ -261,10 +261,9 @@
       globalData = await teachingResponse.json();
       console.log('Tổng hợp bảng dữ liệu:', globalData);
 
-      //const role = await fetchRole();
-      const role = localStorage.getItem("userRole");
-      console.log(role);
-      renderTable(globalData, role); // Gọi hàm renderTable sau khi đã có đủ dữ liệu
+      
+      
+      renderTable(globalData); // Gọi hàm renderTable sau khi đã có đủ dữ liệu
 
 
       calculateTotals();
@@ -274,7 +273,7 @@
   }
 
   // Hàm render bảng
-  function renderTable(data, role) {
+  function renderTable(data) {
     const tableBody = document.getElementById('tableBody');
     tableBody.innerHTML = ''; // Xóa nội dung cũ
 
@@ -326,7 +325,11 @@
       tableRow.appendChild(soTietQCTd);
 
       // Điều kiện để ẩn checkbox của "Khoa" nếu role không phải là "CNTT_ALL"
-      if (role == 'DAOTAO_ALL') {
+      const role = localStorage.getItem("userRole");
+      const MaPhongBan = localStorage.getItem("MaPhongBan")
+
+
+      if (MaPhongBan == 'DAOTAO' && role == 'Duyệt') {
         // Checkbox cho Khoa
         const khoaCheckboxTd = document.createElement('td');
         const khoaCheckbox = document.createElement('input');
@@ -346,7 +349,7 @@
         daoTaoCheckbox.onchange = () => updateCheckAll('daoTao'); // Gọi hàm khi checkbox thay đổi
         daoTaoCheckboxTd.appendChild(daoTaoCheckbox);
         tableRow.appendChild(daoTaoCheckboxTd);
-      } else if (role == 'TAICHINH_ALL') {
+      } else if (MaPhongBan == 'TAICHINH' && role == "Duyệt") {
         // Checkbox cho Đào Tạo
         const daoTaoCheckboxTd = document.createElement('td');
         const daoTaoCheckbox = document.createElement('input');
@@ -373,6 +376,7 @@
 
   async function submitData() {
     const role = localStorage.getItem("userRole")
+    const MaPhongBan = localStorage.getItem("MaPhongBan");
     const rows = document.querySelectorAll('#tableBody tr'); // Lấy tất cả các hàng trong bảng
 
     rows.forEach((row, index) => {
@@ -393,11 +397,11 @@
       let khoaDuyet = false; // Khởi tạo biến để lưu trạng thái checkbox "Khoa"
       let taiChinhDuyet = false; // Khởi tạo biến để lưu trạng thái checkbox "Tài Chính"
 
-      if (role === 'DAOTAO_ALL') {
+      if (role == 'DAOTAO' && role == 'Duyệt') {
         // Khi role là DAOTAO_ALL
         khoaDuyet = khoaCheckbox ? khoaCheckbox.checked : false; // Cập nhật Khoa
         taiChinhDuyet = false; // Tài Chính sẽ luôn là false
-      } else if (role === 'TAICHINH_ALL') {
+      } else if (role == 'TAICHINH' && role == 'Duyệt') {
         // Khi role là TAICHINH_ALL
         khoaDuyet = globalData[index].KhoaDuyet; // Giữ nguyên giá trị cũ của Khoa
         taiChinhDuyet = taiChinhCheckbox ? taiChinhCheckbox.checked : false; // Cập nhật Tài Chính
@@ -589,29 +593,37 @@
   init();
 </script>
 
-<!-- Phần phân quyền -->
 <script>
-  window.onload = async function () {
+  window.onload = function () {
+    //const duyet = process.env.DUYET;
+    //const thuong = process.end.THUONG;
     const role = localStorage.getItem("userRole")
+    const MaPhongBan = localStorage.getItem("MaPhongBan")
 
-    if (role === 'DAOTAO_ALL') {
+
+    if (MaPhongBan == 'DAOTAO' && role == 'Duyệt') {
       // Ẩn cột 'taiChinhColumn'
+      console.log("đào tạo")
       document.getElementById('taiChinhColumn').style.display = 'none';
       document.getElementById('update-qc').style.display = 'inline-block'; // Sử dụng 'inline-block' để hiển thị nút
-    } else if (role === 'TAICHINH_ALL') {
+    } else if (MaPhongBan == 'TAICHINH' && role == duyet) {
       // Ẩn cột 'khoaColumn'
+      console.log("tài chính")
       document.getElementById('khoaColumn').style.display = 'none';
       document.getElementById('update-qc').style.display = 'inline-block'; // Sử dụng 'inline-block' để hiển thị nút
       // Hiển thị nút 'Cập nhật'
       document.getElementById('save-data-all').style.display = 'inline-block'; // Sử dụng 'inline-block' để hiển thị nút
-    } else if (role.includes("XEM")) {
+    } else if (role == 'Thường') {
       // Ẩn tất cả các cột
       document.getElementById('khoaColumn').style.display = 'none';
       document.getElementById('daoTaoColumn').style.display = 'none';
       document.getElementById('taiChinhColumn').style.display = 'none';
     }
   };
+</script>
 
+ <!-- Phần phân quyền -->
+ <script>
   document.addEventListener('DOMContentLoaded', () => {
     // Thêm sự kiện click cho phần tử có id "import"
     const importLink = document.getElementById("Import");
@@ -619,11 +631,11 @@
     importLink.addEventListener("click", function (event) {
       event.preventDefault(); // Ngăn chặn hành vi mặc định của liên kết
 
-      const role = localStorage.getItem("userRole"); // Lấy role từ localStorage
+      const isKhoa = localStorage.getItem("isKhoa"); // Lấy từ localStorage
 
-      if (role.includes("DAOTAO") || role.includes("TAICHINH")) {
+      if (!isKhoa) { // Nếu là đào tạo hoặc tài chính
         window.location.href = "/import";
-      } else {
+      } else { // Nếu là khoa
         window.location.href = "/importGvmList";
       }
     });
@@ -634,9 +646,9 @@
     ThongTinGD.addEventListener("click", function (event) {
       event.preventDefault(); // Ngăn chặn hành vi mặc định của liên kết
 
-      const role = localStorage.getItem("userRole"); // Lấy role từ localStorage
+      const isKhoa = localStorage.getItem("isKhoa"); // Lấy role từ localStorage
 
-      if (role.includes("DAOTAO") || role.includes("TAICHINH")) {
+      if (!isKhoa) { // Nếu là đào tạo hoặc tài chính
         window.location.href = "/info2";
       } else {
         window.location.href = "/info";
@@ -650,9 +662,9 @@
     Home.addEventListener("click", function (event) {
       event.preventDefault(); // Ngăn chặn hành vi mặc định của liên kết
 
-      const role = localStorage.getItem("userRole"); // Lấy role từ localStorage
+      const isKhoa = localStorage.getItem("isKhoa")
 
-      if (role.includes("DAOTAO") || role.includes("TAICHINH")) {
+      if (!isKhoa) { // Nếu là đào tạo hoặc tài chính
         window.location.href = "/maindt";
       } else {
         window.location.href = "/mainkhoa";
