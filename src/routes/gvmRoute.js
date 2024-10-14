@@ -8,6 +8,10 @@ router.get('/tableQC', (req, res) => {
   res.render('tableQC'); // render file 'tableQC.ejs' trong thư mục 'views'
 });
 
+router.get('/tableTam', (req, res) => {
+  res.render('tableTam'); // render file 'tableQC.ejs' trong thư mục 'views'
+});
+
 // Route để lấy dữ liệu từ bảng quy chuẩn
 router.get('/bang-tam', async (req, res) => {
   try {
