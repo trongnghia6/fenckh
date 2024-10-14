@@ -135,7 +135,7 @@
                 <option value="DTVT">Điện tử viễn thông</option>
                 <option value="MM">Mật mã</option>
               </select>
-              <script>
+              <!-- <script>
                 function filterGvmByDepartment() {
                   let select = document.getElementById("departmentFilter");
                   let department = select.value;
@@ -169,7 +169,7 @@
                     }
                   });
                 }
-              </script>
+              </script> -->
             </div>
 
             <table class="class-table" id="classTable">
@@ -182,7 +182,7 @@
                   <th>Số tín chỉ</th>
                   <th>Số tiết</th>
                   <th>Tổng số tiết</th>
-                  <th>Khoa</th>
+                  <!-- <th>Khoa</th> -->
                   <th>Chi tiết giảng viên mời</th>
                 </tr>
               </thead>
@@ -211,7 +211,7 @@
                                                 <% if (courseIndex === 0) { %> 
                                                     <!-- Gộp dòng với rowspan bằng số lượng khóa học của giảng viên -->
                                                     <td rowspan="<%= courses.length %>"><%= totalSoTiet %></td> <!-- Tổng số tiết -->
-                                                    <td><%= course.MaPhongBan %></td>
+                                                    <!-- <td><%= course.MaPhongBan %></td> -->
                                                     <td rowspan="<%= courses.length %>">
                                                         <button class="action-button view" onclick="viewClass('<%= parseInt(course.id_Gvm) - 1 %>')">👁️</button> <!-- Nút xem chi tiết -->
                                                     </td>
@@ -261,6 +261,26 @@
   </div>
   <script src="/bootstrap/dist/js/jquery-3.7.1.min.js"></script>
   <script src="/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    function filterGvmByDepartment() {
+      var filter = document.getElementById("departmentFilter").value;
+      var table = document.getElementById("classTable");
+      var tbody = document.getElementById("teacher-group");
+      var rows = tbody.getElementsByTagName("tr");
+
+      for (var i = 0; i < rows.length; i++) {
+        var row = rows[i];
+        var department = row.getAttribute("data-department");
+
+        if (filter === "" || department === filter) {
+          row.style.display = "";
+        } else {
+          row.style.display = "none";
+        }
+      }
+    }
+  </script>
 
   <script>
     // Tìm kiếm giảng viên mời theo tên

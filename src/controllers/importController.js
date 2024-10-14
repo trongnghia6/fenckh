@@ -642,13 +642,11 @@ AND (KhoaDuyet = FALSE OR DaoTaoDuyet = FALSE OR TaiChinhDuyet = FALSE);  -- Đi
       console.error("Lỗi cập nhật:", error);
       res.status(500).json({ error: "Có lỗi xảy ra khi cập nhật dữ liệu" });
     }
-
   } else {
     res
       .status(403)
       .json({ error: "Bạn không có quyền thực hiện hành động này" });
   }
-
 };
 
 const updateQC = async (req, res) => {
@@ -656,7 +654,9 @@ const updateQC = async (req, res) => {
 
   // Kiểm tra xem người dùng có quyền thực hiện hành động này không
   if (!role.includes("THIHANH") && !role.includes("ALL")) {
-    return res.status(403).json({ error: "Bạn không có quyền thực hiện hành động này" });
+    return res
+      .status(403)
+      .json({ error: "Bạn không có quyền thực hiện hành động này" });
   }
 
   const tableName = process.env.DB_TABLE_QC; // Giả sử biến này có giá trị là "quychuan"
@@ -781,7 +781,7 @@ const updateQC = async (req, res) => {
         TaiChinhDuyet,
         NgayBatDau,
         NgayKetThuc,
-        ID
+        ID,
       ];
 
       await queryAsync(updateQuery, updateValues);
@@ -790,13 +790,12 @@ const updateQC = async (req, res) => {
     // Trả về thông báo cho các ID đã hoàn thiện
     if (completedIDs.length > 0) {
       return res.status(200).json({
-        message: "Dữ liệu đã hoàn thiện, không thể cập nhật"
+        message: "Dữ liệu đã hoàn thiện, không thể cập nhật",
       });
     }
 
     // Nếu tất cả cập nhật thành công
     res.status(200).json({ message: "Cập nhật thành công" });
-
   } catch (error) {
     console.error("Lỗi cập nhật:", error);
     res.status(500).json({ error: "Có lỗi xảy ra khi cập nhật dữ liệu" });
@@ -1330,7 +1329,7 @@ const insertGiangDay = async () => {
             gv = gv1[0];
           }
         }
-
+        console.log("Mã học phần = ", MaHocPhan);
         // Kiểm tra môn học đã tồn tại chưa
         if (!(await hocPhanDaTonTai(MaHocPhan))) {
           await themHocPhan(MaHocPhan, TenHocPhan, SoTinChi, Khoa);
