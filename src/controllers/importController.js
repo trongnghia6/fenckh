@@ -510,24 +510,12 @@ const deleteRowByKhoa = (req, res) => {
 
 const updateChecked = async (req, res) => {
   const role = req.session.role;
-  const roleDaoTaoALL = process.env.DAOTAO_ALL;
-  const roleCNTTAll = process.env.CNTT_ALL;
-  const roleATTTAll = process.env.ATTT_ALL;
-  const roleDTVTAll = process.env.DTVT_ALL;
 
-  // const roleDaoTaoThiHanh = process.env.THIHANH;
-  const roleCNTTThiHanh = process.env.CNTT_THIHANH;
-  const roleATTTThiHanh = process.env.ATTT_THIHANH;
-  const roleDTVTThiHanh = process.env.DTVT_THIHANH;
-
-  const roleDaoTaoXem = process.env.DAOTAO_XEM;
-  const roleCNTTXem = process.env.CNTT_XEM;
-  const roleATTTXem = process.env.ATTT_XEM;
-  const roleDTVTXem = process.env.DTVT_XEM;
+  const duyet = process.env.DUYET;
 
   const tableName = process.env.DB_TABLE_QC; // Giả sử biến này có giá trị là "quychuan"
 
-  if (role.includes("THIHANH") || role.includes("ALL")) {
+  if (role == duyet) {
     const jsonData = req.body; // Lấy dữ liệu từ req.body
 
     // Tạo mảng các Promise cho từng item trong jsonData
@@ -651,9 +639,10 @@ AND (KhoaDuyet = FALSE OR DaoTaoDuyet = FALSE OR TaiChinhDuyet = FALSE);  -- Đi
 
 const updateQC = async (req, res) => {
   const role = req.session.role;
+  const duyet = process.env.DUYET;
 
   // Kiểm tra xem người dùng có quyền thực hiện hành động này không
-  if (!role.includes("THIHANH") && !role.includes("ALL")) {
+  if (role == duyet) {
     return res
       .status(403)
       .json({ error: "Bạn không có quyền thực hiện hành động này" });

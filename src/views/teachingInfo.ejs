@@ -268,8 +268,8 @@
       // console.table(globalData);
 
       //const role = await fetchRole();
-      role = localStorage.getItem("userRole")
-      renderTable(globalData, role); // Gọi hàm renderTable sau khi đã có đủ dữ liệu
+      //role = localStorage.getItem("userRole")
+      renderTable(globalData); // Gọi hàm renderTable sau khi đã có đủ dữ liệu
       calculateTotals();
     } catch (error) {
       console.error('Đã có lỗi xảy ra:', error);
@@ -338,9 +338,12 @@
   }
 
   // Hàm render bảng
-  function renderTable(data, role) {
+  function renderTable(data) {
     const tableBody = document.getElementById('tableBody');
     tableBody.innerHTML = ''; // Xóa nội dung cũ
+
+    const role = localStorage.getItem("userRole");
+    const isKhoa = localStorage.getItem("isKhoa")
 
     data.forEach((row) => {
       const tableRow = document.createElement('tr');
@@ -413,7 +416,7 @@
       tableRow.appendChild(soTietQCTd);
 
       // Điều kiện để ẩn checkbox của "Khoa" nếu role không phải là "CNTT_ALL"
-      if (role === 'CNTT_ALL' || role === 'ATTT_ALL' || role === 'DTVT_ALL') {
+      if (isKhoa == 1 && role == "Duyệt") {
         const khoaCheckboxTd = document.createElement('td');
         const khoaCheckbox = document.createElement('input');
         khoaCheckbox.type = 'checkbox';
@@ -609,27 +612,8 @@
   init();
 </script>
 
-<!-- Phần phân quyền -->
-<script>
-  window.onload = async function () {
-    const role = localStorage.getItem("userRole")
-
-    // chỉ cho nhập ngày bắt đầu ngày kết thúc với role thi hành
-    if (role.includes('THIHANH')) {
-      document.getElementById('batdau').style.display = '';
-      document.getElementById('ketthuc').style.display = '';
-    }
-    // Nếu role là 1 trong 3 giá trị sau thì hiển thị cột, ngược lại thì ẩn
-    if (role === 'CNTT_ALL' || role === 'ATTT_ALL' || role === 'DTVT_ALL') {
-      // Hiển thị cột 'khoaColumn'
-      document.getElementById('khoaColumn').style.display = 'table-cell';
-    } else {
-      // Ẩn cột 'khoaColumn'
-      document.getElementById('khoaColumn').style.display = 'none';
-      document.getElementById('ankhoa').style.display = 'none';
-    }
-  };
-
+ <!-- Phần phân quyền -->
+ <script>
   document.addEventListener('DOMContentLoaded', () => {
     // Thêm sự kiện click cho phần tử có id "import"
     const importLink = document.getElementById("Import");
@@ -637,11 +621,11 @@
     importLink.addEventListener("click", function (event) {
       event.preventDefault(); // Ngăn chặn hành vi mặc định của liên kết
 
-      const role = localStorage.getItem("userRole"); // Lấy role từ localStorage
+      const isKhoa = localStorage.getItem("isKhoa"); // Lấy role từ localStorage
 
-      if (role.includes("DAOTAO") || role.includes("TAICHINH")) {
+      if (!isKhoa) { // Nếu là đào tạo hoặc tài chính
         window.location.href = "/import";
-      } else {
+      } else { // Nếu là khoa
         window.location.href = "/importGvmList";
       }
     });
@@ -652,9 +636,9 @@
     ThongTinGD.addEventListener("click", function (event) {
       event.preventDefault(); // Ngăn chặn hành vi mặc định của liên kết
 
-      const role = localStorage.getItem("userRole"); // Lấy role từ localStorage
+      const isKhoa = localStorage.getItem("isKhoa"); // Lấy role từ localStorage
 
-      if (role.includes("DAOTAO") || role.includes("TAICHINH")) {
+      if (!isKhoa) { // Nếu là đào tạo hoặc tài chính
         window.location.href = "/info2";
       } else {
         window.location.href = "/info";
@@ -668,9 +652,9 @@
     Home.addEventListener("click", function (event) {
       event.preventDefault(); // Ngăn chặn hành vi mặc định của liên kết
 
-      const role = localStorage.getItem("userRole"); // Lấy role từ localStorage
+      const isKhoa = localStorage.getItem("isKhoa")
 
-      if (role.includes("DAOTAO") || role.includes("TAICHINH")) {
+      if (!isKhoa) { // Nếu là đào tạo hoặc tài chính
         window.location.href = "/maindt";
       } else {
         window.location.href = "/mainkhoa";

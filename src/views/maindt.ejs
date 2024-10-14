@@ -9,6 +9,11 @@
   <link rel="stylesheet" href="../../bootstrap-5.3.3-dist/bootstrap-icons-1.11.3/font/bootstrap-icons.min.css">
   <link rel="stylesheet" href="/css/styles.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+  <style>
+    .card-item{
+      width: 30%;
+    }
+  </style>
 </head>
 
 <body>
@@ -72,7 +77,7 @@
   <!-- 2. Tổng quan -->
   <div class="container-fluid m-4">
     <div class="card-container d-flex flex-wrap justify-content-between">
-      <div class="card-item">
+      <div class="card-item ">
         <div class="card text-white bg-primary mb-3">
           <div class="card-body">
             <h5 class="card-title">Tổng số học viên</h5>
@@ -302,57 +307,57 @@
     }
   </script>
 
-      <!-- Phần phân quyền -->
-      <script>
-        document.addEventListener('DOMContentLoaded', () => {
-          // Thêm sự kiện click cho phần tử có id "import"
-          const importLink = document.getElementById("Import");
-          
-          importLink.addEventListener("click", function(event) {
-              event.preventDefault(); // Ngăn chặn hành vi mặc định của liên kết
-              
-              const role = localStorage.getItem("userRole"); // Lấy role từ localStorage
-              
-              if (role.includes("DAOTAO")||role.includes("TAICHINH")){
-                window.location.href = "/import";
-              } else {
-                window.location.href = "/importGvmList";
-              }
-          });
-    
-          // Thêm sự kiện click cho phần tử có id="ThongTinGD"
-          const ThongTinGD = document.getElementById("ThongTinGD");
-          
-          ThongTinGD.addEventListener("click", function(event) {
-              event.preventDefault(); // Ngăn chặn hành vi mặc định của liên kết
-              
-              const role = localStorage.getItem("userRole"); // Lấy role từ localStorage
-                      
-              if (role.includes("DAOTAO")||role.includes("TAICHINH")){
-                window.location.href = "/info2";
-              } else {
-                window.location.href = "/info";
-              }
-          });
-    
-          // Thêm sự kiện click cho phần tử có id="Home"
-    
-          const Home = document.getElementById("Home");
-          
-          Home.addEventListener("click", function(event) {
-              event.preventDefault(); // Ngăn chặn hành vi mặc định của liên kết
-              
-              const role = localStorage.getItem("userRole"); // Lấy role từ localStorage
-              
-              if (role.includes("DAOTAO")||role.includes("TAICHINH")){
-                window.location.href = "/maindt";
-              } else {
-                window.location.href = "/mainkhoa";
-              }
-          });
+  <!-- Phần phân quyền -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Thêm sự kiện click cho phần tử có id "import"
+      const importLink = document.getElementById("Import");
+
+      importLink.addEventListener("click", function (event) {
+        event.preventDefault(); // Ngăn chặn hành vi mặc định của liên kết
+
+        const isKhoa = localStorage.getItem("isKhoa"); // Lấy role từ localStorage
+
+        if (isKhoa == 0) { // Nếu là đào tạo hoặc tài chính
+          window.location.href = "/import";
+        } else { // Nếu là khoa
+          window.location.href = "/importGvmList";
+        }
       });
-    
-       </script>
+
+      // Thêm sự kiện click cho phần tử có id="ThongTinGD"
+      const ThongTinGD = document.getElementById("ThongTinGD");
+
+      ThongTinGD.addEventListener("click", function (event) {
+        event.preventDefault(); // Ngăn chặn hành vi mặc định của liên kết
+
+        const isKhoa = localStorage.getItem("isKhoa"); // Lấy role từ localStorage
+
+        if (isKhoa == 0) { // Nếu là đào tạo hoặc tài chính
+          window.location.href = "/info2";
+        } else {
+          window.location.href = "/info";
+        }
+      });
+
+      // Thêm sự kiện click cho phần tử có id="Home"
+
+      const Home = document.getElementById("Home");
+
+      Home.addEventListener("click", function (event) {
+        event.preventDefault(); // Ngăn chặn hành vi mặc định của liên kết
+
+        const isKhoa = localStorage.getItem("isKhoa")
+
+        if (isKhoa == 0) { // Nếu là đào tạo hoặc tài chính
+          window.location.href = "/maindt";
+        } else {
+          window.location.href = "/mainkhoa";
+        }
+      });
+    });
+
+  </script>
 
 
 </body>

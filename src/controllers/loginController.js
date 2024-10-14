@@ -5,24 +5,12 @@ require("dotenv").config();
 const login = async (req, res) => {
   const { username, password } = req.body;
 
-  const roleDaoTaoALL = process.env.DAOTAO_ALL;
-  const roleTaiChinhALL = process.env.TAICHINH_ALL;
-
-  const roleCNTTAll = process.env.CNTT_ALL;
-  const roleATTTAll = process.env.ATTT_ALL;
-  const roleDTVTAll = process.env.DTVT_ALL;
-
-  // const roleDaoTaoThiHanh = process.env.THIHANH;
-  const roleCNTTThiHanh = process.env.CNTT_THIHANH;
-  const roleATTTThiHanh = process.env.ATTT_THIHANH;
-  const roleDTVTThiHanh = process.env.DTVT_THIHANH;
-
-
-  const roleDaoTaoXem = process.env.DAOTAO_XEM;
-  const roleTaiChinhXem = process.env.TAICHINH_XEM;
-  const roleCNTTXem = process.env.CNTT_XEM;
-  const roleATTTXem = process.env.ATTT_XEM;
-  const roleDTVTXem = process.env.DTVT_XEM;
+  // Lấy tên người dùng
+  query = `select TenNhanVien from nhanvien 
+            join taikhoannguoidung on nhanvien.id_User = taikhoannguoidung.id_User
+            where TenDangNhap = ?`;
+  const [TenNhanViens] = await connection.promise().query(query, [username]);
+  const TenNhanVien = TenNhanViens[0];
 
   try {
     // Truy vấn người dùng từ cơ sở dữ liệu
@@ -43,63 +31,31 @@ const login = async (req, res) => {
         // Phân quyền người dùng
         const [roles] = await connection
           .promise()
-          .query("SELECT Quyen FROM role WHERE TenDangNhap = ?", [username]);
+          .query(
+            "SELECT MaPhongBan, Quyen, isKhoa FROM role WHERE TenDangNhap = ?",
+            [username]
+          );
 
         let url;
-        // console.log();
-        // console.log("đến đây r");
 
-
+        const MaPhongBan = roles[0].MaPhongBan;
         const role = roles[0].Quyen;
-        console.log('role đăng nhập : ' + role);
-        if (role.includes(roleDaoTaoALL)) {
-          req.session.role = roleDaoTaoALL; // Lưu vai trò vào session
+        const isKhoa = roles[0].isKhoa;
+        req.session.role = role;
+        req.session.MaPhongBan = MaPhongBan;
+        console.log("role = ", role);
+        console.log("MaPhongBan = ", MaPhongBan);
+        //console.log('role đăng nhập : ' + role);
+        if (isKhoa == 0) {
           url = "/maindt";
-        } else if (role.includes(roleDaoTaoXem)) {
-          req.session.role = roleDaoTaoXem; // Lưu vai trò vào session
-          url = "/maindt";
-          // } else if (role.includes(roleDaoTaoThiHanh)) {
-          //   req.session.role = roleDaoTaoThiHanh; // Lưu vai trò vào session
-          //   url = "/maindt";
-        } else if (role.includes(roleCNTTAll)) {
-          req.session.role = roleCNTTAll; // Lưu vai trò vào session
+        } else {
           url = "/mainkhoa";
-        } else if (role.includes(roleCNTTXem)) {
-          req.session.role = roleCNTTXem; // Lưu vai trò vào session
-          url = "/mainkhoa";
-        } else if (role.includes(roleCNTTThiHanh)) {
-          req.session.role = roleCNTTThiHanh; // Lưu vai trò vào session
-          url = "/mainkhoa";
-        } else if (role.includes(roleATTTAll)) {
-          req.session.role = roleATTTAll;
-          url = "/mainkhoa";
-        } else if (role.includes(roleATTTXem)) {
-          req.session.role = roleATTTXem;
-          url = "/mainkhoa";
-        } else if (role.includes(roleATTTThiHanh)) {
-          req.session.role = roleATTTThiHanh;
-          url = "/mainkhoa";
-        } else if (role.includes(roleDTVTAll)) {
-          req.session.role = roleDTVTAll;
-          url = "/mainkhoa";
-        } else if (role.includes(roleDTVTXem)) {
-          req.session.role = roleDTVTXem;
-          url = "/mainkhoa";
-        } else if (role.includes(roleDTVTThiHanh)) {
-          req.session.role = roleDTVTThiHanh;
-          url = "/mainkhoa";
-        } else if (role.includes(roleTaiChinhALL)) {
-          req.session.role = roleTaiChinhALL;
-          url = "/maindt";
-        } else if (role.includes(roleTaiChinhXem)) {
-          req.session.role = roleTaiChinhXem;
-          url = "/maindt";
         }
 
-
-
         // Trả về phản hồi thành công với url
-        return res.status(200).json({ url, role });
+        return res
+          .status(200)
+          .json({ url, role, MaPhongBan, isKhoa, TenNhanVien });
       } else {
         return res.status(401).json({ message: "Mật khẩu không chính xác" });
       }

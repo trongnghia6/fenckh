@@ -232,52 +232,57 @@ if (message) {
     </script>
 
 
-      <!-- Phần phân quyền -->
-  <script>
-    async function fetchRole() {
-        try {
-            const response = await fetch('/api/getRole');
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            const role = await response.json();
-            return role;
-        } catch (error) {
-            console.error('Error fetching data:', error);
-        }
-    }
+ <!-- Phần phân quyền -->
+ <script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // Thêm sự kiện click cho phần tử có id "import"
+    const importLink = document.getElementById("Import");
 
-    async function ThongTinGD(){
-        const role = await fetchRole();
-        
-        if (role.includes("CNTT")){
-            window.location.href = "/info"; // Chuyển hướng đến trang mong muốn
-        } else if (role.includes("DAOTAO")){
-            window.location.href = "/info2"; // Chuyển hướng đến trang mong muốn
-        }  // thêm quyền vào đây
-    }
+    importLink.addEventListener("click", function (event) {
+      event.preventDefault(); // Ngăn chặn hành vi mặc định của liên kết
 
-    async function Import(){
-      const role = await fetchRole();
+      const isKhoa = localStorage.getItem("isKhoa"); // Lấy role từ localStorage
 
-      if (role.includes("CNTT")){
-          window.location.href = "/importGvmList"; // Chuyển hướng đến trang mong muốn
-      } else if (role.includes("DAOTAO")){
-          window.location.href = "/import"; // Chuyển hướng đến trang mong muốn
-      }  // thêm quyền vào đây
-  }
+      if (!isKhoa) { // Nếu là đào tạo hoặc tài chính
+        window.location.href = "/import";
+      } else { // Nếu là khoa
+        window.location.href = "/importGvmList";
+      }
+    });
 
-  async function Home(){
-    const role = await fetchRole();
+    // Thêm sự kiện click cho phần tử có id="ThongTinGD"
+    const ThongTinGD = document.getElementById("ThongTinGD");
 
-    if (role.includes("CNTT")){
-        window.location.href = "/mainkhoa"; // Chuyển hướng đến trang mong muốn
-    } else if (role.includes("DAOTAO")){
-        window.location.href = "/maindt"; // Chuyển hướng đến trang mong muốn
-    }  // thêm quyền vào đây
-  }
+    ThongTinGD.addEventListener("click", function (event) {
+      event.preventDefault(); // Ngăn chặn hành vi mặc định của liên kết
 
-   </script>
+      const isKhoa = localStorage.getItem("isKhoa"); // Lấy role từ localStorage
+
+      if (!isKhoa) { // Nếu là đào tạo hoặc tài chính
+        window.location.href = "/info2";
+      } else {
+        window.location.href = "/info";
+      }
+    });
+
+    // Thêm sự kiện click cho phần tử có id="Home"
+
+    const Home = document.getElementById("Home");
+
+    Home.addEventListener("click", function (event) {
+      event.preventDefault(); // Ngăn chặn hành vi mặc định của liên kết
+
+      const isKhoa = localStorage.getItem("isKhoa")
+
+      if (!isKhoa) { // Nếu là đào tạo hoặc tài chính
+        window.location.href = "/maindt";
+      } else {
+        window.location.href = "/mainkhoa";
+      }
+    });
+  });
+
+</script>
 </body>
 </html>
 
