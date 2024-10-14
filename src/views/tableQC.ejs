@@ -121,8 +121,13 @@
     </div>
   </nav>
 
-  <div class="container-fluid my-4">
+  <div class="container-fluid my-4  ">
     <div class="mx-5 flex-grow-1">
+      <div class="d-flex justify-content-start mb-3">
+        <button class="btn btn-success" id="render">Hiển thị</button>
+        <button class="btn btn-success mx-2" id="filter">Lọc GVM</button>
+        <!-- Nút Lọc màu giống nút Hiển thị -->
+      </div>
       <div>
         <table class="table table-bordered">
           <thead>
@@ -131,37 +136,32 @@
           <tbody id="data-table-body"></tbody>
         </table>
       </div>
-      <div id="no-data-message" class="text-center my-3" style="display: none;">
-        Không có dữ liệu để hiển thị.
-      </div>
     </div>
+  </div>
   </div>
 
   <script>
     document.addEventListener('DOMContentLoaded', function () {
-      const loadingSpinner = document.createElement('div'); // Tạo spinner
-      loadingSpinner.className = 'spinner-border'; // Thêm lớp spinner
-      loadingSpinner.role = 'status'; // Đặt vai trò
-      loadingSpinner.innerHTML = '<span class="visually-hidden">Loading...</span>'; // Thêm thông báo ẩn
-      document.body.appendChild(loadingSpinner); // Thêm spinner vào body
+      document.getElementById('render').addEventListener('click', function () {
+        const loadingSpinner = document.createElement('div'); // Tạo spinner
+        loadingSpinner.className = 'spinner-border'; // Thêm lớp spinner
+        loadingSpinner.role = 'status'; // Đặt vai trò
+        loadingSpinner.innerHTML = '<span class="visually-hidden">Loading...</span>'; // Thêm thông báo ẩn
+        document.body.appendChild(loadingSpinner); // Thêm spinner vào body
 
-      fetch('http://localhost:3000/bang-qc') // Thay đổi URL API thành URL thực tế của bạn
-        .then(response => {
-          if (!response.ok) {
-            throw new Error('Network response was not ok: ' + response.statusText);
-          }
-          return response.json();
-        })
-        .then(data => {
-          if (data.length === 0) {
-            document.getElementById('no-data-message').style.display = 'block'; // Hiển thị thông báo nếu không có dữ liệu
-          } else {
+        fetch('http://localhost:3000/bang-tam') // Thay đổi URL API thành URL thực tế của bạn
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('Network response was not ok: ' + response.statusText);
+            }
+            return response.json();
+          })
+          .then(data => {
+            // Tạo bảng HTML từ dữ liệu JSON
             let tableHtml = '';
             const headersMap = {
               'Khoa': 'Khoa',
               'Dot': 'Đợt',
-              'Ki': 'Kì',
-              'Nam': 'Năm',
               'GiaoVien': 'Giảng viên theo TKB',
               'GiaoVienGiangDay': 'Giảng viên giảng dạy',
               'MoiGiang': 'Mời giảng?',
@@ -178,37 +178,38 @@
 
             const headers = Object.keys(data[0]);
             headers.forEach(header => {
-              const newHeaderName = headersMap[header] || header;
+              const newHeaderName = headersMap[header] || header; // Sử dụng tên cột mới nếu có
               tableHtml += `<th>${newHeaderName}</th>`;
             });
 
             document.getElementById('table-header').innerHTML = tableHtml;
 
+            // Duyệt qua từng mục trong dữ liệu
             data.forEach(item => {
               const row = headers.map(key => `<td>${item[key] !== null ? item[key] : ''}</td>`).join('');
               document.getElementById('data-table-body').innerHTML += `<tr>${row}</tr>`;
             });
-          }
-          loadingSpinner.remove(); // Xóa spinner sau khi hoàn thành
-        })
-        .catch(error => {
-          console.error('Error fetching data:', error);
-          alert('Có lỗi xảy ra khi gọi API: ' + error.message);
-          loadingSpinner.remove(); // Xóa spinner nếu có lỗi
-        });
-    });
+            loadingSpinner.remove(); // Xóa spinner sau khi hoàn thành
+          })
+          .catch(error => {
+            console.error('Error fetching data:', error);
+            alert('Có lỗi xảy ra khi gọi API: ' + error.message);
+            loadingSpinner.remove(); // Xóa spinner nếu có lỗi
+          });
+      });
 
-    // Thêm sự kiện cho nút lọc
-    document.getElementById('filter').addEventListener('click', function () {
-      const rows = document.querySelectorAll('#data-table-body tr');
-      rows.forEach(row => {
-        const cells = row.getElementsByTagName('td');
-        const moiGiang = cells[2].textContent; // Giả sử "Mời giảng" là cột thứ 3 (index 2)
-        if (moiGiang !== '1') {
-          row.style.display = 'none'; // Ẩn hàng nếu "Mời giảng" không bằng 1
-        } else {
-          row.style.display = ''; // Hiện hàng nếu "Mời giảng" bằng 1
-        }
+      // Thêm sự kiện cho nút lọc
+      document.getElementById('filter').addEventListener('click', function () {
+        const rows = document.querySelectorAll('#data-table-body tr');
+        rows.forEach(row => {
+          const cells = row.getElementsByTagName('td');
+          const moiGiang = cells[2].textContent; // Giả sử "Mời giảng" là cột thứ 3 (index 2)
+          if (moiGiang !== '1') {
+            row.style.display = 'none'; // Ẩn hàng nếu "Mời giảng" không bằng 1
+          } else {
+            row.style.display = ''; // Hiện hàng nếu "Mời giảng" bằng 1
+          }
+        });
       });
     });
   </script>
@@ -216,12 +217,13 @@
   <!-- Phần phân quyền -->
   <script>
     document.addEventListener('DOMContentLoaded', () => {
+      // Thêm sự kiện click cho phần tử có id "import"
       const importLink = document.getElementById("Import");
 
       importLink.addEventListener("click", function (event) {
-        event.preventDefault();
+        event.preventDefault(); // Ngăn chặn hành vi mặc định của liên kết
 
-        const role = localStorage.getItem("userRole");
+        const role = localStorage.getItem("userRole"); // Lấy role từ localStorage
 
         if (role.includes("DAOTAO") || role.includes("TAICHINH")) {
           window.location.href = "/import";
@@ -230,12 +232,13 @@
         }
       });
 
+      // Thêm sự kiện click cho phần tử có id="ThongTinGD"
       const ThongTinGD = document.getElementById("ThongTinGD");
 
       ThongTinGD.addEventListener("click", function (event) {
-        event.preventDefault();
+        event.preventDefault(); // Ngăn chặn hành vi mặc định của liên kết
 
-        const role = localStorage.getItem("userRole");
+        const role = localStorage.getItem("userRole"); // Lấy role từ localStorage
 
         if (role.includes("DAOTAO") || role.includes("TAICHINH")) {
           window.location.href = "/info2";
@@ -244,12 +247,14 @@
         }
       });
 
+      // Thêm sự kiện click cho phần tử có id="Home"
+
       const Home = document.getElementById("Home");
 
       Home.addEventListener("click", function (event) {
-        event.preventDefault();
+        event.preventDefault(); // Ngăn chặn hành vi mặc định của liên kết
 
-        const role = localStorage.getItem("userRole");
+        const role = localStorage.getItem("userRole"); // Lấy role từ localStorage
 
         if (role.includes("DAOTAO") || role.includes("TAICHINH")) {
           window.location.href = "/maindt";
