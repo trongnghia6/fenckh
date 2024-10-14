@@ -147,7 +147,8 @@
 #update-qc,
 #chooseFile,
 #import,
-#viewtam {
+#viewtam,
+#ban-hanh {
   --color: #0077ff;
   font-family: inherit;
   display: inline-block;
@@ -167,7 +168,8 @@
 }
 button#chooseFile,
 button#import,
-button#viewtam {
+button#viewtam,
+button#ban-hanh {
   padding-top: 0;
 }
 #infoGvm {
@@ -176,12 +178,19 @@ button#viewtam {
 #viewtam {
   width: 150px;
 }
+#ban-hanh{
+  width: auto;
+}
+#import{
+  width: auto;
+}
 #infoGvm::before,
 #save-data-all::before,
 #update-qc::before,
 #chooseFile::before,
 #import::before,
-#viewtam::before {
+#viewtam::before, 
+#ban-hanh::before{
   position: absolute;
   content: "";
   background: var(--color);
@@ -196,7 +205,8 @@ button#viewtam {
 #update-qc:hover,
 #chooseFile:hover,
 #import:hover,
-#viewtam:hover {
+#viewtam:hover,
+#ban-hanh:hover {
   color: white;
 }
 
@@ -205,7 +215,8 @@ button#viewtam {
 #update-qc:before,
 #chooseFile:before,
 #import:before,
-#viewtam:before {
+#viewtam:before,
+#ban-hanh:before {
   top: 100%;
   left: 100%;
   transition: 0.3s all;
@@ -216,7 +227,8 @@ button#viewtam {
 #update-qc:hover::before,
 #chooseFile:hover::before,
 #import:hover::before,
-#viewtam:hover::before {
+#viewtam:hover::before, 
+#ban-hanh:hover::before{
   top: -30px;
   left: -30px;
 }
