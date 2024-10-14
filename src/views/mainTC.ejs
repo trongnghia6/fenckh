@@ -224,7 +224,7 @@
 
         const isKhoa = localStorage.getItem("isKhoa"); // Lấy role từ localStorage
 
-        if (!isKhoa) { // Nếu là đào tạo hoặc tài chính
+        if (isKhoa==0) { // Nếu là đào tạo hoặc tài chính
           window.location.href = "/import";
         } else { // Nếu là khoa
           window.location.href = "/importGvmList";
@@ -239,7 +239,7 @@
 
         const isKhoa = localStorage.getItem("isKhoa"); // Lấy role từ localStorage
 
-        if (!isKhoa) { // Nếu là đào tạo hoặc tài chính
+        if (isKhoa==0) { // Nếu là đào tạo hoặc tài chính
           window.location.href = "/info2";
         } else {
           window.location.href = "/info";
@@ -255,7 +255,7 @@
 
         const isKhoa = localStorage.getItem("isKhoa")
 
-        if (!isKhoa) { // Nếu là đào tạo hoặc tài chính
+        if (isKhoa==0) { // Nếu là đào tạo hoặc tài chính
           window.location.href = "/maindt";
         } else {
           window.location.href = "/mainkhoa";
