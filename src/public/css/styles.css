@@ -232,10 +232,25 @@ button#ban-hanh {
   border-radius: 12px;
   height: fit-content;
 }
+
 table,
 th,
 td {
-  border: 2px solid black;
+  border: 2px solid rgb(255, 255, 255);
   border-collapse: collapse;
   font-size: 12px;
+}
+td{
+  margin: 10px;
+}
+.form-check-label{
+  margin: auto;
+}
+.container-fluid{
+  width: auto;
+  
+}
+.box{
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
