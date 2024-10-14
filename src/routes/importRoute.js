@@ -51,7 +51,7 @@ router.post("/save-data", role.checkDaotaoRoleThiHanh, async (req, res) => {
 });
 
 // Định tuyến cho POST request tới /index / save - data
-router.post("/ban-hanh", role.checkDaotaoRoleThiHanh, async (req, res) => {
+router.post("/viewtam", role.checkDaotaoRoleThiHanh, async (req, res) => {
   try {
     // Gọi hàm xử lý dữ liệu import
     const result = await obj.importTableQC(req.body);
