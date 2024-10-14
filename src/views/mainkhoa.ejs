@@ -8,6 +8,7 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="../../bootstrap-5.3.3-dist/bootstrap-icons-1.11.3/font/bootstrap-icons.min.css">
   <link rel="stylesheet" href="/css/styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
@@ -25,43 +26,35 @@
   </nav>
 
   <!-- Phần dưới của navbar chứa các mục nằm ngang -->
-  <nav class="navbar navbar-expand-lg navbar-bottom ">
+  <nav class="navbar navbar-expand-lg navbar-bottom sticky-top">
     <div class="container-fluid">
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
         aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+        
         <ul class="navbar-nav">
           <li class="nav-item">
-            <a class="nav-link active" id="Home" href="">HOME</a>
+            <a class="nav-link active" id="Home" href=""><i class="fa-solid fa-house"></i></a>
           </li>
 
-          <li class="nav-item">
-            <a class="nav-link" id="ThongTinGD" href="">Thông tin GD</a>
-          </li>
-          <!-- <li> -->
-          <li class="nav-item">
-            <!-- <a class="nav-link" href="/import">Import danh sách giảng viên mời</a> -->
-            <a class="nav-link" id="Import" href="">Import</a>
-          </li>
-          <!-- <li class="nav-item">
-              <a class="nav-link" href="#">Duyệt</a>
-            </li> -->
-          <li class="nav-item">
-            <a class="nav-link" href="/gvmList">Danh sách giảng viên mời</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/classInfoGvm">Thông tin lớp giảng viên mời</a>
-          </li>
-         <!-- Thông tin HD giảng viên mời-->
-         <li class="nav-item">
-         <a  class="nav-link " href="/infoHDGvm" role="button">Thông tin HD Gvm</a>
-     </li>
-          <!--  -->
-          <li class="nav-item">
-            <a class="nav-link" href="/tableQC">Bảng quy chuẩn</a>
-          </li>
+          <div class="navbar-nav">
+            <div class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="/login" id="navbarDropdownUser" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                Giảng Viên
+              </a>
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="nav-link" id="ThongTinGD" href="">Thông tin giảng dạy</a>
+                <a class="nav-link" id="Import" href="">Thêm bảng quy chuẩn</a>
+                <a class="nav-link" href="/gvmList">Danh sách giảng viên mời</a>
+                <a class="nav-link" href="/classInfoGvm">Thông tin lớp giảng viên mời</a>
+                <a  class="nav-link " href="/infoHDGvm" role="button">Thông tin hợp đồng giảng viên mời</a>
+                <a class="nav-link" href="/tableTam">Bảng quy chuẩn dự kiến</a>
+                <a class="nav-link" href="/tableTam">Bảng quy chuẩn chính thức</a>
+              </div>
+            </div>
           <div class="navbar-nav">
             <div class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="/login" id="navbarDropdownUser" data-bs-toggle="dropdown"
@@ -77,16 +70,15 @@
       </div>
     </div>
   </nav>
-  </div>
 
 
   <!-- Phần trên của navbar chứa logo và tiêu đề -->
-  <div class="container my-4">
+  <div class="container-fluid m-4">
     <!-- Tiêu đề dashboard -->
     <h1 class="text-center">Dashboard Giảng Dạy Khoa</h1>
 
     <!-- 1. Tổng quan về số lớp và số tiết giảng dạy -->
-    <div class="row my-4">
+    <div class="row m-4">
       <div class="col-lg-6 col-md-12">
         <div class="card text-white bg-info mb-3">
           <div class="card-body">
@@ -106,7 +98,7 @@
     </div>
 
     <!-- 2. Danh sách các lớp giảng dạy -->
-    <div class="container my-4">
+    <div class="container-fluid m-4">
       <h3>Danh sách các lớp giảng dạy</h3>
       <table class="table table-bordered">
         <thead>
@@ -138,13 +130,13 @@
     </div>
 
     <!-- 3. Thống kê số tiết giảng dạy theo giáo viên -->
-    <div class="container my-4">
+    <div class="container-fluid m-4">
       <h3>Thống kê số tiết giảng dạy theo giáo viên</h3>
       <canvas id="teachingHoursChart"></canvas>
     </div>
 
     <!-- 4. Nút quay về đầu trang -->
-    <div class="container my-4">
+    <div class="container-fluid m-4">
       <footer class="text-center">
         <button onclick="topFunction()" id="backToTopBtn" class="btn btn-secondary">Quay về đầu trang</button>
       </footer>

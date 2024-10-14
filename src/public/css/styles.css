@@ -38,22 +38,25 @@
   border-style: solid;
 }
 /* ui moi */
+/* Điều chỉnh navbar-top */
 .navbar-top {
-  background-color: #f9f5e6; /* Màu nền vàng nhạt */
-  padding: 10px 20px;
-}
-.navbar-brand {
   display: flex;
   align-items: center;
-  color: #d42f2f; /* Màu chữ đỏ */
-  font-weight: bold;
-  padding-left: 15px;
-  margin-bottom: 10px;
+  justify-content: space-between;
+  padding: 20px; /* Tăng khoảng cách padding */
+  background-color: #f9f5e6; /* Màu nền vàng nhạt */
 }
-.navbar-brand img {
-  margin-left: 10%;
-  height: 120px; /* Kích thước logo */
-  margin-right: 15px;
+
+.navbar-top .navbar-brand {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.navbar-top img {
+  max-height: 120px; /* Tăng kích thước logo ban đầu */
+  height: auto;
+  width: auto;
 }
 .navbar-title {
   text-align: center;
@@ -83,7 +86,13 @@
   padding: 5px 10px;
   margin-right: 15px;
   border-radius: 12px;
+  
 }
+
+.dropdown-menu{
+  width: 300px;
+}
+
 .navbar-bottom .nav-link:hover {
   color: black;
   background-color: #f8f5f4; /* Màu cam đậm hơn khi hover */
@@ -122,18 +131,23 @@
   font-size: 1.2em;
   font-weight: 550;
 }
-
-.button:hover {
-  background: #315cfd;
-  color: white;
-  font-size: 1.5em;
+.button:hover ::before{
+  transform: scale(1.1);
+  box-shadow: 0 0 15px #ffee10;
 }
+.button:hover {
+  color: #ffee10;
+  box-shadow: 0 0 5px #ffee10;
+  text-shadow: 0 0 5px #ffee10;
+}
+
 /*Sửa 1 vài button ở teaching info và import*/
 #infoGvm,
 #save-data-all,
 #update-qc,
 #chooseFile,
 #import,
+#viewtam,
 #ban-hanh {
   --color: #0077ff;
   font-family: inherit;
@@ -154,21 +168,29 @@
 }
 button#chooseFile,
 button#import,
+button#viewtam,
 button#ban-hanh {
   padding-top: 0;
 }
 #infoGvm {
   width: 190px;
 }
-#ban-hanh {
+#viewtam {
   width: 150px;
+}
+#ban-hanh{
+  width: auto;
+}
+#import{
+  width: auto;
 }
 #infoGvm::before,
 #save-data-all::before,
 #update-qc::before,
 #chooseFile::before,
 #import::before,
-#ban-hanh::before {
+#viewtam::before, 
+#ban-hanh::before{
   position: absolute;
   content: "";
   background: var(--color);
@@ -183,6 +205,7 @@ button#ban-hanh {
 #update-qc:hover,
 #chooseFile:hover,
 #import:hover,
+#viewtam:hover,
 #ban-hanh:hover {
   color: white;
 }
@@ -192,6 +215,7 @@ button#ban-hanh {
 #update-qc:before,
 #chooseFile:before,
 #import:before,
+#viewtam:before,
 #ban-hanh:before {
   top: 100%;
   left: 100%;
@@ -203,7 +227,8 @@ button#ban-hanh {
 #update-qc:hover::before,
 #chooseFile:hover::before,
 #import:hover::before,
-#ban-hanh:hover::before {
+#viewtam:hover::before, 
+#ban-hanh:hover::before{
   top: -30px;
   left: -30px;
 }
@@ -232,10 +257,91 @@ button#ban-hanh {
   border-radius: 12px;
   height: fit-content;
 }
+
 table,
 th,
 td {
-  border: 2px solid black;
+  border: 2px solid rgb(255, 255, 255);
   border-collapse: collapse;
   font-size: 12px;
+}
+td{
+  margin: 10px;
+}
+.form-check-label{
+  margin: auto;
+}
+.container-fluid{
+  width: auto;
+  
+}
+.box{
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+
+.card-container {
+  display: flex;
+  flex-wrap: wrap; /* Cho phép xuống dòng nếu cần */
+  justify-content: space-between; /* Căn đều khoảng cách giữa các phần tử */
+}
+
+.card-item {
+  flex: 1 1 30%; /* Cho phép các card tự động thu nhỏ nhưng không nhỏ hơn 30% */
+  margin: 10px;
+}
+
+.card {
+  min-width: 200px; /* Đặt kích thước tối thiểu cho các card */
+}
+
+.row {
+  flex-wrap: wrap; /* Cho phép các phần tử tự động xuống dòng */
+  align-items: center;
+}
+
+@media (max-width: 768px) {
+  .w-20, .w-30, .w-80 {
+      width: 100% !important; /* Đảm bảo không bị tràn ra ngoài */
+    }
+    
+  .navbar-brand img {
+      height: 80px; /* Giảm kích thước logo */
+  }
+  .card-item {
+    flex: 1 1 45%; /* Khi màn hình nhỏ hơn 768px, các card sẽ chiếm 45% chiều rộng */
+  }
+  .navbar-top img {
+    max-height: 50px; /* Thu nhỏ logo khi màn hình nhỏ hơn */
+  }
+
+  .navbar-title img {
+    max-width: 100%; /* Đảm bảo banner tự điều chỉnh kích thước */
+    height: auto;
+  }
+}
+
+@media (max-width: 576px) {
+  .navbar-brand img {
+      height: 60px; /* Giảm kích thước logo cho mobile */
+  }
+  .card-item {
+    flex: 1 1 100%; /* Khi màn hình nhỏ hơn 576px, mỗi card sẽ chiếm toàn bộ chiều rộng */
+  }
+  .navbar-top {
+    flex-direction: column; /* Đặt các phần tử thành cột trên màn hình nhỏ */
+    text-align: center;
+  }
+
+  .navbar-top img {
+    max-height: 40px; /* Tiếp tục thu nhỏ logo cho màn hình nhỏ hơn */
+  }
+
+  .navbar-title img {
+    max-width: 100%; /* Đảm bảo banner tự điều chỉnh kích thước */
+    height: auto;
+  }
+}
+
+.table-responsive {
+  overflow-x: auto; /* Cho phép cuộn ngang với bảng */
 }
