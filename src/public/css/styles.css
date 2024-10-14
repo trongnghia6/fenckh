@@ -131,19 +131,23 @@
   font-size: 1.2em;
   font-weight: 550;
 }
-
-.button:hover {
-  background: #315cfd;
-  color: white;
-  font-size: 1.5em;
+.button:hover ::before{
+  transform: scale(1.1);
+  box-shadow: 0 0 15px #ffee10;
 }
+.button:hover {
+  color: #ffee10;
+  box-shadow: 0 0 5px #ffee10;
+  text-shadow: 0 0 5px #ffee10;
+}
+
 /*Sửa 1 vài button ở teaching info và import*/
 #infoGvm,
 #save-data-all,
 #update-qc,
 #chooseFile,
 #import,
-#ban-hanh {
+#viewtam {
   --color: #0077ff;
   font-family: inherit;
   display: inline-block;
@@ -163,13 +167,13 @@
 }
 button#chooseFile,
 button#import,
-button#ban-hanh {
+button#viewtam {
   padding-top: 0;
 }
 #infoGvm {
   width: 190px;
 }
-#ban-hanh {
+#viewtam {
   width: 150px;
 }
 #infoGvm::before,
@@ -177,7 +181,7 @@ button#ban-hanh {
 #update-qc::before,
 #chooseFile::before,
 #import::before,
-#ban-hanh::before {
+#viewtam::before {
   position: absolute;
   content: "";
   background: var(--color);
@@ -192,7 +196,7 @@ button#ban-hanh {
 #update-qc:hover,
 #chooseFile:hover,
 #import:hover,
-#ban-hanh:hover {
+#viewtam:hover {
   color: white;
 }
 
@@ -201,7 +205,7 @@ button#ban-hanh {
 #update-qc:before,
 #chooseFile:before,
 #import:before,
-#ban-hanh:before {
+#viewtam:before {
   top: 100%;
   left: 100%;
   transition: 0.3s all;
@@ -212,7 +216,7 @@ button#ban-hanh {
 #update-qc:hover::before,
 #chooseFile:hover::before,
 #import:hover::before,
-#ban-hanh:hover::before {
+#viewtam:hover::before {
   top: -30px;
   left: -30px;
 }
