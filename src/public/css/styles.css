@@ -131,14 +131,11 @@
   font-size: 1.2em;
   font-weight: 550;
 }
-.button:hover ::before{
-  transform: scale(1.1);
-  box-shadow: 0 0 15px #ffee10;
-}
+
 .button:hover {
-  color: #ffee10;
-  box-shadow: 0 0 5px #ffee10;
-  text-shadow: 0 0 5px #ffee10;
+  background: #315cfd;
+  color: white;
+  font-size: 1.5em;
 }
 
 /*Sửa 1 vài button ở teaching info và import*/
@@ -173,7 +170,7 @@ button#ban-hanh {
   padding-top: 0;
 }
 #infoGvm {
-  width: 190px;
+  width: 150px;
 }
 #viewtam {
   width: 150px;
