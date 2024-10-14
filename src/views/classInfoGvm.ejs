@@ -85,17 +85,20 @@
                     </li> -->
 
           <!-- Danh sách giảng viên mời -->
-          <li class="nav-item"></li>
-          <a class="nav-link" href="/gvmList" role="button">Danh sách giảng viên mời</a>
+          <li class="nav-item">
+            <a class="nav-link" href="/gvmList" role="button">Danh sách giảng viên mời</a>
           </li>
 
           <!-- Thông tin các lớp giảng viên mời -->
-          <li class="nav-item"></li>
-          <a class="nav-link active" href="/classInfoGvm" role="button">Thông tin các lớp giảng viên mời</a>
+          <li class="nav-item">
+            <a class="nav-link active" href="/classInfoGvm" role="button">Thông tin các lớp giảng viên mời</a>
           </li>
-          <!-- Thông tin HD giảng viên mời-->>
-          <li class="nav-item"></li>
-          <a class="nav-link " href="/infoHDGvm" role="button"> Thông tin HD Gvm </a>
+          <!-- Thông tin HD giảng viên mời-->
+          <li class="nav-item">
+            <a class="nav-link " href="/infoHDGvm" role="button"> Thông tin HD Gvm </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/tableQC">Bảng quy chuẩn</a>
           </li>
           <div class="navbar-nav">
             <div class="nav-item dropdown">
@@ -124,7 +127,14 @@
               <!-- <button class="add-class" onclick="addClass()">+ Thêm giảng viên mời</button> -->
               <input type="text" placeholder="Tìm kiếm theo Tên..." class="search" id="searchInput"
                 onkeyup="searchClass()" />
-              <!-- <button class="export" onclick="exportSelectedData()">Xuất dữ liệu</button> -->
+              <button class="export" onclick="exportTableToCSV()">Xuất dữ liệu</button>
+              <script>
+               
+              </script>
+
+
+
+
               <select class="filter" id="departmentFilter" onchange="filterGvmByDepartment()">
                 <option value="">Tất cả khoa</option>
                 <option value="CNTT">Công nghệ thông tin</option>
@@ -135,38 +145,23 @@
               <script>
                 function filterGvmByDepartment() {
                   let select = document.getElementById("departmentFilter");
-                  let department = select.value;
+                  let department = select.value.trim(); // Lấy giá trị và loại bỏ khoảng trắng
                   let table = document.getElementById("classTable");
                   let tr = table.getElementsByTagName("tr");
-                  let infoTableBody = document.getElementById("infoTableBody");
 
-                  // Xóa nội dung cũ của bảng
-                  infoTableBody.innerHTML = "";
-
-                  let filteredRows = Array.prototype.filter.call(tr, function (row) {
-                    let td = row.getElementsByTagName("td")[5]; // Giả sử cột Khoa là cột thứ 6
-                    if (td) {
-                      let txtValue = td.textContent || td.innerText;
-                      return department === "Tất cả khoa" || txtValue === department;
+                  for (let i = 1; i < tr.length; i++) { // Bỏ qua hàng tiêu đề
+                    let departmentValue = tr[i].getAttribute("data-department");
+                    if (departmentValue) {
+                      if (department === "" || departmentValue === department) { // Kiểm tra khoa
+                        tr[i].style.display = ""; // Hiển thị hàng
+                      } else {
+                        tr[i].style.display = "none"; // Ẩn hàng
+                      }
                     }
-                    return false;
-                  });
-
-                  filteredRows.forEach(function (row) {
-                    // Hiển thị thông tin ở bảng
-                    let infoRow = document.createElement("tr");
-                    infoTableBody.appendChild(infoRow);
-
-                    let cells = row.getElementsByTagName("td");
-                    for (let j = 0; j < cells.length; j++) {
-                      let cell = cells[j];
-                      let infoCell = document.createElement("td");
-                      infoCell.textContent = cell.textContent;
-                      infoRow.appendChild(infoCell);
-                    }
-                  });
+                  }
                 }
               </script>
+
             </div>
 
             <table class="class-table" id="classTable">
@@ -179,46 +174,56 @@
                   <th>Số tín chỉ</th>
                   <th>Số tiết</th>
                   <th>Tổng số tiết</th>
+                  <th>Khoa</th> <!-- Cột Khoa -->
                   <th>Chi tiết giảng viên mời</th>
                 </tr>
               </thead>
               <tbody class="teacher-group">
-
                 <% let index=1; %>
                   <% for (let teacher in GiangDay) { %>
                     <% let courses=GiangDay[teacher]; %>
                       <% let totalSoTiet=courses.reduce((total, course)=> total + course.QuyChuan, 0); %>
-                        <!-- Tính tổng số tiết -->
-
-                
-                                        <% courses.forEach((course, courseIndex) => { %>
-                                            <tr>
-                                                <% if (courseIndex === 0) { %> 
-                                                    <!-- Gộp dòng với rowspan bằng số lượng khóa học của giảng viên -->
-                                                    <td rowspan="<%= courses.length %>"><%= index %></td> <!-- Số thứ tự -->
-                                                    <td rowspan="<%= courses.length %>"><%= teacher %></td> <!-- Tên giảng viên -->
-                                                    <% index++; %>
-                                                <% } %>
-                                                <td><%= course.TenHocPhan %></td> <!-- Tên học phần -->
-                                                <td><%= course.Lop %></td> <!-- Tên lớp -->
-                                                <td><%= course.SoTC %></td> <!-- Số tín chỉ -->
-                                                <td><%= course.QuyChuan %></td> <!-- Số tiết -->
-                                                <!-- Tổng số tiết -->
-                                                <% if (courseIndex === 0) { %> 
-                                                    <!-- Gộp dòng với rowspan bằng số lượng khóa học của giảng viên -->
-                                                    <td rowspan="<%= courses.length %>"><%= totalSoTiet %></td> <!-- Tổng số tiết -->
-                                                    <td rowspan="<%= courses.length %>">
-                                                        <button class="action-button view" onclick="viewClass('<%= parseInt(course.id_Gvm) - 1 %>')">👁️</button> <!-- Nút xem chi tiết -->
-                                                    </td>
-                                                    
-                                                <% } %>
-                                            </tr>
-                                           
-                                        <% }); %>
+                        <% courses.forEach((course, courseIndex)=> { %>
+                          <tr data-department="<%= course.MaPhongBan %>">
+                            <% if (courseIndex===0) { %>
+                              <td rowspan="<%= courses.length %>">
+                                <%= index %>
+                              </td>
+                              <td rowspan="<%= courses.length %>">
+                                <%= teacher %>
+                              </td>
+                              <% index++; %>
+                                <% } %>
+                                  <td>
+                                    <%= course.TenHocPhan %>
+                                  </td>
+                                  <td>
+                                    <%= course.Lop %>
+                                  </td>
+                                  <td>
+                                    <%= course.SoTC %>
+                                  </td>
+                                  <td>
+                                    <%= course.QuyChuan %>
+                                  </td>
+                                  <% if (courseIndex===0) { %>
+                                    <td rowspan="<%= courses.length %>">
+                                      <%= totalSoTiet %>
+                                    </td>
+                                    <td rowspan="<%= courses.length %>">
+                                      <%= course.MaPhongBan %> <!-- Đây là cột Khoa -->
+                                    </td>
+                                    <td rowspan="<%= courses.length %>">
+                                      <button class="action-button view"
+                                        onclick="viewClass('<%= parseInt(course.id_Gvm) - 1 %>')">👁️</button>
+                                    </td>
                                     <% } %>
-                                </tbody>
-                            </table>          
-                            <!-- <div class="pagination">
+                          </tr>
+                          <% }); %>
+                            <% } %>
+              </tbody>
+            </table>
+            <!-- <div class="pagination">
                               <span>10 / trang</span>
                               <button class="page-button">1</button>
                             </div> -->

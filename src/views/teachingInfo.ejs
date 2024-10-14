@@ -82,10 +82,10 @@
           <li class="nav-item">
             <a class="nav-link" href="/classInfoGvm">Thông tin lớp giảng viên mời</a>
           </li>
-           <!-- Thông tin HD giảng viên mời-->>
-           <li class="nav-item"></li>
-           <a  class="nav-link " href="/infoHDGvm" role="button">Thông tin HD Gvm</a>
-       </li>
+          <!-- Thông tin HD giảng viên mời-->
+          <li class="nav-item"></li>
+          <a class="nav-link " href="/infoHDGvm" role="button">Thông tin HD Gvm</a>
+          </li>
 
 
           <!-- <li class="nav-item">
@@ -112,7 +112,7 @@
   </nav>
   </div>
 
-  <div class="container my-4 mg-top" style="max-width: max-content;">
+  <div class="container my-4 " style="max-width: max-content;">
     <div class="" style="width:1300px;">
       <div class="d-flex justify-content-between">
         <div class="d-flex justify-content-center">
@@ -147,45 +147,145 @@
         <input type="text" id="filterClass" placeholder="Tìm theo tên học phần" oninput="filterByClass()"
           class="form-control m-2 search" style="width: 300px;" />
         <div class="input-group m-2" style="width: 350px;">
-          <label for="startDate"  class="input-group-text">Ngày bắt đầu</label>
+          <label for="startDate" class="input-group-text">Ngày bắt đầu</label>
           <input required type="date" id="startDate" class="form-control" />
         </div>
         <div class="input-group m-2" style="width: 350px;">
           <label for="endDate" class="input-group-text">Ngày kết thúc</label>
           <input required type="date" id="endDate" class="form-control" />
         </div>
+
+
+        <!-- <button class="button-action SapXep " id="sortTeachersByName">Sắp Xếp</button> -->
+
+        <script>
+          document.getElementById('sortTeachersByName').addEventListener('click', sortTeachersByName);
+
+          function sortTeachersByName() {
+            const tableBody = document.getElementById('tableBody');
+            const rows = Array.from(tableBody.rows);
+
+            // Loại bỏ hàng tiêu đề khỏi quá trình sắp xếp
+            const dataRows = rows.slice(); // Lấy tất cả các hàng dữ liệu
+
+            // Sắp xếp các hàng dữ liệu dựa trên tên giáo viên
+            dataRows.sort((a, b) => {
+              const teacherA = a.cells[2].textContent.trim();
+              const teacherB = b.cells[2].textContent.trim();
+
+              // Sắp xếp theo tiêu chuẩn tiếng Việt
+              return teacherA.localeCompare(teacherB, 'vi', { sensitivity: 'base' });
+            });
+
+            // Xóa bảng và chèn lại các hàng dữ liệu đã sắp xếp
+            tableBody.innerHTML = ''; // Xóa các hàng hiện có
+            dataRows.forEach(row => tableBody.appendChild(row)); // Chèn lại các hàng dữ liệu đã sắp xếp
+          }
+
+        </script>
+
+        <script>
+          function sortTableByColumn(columnIndex, direction) {
+            const tableBody = document.getElementById('tableBody');
+            const rows = Array.from(tableBody.rows);
+
+            rows.sort((a, b) => {
+              const cellA = a.cells[columnIndex].textContent.trim();
+              const cellB = b.cells[columnIndex].textContent.trim();
+
+              if (direction === 'asc') {
+                return cellA.localeCompare(cellB, 'vi', { sensitivity: 'base' });
+              } else {
+                return cellB.localeCompare(cellA, 'vi', { sensitivity: 'base' });
+              }
+            });
+
+            tableBody.innerHTML = ''; // Clear current rows
+            rows.forEach(row => tableBody.appendChild(row)); // Append sorted rows
+          }
+        </script>
+
       </div>
+
+
+
+
       <div id="renderInfo">
         <table class="table table-bordered table-hover">
           <thead>
             <tr>
-              <th style="width: 200px;">Học phần</th>
-              <th style="width: 50px;">Số TC</th>
-              <th style="width: 200px;">GV theo TKB</th>
-              <th style="width: 50px;">GV mời?</th>
-              <th style="width: 100px;">GV giảng dạy</th>
-              <th style="width: 50px;">Khoa</th>
-              <th style="width: 100px;">Bộ môn</th>
-              <th style="width: 50px;">Số tiết LL</th>
-              <th style="width: 50px;">Số tiết QC</th>
-              <th style="width: 50px;" id="khoaColumn" display="none">
-                <div class="form-check">
-                  <input class="form-check-input" type="checkbox" id="checkAllKhoa" onclick="checkAll('khoa')">
-                  <label class="form-check-label" for="checkAllKhoa">Khoa</label>
-                </div>
-              </th>
-              <!-- <th style="width: 50px;">
-                <div class="form-check">
-                  <input class="form-check-input" type="checkbox" id="checkAllDaoTao" onclick="checkAll('daoTao')">
-                  <label class="form-check-label text-nowrap" for="checkAllDaoTao">Đào Tạo</label>
-                </div>
+              <th style="width: 200px;">
+                <span onclick="sortTableByColumn(0, 'asc')">Học phần</span>
+                <span class="sort-icon">
+                  <i class="bi bi-arrow-up" onclick="sortTableByColumn(0, 'asc')"></i>
+                  <i class="bi bi-arrow-down" onclick="sortTableByColumn(0, 'desc')"></i>
+                </span>
               </th>
               <th style="width: 50px;">
-                <div class="form-check">
-                  <input class="form-check-input" type="checkbox" id="checkAllTaiChinh" onclick="checkAll('taiChinh')">
-                  <label class="form-check-label text-nowrap" for="checkAllTaiChinh">Tài Chính</label>
-                </div>
-              </th> -->
+                <span onclick="sortTableByColumn(1, 'asc')">Số TC</span>
+                <span class="sort-icon">
+                  <i class="bi bi-arrow-up" onclick="sortTableByColumn(1, 'asc')"></i>
+                  <i class="bi bi-arrow-down" onclick="sortTableByColumn(1, 'desc')"></i>
+                </span>
+              </th>
+              <th style="width: 200px;">
+                <span onclick="sortTableByColumn(2, 'asc')">GV theo TKB</span>
+                <span class="sort-icon">
+                  <i class="bi bi-arrow-up" onclick="sortTableByColumn(2, 'asc')"></i>
+                  <i class="bi bi-arrow-down" onclick="sortTableByColumn(2, 'desc')"></i>
+                </span>
+              </th>
+              <th style="width: 50px;">
+                <span onclick="sortTableByColumn(3, 'asc')">GV mời?</span>
+                <span class="sort-icon">
+                  <i class="bi bi-arrow-up" onclick="sortTableByColumn(3, 'asc')"></i>
+                  <i class="bi bi-arrow-down" onclick="sortTableByColumn(3, 'desc')"></i>
+                </span>
+              </th>
+              <th style="width: 100px;">
+                <span onclick="sortTableByColumn(4, 'asc')">GV giảng dạy</span>
+                <span class="sort-icon">
+                  <i class="bi bi-arrow-up" onclick="sortTableByColumn(4, 'asc')"></i>
+                  <i class="bi bi-arrow-down" onclick="sortTableByColumn(4, 'desc')"></i>
+                </span>
+              </th>
+              <th style="width: 50px;">
+                <span onclick="sortTableByColumn(5, 'asc')">Khoa</span>
+                <span class="sort-icon">
+                  <i class="bi bi-arrow-up" onclick="sortTableByColumn(5, 'asc')"></i>
+                  <i class="bi bi-arrow-down" onclick="sortTableByColumn(5, 'desc')"></i>
+                </span>
+              </th>
+              <th style="width: 100px;">
+                <span onclick="sortTableByColumn(6, 'asc')">Bộ môn</span>
+                <span class="sort-icon">
+                  <i class="bi bi-arrow-up" onclick="sortTableByColumn(6, 'asc')"></i>
+                  <i class="bi bi-arrow-down" onclick="sortTableByColumn(6, 'desc')"></i>
+                </span>
+              </th>
+              <th style="width: 50px;">
+                <span onclick="sortTableByColumn(7, 'asc')">Số tiết LL</span>
+                <span class="sort-icon">
+                  <i class="bi bi-arrow-up" onclick="sortTableByColumn(7, 'asc')"></i>
+                  <i class="bi bi-arrow-down" onclick="sortTableByColumn(7, 'desc')"></i>
+                </span>
+              </th>
+              <th style="width: 50px;">
+                <span onclick="sortTableByColumn(8, 'asc')">Số tiết QC</span>
+                <span class="sort-icon">
+                  <i class="bi bi-arrow-up" onclick="sortTableByColumn(8, 'asc')"></i>
+                  <i class="bi bi-arrow-down" onclick="sortTableByColumn(8, 'desc')"></i>
+                </span>
+              </th>
+              
+              <th style="width: 50px;" id="khoaColumn" display="none"> 
+                <div class="form-check"> 
+                  <input class="form-check-input" type="checkbox" id="checkAllKhoa" onclick="checkAll('khoa')"> 
+                  <label class="form-check-label" for="checkAllKhoa">Khoa</label> 
+           
+                </div> 
+           
+              </th>
             </tr>
           </thead>
           <tbody id="tableBody">
@@ -628,55 +728,55 @@
     }
   };
 
-        document.addEventListener('DOMContentLoaded', () => {
-          // Thêm sự kiện click cho phần tử có id "import"
-          const importLink = document.getElementById("Import");
-          
-          importLink.addEventListener("click", function(event) {
-              event.preventDefault(); // Ngăn chặn hành vi mặc định của liên kết
-              
-              const role = localStorage.getItem("userRole"); // Lấy role từ localStorage
-              
-              if (role.includes("DAOTAO")||role.includes("TAICHINH")){
-                window.location.href = "/import";
-              } else {
-                window.location.href = "/importGvmList";
-              }
-          });
-    
-          // Thêm sự kiện click cho phần tử có id="ThongTinGD"
-          const ThongTinGD = document.getElementById("ThongTinGD");
-          
-          ThongTinGD.addEventListener("click", function(event) {
-              event.preventDefault(); // Ngăn chặn hành vi mặc định của liên kết
-              
-              const role = localStorage.getItem("userRole"); // Lấy role từ localStorage
-                      
-              if (role.includes("DAOTAO")||role.includes("TAICHINH")){
-                window.location.href = "/info2";
-              } else {
-                window.location.href = "/info";
-              }
-          });
-    
-          // Thêm sự kiện click cho phần tử có id="Home"
-    
-          const Home = document.getElementById("Home");
-          
-          Home.addEventListener("click", function(event) {
-              event.preventDefault(); // Ngăn chặn hành vi mặc định của liên kết
-              
-              const role = localStorage.getItem("userRole"); // Lấy role từ localStorage
-              
-              if (role.includes("DAOTAO")||role.includes("TAICHINH")){
-                window.location.href = "/maindt";
-              } else {
-                window.location.href = "/mainkhoa";
-              }
-          });
-      });
-    
-       </script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // Thêm sự kiện click cho phần tử có id "import"
+    const importLink = document.getElementById("Import");
+
+    importLink.addEventListener("click", function (event) {
+      event.preventDefault(); // Ngăn chặn hành vi mặc định của liên kết
+
+      const role = localStorage.getItem("userRole"); // Lấy role từ localStorage
+
+      if (role.includes("DAOTAO") || role.includes("TAICHINH")) {
+        window.location.href = "/import";
+      } else {
+        window.location.href = "/importGvmList";
+      }
+    });
+
+    // Thêm sự kiện click cho phần tử có id="ThongTinGD"
+    const ThongTinGD = document.getElementById("ThongTinGD");
+
+    ThongTinGD.addEventListener("click", function (event) {
+      event.preventDefault(); // Ngăn chặn hành vi mặc định của liên kết
+
+      const role = localStorage.getItem("userRole"); // Lấy role từ localStorage
+
+      if (role.includes("DAOTAO") || role.includes("TAICHINH")) {
+        window.location.href = "/info2";
+      } else {
+        window.location.href = "/info";
+      }
+    });
+
+    // Thêm sự kiện click cho phần tử có id="Home"
+
+    const Home = document.getElementById("Home");
+
+    Home.addEventListener("click", function (event) {
+      event.preventDefault(); // Ngăn chặn hành vi mặc định của liên kết
+
+      const role = localStorage.getItem("userRole"); // Lấy role từ localStorage
+
+      if (role.includes("DAOTAO") || role.includes("TAICHINH")) {
+        window.location.href = "/maindt";
+      } else {
+        window.location.href = "/mainkhoa";
+      }
+    });
+  });
+
+</script>
 </body>
 
 </html>
