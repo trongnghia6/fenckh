@@ -27,9 +27,8 @@
   align-items: center;
 }
 .active {
-  background-color: #f6904c !important;
-  color: #000 !important;
-  border-radius: 12px;
+  background-color: #2d7fbe !important;
+  color: white !important;
 }
 .drop-custom {
   background-color: #f99a9c;
@@ -72,33 +71,42 @@
   color: #d5a253;
 }
 .navbar-bottom {
-  background-color: blue; /* Màu nền cam */
-  padding: 5px;
+  background-color: #3eacff; /* Màu nền cam */
+  padding: 0;
   justify-content: space-around;
   box-shadow: 0 10px 15px rgba(159, 9, 9, 0.2), 0 4px 6px rgba(185, 12, 12, 0.1); /* Hiệu ứng bóng đổ 3D */
   position: relative;
   transform-style: preserve-3d;
+  height: 40px;
 }
 .navbar-bottom .nav-link {
   color: white;
+  background-color: #3eacff;
   font-weight: bold;
   text-transform: uppercase;
-  padding: 5px 10px;
-  margin-right: 15px;
-  border-radius: 12px;
-  
-}
+  height: 40px;
+  display: flex;
+  align-items: center;
 
+}
+.navbar-nav .dropdown:hover .dropdown-menu {
+  display: block;
+  margin-top: 0 !important; /* Đảm bảo menu hiển thị ngay bên dưới */
+  padding-top: 0 !important; /* Xóa padding trên cùng nếu có */
+}
 .dropdown-menu{
+  margin-top: 0 !important; /* Không để khoảng trống phía trên */
+  padding: 0; /* Xóa mọi padding không cần thiết */
   width: 300px;
+  display: :none;
 }
 
 .navbar-bottom .nav-link:hover {
-  color: black;
-  background-color: #f8f5f4; /* Màu cam đậm hơn khi hover */
+  color: white;
+  background-color: #2d7fbe; /* Màu cam đậm hơn khi hover */
   transform: perspective(500px) translateZ(10px); /* Tạo hiệu ứng nổi 3D */
   box-shadow: 0 10px 10px rgba(0, 0, 0, 0.3);
-  border-radius: 12px;
+  
 }
 .login {
   color: red;
