@@ -5,6 +5,8 @@ const createConnection = require("../config/databaseAsync");
 
 const router = express.Router();
 
-const getClassInfoGvm = async (req, res) => {};
+const getClassInfoGvm = async (req, res) => {
+  res.render("xemCacLopGvm.ejs");
+};
 
-module.exports = {};
+module.exports = { getClassInfoGvm };

@@ -7,10 +7,8 @@ const path = require("path");
 var appRoot = require("app-root-path");
 const router = express.Router();
 
-const {
-  //,
-  ,
-} = require("../controllers/createGvmController");
+const { getClassInfoGvm } = require("../controllers/xemCacLopGvmController");
 
+router.get("/xemCacLopGvm", getClassInfoGvm);
 
 module.exports = router;
