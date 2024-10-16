@@ -19,7 +19,7 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
     />
   </head>
-
+  
   <body>
     <!-- Phần trên của navbar chứa logo và tiêu đề -->
 
@@ -218,19 +218,20 @@
             Chọn file
           </button>
           <!-- Combo box Đợt -->
-          <select class="form-select w-100px mx-1 selectop" id="combobox-dot">
+     <!-- Combo box Đợt -->
+          <select class="form-select w-100px mx-1 selectop custom-select" id="combobox-dot">
             <option value="1">Đợt 1</option>
             <option value="2">Đợt 2</option>
           </select>
 
           <!-- Combo box kì -->
-          <select class="form-select w-100px mx-1 selectop" id="combobox-ki">
+          <select class="form-select w-100px mx-1 selectop custom-select" id="combobox-ki">
             <option value="1">Kì 1</option>
             <option value="2">Kì 2</option>
           </select>
 
           <!-- Combo box Năm -->
-          <select class="form-select w-100px mx-1 selectop" id="combobox-nam">
+          <select class="form-select w-100px mx-1 selectop custom-select" id="combobox-nam">
             <option value="2024">2024</option>
             <option value="2024">2025</option>
             <option value="2024">2026</option>
@@ -238,7 +239,7 @@
           </select>
 
           <!-- Combo box với các giá trị CNTT, ATTT, DTVT -->
-          <select class="form-select w-100px mx-1 selectop" id="combobox-khoa">
+          <select class="form-select w-100px mx-1 selectop custom-select" id="combobox-khoa">
             <option value="CNTT">CNTT</option>
             <option value="ATTT">ATTT</option>
             <option value="DTVT">DTVT</option>
@@ -578,7 +579,7 @@
 
         if (TenNhanVien) {
           // Hiển thị tên người dùng trên phần tử HTML
-          document.querySelector(".fullname").innerText = `${TenNhanVien}`;
+          document.querySelector(".fullname").innerText = `${TenNhanVien} - ${Role}`;
         } else {
           document.querySelector(".fullname").innerText = "Hi, Guest"; // Hiển thị nếu không có tên người dùng
         }

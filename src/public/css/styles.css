@@ -360,3 +360,44 @@ td{
 .table-responsive {
   overflow-x: auto; /* Cho phép cuộn ngang với bảng */
 }
+.custom-select {
+-webkit-appearance: none; /* Loại bỏ mũi tên mặc định của trình duyệt */
+-moz-appearance: none;
+appearance: none;
+margin: 20px;
+width: 30px; /* Điều chỉnh lại chiều rộng */
+padding: 0px 12px 6px; /* Giảm padding để tạo cảm giác thanh mảnh */
+font-size: 17px; /* Thu nhỏ font size */
+background-color: #fff; /* Màu nền trắng */
+border: 2px solid #315cfd; /* Đường viền mỏng và tinh tế */
+border-radius: 4px; /* Bo góc nhẹ */
+transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+box-shadow: none; /* Loại bỏ shadow mặc định */
+color: #161414; /* Màu chữ */
+}
+
+.custom-select:focus {
+border-color: #007bff; /* Đổi màu viền khi focus */
+box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25); /* Thêm hiệu ứng shadow nhẹ khi focus */
+outline: none; /* Loại bỏ outline */
+}
+
+.custom-select:hover {
+border-color: #ff0000; /* Đổi màu viền khi hover */
+}
+
+.custom-select option {
+color: #333;
+}
+
+/* Thêm mũi tên bằng CSS */
+.custom-select::after {
+content: '▼'; /* Biểu tượng mũi tên */
+position: absolute;
+top: 50%;
+right: 10px;
+pointer-events: none;
+transform: translateY(-50%);
+font-size: 12px;
+color: #333;
+}
