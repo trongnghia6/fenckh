@@ -121,14 +121,14 @@ function handleDuplicateCourses(firstCourse, courses) {
 // };
 const renderInfo = (req, res) => {
   const role = req.session.role;
-  const { Dot, Ki, Nam } = req.body; // Lấy giá trị khoa, dot, ki từ body của yêu cầu
+  const { Khoa, Dot, Ki, Nam } = req.body; // Lấy giá trị khoa, dot, ki từ body của yêu cầu
   const tableName = process.env.DB_TABLE_QC;
   let query = "";
 
   const roleDaoTaoALL = process.env.DAOTAO_ALL;
   const roleTaiChinhALL = process.env.TAICHINH_ALL;
 
-  console.log("daotaoall ", roleDaoTaoALL);
+  // console.log("daotaoall ", roleDaoTaoALL);
 
   const roleCNTTAll = process.env.CNTT_ALL;
   const roleATTTAll = process.env.ATTT_ALL;
@@ -145,6 +145,10 @@ const renderInfo = (req, res) => {
   const roleATTTXem = process.env.ATTT_XEM;
   const roleDTVTXem = process.env.DTVT_XEM;
 
+  if (Khoa == "CNTT" || Khoa == "ATTT" || Khoa == "DTVT") {
+    query = `SELECT * FROM ${tableName}
+    WHERE Dot = ? AND KiHoc = ? AND NamHoc = ? AND Khoa = '${Khoa}';`
+  }
   // Xây dựng câu truy vấn SQL sử dụng các tham số
   if (
     role == roleDaoTaoALL ||

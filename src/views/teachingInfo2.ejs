@@ -12,7 +12,6 @@
   <link rel="stylesheet" href="/css/styles.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
   <style>
-
     /* .suggestions {
       position: absolute;
       background-color: white;
@@ -57,14 +56,14 @@
   </nav>
 
   <!-- Phần dưới của navbar chứa các mục nằm ngang -->
-          <nav class="navbar navbar-expand-lg navbar-bottom sticky-top">
+  <nav class="navbar navbar-expand-lg navbar-bottom sticky-top">
     <div class="container-fluid">
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
         aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
-        
+
         <ul class="navbar-nav">
           <li class="nav-item">
             <a class="nav-link active" id="Home" href=""><i class="fa-solid fa-house"></i></a>
@@ -101,7 +100,7 @@
                   </a>
                   <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                     <a class="nav-link" href="/classInfoGvm">Thông tin lớp giảng viên mời</a>
-                    <a  class="nav-link " href="/infoHDGvm" role="button">Thông tin hợp đồng (exel)</a>
+                    <a class="nav-link " href="/infoHDGvm" role="button">Thông tin hợp đồng (exel)</a>
                   </div>
                 </div>
                 <div class="navbar-nav">
@@ -114,48 +113,48 @@
                       <a class="nav-link" href="/classInfoGvm">--COMING SOON--</a>
                     </div>
                   </div>
+                </div>
+                <div class="navbar-nav">
+                  <div class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="/login" id="navbarDropdownUser" data-bs-toggle="dropdown"
+                      aria-expanded="false">
+                      Nghiên cứu khoa học
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                      <a class="nav-link" href="/classInfoGvm">--COMING SOON--</a>
+                    </div>
                   </div>
                   <div class="navbar-nav">
                     <div class="nav-item dropdown">
-                      <a class="nav-link dropdown-toggle" href="/login" id="navbarDropdownUser" data-bs-toggle="dropdown"
-                        aria-expanded="false">
-                        Nghiên cứu khoa học
+                      <a class="nav-link dropdown-toggle" href="/login" id="navbarDropdownUser"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        Đồ Án
                       </a>
                       <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                         <a class="nav-link" href="/classInfoGvm">--COMING SOON--</a>
                       </div>
                     </div>
+                    <div class="navbar-nav">
+                      <div class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="/login" id="navbarDropdownUser"
+                          data-bs-toggle="dropdown" aria-expanded="false">
+                          Thống kê
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                          <a class="nav-link" href="/classInfoGvm">--COMING SOON--</a>
+                        </div>
+                      </div>
                       <div class="navbar-nav">
                         <div class="nav-item dropdown">
-                          <a class="nav-link dropdown-toggle" href="/login" id="navbarDropdownUser" data-bs-toggle="dropdown"
-                            aria-expanded="false">
-                            Đồ Án
+                          <a class="nav-link dropdown-toggle" href="/login" id="navbarDropdownUser"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Hi, Lê Đức Thuận
                           </a>
                           <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <a class="nav-link" href="/classInfoGvm">--COMING SOON--</a>
+                            <a class="dropdown-item" href="#">Thông tin cá nhân</a>
+                            <a class="dropdown-item" href="/">Đăng xuất</a>
                           </div>
                         </div>
-                          <div class="navbar-nav">
-                            <div class="nav-item dropdown">
-                              <a class="nav-link dropdown-toggle" href="/login" id="navbarDropdownUser" data-bs-toggle="dropdown"
-                                aria-expanded="false">
-                                Thống kê
-                              </a>
-                              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <a class="nav-link" href="/classInfoGvm">--COMING SOON--</a>
-                              </div>
-                            </div>
-          <div class="navbar-nav">
-            <div class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="/login" id="navbarDropdownUser" data-bs-toggle="dropdown"
-                aria-expanded="false">
-                Hi, Lê Đức Thuận
-              </a>
-              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a class="dropdown-item" href="#">Thông tin cá nhân</a>
-                <a class="dropdown-item" href="/">Đăng xuất</a>
-              </div>
-            </div>
         </ul>
       </div>
     </div>
@@ -309,8 +308,8 @@
       globalData = await teachingResponse.json();
       console.log('Tổng hợp bảng dữ liệu:', globalData);
 
-      
-      
+
+
       renderTable(globalData); // Gọi hàm renderTable sau khi đã có đủ dữ liệu
 
 
@@ -654,14 +653,14 @@
       console.log("đào tạo")
       document.getElementById('taiChinhColumn').style.display = 'none';
       document.getElementById('update-qc').style.display = 'inline-block'; // Sử dụng 'inline-block' để hiển thị nút
-    } else if (MaPhongBan == 'TAICHINH' && role == duyet) {
+    } else if (MaPhongBan == 'TAICHINH' && role == "Duyệt") {
       // Ẩn cột 'khoaColumn'
       console.log("tài chính")
       document.getElementById('khoaColumn').style.display = 'none';
       document.getElementById('update-qc').style.display = 'inline-block'; // Sử dụng 'inline-block' để hiển thị nút
       // Hiển thị nút 'Cập nhật'
       document.getElementById('save-data-all').style.display = 'inline-block'; // Sử dụng 'inline-block' để hiển thị nút
-    } else if (role == 'Thường') {
+    } else if (role == 'GV') {
       // Ẩn tất cả các cột
       document.getElementById('khoaColumn').style.display = 'none';
       document.getElementById('daoTaoColumn').style.display = 'none';
@@ -670,8 +669,8 @@
   };
 </script>
 
- <!-- Phần phân quyền -->
- <script>
+<!-- Phần phân quyền -->
+<script>
   document.addEventListener('DOMContentLoaded', () => {
     // Thêm sự kiện click cho phần tử có id "import"
     const importLink = document.getElementById("Import");
