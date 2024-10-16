@@ -13,6 +13,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 
   <style>
+    /* nmsvbmbvsmnvds */
     .teacher-group {
       border: 2px solid black;
       /* Viền đen xung quanh nhóm giảng viên */
@@ -62,93 +63,166 @@
   </nav>
 
   <!-- Phần dưới của navbar chứa các mục nằm ngang -->
-  <nav class="navbar navbar-expand-lg navbar-bottom sticky-top">
+          <nav class="navbar navbar-expand-lg navbar-bottom sticky-top">
     <div class="container-fluid">
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
         aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
-
         <ul class="navbar-nav">
           <li class="nav-item">
-            <a class="nav-link active" id="Home" href=""><i class="fa-solid fa-house"></i></a>
+            <a class="nav-link" id="Home" href=""><i class="fa-solid fa-house"></i></a>
           </li>
-
           <div class="navbar-nav">
             <div class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="/login" id="navbarDropdownUser" data-bs-toggle="dropdown"
                 aria-expanded="false">
-                Giảng Viên
+                Giảng Viên Mời
               </a>
               <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a class="nav-link" id="ThongTinGD" href="">Thông tin giảng dạy</a>
-                <a class="nav-link" id="Import" href="">Thêm bảng quy chuẩn</a>
                 <a class="nav-link" href="/gvmList">Danh sách giảng viên mời</a>
-                <a class="nav-link" href="/classInfoGvm">Thông tin lớp giảng viên mời</a>
-                <a class="nav-link " href="/infoHDGvm" role="button">Thông tin hợp đồng giảng viên mời</a>
-                <a class="nav-link" href="/tableTam">Bảng quy chuẩn dự kiến</a>
-                <a class="nav-link" href="/tableTam">Bảng quy chuẩn chính thức</a>
+                <a class="nav-link" id="Import" href="">Thêm bằng file</a>
               </div>
             </div>
-            <div class="navbar-nav">
-              <div class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle fullname" href="/login" id="navbarDropdownUser"
-                  data-bs-toggle="dropdown" aria-expanded="false">
-                  Hi, Lê Đức Thuận
-                </a>
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                  <a class="dropdown-item" href="#">Thông tin cá nhân</a>
-                  <a class="dropdown-item" href="/">Đăng xuất</a>
-                </div>
+          </div>
+          <div class="navbar-nav">
+            <div class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="/login" id="navbarDropdownUser" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                Bảng Quy Chuẩn
+              </a>
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="nav-link" href="/tableTam">Bảng quy chuẩn dự kiến</a>
+                <a class="nav-link" href="/tableQC">Bảng quy chuẩn chính thức</a>
+                <a class="nav-link" id="ThongTinGD" href="">Thông tin giảng viên theo lớp</a>
               </div>
+            </div>
+          </div>
+          <div class="navbar-nav">
+            <div class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle active" href="/login" id="navbarDropdownUser" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                Mời Giảng
+              </a>
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="nav-link active" href="/classInfoGvm">Thông tin lớp giảng viên mời</a>
+                <a  class="nav-link " href="/infoHDGvm" role="button">Thông tin hợp đồng</a>
+              </div>
+            </div>
+          </div>
+          <div class="navbar-nav">
+            <div class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="/login" id="navbarDropdownUser" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                Vượt Giờ
+              </a>
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="nav-link" id="ThongTinGD" href="#">COMING SOON</a>              </div>
+            </div>
+          </div>
+          <div class="navbar-nav">
+            <div class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="/login" id="navbarDropdownUser" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                Nghiên Cứu Khoa Học
+              </a>
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="nav-link" id="ThongTinGD" href="#">COMING SOON</a>              </div>
+            </div>
+          </div>
+          <div class="navbar-nav">
+            <div class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="/login" id="navbarDropdownUser" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                Đồ Án
+              </a>
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="nav-link" id="ThongTinGD" href="#">COMING SOON</a>              </div>
+            </div>
+          </div>
+          <div class="navbar-nav">
+            <div class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="/login" id="navbarDropdownUser" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                Thống Kê
+              </a>
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="nav-link" id="ThongTinGD" href="#">COMING SOON</a>
+              </div>
+            </div>
+          </div>
+          <div class="navbar-nav">
+            <div class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle fullname" href="/login" id="navbarDropdownUser" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                Hi, Lê Đức Thuận
+              </a>
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="dropdown-item" href="#">Thông tin cá nhân</a>
+                <a class="dropdown-item" href="/">Đăng xuất</a>
+              </div>
+            </div>
+          </div>
         </ul>
       </div>
     </div>
   </nav>
+  <div class="container-fluid m-4 box">
+    <div class="d-flex justify-content-center">
+      <!-- Main content -->
+      <div class="gvmList " style="width: 100%;">
+        <div class="m-3">
+          <div class="">
+            <h1>THÔNG TIN CÁC LỚP GIẢNG VIÊN MỜI</h1>
+            <div class="header-actions">
+              <!-- <button class="add-class" onclick="addClass()">+ Thêm giảng viên mời</button> -->
+              <input type="text" placeholder="Tìm kiếm theo Tên..." class="search" id="searchInput"
+                onkeyup="searchClass()" />
+              <!-- <button class="export" onclick="exportSelectedData()">Xuất dữ liệu</button> -->
+              <select class="filter" id="departmentFilter" onchange="filterGvmByDepartment()">
+                <option value="">Tất cả khoa</option>
+                <option value="CNTT">Công nghệ thông tin</option>
+                <option value="ATTT">An toàn thông tin</option>
+                <option value="DTVT">Điện tử viễn thông</option>
+                <option value="MM">Mật mã</option>
+              </select>
+              <!-- <script>
+                function filterGvmByDepartment() {
+                  let select = document.getElementById("departmentFilter");
+                  let department = select.value;
+                  let table = document.getElementById("classTable");
+                  let tr = table.getElementsByTagName("tr");
+                  let infoTableBody = document.getElementById("infoTableBody");
 
-  <div class="container-fluid box m-4">
-    <div class="">
-      <div class="container-fluid ">
-        <div class="d-flex justify-content-center">
-          <!-- Main content -->
-          <div class="gvmList ">
-            <div class="m-3">
-              <div class="">
-                <h1>THÔNG TIN CÁC LỚP GIẢNG VIÊN MỜI</h1>
-                <div class="header-actions">
-                  <!-- <button class="add-class" onclick="addClass()">+ Thêm giảng viên mời</button> -->
-                  <input type="text" placeholder="Tìm kiếm theo Tên..." class="search" id="searchInput"
-                    onkeyup="searchClass()" />
-                  <!-- <button class="export" onclick="exportSelectedData()">Xuất dữ liệu</button> -->
-                  <select class="filter" id="departmentFilter" onchange="filterGvmByDepartment()">
-                    <option value="">Tất cả khoa</option>
-                    <option value="CNTT">Công nghệ thông tin</option>
-                    <option value="ATTT">An toàn thông tin</option>
-                    <option value="DTVT">Điện tử viễn thông</option>
-                    <option value="MM">Mật mã</option>
-                  </select>
-                  <script>
-                    function filterGvmByDepartment() {
-                      let select = document.getElementById("departmentFilter");
-                      let department = select.value.trim(); // Lấy giá trị và loại bỏ khoảng trắng
-                      let table = document.getElementById("classTable");
-                      let tr = table.getElementsByTagName("tr");
+                  // Xóa nội dung cũ của bảng
+                  infoTableBody.innerHTML = "";
 
-                      for (let i = 1; i < tr.length; i++) { // Bỏ qua hàng tiêu đề
-                        let departmentValue = tr[i].getAttribute("data-department");
-                        if (departmentValue) {
-                          if (department === "" || departmentValue === department) { // Kiểm tra khoa
-                            tr[i].style.display = ""; // Hiển thị hàng
-                          } else {
-                            tr[i].style.display = "none"; // Ẩn hàng
-                          }
-                        }
-                      }
+                  let filteredRows = Array.prototype.filter.call(tr, function (row) {
+                    let td = row.getElementsByTagName("td")[5]; // Giả sử cột Khoa là cột thứ 6
+                    if (td) {
+                      let txtValue = td.textContent || td.innerText;
+                      return department === "Tất cả khoa" || txtValue === department;
                     }
-                  </script>
+                    return false;
+                  });
 
-                </div>
+                  filteredRows.forEach(function (row) {
+                    // Hiển thị thông tin ở bảng
+                    let infoRow = document.createElement("tr");
+                    infoTableBody.appendChild(infoRow);
+
+                    let cells = row.getElementsByTagName("td");
+                    for (let j = 0; j < cells.length; j++) {
+                      let cell = cells[j];
+                      let infoCell = document.createElement("td");
+                      infoCell.textContent = cell.textContent;
+                      infoRow.appendChild(infoCell);
+                    }
+                  });
+                }
+              </script> -->
+            </div>
 
                 <table class="class-table" id="classTable">
                   <thead>
@@ -416,12 +490,12 @@ function setGroupVisibility(group, isVisible) {
 
             const isKhoa = localStorage.getItem("isKhoa"); // Lấy role từ localStorage
 
-            if (!isKhoa) { // Nếu là đào tạo hoặc tài chính
-              window.location.href = "/import";
-            } else { // Nếu là khoa
-              window.location.href = "/importGvmList";
-            }
-          });
+        if (isKhoa==0) { // Nếu là đào tạo hoặc tài chính
+          window.location.href = "/import";
+        } else { // Nếu là khoa
+          window.location.href = "/importGvmList";
+        }
+      });
 
           // Thêm sự kiện click cho phần tử có id="ThongTinGD"
           const ThongTinGD = document.getElementById("ThongTinGD");
@@ -430,12 +504,12 @@ function setGroupVisibility(group, isVisible) {
             event.preventDefault(); // Ngăn chặn hành vi mặc định của liên kết
             const isKhoa = localStorage.getItem("isKhoa"); // Lấy role từ localStorage
 
-            if (!isKhoa) { // Nếu là đào tạo hoặc tài chính
-              window.location.href = "/info2";
-            } else {
-              window.location.href = "/info";
-            }
-          });
+        if (isKhoa==0) { // Nếu là đào tạo hoặc tài chính
+          window.location.href = "/info2";
+        } else {
+          window.location.href = "/info";
+        }
+      });
 
           // Thêm sự kiện click cho phần tử có id="Home"
 
@@ -446,32 +520,32 @@ function setGroupVisibility(group, isVisible) {
 
             const isKhoa = localStorage.getItem("isKhoa")
 
-            if (!isKhoa) { // Nếu là đào tạo hoặc tài chính
-              window.location.href = "/maindt";
-            } else {
-              window.location.href = "/mainkhoa";
-            }
-          });
-        });
+        if (isKhoa==0) { // Nếu là đào tạo hoặc tài chính
+          window.location.href = "/maindt";
+        } else {
+          window.location.href = "/mainkhoa";
+        }
+      });
+    });
 
       </script>
 
-      <script>
-        window.onload = function () {
-          const TenNhanVien = localStorage.getItem("TenNhanVien"); // Lấy tên người dùng từ localStorage
-          const Role = localStorage.getItem("userRole");
-
-          if (TenNhanVien) {
-            // Hiển thị tên người dùng trên phần tử HTML
-            document.querySelector('.fullname').innerText = `${TenNhanVien}`;
-          } else {
-            document.querySelector('.fullname').innerText = 'Hi, Guest'; // Hiển thị nếu không có tên người dùng
-          }
-
-          document.querySelector('.role').innerText = `${Role}`;
-
-        };
-      </script>
+  <script>
+    window.onload = function () {
+      const TenNhanVien = localStorage.getItem("TenNhanVien"); // Lấy tên người dùng từ localStorage
+      const Role = localStorage.getItem("userRole");
+  
+      if (TenNhanVien) {
+        // Hiển thị tên người dùng trên phần tử HTML
+        document.querySelector('.fullname').innerText = `${TenNhanVien} - ${Role}`;
+      } else {
+        document.querySelector('.fullname').innerText = 'Hi, Guest'; // Hiển thị nếu không có tên người dùng
+      }
+  
+      document.querySelector('.role').innerText = `${Role}`;
+  
+    };
+  </script>
 
 </body>
 

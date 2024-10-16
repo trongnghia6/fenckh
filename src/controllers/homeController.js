@@ -9,25 +9,6 @@ const upload = multer({
   dest: "uploads/", // Đường dẫn thư mục lưu trữ file
 });
 
-// Các hàm khác
-
-// const createUser = (req, res) => {
-//   let maPhongBan = req.body.fname;
-//   let maBoMon = req.body.lname;
-//   let tenBoMon = req.body.email;
-//   let all = [maPhongBan, maBoMon, tenBoMon];
-//   console.log(all);
-//   connection.query(
-//     ` INSERT INTO bomon (MaPhongBan, MaBoMon, TenBoMon)
-//     VALUES (?, ?, ?) `,
-//     [maPhongBan, maBoMon, tenBoMon],
-//     function (err, results) {
-//       console.log(results);
-//       res.send("Insert succeed");
-//     }
-//   );
-// };
-
 const getLogin = (req, res) => {
   res.render("login.ejs");
 };

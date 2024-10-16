@@ -8,7 +8,7 @@ const login = async (req, res) => {
                  JOIN taikhoannguoidung ON nhanvien.id_User = taikhoannguoidung.id_User
                  WHERE TenDangNhap = ?`;
   const [TenNhanViens] = await connection.promise().query(query, [username]);
-  const TenNhanVien = TenNhanViens[0];
+  const TenNhanVien = TenNhanViens[0].TenNhanVien;
 
   try {
     // Truy vấn người dùng từ cơ sở dữ liệu
