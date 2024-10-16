@@ -11,6 +11,12 @@
   <link rel="stylesheet" href="/css/styles.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
   <style>
+    .table>:not(caption)>*>*{
+      border-bottom-width: 2px;
+    }
+    .table{
+      border-color: #ffffff;
+    }
     .suggestions {
       position: absolute;
       background-color: white;
@@ -42,7 +48,7 @@
 </head>
 
 <body>
- 
+
   <nav class="navbar-top ">
     <div class="container-fluid">
       <a class="navbar-brand" href="#">
@@ -55,96 +61,35 @@
   </nav>
 
   <!-- Phần dưới của navbar chứa các mục nằm ngang -->
-
-          <nav class="navbar navbar-expand-lg navbar-bottom sticky-top">
+  <nav class="navbar navbar-expand-lg navbar-bottom sticky-top">
     <div class="container-fluid">
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
         aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+        
         <ul class="navbar-nav">
           <li class="nav-item">
-            <a class="nav-link" id="Home" href=""><i class="fa-solid fa-house"></i></a>
+            <a class="nav-link active" id="Home" href=""><i class="fa-solid fa-house"></i></a>
           </li>
+
           <div class="navbar-nav">
             <div class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="/login" id="navbarDropdownUser" data-bs-toggle="dropdown"
                 aria-expanded="false">
-                Giảng Viên Mời
+                Giảng Viên
               </a>
               <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="nav-link" id="ThongTinGD" href="">Thông tin giảng dạy</a>
+                <a class="nav-link" id="Import" href="">Thêm bảng quy chuẩn</a>
                 <a class="nav-link" href="/gvmList">Danh sách giảng viên mời</a>
-                <a class="nav-link" id="Import" href="">Thêm bằng file</a>
-              </div>
-            </div>
-          </div>
-          <div class="navbar-nav">
-            <div class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle active" href="/login" id="navbarDropdownUser" data-bs-toggle="dropdown"
-                aria-expanded="false">
-                Bảng Quy Chuẩn
-              </a>
-              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a class="nav-link" href="/tableTam">Bảng quy chuẩn dự kiến</a>
-                <a class="nav-link" href="/tableQC">Bảng quy chuẩn chính thức</a>
-                <a class="nav-link active" id="ThongTinGD" href="">Thông tin giảng viên theo lớp</a>
-              </div>
-            </div>
-          </div>
-          <div class="navbar-nav">
-            <div class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="/login" id="navbarDropdownUser" data-bs-toggle="dropdown"
-                aria-expanded="false">
-                Mời Giảng
-              </a>
-              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                 <a class="nav-link" href="/classInfoGvm">Thông tin lớp giảng viên mời</a>
-                <a  class="nav-link " href="/infoHDGvm" role="button">Thông tin hợp đồng</a>
+                <a  class="nav-link " href="/infoHDGvm" role="button">Thông tin hợp đồng giảng viên mời</a>
+                <a class="nav-link" href="/tableTam">Bảng quy chuẩn dự kiến</a>
+                <a class="nav-link" href="/tableTam">Bảng quy chuẩn chính thức</a>
               </div>
             </div>
-          </div>
-          <div class="navbar-nav">
-            <div class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="/login" id="navbarDropdownUser" data-bs-toggle="dropdown"
-                aria-expanded="false">
-                Vượt Giờ
-              </a>
-              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a class="nav-link" id="ThongTinGD" href="#">COMING SOON</a>              </div>
-            </div>
-          </div>
-          <div class="navbar-nav">
-            <div class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="/login" id="navbarDropdownUser" data-bs-toggle="dropdown"
-                aria-expanded="false">
-                Nghiên Cứu Khoa Học
-              </a>
-              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a class="nav-link" id="ThongTinGD" href="#">COMING SOON</a>              </div>
-            </div>
-          </div>
-          <div class="navbar-nav">
-            <div class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="/login" id="navbarDropdownUser" data-bs-toggle="dropdown"
-                aria-expanded="false">
-                Đồ Án
-              </a>
-              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a class="nav-link" id="ThongTinGD" href="#">COMING SOON</a>              </div>
-            </div>
-          </div>
-          <div class="navbar-nav">
-            <div class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="/login" id="navbarDropdownUser" data-bs-toggle="dropdown"
-                aria-expanded="false">
-                Thống Kê
-              </a>
-              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a class="nav-link" id="ThongTinGD" href="#">COMING SOON</a>
-              </div>
-            </div>
-          </div>
           <div class="navbar-nav">
             <div class="nav-item dropdown">
               <a class="nav-link dropdown-toggle fullname" href="/login" id="navbarDropdownUser" data-bs-toggle="dropdown"
@@ -156,88 +101,78 @@
                 <a class="dropdown-item" href="/">Đăng xuất</a>
               </div>
             </div>
-          </div>
         </ul>
       </div>
     </div>
   </nav>
 
+  <div class="container-fluid box m-4">
+    <div class="">
+      <div class="d-flex justify-content-between">
+        <div class="d-flex justify-content-center">
+          <select class="form-select w-100px mx-1 selectop custom-select" id="combobox-dot">
+            <option value="1">Đợt 1</option>
+            <option value="2">Đợt 2</option>
+          </select>
 
-  <div class="container-fluid box m-4  ">
-    <div class="mx-5">
-      <!-- Combo box Đợt -->
-      <select class="form-select w-100px mx-2" id="combobox-dot">
-        <option value="1">Đợt 1</option>
-        <option value="2">Đợt 2</option>
-      </select>
+          <!-- Combo box Đợt -->
+          <select class="form-select w-100px mx-1 selectop custom-select" id="combobox-ki">
+            <option value="1">Kì 1</option>
+            <option value="2">Kì 2</option>
+          </select>
 
-      <!-- Combo box Đợt -->
-      <select class="form-select w-100px mx-2" id="combobox-ki">
-        <option value="1">Kì 1</option>
-        <option value="2">Kì 2</option>
-      </select>
-
-      <!-- Combo box Năm -->
-      <select class="form-select w-100px mx-2" id="combobox-nam">
-        <option value="2024">2024</option>
-        <option value="2025">2025</option>
-        <option value="2026">2026</option>
-        <option value="2027">2027</option>
-      </select>
-
-      <div class="d-flex my-3">
-        <div class="input-group mx-2">
-          <label for="startDate" class="input-group-text">Ngày bắt đầu</label>
-          <input type="date" id="startDate" class="form-control" />
+          <!-- Combo box Năm -->
+          <select class="form-select w-100px mx-1 selectop custom-select" id="combobox-nam">
+            <option value="2024">2024</option>
+            <option value="2025">2025</option>
+            <option value="2026">2026</option>
+            <option value="2027">2027</option>
+          </select>
+          <button id="infoGvm" class="button text-nowrap">Xem dữ liệu</button>
+          <button id="update-qc" onclick="submitData()" class="button mx-3">Cập nhật</button>
         </div>
-        <div class="input-group mx-2">
-          <label for="endDate" class="input-group-text">Ngày kết thúc</label>
-          <input type="date" id="endDate" class="form-control" />
-        </div>
+
       </div>
 
-      <button id="infoGvm" class="button text-nowrap mb-3">Xem dữ liệu giảng viên</button>
-      <button onclick="submitData()" class="button mx-3">Gửi đào tạo</button>
-      <input type="text" id="filterName" placeholder="Tìm theo giảng viên TKB" oninput="filterByName()"
-        class="form-control mb-3 search" style="width: 300px;" />
-      <input type="text" id="filterClass" placeholder="Tìm theo tên học phần" oninput="filterByClass()"
-        class="form-control mb-3 search" style="width: 300px;" />
+
+      <div class="d-flex my-3" style="height: 70px;">
+        <input type="text" id="filterName" placeholder="Tìm theo giảng viên TKB" oninput="filterByName()"
+          class="form-control m-2 search" style="width: 300px;" />
+        <input type="text" id="filterClass" placeholder="Tìm theo tên học phần" oninput="filterByClass()"
+          class="form-control m-2 search" style="width: 300px;" />
+      </div>
       <div id="renderInfo">
-        <table class="table table-bordered text-center" style="width: 100%;">
+        <table class="table table-hover">
           <thead>
             <tr>
-              <th>Học phần</th>
-              <th>Số TC</th>
-              <th>GV theo TKB</th>
-              <th>GV mời?</th>
-              <th>GV giảng dạy</th>
-              <th>Khoa</th>
-              <th>Bộ môn</th>
-              <th>Số tiết LL</th>
-              <th>Số tiết QC</th>
-              <th>
+              <th style="width: 200px;">Học phần</th>
+              <th style="width: 50px;">Số TC</th>
+              <th style="width: 100px;">GV giảng dạy</th>
+              <th style="width: 50px;">Khoa</th>
+              <th style="width: 100px;">Bộ môn</th>
+              <th style="width: 50px;">Số tiết LL</th>
+              <th style="width: 50px;">Số tiết QC</th>
+              <th style="width: 50px;" id="khoaColumn" display="none">
                 <div class="form-check">
                   <input class="form-check-input" type="checkbox" id="checkAllKhoa" onclick="checkAll('khoa')">
                   <label class="form-check-label" for="checkAllKhoa">Khoa</label>
                 </div>
               </th>
-              <th>
-                <div class="form-check">
-                  <input class="form-check-input" type="checkbox" id="checkAllDaoTao" onclick="checkAll('daoTao')">
-                  <label class="form-check-label" for="checkAllDaoTao">Đào Tạo</label>
-                </div>
-              </th>
-              <th>
-                <div class="form-check">
-                  <input class="form-check-input" type="checkbox" id="checkAllTaiChinh" onclick="checkAll('taiChinh')">
-                  <label class="form-check-label" for="checkAllTaiChinh">Tài Chính</label>
-                </div>
-              </th>
-
             </tr>
           </thead>
           <tbody id="tableBody">
-            <!-- Dữ liệu sẽ được chèn vào đây -->
+            <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td id="ankhoa"></td>
+            </tr>
           </tbody>
         </table>
       </div>
@@ -256,8 +191,6 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-
-
 <script>
   let globalData = []; // Biến toàn cục để lưu dữ liệu từ server
   let nameGv = []; // Biến toàn cục để lưu tất cả tên giảng viên
@@ -275,7 +208,6 @@
       const kiValue = document.getElementById('combobox-ki').value;
       const namValue = document.getElementById('combobox-nam').value;
 
-
       // Tạo đối tượng dữ liệu để gửi
       const requestData = {
         Dot: dotValue,
@@ -288,7 +220,7 @@
       const [gvmResponse, khoaResponse, teachingResponse] = await Promise.all([
         fetch('http://localhost:3000/index/name-gvm'),
         fetch('http://localhost:3000/index/name-gvm-khoa'),
-        fetch('http://localhost:3000/index/teaching-info', {
+        fetch('http://localhost:3000/teaching-info', {
           method: 'POST', // Sử dụng phương thức POST
           headers: {
             'Content-Type': 'application/json', // Đặt Content-Type là application/json
@@ -310,21 +242,86 @@
       console.log('Dữ liệu giảng viên mời theo khoa:', nameGvm);
 
       globalData = await teachingResponse.json();
-      console.log('Tổng hợp bảng dữ liệu:', globalData);
+      console.log('Tổng hợp bảng dữ liệu:', globalData[0]);
+      // console.table(globalData);
 
+      //const role = await fetchRole();
+      //role = localStorage.getItem("userRole")
       renderTable(globalData); // Gọi hàm renderTable sau khi đã có đủ dữ liệu
-
-
       calculateTotals();
     } catch (error) {
       console.error('Đã có lỗi xảy ra:', error);
     }
   }
 
+  function showSuggestions(input, inviteCheckbox) {
+    const value = input.value.toLowerCase(); // Lấy giá trị nhập vào và chuyển thành chữ thường
+    hideSuggestions(); // Ẩn gợi ý cũ trước khi hiển thị gợi ý mới
+
+    // Tạo thẻ div chứa gợi ý
+    const suggestionsContainer = document.createElement('div');
+    suggestionsContainer.className = 'suggestions';
+
+    // Đặt vị trí cho suggestionsContainer
+    const { bottom, left, width } = input.getBoundingClientRect(); // Lấy vị trí của input
+    suggestionsContainer.style.position = 'absolute'; // Để đè lên bảng
+    suggestionsContainer.style.top = `${bottom + window.scrollY}px`; // Đặt vị trí dưới input
+    suggestionsContainer.style.left = `${left + window.scrollX}px`; // Căn trái với input
+    suggestionsContainer.style.width = `${width}px`; // Chiều rộng bằng với input
+    input.parentElement.appendChild(suggestionsContainer);
+
+    let suggestions = [];
+
+    // Trường hợp checkbox được check
+    if (inviteCheckbox.checked) {
+      // Hiển thị toàn bộ giảng viên mời
+      suggestions = nameGvm.map(item => `${item.HoTen} - ${item.MaPhongBan}`);
+    } else {
+      // Hiển thị toàn bộ giảng viên
+      suggestions = nameGv.map(item => `${item.TenNhanVien} - ${item.MaPhongBan}`);
+    }
+
+    // Nếu người dùng nhập dữ liệu, lọc kết quả theo tên giảng viên
+    if (value) {
+      suggestions = suggestions.filter(name => name.toLowerCase().includes(value));
+    }
+
+    // Nếu suggestions vẫn rỗng, thông báo cho người dùng
+    if (suggestions.length === 0) {
+      suggestionsContainer.remove(); // Ẩn container nếu không có gợi ý
+      return; // Kết thúc hàm nếu không có gợi ý
+    }
+
+    // Tạo gợi ý dưới dạng danh sách (list)
+    suggestions.forEach(name => {
+      const suggestionItem = document.createElement('div');
+      suggestionItem.className = 'suggestion-item'; // Đặt class để tùy chỉnh giao diện
+      suggestionItem.textContent = name; // Hiển thị tên giảng viên kèm theo khoa
+
+      suggestionItem.onclick = function () {
+        // console.log(name); // Log tên giảng viên khi người dùng chọn gợi ý
+        input.value = name; // Gán tên được chọn vào ô input
+        hideSuggestions(); // Ẩn danh sách gợi ý sau khi chọn
+      };
+
+      suggestionsContainer.appendChild(suggestionItem); // Thêm mục vào danh sách gợi ý
+    });
+
+    // Ẩn gợi ý khi input không còn focus
+    input.onblur = function () {
+      setTimeout(() => {
+        hideSuggestions();
+      }, 100); // Thời gian chờ để nhận diện click
+    };
+  }
+
   // Hàm render bảng
   function renderTable(data) {
     const tableBody = document.getElementById('tableBody');
     tableBody.innerHTML = ''; // Xóa nội dung cũ
+
+    const role = localStorage.getItem("userRole");
+    const isKhoa = localStorage.getItem("isKhoa")
 
     data.forEach((row) => {
       const tableRow = document.createElement('tr');
@@ -342,27 +339,50 @@
       tableRow.appendChild(giaoVienTd);
 
       const moiGiangTd = document.createElement('td');
-      // Thay thế checkbox bằng văn bản "Có" hoặc "Không"
-      const inviteText = document.createElement('span');
-      inviteText.textContent = row.MoiGiang ? 'Có' : 'Không';
-      moiGiangTd.appendChild(inviteText);
+      const inviteCheckbox = document.createElement('input');
+      inviteCheckbox.name = 'moigiang';
+      inviteCheckbox.type = 'checkbox';
+      inviteCheckbox.checked = row.MoiGiang || false;
+
+      inviteCheckbox.onchange = () => {
+        if (inviteCheckbox.checked) {
+          showSuggestions(giaoVienGiangDayInput, inviteCheckbox);
+        } else {
+          hideSuggestions();
+          giaoVienGiangDayInput.value = '';
+        }
+      };
+
+      moiGiangTd.appendChild(inviteCheckbox);
       tableRow.appendChild(moiGiangTd);
 
       const giaoVienGiangDayTd = document.createElement('td');
-      // Chuyển ô input giảng viên thành dạng xem
-      const giaoVienGiangDayView = document.createElement('span');
-      giaoVienGiangDayView.textContent = row.GiaoVienGiangDay || '';
-      giaoVienGiangDayTd.appendChild(giaoVienGiangDayView);
+      const giaoVienGiangDayInput = document.createElement('input');
+      giaoVienGiangDayInput.type = 'text';
+      giaoVienGiangDayInput.placeholder = 'Nhập tên giảng viên';
+      giaoVienGiangDayInput.value = row.GiaoVienGiangDay || '';
+
+      giaoVienGiangDayInput.oninput = () => {
+        showSuggestions(giaoVienGiangDayInput, inviteCheckbox);
+      };
+
+      giaoVienGiangDayInput.onclick = function () {
+        showSuggestions(giaoVienGiangDayInput, inviteCheckbox);
+      };
+
+      giaoVienGiangDayTd.appendChild(giaoVienGiangDayInput);
       tableRow.appendChild(giaoVienGiangDayTd);
 
       const khoaTd = document.createElement('td');
-      khoaTd.textContent = row.Khoa || ''; // Lấy giá trị Khoa trực tiếp từ row
+      khoaTd.textContent = row.Khoa || '';
       tableRow.appendChild(khoaTd);
 
-      const boMonTd = document.createElement('td'); // Tạo ô Bộ môn
-      const boMonInput = document.createElement('span'); // Tạo span cho Bộ môn
-      boMonInput.textContent = row.BoMon || ''; // Lấy giá trị từ row
-      boMonTd.appendChild(boMonInput); // Thêm span vào ô
+      const boMonTd = document.createElement('td');
+      const boMonInput = document.createElement('input');
+      boMonInput.type = 'text';
+      boMonInput.value = row.BoMon || '';
+      boMonInput.placeholder = 'Nhập tên bộ môn';
+      boMonTd.appendChild(boMonInput);
       tableRow.appendChild(boMonTd);
 
       const soTietLLTd = document.createElement('td');
@@ -373,61 +393,100 @@
       soTietQCTd.textContent = row.QuyChuan || '';
       tableRow.appendChild(soTietQCTd);
 
-      // Checkbox cho Khoa
-      const khoaCheckboxTd = document.createElement('td');
-      const khoaCheckbox = document.createElement('input');
-      khoaCheckbox.type = 'checkbox';
-      khoaCheckbox.name = 'khoa'; // Thêm thuộc tính name
-      khoaCheckbox.checked = row.KhoaChecked || false; // Dùng một trường cho checkbox
-      khoaCheckbox.onchange = () => updateCheckAll('khoa'); // Gọi hàm khi checkbox thay đổi
-      khoaCheckboxTd.appendChild(khoaCheckbox);
-      tableRow.appendChild(khoaCheckboxTd);
-
-      // Checkbox cho Đào Tạo
-      const daoTaoCheckboxTd = document.createElement('td');
-      const daoTaoCheckbox = document.createElement('input');
-      daoTaoCheckbox.type = 'checkbox';
-      daoTaoCheckbox.name = 'daoTao'; // Thêm thuộc tính name
-      daoTaoCheckbox.checked = row.DaoTaoChecked || false; // Dùng một trường cho checkbox
-      daoTaoCheckbox.onchange = () => updateCheckAll('daoTao'); // Gọi hàm khi checkbox thay đổi
-      daoTaoCheckboxTd.appendChild(daoTaoCheckbox);
-      tableRow.appendChild(daoTaoCheckboxTd);
-
-      // Checkbox cho Tài Chính
-      const taiChinhCheckboxTd = document.createElement('td');
-      const taiChinhCheckbox = document.createElement('input');
-      taiChinhCheckbox.type = 'checkbox';
-      taiChinhCheckbox.name = 'taiChinh'; // Thêm thuộc tính name
-      taiChinhCheckbox.checked = row.TaiChinhChecked || false; // Dùng một trường cho checkbox
-      taiChinhCheckbox.onchange = () => updateCheckAll('taiChinh'); // Gọi hàm khi checkbox thay đổi
-      taiChinhCheckboxTd.appendChild(taiChinhCheckbox);
-      tableRow.appendChild(taiChinhCheckboxTd);
+      // Điều kiện để ẩn checkbox của "Khoa" nếu role không phải là "CNTT_ALL"
+      if (isKhoa == 1 && role == "Lãnh đạo khoa") {
+        const khoaCheckboxTd = document.createElement('td');
+        const khoaCheckbox = document.createElement('input');
+        khoaCheckbox.type = 'checkbox';
+        khoaCheckbox.name = 'khoa';
+        khoaCheckbox.checked = row.KhoaDuyet || false;
+        khoaCheckbox.onchange = () => updateCheckAll('khoa');
+        khoaCheckboxTd.appendChild(khoaCheckbox);
+        tableRow.appendChild(khoaCheckboxTd);
+      }
 
       tableBody.appendChild(tableRow);
+
+      // tableBody.appendChild(tableRow);
     });
   }
 
-
-
-
+  // Hàm ẩn gợi ý
+  function hideSuggestions() {
+    const suggestionsContainer = document.querySelector('.suggestions');
+    if (suggestionsContainer) {
+      suggestionsContainer.remove();
+    }
+  }
 
   function submitData() {
-    const rows = document.querySelectorAll('.row-container');
+    const rows = document.querySelectorAll('#tableBody tr'); // Lấy tất cả các hàng trong bảng
 
     rows.forEach((row, index) => {
-      const columns = row.querySelectorAll('.column');
-      const giaoVienGiangDayInput = row.querySelector('input[type="text"]');
-      const inviteCheckbox = row.querySelector('input[type="checkbox"]');
+      // Bỏ qua các hàng đang bị ẩn
+      if (row.style.display === 'none') {
+        return;
+      }
+      // Lấy giá trị của ô nhập "Giáo Viên Giảng Dạy"
+      const giaoVienGiangDayInput = row.querySelector('input[type="text"][placeholder="Nhập tên giảng viên"]');
 
-      const giaoVienGiangDay = giaoVienGiangDayInput.value ? giaoVienGiangDayInput.value : "";
-      const moiGiang = inviteCheckbox.checked;
+      // Lấy giá trị của ô nhập "Bộ Môn"
+      const boMonInput = row.querySelector('input[type="text"][placeholder="Nhập tên bộ môn"]');
 
+      // Lấy giá trị của checkbox "Đào Tạo"
+      const moiGiangCheckbox = row.querySelector('input[type="checkbox"][name="moigiang"]');
+
+      // Lấy giá trị của checkbox "Khoa"
+      const khoaCheckbox = row.querySelector('input[type="checkbox"][name="khoa"]');
+
+      // Lấy giá trị từ các ô nhập liệu
+      const giaoVienGiangDay = giaoVienGiangDayInput ? giaoVienGiangDayInput.value : '';
+      const boMon = boMonInput ? boMonInput.value : '';
+
+      // Lấy trạng thái của checkbox "Khoa" và "Đào Tạo"
+      const khoaDuyet = khoaCheckbox ? khoaCheckbox.checked : false;
+      const moiGiang = moiGiangCheckbox ? moiGiangCheckbox.checked : false;
+
+      const ngayBatDauValue = document.getElementById('startDate').value;
+      const ngayKetThucValue = document.getElementById('endDate').value;
+
+      // Cập nhật vào mảng globalData tương ứng với chỉ mục hàng (index)
       globalData[index].GiaoVienGiangDay = giaoVienGiangDay;
+      globalData[index].BoMon = boMon;
+      globalData[index].KhoaDuyet = khoaDuyet;
       globalData[index].MoiGiang = moiGiang;
+      globalData[index].NgayBatDau = ngayBatDauValue;
+      globalData[index].NgayKetThuc = ngayKetThucValue;
     });
 
-    console.log(globalData);
-    alert("Dữ liệu đã được gửi. Kiểm tra console để xem chi tiết.");
+
+    // Kiểm tra dữ liệu đã được cập nhật trong globalData
+    console.log('Dữ liệu gửi đi: ' + JSON.stringify(globalData, null, 2));
+
+    // Gửi dữ liệu đến server
+    fetch('http://localhost:3000/check-teaching', {
+      method: 'POST', // Phương thức POST
+      headers: {
+        'Content-Type': 'application/json' // Định dạng gửi là JSON
+      },
+      body: JSON.stringify(globalData) // Chuyển đổi globalData thành chuỗi JSON
+    })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Lỗi khi gửi dữ liệu');
+        }
+        return response.json(); // Chuyển đổi phản hồi thành JSON
+      })
+      .then(data => {
+        // Xử lý dữ liệu phản hồi từ server (nếu cần)
+        // alert('Cập nhật thành công!');
+        alert(data.message);
+
+      })
+      .catch(error => {
+        console.error('Có lỗi xảy ra:', error);
+        alert('Có lỗi xảy ra khi cập nhật dữ liệu.');
+      });
   }
 
   function filterByName() {
@@ -508,7 +567,6 @@
     document.getElementById('totalQC').textContent = totalQC;
   }
 
-
   function checkAll(type) {
     const checkboxes = document.querySelectorAll(`input[type="checkbox"][name="${type}"]`);
     const checkAllCheckbox = document.getElementById(`checkAll${type.charAt(0).toUpperCase() + type.slice(1)}`);
@@ -527,7 +585,6 @@
     const allChecked = Array.from(checkboxes).every(checkbox => checkbox.checked);
     checkAllCheckbox.checked = allChecked; // Cập nhật trạng thái của checkbox "Check All"
   }
-
 
   // Hàm khởi động ứng dụng
   init();
@@ -597,11 +654,10 @@
       document.querySelector('.fullname').innerText = 'Hi, Guest'; // Hiển thị nếu không có tên người dùng
     }
 
-    document.querySelector('.role').innerText = `${Role}`;
+    //document.querySelector('.role').innerText = `${Role}`;
 
   };
 </script>
-
 </body>
 
 </html>

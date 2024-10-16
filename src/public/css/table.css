@@ -10,7 +10,7 @@ body {
 }
 
 table {
-  width: 800px;
+  width: 100%;
   border-collapse: collapse;
   overflow: hidden;
   box-shadow: 0 2px 20px rgba(0,0,0,0.1);
@@ -49,4 +49,19 @@ tbody {
       }
     }
   }
+}
+.class-table {
+  width: 100%; /* hoặc một kích thước cố định, ví dụ 1000px */
+  table-layout: fixed;
+}
+
+.class-table th, .class-table td {
+  width: auto;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.hidden-row {
+  display: none;
 }

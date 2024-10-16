@@ -5,7 +5,7 @@
     font-size: 16px; /* Kích thước chữ */
     color: blue; /* Màu chữ */
     background-color: white; /* Màu nền */
-    border: 5px solid #007bff;
+    border: 2px solid #007bff;
     border-radius: 12px;
     cursor: pointer; /* Con trỏ chuột thành hình bàn tay */
     text-align: center; /* Căn giữa chữ */

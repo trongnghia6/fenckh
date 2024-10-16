@@ -55,6 +55,7 @@
   border: 1px solid #ccc;
   border-radius: 4px;
   width: fit-content;
+  cursor: pointer;
 }
 
 .gvmList .class-table {
@@ -147,18 +148,28 @@
   cursor: pointer;
 }
 .gvmList .export {
-  background-color: #4CAF50; /* Màu xanh lá cây */
-  color: #ffffff; /* Màu trắng */
+  background-color: #4CAF50; /* Giữ nguyên màu nền */
+  color: #ffffff; /* Giữ nguyên màu chữ */
   border: none;
-  padding: 10px 20px;
-  font-size: 16px;
+  padding: 6px 12px; /* Giảm padding */
+  font-size: 16px; /* Giảm kích thước chữ */
   cursor: pointer;
-  border-radius: 5px;
-  margin-left: 10px; /* Khoảng cách giữa nút xuất dữ liệu và nút thêm giảng viên mời */
+  border-radius: 4px; /* Giảm độ cong của góc */
+  margin-left: 10px; /* Giữ nguyên khoảng cách */
+  height: 40px; /* Giảm chiều cao */
+  line-height: 1; /* Đảm bảo text căn giữa theo chiều dọc */
 }
 
 .gvmList .export:hover {
   background-color: #3e8e41; /* Màu xanh lá cây đậm hơn */
+}
+.add-taikhoan {
+  background-color: #4CAF50;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
 }
 
 /* 
