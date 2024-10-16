@@ -122,7 +122,28 @@
   align-items: center;
   /* Căn giữa theo chiều dọc */
 }
+.SapXep {
+  background-color: #216dab; /* Màu xanh lá cây */
+  color: #ffffff; /* Màu trắng */
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 5px;
+  margin-left: 10px; /* Khoảng cách giữa nút xuất dữ liệu và nút thêm giảng viên mời */
+}
 
+.SapXep:hover {
+  background-color: #1231ac; /* Màu xanh lá cây đậm hơn */
+}
+.sort-icon {
+  display: inline-block;
+  margin-left: 5px;
+}
+
+.sort-icon i {
+  cursor: pointer;
+}
 
 .table {
   width: 100%;
