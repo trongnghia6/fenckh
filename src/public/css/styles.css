@@ -83,29 +83,34 @@ body{
   height: 40px;
 }
 .navbar-bottom .nav-link {
-  color: white;
+  color: white !important;
   background-color: #3eacff;
   font-weight: bold;
   text-transform: uppercase;
   height: 40px;
   display: flex;
   align-items: center;
+}
+.nav-link.dropdown-toggle:focus, .nav-link.dropdown-toggle:hover {
+  color: white !important; /* Keep dropdown-toggle color white on hover and focus */
+}
 
+.nav-link.active {
+  background-color: #3eacff !important; /* Ensure the background color remains consistent */
+  color: white !important; /* Keep the active color white */
 }
 .navbar-nav .dropdown:hover .dropdown-menu {
   display: block;
   margin-top: 0 !important; /* Đảm bảo menu hiển thị ngay bên dưới */
   padding-top: 0 !important; /* Xóa padding trên cùng nếu có */
 }
+
 .dropdown-menu{
   margin-top: 0 !important; /* Không để khoảng trống phía trên */
   padding: 0; /* Xóa mọi padding không cần thiết */
   width: 300px;
-<<<<<<< HEAD
   display: none;
-=======
   display :none;
->>>>>>> 6a09cc7c684a8223daaa8de7bad8ff0af3c39251
 }
 
 .navbar-bottom .nav-link:hover {
