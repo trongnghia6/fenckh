@@ -314,7 +314,7 @@ td{
 
 .row {
   flex-wrap: wrap; /* Cho phép các phần tử tự động xuống dòng */
-  align-items: center;
+  align-items: end;
 }
 
 @media (max-width: 768px) {
@@ -414,4 +414,12 @@ td{
 }
 .collapse{
   font-size: 15px;
+  justify-content: space-between;
+}
+#imgtruoc, #imgsau{
+  height: 400px;
+  width: 400px;
+}
+.bt{
+  width: 40%;
 }

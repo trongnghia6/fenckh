@@ -31,6 +31,11 @@ const login = async (req, res) => {
           "SELECT MaPhongBan, Quyen, isKhoa FROM role WHERE TenDangNhap = ?",
           [username]
         );
+        const MaPhongBan = roles[0].MaPhongBan;
+        const role = roles[0].Quyen;
+        const isKhoa = roles[0].isKhoa;
+        req.session.role = role;
+        req.session.MaPhongBan = MaPhongBan;
 
         // Kiểm tra nếu không có vai trò
         if (!roles || roles.length === 0) {
@@ -43,8 +48,7 @@ const login = async (req, res) => {
           const isKhoa = roles[0].isKhoa;
           req.session.role = role;
           req.session.MaPhongBan = MaPhongBan;
-          console.log("role = ", role);
-          console.log("MaPhongBan = ", MaPhongBan);
+        
         }
 
         let url;
@@ -60,7 +64,7 @@ const login = async (req, res) => {
         // Trả về phản hồi thành công với url
         return res
           .status(200)
-          .json({ url, role: req.session.role, MaPhongBan: req.session.MaPhongBan, isKhoa: req.session.isKhoa, TenNhanVien });
+          .json({ url, role, MaPhongBan, isKhoa, TenNhanVien });
       } else {
         return res.status(401).json({ message: "Mật khẩu không chính xác" });
       }
