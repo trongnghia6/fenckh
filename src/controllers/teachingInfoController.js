@@ -128,6 +128,8 @@ const renderInfo = (req, res) => {
   const roleDaoTaoALL = process.env.DAOTAO_ALL;
   const roleTaiChinhALL = process.env.TAICHINH_ALL;
 
+  console.log("daotaoall ", roleDaoTaoALL);
+
   const roleCNTTAll = process.env.CNTT_ALL;
   const roleATTTAll = process.env.ATTT_ALL;
   const roleDTVTAll = process.env.DTVT_ALL;
