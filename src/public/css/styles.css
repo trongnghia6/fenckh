@@ -98,7 +98,7 @@
   margin-top: 0 !important; /* Không để khoảng trống phía trên */
   padding: 0; /* Xóa mọi padding không cần thiết */
   width: 300px;
-  display: :none;
+  display: none;
 }
 
 .navbar-bottom .nav-link:hover {
@@ -293,7 +293,7 @@ td{
 .box{
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-
+}
 .card-container {
   display: flex;
   flex-wrap: wrap; /* Cho phép xuống dòng nếu cần */
@@ -400,4 +400,53 @@ pointer-events: none;
 transform: translateY(-50%);
 font-size: 12px;
 color: #333;
+}
+.add-taikhoan {
+  background-color: #4CAF50;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+}
+.btn-them-tai-khoan {
+  background-color: #4CAF50; /* Màu xanh lá */
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  margin-right: 20px;
+}
+
+.btn-them-tai-khoan:hover {
+  background-color: #45a049; /* Màu xanh lá đậm hơn khi hover */
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+
+.btn-them-tai-khoan i {
+  margin-right: 8px;
+}
+.btn-hien-thi-tk{
+  background-color: #4CAF50; /* Màu xanh lá */
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.btn-hien-thi-tk:hover {
+  background-color: #45a049; /* Màu xanh lá đậm hơn khi hover */
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+
+.btn-hien-thi-tk i {
+  margin-right: 8px;
 }
