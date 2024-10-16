@@ -96,7 +96,7 @@ body{
 }
 
 .nav-link.active {
-  background-color: #3eacff !important; /* Ensure the background color remains consistent */
+  background-color: #2d7fbe !important; /* Ensure the background color remains consistent */
   color: white !important; /* Keep the active color white */
 }
 .navbar-nav .dropdown:hover .dropdown-menu {
