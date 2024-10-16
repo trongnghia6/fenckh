@@ -1,3 +1,6 @@
+body{
+  min-width: 1275px;
+}
 .background-image {
   background: url("../../picture/OIP.jfif") no-repeat center center;
   background-size: cover; /* hoặc contain */
@@ -98,7 +101,7 @@
   margin-top: 0 !important; /* Không để khoảng trống phía trên */
   padding: 0; /* Xóa mọi padding không cần thiết */
   width: 300px;
-  display: :none;
+  display :none;
 }
 
 .navbar-bottom .nav-link:hover {
@@ -293,6 +296,7 @@ td{
 .box{
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
 
 .card-container {
   display: flex;
@@ -359,4 +363,7 @@ td{
 
 .table-responsive {
   overflow-x: auto; /* Cho phép cuộn ngang với bảng */
+}
+.navbar-collapse{
+  font-size: 15px !important;
 }
