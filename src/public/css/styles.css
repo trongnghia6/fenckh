@@ -1,3 +1,6 @@
+body{
+  min-width: 1275px;
+}
 .background-image {
   background: url("../../picture/OIP.jfif") no-repeat center center;
   background-size: cover; /* hoặc contain */
@@ -98,7 +101,11 @@
   margin-top: 0 !important; /* Không để khoảng trống phía trên */
   padding: 0; /* Xóa mọi padding không cần thiết */
   width: 300px;
+<<<<<<< HEAD
   display: none;
+=======
+  display :none;
+>>>>>>> 6a09cc7c684a8223daaa8de7bad8ff0af3c39251
 }
 
 .navbar-bottom .nav-link:hover {
@@ -449,4 +456,7 @@ color: #333;
 
 .btn-hien-thi-tk i {
   margin-right: 8px;
+}
+.collapse{
+  font-size: 15px;
 }
