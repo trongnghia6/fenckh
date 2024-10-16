@@ -150,10 +150,11 @@
 #infoGvm,
 #save-data-all,
 #update-qc,
-#chooseFile,
+#chosseFile,
 #import,
 #viewtam,
-#ban-hanh {
+#ban-hanh,
+#chooseFile {
   --color: #0077ff;
   font-family: inherit;
   display: inline-block;
@@ -171,6 +172,11 @@
   position: relative;
   transition: 0.7s;
 }
+
+#chosseFile{
+  margin-top: 0px;
+}
+button#chosseFile,
 button#chooseFile,
 button#import,
 button#viewtam,
@@ -192,10 +198,11 @@ button#ban-hanh {
 #infoGvm::before,
 #save-data-all::before,
 #update-qc::before,
-#chooseFile::before,
+#chosseFile::before,
 #import::before,
 #viewtam::before, 
-#ban-hanh::before{
+#ban-hanh::before,
+#chooseFile::before{
   position: absolute;
   content: "";
   background: var(--color);
@@ -208,20 +215,22 @@ button#ban-hanh {
 #infoGvm:hover,
 #save-data-all:hover,
 #update-qc:hover,
-#chooseFile:hover,
+#chosseFile:hover,
 #import:hover,
 #viewtam:hover,
-#ban-hanh:hover {
+#ban-hanh:hover,
+#chooseFile:hover {
   color: white;
 }
 
 #infoGvm:before,
 #save-data-all:before,
 #update-qc:before,
-#chooseFile:before,
+#chosseFile:before,
 #import:before,
 #viewtam:before,
-#ban-hanh:before {
+#ban-hanh:before,
+#chooseFile:before {
   top: 100%;
   left: 100%;
   transition: 0.3s all;
@@ -230,10 +239,11 @@ button#ban-hanh {
 #infoGvm:hover::before,
 #save-data-all:hover::before,
 #update-qc:hover::before,
-#chooseFile:hover::before,
+#chosseFile:hover::before,
 #import:hover::before,
 #viewtam:hover::before, 
-#ban-hanh:hover::before{
+#ban-hanh:hover::before,
+#chooseFile:hover::before{
   top: -30px;
   left: -30px;
 }
