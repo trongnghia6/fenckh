@@ -185,7 +185,63 @@
           <label for="endDate" class="input-group-text">Ngày kết thúc</label>
           <input required type="date" id="endDate" class="form-control" />
         </div>
+
+
+        <!-- <button class="button-action SapXep " id="sortTeachersByName">Sắp Xếp</button> -->
+
+       
+        <script>
+          document.getElementById('sortTeachersByName').addEventListener('click', sortTeachersByName);
+
+          function sortTeachersByName() {
+            const tableBody = document.getElementById('tableBody');
+            const rows = Array.from(tableBody.rows);
+
+            // Loại bỏ hàng tiêu đề khỏi quá trình sắp xếp
+            const dataRows = rows.slice(); // Lấy tất cả các hàng dữ liệu
+
+            // Sắp xếp các hàng dữ liệu dựa trên tên giáo viên
+            dataRows.sort((a, b) => {
+              const teacherA = a.cells[2].textContent.trim();
+              const teacherB = b.cells[2].textContent.trim();
+
+              // Sắp xếp theo tiêu chuẩn tiếng Việt
+              return teacherA.localeCompare(teacherB, 'vi', { sensitivity: 'base' });
+            });
+
+            // Xóa bảng và chèn lại các hàng dữ liệu đã sắp xếp
+            tableBody.innerHTML = ''; // Xóa các hàng hiện có
+            dataRows.forEach(row => tableBody.appendChild(row)); // Chèn lại các hàng dữ liệu đã sắp xếp
+          }
+
+        </script>
+
+        <script>
+          function sortTableByColumn(columnIndex, direction) {
+            const tableBody = document.getElementById('tableBody');
+            const rows = Array.from(tableBody.rows);
+
+            rows.sort((a, b) => {
+              const cellA = a.cells[columnIndex].textContent.trim();
+              const cellB = b.cells[columnIndex].textContent.trim();
+
+              if (direction === 'asc') {
+                return cellA.localeCompare(cellB, 'vi', { sensitivity: 'base' });
+              } else {
+                return cellB.localeCompare(cellA, 'vi', { sensitivity: 'base' });
+              }
+            });
+
+            tableBody.innerHTML = ''; // Clear current rows
+            rows.forEach(row => tableBody.appendChild(row)); // Append sorted rows
+          }
+        </script>
+
       </div>
+
+
+
+
       <div id="renderInfo">
         <table class="text-center">
           <thead>
@@ -205,18 +261,29 @@
                   <label class="form-check-label" for="checkAllKhoa">Khoa</label>
                 </div>
               </th>
-              <!-- <th style="width: 50px;">
-                <div class="form-check">
-                  <input class="form-check-input" type="checkbox" id="checkAllDaoTao" onclick="checkAll('daoTao')">
-                  <label class="form-check-label text-nowrap" for="checkAllDaoTao">Đào Tạo</label>
-                </div>
+              <th style="width: 50px;">
+                <span onclick="sortTableByColumn(7, 'asc')">Số tiết LL</span>
+                <span class="sort-icon">
+                  <i class="bi bi-arrow-up" onclick="sortTableByColumn(7, 'asc')"></i>
+                  <i class="bi bi-arrow-down" onclick="sortTableByColumn(7, 'desc')"></i>
+                </span>
               </th>
               <th style="width: 50px;">
-                <div class="form-check">
-                  <input class="form-check-input" type="checkbox" id="checkAllTaiChinh" onclick="checkAll('taiChinh')">
-                  <label class="form-check-label text-nowrap" for="checkAllTaiChinh">Tài Chính</label>
-                </div>
-              </th> -->
+                <span onclick="sortTableByColumn(8, 'asc')">Số tiết QC</span>
+                <span class="sort-icon">
+                  <i class="bi bi-arrow-up" onclick="sortTableByColumn(8, 'asc')"></i>
+                  <i class="bi bi-arrow-down" onclick="sortTableByColumn(8, 'desc')"></i>
+                </span>
+              </th>
+              
+              <th style="width: 50px;" id="khoaColumn" display="none"> 
+                <div class="form-check"> 
+                  <input class="form-check-input" type="checkbox" id="checkAllKhoa" onclick="checkAll('khoa')"> 
+                  <label class="form-check-label" for="checkAllKhoa">Khoa</label> 
+           
+                </div> 
+           
+              </th>
             </tr>
           </thead>
           <tbody id="tableBody">

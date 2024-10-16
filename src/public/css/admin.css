@@ -1,0 +1,20 @@
+.selectop {
+    width: 100%; /* make the select box full width */
+    padding: 10px; /* add some padding to make the text visible */
+    overflow: hidden; /* hide the scrollbar */
+    text-overflow: ellipsis; /* show ellipsis if the text is too long */
+    white-space: nowrap; /* prevent the text from wrapping */
+  }
+  
+  .selectop option {
+    padding: 10px; /* add some padding to make the text visible */
+    white-space: nowrap; /* prevent the text from wrapping */
+  }
+  .add-taikhoan {
+    background-color: #4CAF50;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+  }

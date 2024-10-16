@@ -1,14 +1,12 @@
-//const connection = require("../connectDb");
-const connection = require("../config/database");
-require("dotenv").config();
+const connection = require('../config/database'); // Import connection từ file cấu hình cơ sở dữ liệu
 
 const login = async (req, res) => {
   const { username, password } = req.body;
 
   // Lấy tên người dùng
-  query = `select TenNhanVien from nhanvien 
-            join taikhoannguoidung on nhanvien.id_User = taikhoannguoidung.id_User
-            where TenDangNhap = ?`;
+  const query = `SELECT TenNhanVien FROM nhanvien 
+                 JOIN taikhoannguoidung ON nhanvien.id_User = taikhoannguoidung.id_User
+                 WHERE TenDangNhap = ?`;
   const [TenNhanViens] = await connection.promise().query(query, [username]);
   const TenNhanVien = TenNhanViens[0].TenNhanVien;
 
@@ -25,37 +23,44 @@ const login = async (req, res) => {
       const user = users[0];
 
       // So sánh mật khẩu
-      if (user.MatKhau == password) {
+      if (user.MatKhau === password) {
         req.session.userId = user.id_User; // Lưu id_User vào session
 
         // Phân quyền người dùng
-        const [roles] = await connection
-          .promise()
-          .query(
-            "SELECT MaPhongBan, Quyen, isKhoa FROM role WHERE TenDangNhap = ?",
-            [username]
-          );
+        const [roles] = await connection.promise().query(
+          "SELECT MaPhongBan, Quyen, isKhoa FROM role WHERE TenDangNhap = ?",
+          [username]
+        );
+
+        // Kiểm tra nếu không có vai trò
+        if (!roles || roles.length === 0) {
+          req.session.role = "admin"; // Gán vai trò admin nếu không có vai trò
+          req.session.MaPhongBan = null;
+          console.log("role = admin");
+        } else {
+          const MaPhongBan = roles[0].MaPhongBan;
+          const role = roles[0].Quyen;
+          const isKhoa = roles[0].isKhoa;
+          req.session.role = role;
+          req.session.MaPhongBan = MaPhongBan;
+          console.log("role = ", role);
+          console.log("MaPhongBan = ", MaPhongBan);
+        }
 
         let url;
 
-        const MaPhongBan = roles[0].MaPhongBan;
-        const role = roles[0].Quyen;
-        const isKhoa = roles[0].isKhoa;
-        req.session.role = role;
-        req.session.MaPhongBan = MaPhongBan;
-        console.log("role = ", role);
-        console.log("MaPhongBan = ", MaPhongBan);
-        //console.log('role đăng nhập : ' + role);
-        if (isKhoa == 0) {
-          url = "/maindt";
-        } else {
+        if (req.session.role === "admin") {
+          url = "/admin"; // Đăng nhập vào trang admin
+        } else if (req.session.MaPhongBan === 1) {
           url = "/mainkhoa";
+        } else {
+          url = "/maindt";
         }
 
         // Trả về phản hồi thành công với url
         return res
           .status(200)
-          .json({ url, role, MaPhongBan, isKhoa, TenNhanVien });
+          .json({ url, role: req.session.role, MaPhongBan: req.session.MaPhongBan, isKhoa: req.session.isKhoa, TenNhanVien });
       } else {
         return res.status(401).json({ message: "Mật khẩu không chính xác" });
       }
