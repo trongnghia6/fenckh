@@ -57,7 +57,7 @@
   </div>
 </nav>
 
-  <div class="container-fluid my-4 mg-top">
+  <div class="container-fluid m-4  ">
     <div class="row">
       <div class="d-flex ">
         <div class=" bg-light mb-4 w-20">
@@ -124,7 +124,7 @@
             </select>
 
             <button class="btn btn-outline-primary" id="import">Import</button>
-            <button class="btn btn-outline-primary" id="ban-hanh">Ban Hành</button>
+            <button class="btn btn-outline-primary" id="viewtam">Ban Hành</button>
 
             <!-- <button class="btn btn-outline-primary" id="importFile">Import</button> -->
           </div>
@@ -269,12 +269,12 @@
     }
 
     // Gọi hàm fetchData để lấy dữ liệu khi click
-    document.getElementById('ban-hanh').addEventListener('click', async function () {
+    document.getElementById('viewtam').addEventListener('click', async function () {
       await fetchData(); // Gọi để lấy dữ liệu trước
 
       // Sau khi lấy dữ liệu, gửi dữ liệu đã cập nhật đến server
       console.log('Dữ liệu sẽ được gửi:', dataQC);
-      fetch('http://localhost:3000/ban-hanh', {
+      fetch('http://localhost:3000/viewtam', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

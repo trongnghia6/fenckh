@@ -14,12 +14,12 @@ const upload = multer().single("truocCCCD");
 
 let handleUploadFile = async (req, res) => {
   const gvms = await gvmList.getGvmLists(req, res);
-  role = req.session.role;
-  const parts = role.split("_");
+
+  const khoa = req.session.MaPhongBan;
 
   lengthList = parseInt(gvms.length) + 1;
   // Lấy các thông tin từ form
-  let MaGvm = parts[0] + "_GVM_" + lengthList;
+  let MaGvm = khoa + "_GVM_" + lengthList;
   console.log("MaGvm = ", MaGvm);
   let HoTen = req.body.HoTen;
   let GioiTinh = req.body.GioiTinh;

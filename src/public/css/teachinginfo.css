@@ -156,9 +156,6 @@
   text-align: center;
   /* Canh giữa nội dung cho đồng bộ */
 }
-table-bordered {
-  border: 1px solid #ddd !important;
-}
 
 table caption {
 	padding: .5em 0;

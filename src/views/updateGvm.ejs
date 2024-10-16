@@ -8,67 +8,68 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
   <link rel="stylesheet" href="/css/forminput.css">
   <link rel="stylesheet" href="/css/styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
     <!-- <link rel="stylesheet" href="public/css/styles.css"> -->
 
 </head>
 <body>
    
-        <nav class="navbar-top ">
-          <div class="container-fluid">
-              <a class="navbar-brand" href="#">
-                  <img src="/Logo-Hoc-Vien-Ky-Thuat-Mat-Ma-ACTVN.webp" alt="Logo">
-                  <div class="navbar-title">
-                    <img src="/dongchu_banner.png" alt="banner">
-                  </div>
-              </a>
-          </div>
+    <nav class="navbar-top ">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="#">
+            <img src="/Logo-Hoc-Vien-Ky-Thuat-Mat-Ma-ACTVN.webp" alt="Logo">
+            <div class="navbar-title">
+              <img src="/dongchu_banner.png" alt="banner">
+            </div>
+          </a>
+        </div>
       </nav>
-      
+    
       <!-- Phần dưới của navbar chứa các mục nằm ngang -->
       <nav class="navbar navbar-expand-lg navbar-bottom sticky-top">
-          <div class="container-fluid">
-              <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                  <span class="navbar-toggler-icon"></span>
-              </button>
-              <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
-                  <ul class="navbar-nav">
-                    
-                    <li class="nav-item">
-                        <a class="nav-link" id="Home" href="">HOME</a>
-                      </li>
-          
-                      <li class="nav-item">
-                        <a class="nav-link" id="ThongTinGD" href="">Thông tin GD</a>
-                      </li>
-                      <!-- <li> -->
-                      <li class="nav-item">
-                        <!-- <a class="nav-link" href="/import">Import danh sách giảng viên mời</a> -->
-                        <a class="nav-link" id="Import" href="">Import</a>
-                      </li>
+        <div class="container-fluid">
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+            
+            <ul class="navbar-nav">
+              <li class="nav-item">
+                <a class="nav-link active" id="Home" href=""><i class="fa-solid fa-house"></i></a>
+              </li>
     
-                  <!-- Danh sách giảng viên mời -->
-                  <li class="nav-item"></li>
-                      <a  class="nav-link" href="/gvmList" role="button">Danh sách giảng viên mời</a>
-                  </li>
-    
-                  <!-- Thông tin các lớp giảng viên mời -->
-                  <li class="nav-item"></li>
-                      <a  class="nav-link " href="/classInfoGvm" role="button">Thông tin các lớp giảng viên mời</a>
-                  </li>
-                      <div class="navbar-nav">
-                        <div class="nav-item dropdown">
-                              <a class="nav-link dropdown-toggle" href="/login" id="navbarDropdownUser" data-bs-toggle="dropdown" aria-expanded="false">
-                                Hi, Lê Đức Thuận
-                              </a>
-                              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                  <a class="dropdown-item" href="#">Thông tin cá nhân</a>
-                                  <a class="dropdown-item" href="/">Đăng xuất</a>
-                              </div>
-                        </div>
-                  </ul>
-              </div>
+              <div class="navbar-nav">
+                <div class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" href="/login" id="navbarDropdownUser" data-bs-toggle="dropdown"
+                    aria-expanded="false">
+                    Giảng Viên
+                  </a>
+                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a class="nav-link" id="ThongTinGD" href="">Thông tin giảng dạy</a>
+                    <a class="nav-link" id="Import" href="">Thêm bảng quy chuẩn</a>
+                    <a class="nav-link" href="/gvmList">Danh sách giảng viên mời</a>
+                    <a class="nav-link" href="/classInfoGvm">Thông tin lớp giảng viên mời</a>
+                    <a  class="nav-link " href="/infoHDGvm" role="button">Thông tin hợp đồng giảng viên mời</a>
+                    <a class="nav-link" href="/tableTam">Bảng quy chuẩn dự kiến</a>
+                    <a class="nav-link" href="/tableTam">Bảng quy chuẩn chính thức</a>
+                  </div>
+                </div>
+              <div class="navbar-nav">
+                <div class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" href="/login" id="navbarDropdownUser" data-bs-toggle="dropdown"
+                    aria-expanded="false">
+                    Hi, Lê Đức Thuận
+                  </a>
+                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item" href="#">Thông tin cá nhân</a>
+                    <a class="dropdown-item" href="/">Đăng xuất</a>
+                  </div>
+                </div>
+            </ul>
           </div>
-        </nav>
+        </div>
+      </nav>
                       <!-- Main content -->
                       <div class="w-80">
                         <div class="m-3">
@@ -267,38 +268,58 @@
 
   </script>
 
-  <script>    
-    async function ThongTinGD(){
-      const role = localStorage.getItem("userRole");
+ <!-- Phần phân quyền -->
+ <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Thêm sự kiện click cho phần tử có id "import"
+      const importLink = document.getElementById("Import");
+
+      importLink.addEventListener("click", function (event) {
+        event.preventDefault(); // Ngăn chặn hành vi mặc định của liên kết
+
+        const isKhoa = localStorage.getItem("isKhoa"); // Lấy role từ localStorage
+
+        if (!isKhoa) { // Nếu là đào tạo hoặc tài chính
+          window.location.href = "/import";
+        } else { // Nếu là khoa
+          window.location.href = "/importGvmList";
+        }
+      });
+
+      // Thêm sự kiện click cho phần tử có id="ThongTinGD"
+      const ThongTinGD = document.getElementById("ThongTinGD");
+
+      ThongTinGD.addEventListener("click", function (event) {
+        event.preventDefault(); // Ngăn chặn hành vi mặc định của liên kết
+
+        const isKhoa = localStorage.getItem("isKhoa"); // Lấy role từ localStorage
+
         
-        if (role.includes("DAOTAO"||role.includes("TAICHINH"))){
+        if (!isKhoa) { // Nếu là đào tạo hoặc tài chính
           window.location.href = "/info2";
         } else {
           window.location.href = "/info";
         }
-    }
+      });
 
-    async function Import(){
-      const role = localStorage.getItem("userRole");
+      // Thêm sự kiện click cho phần tử có id="Home"
 
-      if (role.includes("DAOTAO"||role.includes("TAICHINH"))){
-        window.location.href = "/import";
-      } else {
-        window.location.href = "/importGvmList";
-      }
-  }
+      const Home = document.getElementById("Home");
 
-  async function Home(){
-    const role = localStorage.getItem("userRole");
+      Home.addEventListener("click", function (event) {
+        event.preventDefault(); // Ngăn chặn hành vi mặc định của liên kết
 
-    if (role.includes("DAOTAO"||role.includes("TAICHINH"))){
-      window.location.href = "/maindt";
-    } else {
-      window.location.href = "/mainkhoa";
-    }
-  }
+        const isKhoa = localStorage.getItem("isKhoa")
 
-   </script>
+        if (!isKhoa) { // Nếu là đào tạo hoặc tài chính
+          window.location.href = "/maindt";
+        } else {
+          window.location.href = "/mainkhoa";
+        }
+      });
+    });
+
+  </script>
 
 </body>
 </html>

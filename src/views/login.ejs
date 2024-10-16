@@ -67,7 +67,7 @@
             <label for="remember-me">Remember Me</label>
           </div>
           <input
-            value="Sign In"
+            value="Đăng nhập"
             type="submit"
             class="login-button"
             id="sign-in-button"
@@ -114,9 +114,12 @@
               console.log("Response data:", data); // Kiểm tra dữ liệu trả về
               // Nếu đăng nhập thành công, chuyển hướng
 
-              const { url, role } = data;
+              const { url, role, MaPhongBan, isKhoa, TenNhanVien } = data;
 
               localStorage.setItem("userRole", role);
+              localStorage.setItem("MaPhongBan", MaPhongBan);
+              localStorage.setItem("isKhoa", isKhoa);
+              localStorage.setItem("TenNhanVien", TenNhanVien);
               window.location.href = data.url;
               //alert(data.url);
               //window.location.href = "/index";

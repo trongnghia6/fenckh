@@ -2,12 +2,14 @@ const express = require('express');
 
 const AdminController = {
   index: (req, res) => {
-    // implementation for index route
-  },
-
-  dashboard: (req, res) => {
-    // implementation for dashboard route
+    res.render('admin', { title: 'Trang admin' });
   }
 };
+showThemTaiKhoan: (req, res) => {
+  res.render('themTK', { title: 'Thêm Tài Khoản' });
+},
 
-module.exports = AdminController;
+module.exports = {
+  AdminController,
+  showThemTaiKhoan: AdminController.showThemTaiKhoan
+};

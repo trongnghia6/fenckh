@@ -8,6 +8,12 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="../../bootstrap-5.3.3-dist/bootstrap-icons-1.11.3/font/bootstrap-icons.min.css">
   <link rel="stylesheet" href="/css/styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+  <style>
+    .card-item{
+      width: 30%;
+    }
+  </style>
 </head>
 
 <body>
@@ -31,37 +37,28 @@
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+        
         <ul class="navbar-nav">
           <li class="nav-item">
-            <a class="nav-link active" id="Home" href="">HOME</a>
+            <a class="nav-link active" id="Home" href=""><i class="fa-solid fa-house"></i></a>
           </li>
 
-          <li class="nav-item">
-            <a class="nav-link" id="ThongTinGD" href="">Thông tin GD</a>
-          </li>
-          <!-- <li> -->
-          <li class="nav-item">
-            <!-- <a class="nav-link" href="/import">Import danh sách giảng viên mời</a> -->
-            <a class="nav-link" id="Import" href="">Import</a>
-          </li>
-
-          <li class="nav-item">
-            <a class="nav-link" href="/gvmList">Danh sách giảng viên mời</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/classInfoGvm">Thông tin lớp giảng viên mời</a>
-          </li>
-          <!-- Thông tin HD giảng viên mời-->
-          <li class="nav-item"></li>
-          <a  class="nav-link " href="/infoHDGvm" role="button">Thông tin HD Gvm</a>
-      </li>
-
-          <!-- <li class="nav-item">
-            <a class="nav-link" href="#">Duyệt</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/maindt/tableQC">Bảng quy chuẩn</a>
-          </li> -->
+          <div class="navbar-nav">
+            <div class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="/login" id="navbarDropdownUser" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                Giảng Viên
+              </a>
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="nav-link" id="ThongTinGD" href="">Thông tin giảng dạy</a>
+                <a class="nav-link" id="Import" href="">Thêm bảng quy chuẩn</a>
+                <a class="nav-link" href="/gvmList">Danh sách giảng viên mời</a>
+                <a class="nav-link" href="/classInfoGvm">Thông tin lớp giảng viên mời</a>
+                <a  class="nav-link " href="/infoHDGvm" role="button">Thông tin hợp đồng giảng viên mời</a>
+                <a class="nav-link" href="/tableTam">Bảng quy chuẩn dự kiến</a>
+                <a class="nav-link" href="/tableTam">Bảng quy chuẩn chính thức</a>
+              </div>
+            </div>
           <div class="navbar-nav">
             <div class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="/login" id="navbarDropdownUser" data-bs-toggle="dropdown"
@@ -78,9 +75,9 @@
     </div>
   </nav>
   <!-- 2. Tổng quan -->
-  <div class="container my-4 ">
-    <div class="row">
-      <div class="col-lg-4 col-md-6">
+  <div class="container-fluid m-4">
+    <div class="card-container d-flex flex-wrap justify-content-between">
+      <div class="card-item ">
         <div class="card text-white bg-primary mb-3">
           <div class="card-body">
             <h5 class="card-title">Tổng số học viên</h5>
@@ -88,7 +85,7 @@
           </div>
         </div>
       </div>
-      <div class="col-lg-4 col-md-6">
+      <div class="card-item">
         <div class="card text-white bg-success mb-3">
           <div class="card-body">
             <h5 class="card-title">Môn học đang hoạt động</h5>
@@ -96,7 +93,7 @@
           </div>
         </div>
       </div>
-      <div class="col-lg-4 col-md-6">
+      <div class="card-item">
         <div class="card text-white bg-warning mb-3">
           <div class="card-body">
             <h5 class="card-title">Giảng viên</h5>
@@ -106,9 +103,10 @@
       </div>
     </div>
   </div>
+  
 
   <!-- 3. Danh sách Môn học -->
-  <div class="container my-4">
+  <div class="container-fluid m-4">
     <h3>Danh sách Môn học</h3>
     <table class="table table-bordered">
       <thead>
@@ -137,7 +135,7 @@
   </div>
 
   <!-- 4. Danh sách học viên -->
-  <div class="container my-4">
+  <div class="container-fluid m-4">
     <h3>Danh sách học viên</h3>
     <table class="table table-bordered">
       <thead>
@@ -166,7 +164,7 @@
   </div>
 
   <!-- 5. Danh sách Giảng viên -->
-  <div class="container my-4">
+  <div class="container-fluid m-4">
     <h3>Danh sách Giảng viên</h3>
     <table class="table table-bordered">
       <thead>
@@ -195,7 +193,7 @@
   </div>
 
   <!-- 6. Lịch học -->
-  <div class="container my-4">
+  <div class="container-fluid m-4">
     <h3>Lịch học</h3>
     <table class="table table-bordered">
       <thead>
@@ -224,7 +222,7 @@
   </div>
 
   <!-- 7. Báo cáo và thống kê -->
-  <div class="container my-4">
+  <div class="container-fluid m-4">
     <h3>Báo cáo và thống kê</h3>
     <div class="row">
       <div class="col-lg-6">
@@ -291,7 +289,7 @@
     });
   </script>
   <!-- 8. Chữ mờ và nút quay về đầu trang -->
-  <div class="container my-4">
+  <div class="container-fluid m-4">
     <footer class="text-center">
       <p class="text-muted">© 2024 Phòng Đào Tạo. Tất cả các quyền được bảo lưu.</p>
       <button onclick="topFunction()" id="backToTopBtn" class="btn btn-secondary">Quay về đầu trang</button>
@@ -309,57 +307,57 @@
     }
   </script>
 
-      <!-- Phần phân quyền -->
-      <script>
-        document.addEventListener('DOMContentLoaded', () => {
-          // Thêm sự kiện click cho phần tử có id "import"
-          const importLink = document.getElementById("Import");
-          
-          importLink.addEventListener("click", function(event) {
-              event.preventDefault(); // Ngăn chặn hành vi mặc định của liên kết
-              
-              const role = localStorage.getItem("userRole"); // Lấy role từ localStorage
-              
-              if (role.includes("DAOTAO")||role.includes("TAICHINH")){
-                window.location.href = "/import";
-              } else {
-                window.location.href = "/importGvmList";
-              }
-          });
-    
-          // Thêm sự kiện click cho phần tử có id="ThongTinGD"
-          const ThongTinGD = document.getElementById("ThongTinGD");
-          
-          ThongTinGD.addEventListener("click", function(event) {
-              event.preventDefault(); // Ngăn chặn hành vi mặc định của liên kết
-              
-              const role = localStorage.getItem("userRole"); // Lấy role từ localStorage
-                      
-              if (role.includes("DAOTAO")||role.includes("TAICHINH")){
-                window.location.href = "/info2";
-              } else {
-                window.location.href = "/info";
-              }
-          });
-    
-          // Thêm sự kiện click cho phần tử có id="Home"
-    
-          const Home = document.getElementById("Home");
-          
-          Home.addEventListener("click", function(event) {
-              event.preventDefault(); // Ngăn chặn hành vi mặc định của liên kết
-              
-              const role = localStorage.getItem("userRole"); // Lấy role từ localStorage
-              
-              if (role.includes("DAOTAO")||role.includes("TAICHINH")){
-                window.location.href = "/maindt";
-              } else {
-                window.location.href = "/mainkhoa";
-              }
-          });
+  <!-- Phần phân quyền -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Thêm sự kiện click cho phần tử có id "import"
+      const importLink = document.getElementById("Import");
+
+      importLink.addEventListener("click", function (event) {
+        event.preventDefault(); // Ngăn chặn hành vi mặc định của liên kết
+
+        const isKhoa = localStorage.getItem("isKhoa"); // Lấy role từ localStorage
+
+        if (isKhoa == 0) { // Nếu là đào tạo hoặc tài chính
+          window.location.href = "/import";
+        } else { // Nếu là khoa
+          window.location.href = "/importGvmList";
+        }
       });
-    
-       </script>
+
+      // Thêm sự kiện click cho phần tử có id="ThongTinGD"
+      const ThongTinGD = document.getElementById("ThongTinGD");
+
+      ThongTinGD.addEventListener("click", function (event) {
+        event.preventDefault(); // Ngăn chặn hành vi mặc định của liên kết
+
+        const isKhoa = localStorage.getItem("isKhoa"); // Lấy role từ localStorage
+
+        if (isKhoa == 0) { // Nếu là đào tạo hoặc tài chính
+          window.location.href = "/info2";
+        } else {
+          window.location.href = "/info";
+        }
+      });
+
+      // Thêm sự kiện click cho phần tử có id="Home"
+
+      const Home = document.getElementById("Home");
+
+      Home.addEventListener("click", function (event) {
+        event.preventDefault(); // Ngăn chặn hành vi mặc định của liên kết
+
+        const isKhoa = localStorage.getItem("isKhoa")
+
+        if (isKhoa == 0) { // Nếu là đào tạo hoặc tài chính
+          window.location.href = "/maindt";
+        } else {
+          window.location.href = "/mainkhoa";
+        }
+      });
+    });
+
+  </script>
 
 
 </body>

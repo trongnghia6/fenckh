@@ -1,31 +1,31 @@
 const express = require("express");
 const createConnection = require("../config/databaseAsync");
-const ExcelJS = require('exceljs');
+const ExcelJS = require("exceljs");
 const router = express.Router();
-const mysql = require('mysql2/promise');
-const xlsx = require('xlsx');
+const mysql = require("mysql2/promise");
+const xlsx = require("xlsx");
 
 const getGvm = async (req, res) => {
-    try {
-      const gvmLists = await fetchHDGvmData();
-      res.json(gvmLists); // Trả về danh sách giảng viên mời
-    } catch (error) {
-      console.error("Error fetching HD Gvm:", error);
-      res.status(500).json({ message: "Internal Server Error" }); // Xử lý lỗi
-    }
+  try {
+    const gvmLists = await fetchHDGvmData();
+    res.json(gvmLists); // Trả về danh sách giảng viên mời
+  } catch (error) {
+    console.error("Error fetching HD Gvm:", error);
+    res.status(500).json({ message: "Internal Server Error" }); // Xử lý lỗi
+  }
 };
 
 async function fetchHDGvmData() {
-    const connection = await mysql.createConnection({
-      host: 'localhost',
-      user: 'root',
-      database: 'ttcs'
-    });
-  
-    const [rows] = await connection.execute('SELECT * FROM hopdonggvmoi'); // Thay đổi theo bảng giảng viên mời
-    return rows;
+  const connection = await mysql.createConnection({
+    host: "localhost",
+    user: "root",
+    database: "ttcs2",
+  });
+
+  const [rows] = await connection.execute("SELECT * FROM hopdonggvmoi"); // Thay đổi theo bảng giảng viên mời
+  return rows;
 }
-  
+
 // Hàm xuất dữ liệu ra Excel
 const exportHDGvmToExcel = async (req, res) => {
     console.log('Hàm exportHDGvmToExcel được gọi');
@@ -33,7 +33,7 @@ const exportHDGvmToExcel = async (req, res) => {
       const connection = await mysql.createConnection({
         host: 'localhost',
         user: 'root',
-        database: 'ttcs'
+        database: 'ttcs2'
       });
       console.log('Kết nối database thành công');
       const namHoc = req.query.namHoc;
@@ -132,5 +132,5 @@ function soTienBangChu(soTien) {
 
 
 module.exports = {
-    exportHDGvmToExcel,
+  exportHDGvmToExcel,
 };
