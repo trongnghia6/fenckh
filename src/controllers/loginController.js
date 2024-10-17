@@ -9,7 +9,7 @@ const login = async (req, res) => {
                  WHERE TenDangNhap = ?`;
   const [TenNhanViens] = await connection.promise().query(query, [username]);
   const TenNhanVien = TenNhanViens[0].TenNhanVien;
-
+     
   try {
     // Truy vấn người dùng từ cơ sở dữ liệu
     const [users] = await connection
@@ -28,37 +28,28 @@ const login = async (req, res) => {
 
         // Phân quyền người dùng
         const [roles] = await connection.promise().query(
-          "SELECT MaPhongBan, Quyen, isKhoa FROM role WHERE TenDangNhap = ?",
+          "SELECT MaPhongBan, Quyen,isKhoa FROM role WHERE TenDangNhap = ?",
           [username]
         );
-        const MaPhongBan = roles[0].MaPhongBan;
-        const role = roles[0].Quyen;
-        const isKhoa = roles[0].isKhoa;
-        req.session.role = role;
-        req.session.MaPhongBan = MaPhongBan;
-
-        // Kiểm tra nếu không có vai trò
-        if (!roles || roles.length === 0) {
-          req.session.role = "admin"; // Gán vai trò admin nếu không có vai trò
-          req.session.MaPhongBan = null;
-          console.log("role = admin");
-        } else {
-          const MaPhongBan = roles[0].MaPhongBan;
-          const role = roles[0].Quyen;
-          const isKhoa = roles[0].isKhoa;
-          req.session.role = role;
-          req.session.MaPhongBan = MaPhongBan;
-        
-        }
+     
+     const MaPhongBan = roles[0].MaPhongBan;
+     const role = roles[0].Quyen;
+     const isKhoa = roles[0].isKhoa;
+      req.session.role = role;
+       req.session.MaPhongBan = MaPhongBan;
 
         let url;
 
-        if (req.session.role === "admin") {
+        if (role === "ADMIN") {
+          req.session.role = "ADMIN"; // Gán vai trò admin nếu không có vai trò
+          req.session.MaPhongBan = null;
           url = "/admin"; // Đăng nhập vào trang admin
         } else if (req.session.MaPhongBan === 1) {
           url = "/mainkhoa";
+         
         } else {
           url = "/maindt";
+        
         }
 
         // Trả về phản hồi thành công với url

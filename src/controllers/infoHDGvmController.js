@@ -19,7 +19,7 @@ async function fetchHDGvmData() {
   const connection = await mysql.createConnection({
     host: "localhost",
     user: "root",
-    database: "ttcs2",
+    database: "ttcs",
   });
 
   const [rows] = await connection.execute("SELECT * FROM hopdonggvmoi"); // Thay đổi theo bảng giảng viên mời
@@ -33,7 +33,7 @@ const exportHDGvmToExcel = async (req, res) => {
       const connection = await mysql.createConnection({
         host: 'localhost',
         user: 'root',
-        database: 'ttcs2'
+        database: 'ttcs'
       });
       console.log('Kết nối database thành công');
       const namHoc = req.query.namHoc;

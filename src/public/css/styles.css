@@ -127,7 +127,7 @@ body{
 /* From Uiverse.io by Praashoo7 */
 .search {
   border: none;
-  outline: none;
+outline: none;
   border-radius: 15px;
   padding: 1em;
   background-color: #ccc;
@@ -304,7 +304,7 @@ td{
 }
 .box{
   border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 .card-container {
   display: flex;
@@ -421,8 +421,7 @@ color: #333;
   font-size: 16px;
   cursor: pointer;
 }
-}
-.btn-them {
+.btn-them-tai-khoan {
   background-color: #4CAF50; /* Màu xanh lá */
   color: white;
   padding: 10px 20px;
@@ -435,15 +434,15 @@ color: #333;
   margin-right: 20px;
 }
 
-.btn-them:hover {
+.btn-them-tai-khoan:hover {
   background-color: #45a049; /* Màu xanh lá đậm hơn khi hover */
   box-shadow: 0 4px 8px rgba(0,0,0,0.3);
 }
 
-.btn-them i {
+.btn-them-tai-khoan i {
   margin-right: 8px;
 }
-.btn-hien-thi{
+.btn-hien-thi-tk{
   background-color: #4CAF50; /* Màu xanh lá */
   color: white;
   padding: 10px 20px;
@@ -455,57 +454,22 @@ color: #333;
   box-shadow: 0 2px 5px rgba(0,0,0,0.2);
 }
 
-.btn-hien-thi:hover {
+.btn-hien-thi-tk:hover {
   background-color: #45a049; /* Màu xanh lá đậm hơn khi hover */
   box-shadow: 0 4px 8px rgba(0,0,0,0.3);
 }
 
-.btn-hien-thi i {
-  margin-right: 16px;
+.btn-hien-thi-tk i {
+  margin-right: 8px;
 }
-.btn-suaTT{
-  background-color: #4CAF50; /* Màu xanh lá */
-  color: white;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  font-size: 16px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+.collapse{
+  font-size: 15px;
+  justify-content: space-between;
 }
-
-.btn-suaTT:hover {
-  background-color: #45a049; /* Màu xanh lá đậm hơn khi hover */
-  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+img{
+  height: 400px;
+  width: 400px;
 }
-
-.btn-suaTT i {
-  margin-right: 30px;
-}
-.btn-xoa{
-  background-color: #4CAF50; /* Màu xanh lá */
-  color: white;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  font-size: 16px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-}
-
-.btn-xoa:hover {
-  background-color: #45a049; /* Màu xanh lá đậm hơn khi hover */
-  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-}
-
-.btn-xoa i {
-  margin-right: 22px;
-}
-
-.btn-hien-thi,
-.btn-suaTT,
-.btn-xoa {
-    margin-right: 14px; /* Thêm khoảng cách bên phải cho mỗi nút */
+.bt{
+  width: 40%;
 }
