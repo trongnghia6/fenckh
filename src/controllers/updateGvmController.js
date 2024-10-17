@@ -19,6 +19,20 @@ const getUpdateGvm = async (req, res) => {
 
   res.render("updateGvm.ejs", { value: user });
 };
+const getViewGvm = async (req, res) => {
+  const id_Gvm = parseInt(req.params.id) + 1;
+
+  // lấy dữ liệu
+  const connection2 = await createConnection();
+  const query = "SELECT * FROM `gvmoi` WHERE id_Gvm = ?";
+  const [results, fields] = await connection2.query(query, [id_Gvm]);
+  //   console.log("id=", id_Gvm);
+  //   console.log("results = ", results);
+
+  let user = results && results.length > 0 ? results[0] : {};
+
+  res.render("viewGvm.ejs", { value: user });
+};
 
 const upload = multer().single("truocCCCD");
 
@@ -154,4 +168,5 @@ const postUpdateGvm = async (req, res) => {
 module.exports = {
   getUpdateGvm,
   postUpdateGvm,
+  getViewGvm,
 };
