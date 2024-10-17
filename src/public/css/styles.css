@@ -466,7 +466,7 @@ color: #333;
   font-size: 15px;
   justify-content: space-between;
 }
-#imgtruoc, #imgsau{
+img{
   height: 400px;
   width: 400px;
 }

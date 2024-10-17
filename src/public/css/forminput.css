@@ -5,6 +5,14 @@
   border-radius: 5px;
   justify-content: center;
 }
+.button-class {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+}
 
 .text {
   color: #333; /* Darker text for better contrast */
@@ -228,7 +236,8 @@
 }
 
 .form-control {
-  background-image: linear-gradient(to top, #fad0c4 0%, #ffd1ff 100%);
+  /* background-image: linear-gradient(to top, #fad0c4 0%, #ffd1ff 100%); */
+  border: 2px solid #007bff;
 }
 
 .form-control:focus {

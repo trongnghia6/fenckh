@@ -39,12 +39,12 @@
               </li>
               <div class="navbar-nav">
                 <div class="nav-item dropdown">
-                  <a class="nav-link dropdown-toggle" href="/login" id="navbarDropdownUser" data-bs-toggle="dropdown"
+                  <a class="nav-link dropdown-toggle active" href="/login" id="navbarDropdownUser" data-bs-toggle="dropdown"
                     aria-expanded="false">
                     Giảng Viên Mời
                   </a>
                   <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <a class="nav-link" href="/gvmList">Danh sách giảng viên mời</a>
+                    <a class="nav-link active" href="/gvmList">Danh sách giảng viên mời</a>
                     <a class="nav-link" id="Import" href="">Thêm bằng file</a>
                   </div>
                 </div>
@@ -276,8 +276,8 @@
        </select>
    </div>
    <div class="col-md-4 d-flex justify-content-between">
-      <button class="btn btn-success bt" id="submit">Cập nhật</button>
-      <button class="btn btn-success bt" id="submit" onclick="goBack()">Quay lại</button>
+      <button class="button-class bt" id="submit">Cập nhật</button>
+      <button class="button-class bt" id="return" onclick="goBack()">Quay lại</button>
    </div>
                                </div>
                            </fieldset>
@@ -311,7 +311,6 @@
     function goBack() {
         window.history.back(); // Quay lại trang trước đó
       }
-
   </script>
 
   <!-- Phần phân quyền -->
