@@ -369,7 +369,7 @@ td{
   cursor: pointer;
 }
 }
-.btn-them-tai-khoan {
+.btn-them {
   background-color: #4CAF50; /* Màu xanh lá */
   color: white;
   padding: 10px 20px;
@@ -382,15 +382,15 @@ td{
   margin-right: 20px;
 }
 
-.btn-them-tai-khoan:hover {
+.btn-them:hover {
   background-color: #45a049; /* Màu xanh lá đậm hơn khi hover */
   box-shadow: 0 4px 8px rgba(0,0,0,0.3);
 }
 
-.btn-them-tai-khoan i {
+.btn-them i {
   margin-right: 8px;
 }
-.btn-hien-thi-tk{
+.btn-hien-thi{
   background-color: #4CAF50; /* Màu xanh lá */
   color: white;
   padding: 10px 20px;
@@ -402,11 +402,57 @@ td{
   box-shadow: 0 2px 5px rgba(0,0,0,0.2);
 }
 
-.btn-hien-thi-tk:hover {
+.btn-hien-thi:hover {
   background-color: #45a049; /* Màu xanh lá đậm hơn khi hover */
   box-shadow: 0 4px 8px rgba(0,0,0,0.3);
 }
 
-.btn-hien-thi-tk i {
-  margin-right: 8px;
+.btn-hien-thi i {
+  margin-right: 16px;
+}
+.btn-suaTT{
+  background-color: #4CAF50; /* Màu xanh lá */
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.btn-suaTT:hover {
+  background-color: #45a049; /* Màu xanh lá đậm hơn khi hover */
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+
+.btn-suaTT i {
+  margin-right: 30px;
+}
+.btn-xoa{
+  background-color: #4CAF50; /* Màu xanh lá */
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.btn-xoa:hover {
+  background-color: #45a049; /* Màu xanh lá đậm hơn khi hover */
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+
+.btn-xoa i {
+  margin-right: 22px;
+}
+
+.btn-hien-thi,
+.btn-suaTT,
+.btn-xoa {
+    margin-right: 14px; /* Thêm khoảng cách bên phải cho mỗi nút */
 }
