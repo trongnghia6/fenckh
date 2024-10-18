@@ -383,7 +383,7 @@
       // dùng window onclick đéo được
       document.addEventListener("DOMContentLoaded", function () {
         const role = localStorage.getItem("userRole");
-        alert(role ? role : "Vai trò người dùng là null.");
+        //alert(role ? role : "Vai trò người dùng là null.");
 
         // Chỉ cho nhập ngày bắt đầu ngày kết thúc với role thi hành
         // if (role && role.includes('GV_CNBM')) {
@@ -506,6 +506,8 @@
           // globalData = globalDataNew;
           const check = rs.check; // Dữ liệu check
 
+          localStorage.setItem("check", check);
+
           // Kiểm tra dữ liệu trong localStorage
           let cachedData = localStorage.getItem('tableData');
 
@@ -545,6 +547,7 @@
 
         const role = localStorage.getItem("userRole");
         const isKhoa = parseInt(localStorage.getItem("isKhoa"), 10); // Chuyển đổi isKhoa thành số
+        const MaPhongBan = localStorage.getItem("MaPhongBan")
 
         data.forEach((row) => {
           const tableRow = document.createElement('tr');
@@ -641,10 +644,11 @@
           tableRow.appendChild(ngayKetThucTd);
 
 
+          let khoaCheckboxTd, khoaCheckbox;
           // Điều kiện ẩn checkbox Khoa nếu role không phải "CNTT_ALL"
           if (isKhoa === 1 && role === "Lãnh đạo khoa") {
-            const khoaCheckboxTd = document.createElement('td');
-            const khoaCheckbox = document.createElement('input');
+            khoaCheckboxTd = document.createElement('td');
+            khoaCheckbox = document.createElement('input');
             khoaCheckbox.type = 'checkbox';
             khoaCheckbox.name = 'khoa';
             khoaCheckbox.checked = row.KhoaDuyet || false;
@@ -653,9 +657,44 @@
             tableRow.appendChild(khoaCheckboxTd);
           }
 
+      const check = localStorage.getItem("check");
+      // Phân quyền theo phòng ban
+      if (isKhoa == 1){ // Nếu là khoa
+        if (check.includes(MaPhongBan)){
+          inviteCheckbox.addEventListener('click', function(e){
+            e.preventDefault();
+          })
+
+          giaoVienGiangDayInput.readOnly = true;
+          boMonInput.readOnly = true;
+          ngayBatDauInput.readOnly = true;
+          // Ngăn người dùng thay đổi trạng thái ngày kết thúc
+          ngayKetThucInput.readOnly = true;
+
+          // Ngăn người dùng thay đổi trạng thái checkbox
+          khoaCheckbox.addEventListener('click', function (e) {
+            e.preventDefault(); // Ngăn người dùng thay đổi trạng thái checkbox
+          });
+
+          // Ngăn checkbox tổng của 'khoa' không cho thay đổi
+          disableCheckAll('khoa');
+        }
+      } 
+
           // Thêm hàng vào body của bảng
           tableBody.appendChild(tableRow);
         });
+      }
+
+      function disableCheckAll(type) {
+        const checkAllCheckbox = document.getElementById(`checkAll${type.charAt(0).toUpperCase() + type.slice(1)}`);
+    
+        if (checkAllCheckbox) {
+            // Ngăn không cho người dùng thay đổi checkbox tổng
+            checkAllCheckbox.addEventListener('click', function(e) {
+                e.preventDefault(); // Ngăn thay đổi trạng thái
+            });
+        }
       }
 
       // xử lí hiển thị ngày tháng năm
@@ -810,9 +849,6 @@
 
         // Cập nhật lại localStorage với dữ liệu mới
         localStorage.setItem('tableData', JSON.stringify(localData));
-
-        // Kiểm tra dữ liệu đã được cập nhật trong localStorage
-        console.log('Dữ liệu cập nhật trong localStorage: ', JSON.stringify(localData, null, 2));
 
         // Hiển thị thông báo thành công
         alert('Lưu thành công');
