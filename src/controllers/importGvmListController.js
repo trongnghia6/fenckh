@@ -173,11 +173,16 @@ const saveToDB = async (req, res) => {
 
     if (data && data.length > 0) {
       for (const row of data) {
+        // const sql = `
+        //   INSERT INTO gvmoi
+        //   (GioiTinh, MaGvm, HoTen, NgaySinh, CCCD, NgayCapCCCD, NoiCapCCCD, DiaChi, Email, MaSoThue, HocVi, ChucVu, HSL, DienThoai, STK, NganHang, MaPhongBan, TinhTrangGiangDay)
+        //   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        // `;
         const sql = `
-          INSERT INTO gvmoi
-          (GioiTinh, MaGvm, HoTen, NgaySinh, CCCD, NgayCapCCCD, NoiCapCCCD, DiaChi, Email, MaSoThue, HocVi, ChucVu, HSL, DienThoai, STK, NganHang, MaPhongBan, TinhTrangGiangDay)
-          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-        `;
+        INSERT INTO gvmoi
+        (GioiTinh, MaGvm, HoTen, NgaySinh, BangTotNghiepLoai, NoiCongTac, MonGiangDayChinh, DiaChi, Email, MaSoThue, HocVi, ChucVu, HSL, DienThoai, STK, NganHang, TinhTrangGiangDay)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      `;
 
         const gvms = await gvmList.getGvmLists(req, res);
         let length = parseInt(gvms.length) + 1;
@@ -185,42 +190,28 @@ const saveToDB = async (req, res) => {
         const MaGvm = MaPhongBan + "_GVM_" + length;
 
         // Chuyển đổi dữ liệu để phù hợp với cột trong DB
-        const GioiTinh = row["Danh xưng"] === "Ông" ? "Nam" : "Nữ";
+        //const GioiTinh = row["Danh xưng"] === "Ông" ? "Nam" : "Nữ";
         const HoTen = row["Họ và tên"];
+        const GioiTinh = row["Giới tính"];
         const NgaySinh = row["Ngày sinh"];
+        const DienThoai = row["Điện thoại"];
+        const Email = row["Email"];
+        const HocVi = row["Học vị"];
+        const BangTotNghiepLoai = row["Bằng loại"] || " ";
+        const ChucVu = row["Chức vụ"];
+        const HSL = row["Hệ số lương"];
+        const NoiCongTac = row["Nơi công tác"];
+        const DiaChi = row["Địa chỉ theo CCCD"];
+        const MaSoThue = row["Mã số thuế"];
+        const STK = row["Số tài khoản"];
+        const NganHang = row["Tại ngân hàng"];
+        const MonGiangDayChinh = row["Bộ môn"] || " ";
+
+        //
         const CCCD = row["CCCD"];
         const NgayCapCCCD = row["Ngày cấp"];
         const NoiCapCCCD = row["Nơi cấp"];
-        const DiaChi = row["Địa chỉ theo CCCD"];
-        const Email = row["Email"];
-        const MaSoThue = row["Mã số thuế"];
-        const HocVi = row["Cấp bậc"];
-        const ChucVu = row["Chức vụ"];
-        const HSL = row["Hệ số lương"];
-        const DienThoai = row["Điện thoại"];
-        const STK = row["Số tài khoản"];
-        const NganHang = row["Tại ngân hàng"];
-
-        // const values = [
-        //   GioiTinh,
-        //   MaGvm,
-        //   HoTen,
-        //   NgaySinh,
-        //   CCCD,
-        //   NgayCapCCCD,
-        //   NoiCapCCCD,
-        //   DiaChi,
-        //   Email,
-        //   MaSoThue,
-        //   HocVi,
-        //   ChucVu,
-        //   HSL,
-        //   DienThoai,
-        //   STK,
-        //   NganHang,
-        //   MaPhongBan,
-        //   TinhTrangGiangDay,
-        // ];
+        //const HocVi = row["Cấp bậc"];
 
         let isDuplicate = false;
 
@@ -249,9 +240,9 @@ const saveToDB = async (req, res) => {
           MaGvm,
           HoTen,
           NgaySinh,
-          CCCD,
-          NgayCapCCCD,
-          NoiCapCCCD,
+          BangTotNghiepLoai,
+          NoiCongTac,
+          MonGiangDayChinh,
           DiaChi,
           Email,
           MaSoThue,
@@ -261,7 +252,7 @@ const saveToDB = async (req, res) => {
           DienThoai,
           STK,
           NganHang,
-          MaPhongBan,
+          //MaPhongBan,
           TinhTrangGiangDay,
         ];
 

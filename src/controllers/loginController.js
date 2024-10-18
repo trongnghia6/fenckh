@@ -43,6 +43,7 @@ const login = async (req, res) => {
         const isKhoa = roles[0].isKhoa;
         req.session.role = role;
         req.session.MaPhongBan = MaPhongBan;
+        req.session.isKhoa = isKhoa;
         console.log("role = ", role);
         console.log("MaPhongBan = ", MaPhongBan);
         //console.log('role đăng nhập : ' + role);

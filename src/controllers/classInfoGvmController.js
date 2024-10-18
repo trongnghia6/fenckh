@@ -11,14 +11,25 @@ const getClassInfoGvm = async (req, res) => {
   const MaPhongBan = req.session.MaPhongBan;
   const isKhoa = req.session.isKhoa;
   //const parts = role.split("_");
-  if (!isKhoa) {
-    query = `SELECT * from giangday JOIN gvmoi
-    on giangday.id_Gvm = gvmoi.id_Gvm`;
+  // if (isKhoa == 0) {
+  //   query = `SELECT * from giangday JOIN gvmoi
+  //   on giangday.id_Gvm = gvmoi.id_Gvm`;
+  //   //ORDER BY GiaoVien`; // Sắp xếp theo tên giảng viên
+  // } else {
+  //   query = `SELECT *
+  //   FROM giangday
+  //   JOIN gvmoi ON giangday.id_Gvm = gvmoi.id_Gvm
+  //   WHERE MaHocPhan LIKE '${MaPhongBan}%'`;
+  // }
+
+  if (isKhoa == 0) {
+    query = `SELECT * from quychuan JOIN gvmoi
+    on quychuan.GiaoVienGiangDay = gvmoi.HoTen`;
     //ORDER BY GiaoVien`; // Sắp xếp theo tên giảng viên
   } else {
     query = `SELECT * 
-    FROM giangday 
-    JOIN gvmoi ON giangday.id_Gvm = gvmoi.id_Gvm 
+    FROM quychuan 
+    JOIN gvmoi ON quychuan.GiaoVienGiangDay = gvmoi.HoTen
     WHERE MaHocPhan LIKE '${MaPhongBan}%'`;
   }
 
@@ -27,7 +38,7 @@ const getClassInfoGvm = async (req, res) => {
   //console.log("danh sách = ", results);
   // Nhóm các môn học theo giảng viên
   const groupedByTeacher = results.reduce((acc, current) => {
-    const teacher = current.GiangVien;
+    const teacher = current.GiaoVien;
     if (!acc[teacher]) {
       acc[teacher] = [];
     }

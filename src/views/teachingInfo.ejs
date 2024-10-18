@@ -81,6 +81,7 @@
                 Mời Giảng
               </a>
               <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="nav-link" href="/xemCacLopGvm">Xem các lớp mời</a>
                 <a class="nav-link" href="/classInfoGvm">Thông tin lớp giảng viên mời</a>
                 <a  class="nav-link " href="/infoHDGvm" role="button">Thông tin hợp đồng</a>
               </div>
@@ -304,8 +305,6 @@
       console.log('Tổng hợp bảng dữ liệu:', globalData[0]);
       // console.table(globalData);
 
-      //const role = await fetchRole();
-      //role = localStorage.getItem("userRole")
       renderTable(globalData); // Gọi hàm renderTable sau khi đã có đủ dữ liệu
       calculateTotals();
     } catch (error) {
@@ -658,7 +657,7 @@
       importLink.addEventListener("click", function (event) {
         event.preventDefault(); // Ngăn chặn hành vi mặc định của liên kết
 
-        const isKhoa = localStorage.getItem("isKhoa"); // Lấy role từ localStorage
+        const isKhoa = localStorage.getItem("isKhoa"); // Lấy  từ localStorage
 
         if (isKhoa==0) { // Nếu là đào tạo hoặc tài chính
           window.location.href = "/import";

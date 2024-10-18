@@ -669,6 +669,7 @@ const updateQC = async (req, res) => {
     let completedIDs = [];
 
     // Duyệt qua từng phần tử trong jsonData
+    console.log("data = ", jsonData);
     for (let item of jsonData) {
       const {
         ID,
