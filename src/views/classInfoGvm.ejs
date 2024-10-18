@@ -71,7 +71,7 @@
 
     <!-- Phần dưới của navbar chứa các mục nằm ngang -->
     <nav class="navbar navbar-expand-lg navbar-bottom sticky-top">
-      <div class="container-fluid">
+      <div class="" style="width: 100%">
         <button
           class="navbar-toggler"
           type="button"
@@ -84,7 +84,8 @@
           <span class="navbar-toggler-icon"></span>
         </button>
         <div
-          class="collapse navbar-collapse justify-content-center"
+          class="collapse navbar-collapse"
+          style="width: 100%"
           id="navbarNav"
         >
           <ul class="navbar-nav">
@@ -223,24 +224,24 @@
                 </div>
               </div>
             </div>
-            <div class="navbar-nav">
-              <div class="nav-item dropdown">
-                <a
-                  class="nav-link dropdown-toggle fullname"
-                  href="/login"
-                  id="navbarDropdownUser"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                >
-                  Hi, Lê Đức Thuận
-                </a>
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                  <a class="dropdown-item" href="#">Thông tin cá nhân</a>
-                  <a class="dropdown-item" href="/">Đăng xuất</a>
-                </div>
+          </ul>
+          <div class="navbar-nav">
+            <div class="nav-item dropdown">
+              <a
+                class="nav-link dropdown-toggle fullname"
+                href="/login"
+                id="navbarDropdownUser"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                Hi, Lê Đức Thuận
+              </a>
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="dropdown-item" href="#">Thông tin cá nhân</a>
+                <a class="dropdown-item" href="/">Đăng xuất</a>
               </div>
             </div>
-          </ul>
+          </div>
         </div>
       </div>
     </nav>
@@ -272,41 +273,31 @@
                   <option value="DTVT">Điện tử viễn thông</option>
                   <option value="MM">Mật mã</option>
                 </select>
-                <!-- <script>
-                function filterGvmByDepartment() {
-                  let select = document.getElementById("departmentFilter");
-                  let department = select.value;
-                  let table = document.getElementById("classTable");
-                  let tr = table.getElementsByTagName("tr");
-                  let infoTableBody = document.getElementById("infoTableBody");
+                <script>
+                  function filterGvmByDepartment() {
+                    let select = document.getElementById("departmentFilter");
+                    let department = select.value.trim(); // Lấy giá trị và loại bỏ khoảng trắng
+                    let table = document.getElementById("classTable");
+                    let tr = table.getElementsByTagName("tr");
 
-                  // Xóa nội dung cũ của bảng
-                  infoTableBody.innerHTML = "";
-
-                  let filteredRows = Array.prototype.filter.call(tr, function (row) {
-                    let td = row.getElementsByTagName("td")[5]; // Giả sử cột Khoa là cột thứ 6
-                    if (td) {
-                      let txtValue = td.textContent || td.innerText;
-                      return department === "Tất cả khoa" || txtValue === department;
+                    for (let i = 1; i < tr.length; i++) {
+                      // Bỏ qua hàng tiêu đề
+                      let departmentValue =
+                        tr[i].getAttribute("data-department");
+                      if (departmentValue) {
+                        if (
+                          department === "" ||
+                          departmentValue === department
+                        ) {
+                          // Kiểm tra khoa
+                          tr[i].style.display = ""; // Hiển thị hàng
+                        } else {
+                          tr[i].style.display = "none"; // Ẩn hàng
+                        }
+                      }
                     }
-                    return false;
-                  });
-
-                  filteredRows.forEach(function (row) {
-                    // Hiển thị thông tin ở bảng
-                    let infoRow = document.createElement("tr");
-                    infoTableBody.appendChild(infoRow);
-
-                    let cells = row.getElementsByTagName("td");
-                    for (let j = 0; j < cells.length; j++) {
-                      let cell = cells[j];
-                      let infoCell = document.createElement("td");
-                      infoCell.textContent = cell.textContent;
-                      infoRow.appendChild(infoCell);
-                    }
-                  });
-                }
-              </script> -->
+                  }
+                </script>
               </div>
 
               <table class="class-table" id="classTable">
@@ -317,11 +308,10 @@
                     <th>Môn học</th>
                     <th>Tên lớp</th>
                     <th>Số tín chỉ</th>
-                    <th>Ngày bắt đầu</th>
-                    <th>Ngày kết thúc</th>
                     <th>Số tiết</th>
                     <th>Tổng số tiết</th>
-                    <!-- <th>Khoa</th> -->
+                    <th>Khoa</th>
+                    <!-- Cột Khoa -->
                     <th>Chi tiết giảng viên mời</th>
                   </tr>
                 </thead>
@@ -330,57 +320,28 @@
                   let courses=GiangDay[teacher]; %> <% let
                   totalSoTiet=courses.reduce((total, course)=> total +
                   course.QuyChuan, 0); %>
-                  <!-- Tính tổng số tiết -->
+                  <tr
+                    class="teacher-group"
+                    data-department="<%= courses[0].MaPhongBan %>"
+                  >
+                    <% courses.forEach((course, courseIndex)=> { %>
+                  </tr>
 
-                  <% courses.forEach((course, courseIndex) => { %>
-                  <tr>
-                    <% if (courseIndex === 0) { %>
-                    <!-- Gộp dòng với rowspan bằng số lượng khóa học của giảng viên -->
+                  <tr data-department="<%= course.MaPhongBan %>">
+                    <% if (courseIndex===0) { %>
                     <td rowspan="<%= courses.length %>"><%= index %></td>
-                    <td rowspan="<%= courses.length %>">
-                      <%= course.GiaoVienGiangDay %>
-                    </td>
-                    <!-- Tên giảng viên -->
+                    <td rowspan="<%= courses.length %>"><%= teacher %></td>
                     <% index++; %> <% } %>
-                    <!-- Tên học phần -->
-                    <td><%= course.LopHocPhan %></td>
-                    <!-- Tên lớp học phần -->
-                    <td><%= course.TenLop %></td>
-                    <!-- Số tín chỉ -->
-                    <td><%= course.SoTinChi %></td>
-
-                    <% function formatDate(dateStr) { %> <% if (!dateStr) return
-                    'N/A'; %>
-                    <!-- Kiểm tra giá trị rỗng -->
-                    <% const date = new Date(dateStr); %>
-                    <!-- Chuyển chuỗi thành đối tượng Date -->
-                    <% if (isNaN(date.getTime())) return 'N/A'; %>
-                    <!-- Kiểm tra xem có phải là ngày hợp lệ không -->
-                    <% const day = String(date.getDate()).padStart(2, '0'); %>
-                    <!-- Lấy ngày với định dạng 2 chữ số -->
-                    <% const month = String(date.getMonth() + 1).padStart(2,
-                    '0'); %>
-                    <!-- Lấy tháng (0-indexed) với định dạng 2 chữ số -->
-                    <% const year = date.getFullYear(); %>
-                    <!-- Lấy năm -->
-                    <% return `${day}/${month}/${year}`; %>
-                    <!-- Trả về chuỗi ngày/tháng/năm -->
-                    <% } %>
-
-                    <td><%= formatDate(course.NgayBatDau) %></td>
-                    <td><%= formatDate(course.NgayKetThuc) %></td>
-
-                    <!-- <td><%= course.NgayBatDau %></td>
-                    <td><%= course.NgayKetThuc %></td> -->
-
+                    <td><%= course.TenHocPhan %></td>
+                    <td><%= course.Lop %></td>
+                    <td><%= course.SoTC %></td>
                     <td><%= course.QuyChuan %></td>
-                    <!-- Số tiết -->
-                    <!-- Tổng số tiết -->
-                    <% if (courseIndex === 0) { %>
-                    <!-- Gộp dòng với rowspan bằng số lượng khóa học của giảng viên -->
+                    <% if (courseIndex===0) { %>
                     <td rowspan="<%= courses.length %>"><%= totalSoTiet %></td>
-                    <!-- Tổng số tiết -->
-                    <!-- <td><%= course.MaPhongBan %></td> -->
+                    <td rowspan="<%= courses.length %>">
+                      <%= course.MaPhongBan %>
+                      <!-- Đây là cột Khoa -->
+                    </td>
                     <td rowspan="<%= courses.length %>">
                       <button
                         class="action-button view"
@@ -388,12 +349,9 @@
                       >
                         👁️
                       </button>
-                      <!-- Nút xem chi tiết -->
                     </td>
-
                     <% } %>
                   </tr>
-
                   <% }); %> <% } %>
                 </tbody>
               </table>
@@ -463,43 +421,71 @@
     <script src="/bootstrap/dist/js/jquery-3.7.1.min.js"></script>
     <script src="/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 
-    <script>
-      function filterGvmByDepartment() {
-        var filter = document.getElementById("departmentFilter").value;
-        var table = document.getElementById("classTable");
-        var tbody = document.getElementById("teacher-group");
-        var rows = tbody.getElementsByTagName("tr");
+    <!-- <script>
+        function filterGvmByDepartment() {
+          var filter = document.getElementById("departmentFilter").value;
+          var table = document.getElementById("classTable");
+          var tbody = document.getElementById("teacher-group");
+          var rows = tbody.getElementsByTagName("tr");
 
-        for (var i = 0; i < rows.length; i++) {
-          var row = rows[i];
-          var department = row.getAttribute("data-department");
+          for (var i = 0; i < rows.length; i++) {
+            var row = rows[i];
+            var department = row.getAttribute("data-department");
 
-          if (filter === "" || department === filter) {
-            row.style.display = "";
-          } else {
-            row.style.display = "none";
+            if (filter === "" || department === filter) {
+              row.style.display = "";
+            } else {
+              row.style.display = "none";
+            }
           }
         }
-      }
-    </script>
+      </script> -->
 
     <script>
       // Tìm kiếm giảng viên mời theo tên
       function searchClass() {
         let input = document.getElementById("searchInput").value.toLowerCase();
         let table = document.getElementById("classTable");
-        let tr = table.getElementsByTagName("tr");
+        let rows = table.getElementsByTagName("tr");
 
-        for (let i = 1; i < tr.length; i++) {
-          let td = tr[i].getElementsByTagName("td")[1];
-          if (td) {
-            let textValue = td.textContent || td.innerText;
-            if (textValue.toLowerCase().indexOf(input) > -1) {
-              tr[i].style.display = "";
-            } else {
-              tr[i].style.display = "none";
+        let currentGroup = null;
+        let groupVisible = false;
+
+        for (let i = 1; i < rows.length; i++) {
+          // Bắt đầu từ 1 để bỏ qua hàng tiêu đề
+          let row = rows[i];
+
+          if (row.classList.contains("teacher-group")) {
+            // Đây là hàng đầu tiên của một nhóm giảng viên mới
+            if (currentGroup) {
+              // Ẩn/hiện nhóm trước đó dựa trên kết quả tìm kiếm
+              setGroupVisibility(currentGroup, groupVisible);
+            }
+
+            currentGroup = [];
+            groupVisible = false;
+          }
+
+          currentGroup.push(row);
+
+          let teacherNameCell = row.cells[1]; // Giả sử tên giảng viên ở cột thứ 2
+          if (teacherNameCell) {
+            let teacherName = teacherNameCell.textContent.toLowerCase();
+            if (teacherName.includes(input)) {
+              groupVisible = true;
             }
           }
+        }
+
+        // Xử lý nhóm cuối cùng
+        if (currentGroup) {
+          setGroupVisibility(currentGroup, groupVisible);
+        }
+      }
+
+      function setGroupVisibility(group, isVisible) {
+        for (let row of group) {
+          row.style.display = isVisible ? "" : "none";
         }
       }
 
@@ -613,7 +599,6 @@
 
         ThongTinGD.addEventListener("click", function (event) {
           event.preventDefault(); // Ngăn chặn hành vi mặc định của liên kết
-
           const isKhoa = localStorage.getItem("isKhoa"); // Lấy role từ localStorage
 
           if (isKhoa == 0) {

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -20,9 +21,10 @@
           text-align: left;
           border: 2px solid black; /* Viền đen xung quanh nhóm giảng viên */
 
-        }
-      </style>
+    }
+  </style>
 </head>
+
 <body>
   <nav class="navbar-top ">
     <div class="container-fluid">
@@ -37,13 +39,13 @@
 
   <!-- Phần dưới của navbar chứa các mục nằm ngang -->
 
-          <nav class="navbar navbar-expand-lg navbar-bottom sticky-top">
-    <div class="container-fluid">
+  <nav class="navbar navbar-expand-lg navbar-bottom sticky-top">
+    <div class="" style="width: 100%;">
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
         aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
-      <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+      <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav">
           <li class="nav-item">
             <a class="nav-link" id="Home" href=""><i class="fa-solid fa-house"></i></a>
@@ -127,19 +129,19 @@
               </div>
             </div>
           </div>
-          <div class="navbar-nav">
-            <div class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle fullname" href="/login" id="navbarDropdownUser" data-bs-toggle="dropdown"
-                aria-expanded="false">
-                Hi, Lê Đức Thuận
-              </a>
-              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a class="dropdown-item" href="#">Thông tin cá nhân</a>
-                <a class="dropdown-item" href="/">Đăng xuất</a>
-              </div>
+        </ul>
+        <div class="navbar-nav">
+          <div class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle fullname" href="/login" id="navbarDropdownUser" data-bs-toggle="dropdown"
+              aria-expanded="false">
+              Hi, Lê Đức Thuận
+            </a>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+              <a class="dropdown-item" href="#">Thông tin cá nhân</a>
+              <a class="dropdown-item" href="/">Đăng xuất</a>
             </div>
           </div>
-        </ul>
+        </div>
       </div>
     </div>
   </nav>
@@ -154,146 +156,175 @@
                             <h1>THÔNG TIN HỢP ĐỒNG GIẢNG VIÊN MỜI</h1>
                             <div class="header-actions">
                               <!-- <button class="add-class" onclick="addClass()">+ Thêm giảng viên mời</button> -->
-                              <input
-                                type="text"
-                                placeholder="Tìm kiếm theo Tên..."
-                                class="search"
-                                id="searchInput"
-                                onkeyup="searchClass()"
-                              />
-                              <button class="action-button export" onclick="window.location.href='/hdgvm/export-excel'">
-                                Xuất dữ liệu 
+                              
+                              <select class="form-select w-100px mx-2 selectop" id="combobox-dot">
+                              <option value="1">Đợt 1</option>
+                              <option value="2">Đợt 2</option>
+                            </select>
+              
+                            <!-- Combo box Đợt -->
+                            <select class="form-select w-100px mx-2 selectop" id="combobox-ki">
+                              <option value="1">Kì 1</option>
+                              <option value="2">Kì 2</option>
+                            </select>
+              
+                            <!-- Combo box Năm -->
+                            <select class="form-select w-100px mx-2 selectop" id="combobox-nam">
+                              <option value="2023"> 2023 </option>
+                              <option value="2024"> 2024 </option>
+                              <option value="2025"> 2025 </option>
+                              <option value="2026"> 2026 </option>
+                              <option value="2027"> 2027 </option>
+                            </select>
+                            <!-- <button id="infoGvm" class="button text-nowrap">Xem dữ liệu</button> -->
+                            <!-- Phần code khác -->
+              
+                            <button class="action-button export" onclick="exportData()">
+                              Xuất dữ liệu
+                            </button>
+              
+                            <script>
+                              function exportData() {
+const namHoc = document.getElementById('combobox-nam').value;
+const dot = document.getElementById('combobox-dot').value;
+const ki = document.getElementById('combobox-ki').value;
+              
+window.location.href = '/hdgvm/export-excel?namHoc=' + namHoc + '&dot=' + dot + '&ki=' + ki;
+                              }
+                            </script>
+                              <!-- <button class="action-button export" onclick="window.location.href='/hdgvm/export-excel'">
+Xuất dữ liệu 
                               </button><script>
                               function exportSelectedData() {
-                                fetch('/export-excel')
-                                  .then(response => response.blob())
-                                  .then(blob => {
-                                    const url = URL.createObjectURL(blob);
-                                    const a = document.createElement('a');
-                                    a.href = url;
-                                    a.download = 'hdgvmList.xlsx';
-                                    a.click();
-                                  });
+fetch('/export-excel')
+  .then(response => response.blob())
+  .then(blob => {
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'hdgvmList.xlsx';
+    a.click();
+  });
                               }</script>
                               <select class="filter" onchange="filterClasses()">
-                                <option value="">Công nghệ thông tin</option>
-                                <option value="">An toàn thông tin</option>
-                                <option value="">Điện tử viễn thông</option>
-                                <option value="">Mật mã</option>
-                                <!-- Các tùy chọn lọc khác -->
-                            
-                      
-                         
-    <script src="/bootstrap/dist/js/jquery-3.7.1.min.js"></script>
-    <script src="/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<option value="">Công nghệ thông tin</option>
+<option value="">An toàn thông tin</option>
+<option value="">Điện tử viễn thông</option>
+<option value="">Mật mã</option> --> 
+              <!-- Các tùy chọn lọc khác -->
 
-    <script>
-        // Tìm kiếm giảng viên mời theo tên
-function searchClass() {
-    let input = document.getElementById("searchInput").value.toLowerCase();
-    let table = document.getElementById("classTable");
-    let tr = table.getElementsByTagName("tr");
-  
-    for (let i = 1; i < tr.length; i++) {
-      let td = tr[i].getElementsByTagName("td")[1];
-      if (td) {
-        let textValue = td.textContent || td.innerText;
-        if (textValue.toLowerCase().indexOf(input) > -1) {
-          tr[i].style.display = "";
-        } else {
-          tr[i].style.display = "none";
-        }
-      }
-    }
-  }
-  
- 
 
-  async function fetchGVMLists() {
-    try {
-        const response = await fetch('/api/classInfoGvm');
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-        const gvmLists = await response.json();
-        return gvmLists;
-    } catch (error) {
-        console.error('Error fetching data:', error);
-    }
-  }
- 
 
- async function viewClass( index) {
+              <script src="/bootstrap/dist/js/jquery-3.7.1.min.js"></script>
+              <script src="/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 
-  gvmLists = await fetchGVMLists();
+              <script>
+                // Tìm kiếm giảng viên mời theo tên
+                function searchClass() {
+                  let input = document.getElementById("searchInput").value.toLowerCase();
+                  let table = document.getElementById("classTable");
+                  let tr = table.getElementsByTagName("tr");
 
-  index = parseInt(index);
+                  for (let i = 1; i < tr.length; i++) {
+                    let td = tr[i].getElementsByTagName("td")[1];
+                    if (td) {
+                      let textValue = td.textContent || td.innerText;
+                      if (textValue.toLowerCase().indexOf(input) > -1) {
+                        tr[i].style.display = "";
+                      } else {
+                        tr[i].style.display = "none";
+                      }
+                    }
+                  }
+                }
 
-  var gvm = gvmLists[index];
-  
-  
-  // Hiển thị thông tin vào modal
-document.getElementById('modal-ma-gv').innerText = gvm.MaGvm;
-document.getElementById('modal-ho-ten').innerText = gvm.HoTen;
-document.getElementById('modal-ngay-sinh').innerText = new Date(gvm.NgaySinh).toLocaleDateString('vi-VN');
-document.getElementById('modal-cccd').innerText = gvm.CCCD;
-document.getElementById('modal-ngay-cap').innerText = new Date(gvm.NgayCapCCCD).toLocaleDateString('vi-VN');
-document.getElementById('modal-noi-cap').innerText = gvm.NoiCapCCCD;
-document.getElementById('modal-dia-chi-cccd').innerText = gvm.DiaChi;
-document.getElementById('modal-so-tk').innerText = gvm.STK;
-document.getElementById('modal-ngan-hang').innerText = gvm.NganHang;
-document.getElementById('modal-email').innerText = gvm.Email;
-document.getElementById('modal-heso-luong').innerText = gvm.HSL;//
-document.getElementById('modal-noi-cong-tac').innerText = gvm.NoiCongTac;
-document.getElementById('modal-chuc-vu').innerText = gvm.ChucVu;
-document.getElementById('modal-ma-so-thue').innerText = gvm.MaSoThue;
-document.getElementById('modal-tot-nghiep-loai').innerText = gvm.TotNghiepLoai;
 
-  // Hiển thị modal
-  document.getElementById('modal').style.display = 'flex';
-}
-  
 
-  
-  // Đóng modal
-  function closeModal() {
-    document.getElementById("modal").style.display = "none";
-  }
-  
-  // Thêm sự kiện khi nhấn ra ngoài modal để đóng modal
-  window.onclick = function (event) {
-    let modal = document.getElementById("modal");
-    if (event.target == modal) {
-      modal.style.display = "none";
-    }
-  };
-  
-    </script>
+                async function fetchGVMLists() {
+                  try {
+                    const response = await fetch('/api/classInfoGvm');
+                    if (!response.ok) {
+                      throw new Error('Network response was not ok');
+                    }
+                    const gvmLists = await response.json();
+                    return gvmLists;
+                  } catch (error) {
+                    console.error('Error fetching data:', error);
+                  }
+                }
 
-    <script>
-      // Lấy query string từ URL
-      const urlParams = new URLSearchParams(window.location.search);
-      const message = urlParams.get('message');
-      
-      // Lấy phần tử div để hiển thị thông báo
-      const messageDiv = document.getElementById('message');
 
-     // console.log(message)
-      // Hiển thị thông báo dựa trên giá trị của message
-      if (message === 'insertSuccess') {
-        alert("Update Success")
-      } else if (message === 'insertFalse') {
-        alert("Update False")
-      }
+                async function viewClass(index) {
 
-        // Sau khi hiển thị thông báo, xóa query string để tránh hiển thị lại khi refresh
-if (message) {
-  // Sử dụng window.history để xóa query string mà không refresh lại trang
-  const newUrl = window.location.origin + window.location.pathname;
-  window.history.replaceState({}, document.title, newUrl);
-}
+                  gvmLists = await fetchGVMLists();
 
-    </script>
+                  index = parseInt(index);
+
+                  var gvm = gvmLists[index];
+
+
+                  // Hiển thị thông tin vào modal
+                  document.getElementById('modal-ma-gv').innerText = gvm.MaGvm;
+                  document.getElementById('modal-ho-ten').innerText = gvm.HoTen;
+                  document.getElementById('modal-ngay-sinh').innerText = new Date(gvm.NgaySinh).toLocaleDateString('vi-VN');
+                  document.getElementById('modal-cccd').innerText = gvm.CCCD;
+                  document.getElementById('modal-ngay-cap').innerText = new Date(gvm.NgayCapCCCD).toLocaleDateString('vi-VN');
+                  document.getElementById('modal-noi-cap').innerText = gvm.NoiCapCCCD;
+                  document.getElementById('modal-dia-chi-cccd').innerText = gvm.DiaChi;
+                  document.getElementById('modal-so-tk').innerText = gvm.STK;
+                  document.getElementById('modal-ngan-hang').innerText = gvm.NganHang;
+                  document.getElementById('modal-email').innerText = gvm.Email;
+                  document.getElementById('modal-heso-luong').innerText = gvm.HSL;//
+                  document.getElementById('modal-noi-cong-tac').innerText = gvm.NoiCongTac;
+                  document.getElementById('modal-chuc-vu').innerText = gvm.ChucVu;
+                  document.getElementById('modal-ma-so-thue').innerText = gvm.MaSoThue;
+                  document.getElementById('modal-tot-nghiep-loai').innerText = gvm.TotNghiepLoai;
+
+                  // Hiển thị modal
+                  document.getElementById('modal').style.display = 'flex';
+                }
+
+
+
+                // Đóng modal
+                function closeModal() {
+                  document.getElementById("modal").style.display = "none";
+                }
+
+                // Thêm sự kiện khi nhấn ra ngoài modal để đóng modal
+                window.onclick = function (event) {
+                  let modal = document.getElementById("modal");
+                  if (event.target == modal) {
+                    modal.style.display = "none";
+                  }
+                };
+
+              </script>
+
+              <script>
+                // Lấy query string từ URL
+                const urlParams = new URLSearchParams(window.location.search);
+                const message = urlParams.get('message');
+
+                // Lấy phần tử div để hiển thị thông báo
+                const messageDiv = document.getElementById('message');
+
+                // console.log(message)
+                // Hiển thị thông báo dựa trên giá trị của message
+                if (message === 'insertSuccess') {
+                  alert("Update Success")
+                } else if (message === 'insertFalse') {
+                  alert("Update False")
+                }
+
+                // Sau khi hiển thị thông báo, xóa query string để tránh hiển thị lại khi refresh
+                if (message) {
+                  // Sử dụng window.history để xóa query string mà không refresh lại trang
+                  const newUrl = window.location.origin + window.location.pathname;
+                  window.history.replaceState({}, document.title, newUrl);
+                }
+
+              </script>
 
 
   <!-- Phần phân quyền -->
@@ -365,5 +396,5 @@ if (message) {
   };
 </script>
 </body>
-</html>
 
+</html>

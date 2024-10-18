@@ -51,6 +51,33 @@ router.post("/save-data", role.checkDaotaoRoleThiHanh, async (req, res) => {
 });
 
 // Định tuyến cho POST request tới /index / save - data
+router.post("/ban-hanh", role.checkDaotaoRoleThiHanh, async (req, res) => {
+  try {
+    // Gọi hàm xử lý dữ liệu import
+    const result = await obj.importTableQC(req.body);
+
+    // Kiểm tra kết quả trả về và phản hồi cho client
+    if (result === true) {
+      res
+        .status(200)
+        .json({ success: true, message: "Dữ liệu đã được lưu thành công!" });
+    } else {
+      res
+        .status(500)
+        .json({ success: false, message: "Lưu dữ liệu thất bại!" });
+    }
+  } catch (error) {
+    console.error("Lỗi server:", error);
+    res.status(500).json({
+      success: false,
+      message: "Lỗi trong quá trình lưu dữ liệu!",
+      error,
+    });
+  }
+});
+
+
+// Định tuyến cho POST request tới /index / save - data
 router.post("/viewtam", role.checkDaotaoRoleThiHanh, async (req, res) => {
   try {
     // Gọi hàm xử lý dữ liệu import

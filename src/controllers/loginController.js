@@ -32,11 +32,9 @@ const login = async (req, res) => {
         const [roles] = await connection
           .promise()
           .query(
-            "SELECT MaPhongBan, Quyen, isKhoa FROM role WHERE TenDangNhap = ?",
+            "SELECT MaPhongBan, Quyen,isKhoa FROM role WHERE TenDangNhap = ?",
             [username]
           );
-
-        let url;
 
         const MaPhongBan = roles[0].MaPhongBan;
         const role = roles[0].Quyen;
@@ -44,13 +42,17 @@ const login = async (req, res) => {
         req.session.role = role;
         req.session.MaPhongBan = MaPhongBan;
         req.session.isKhoa = isKhoa;
-        console.log("role = ", role);
-        console.log("MaPhongBan = ", MaPhongBan);
-        //console.log('role đăng nhập : ' + role);
-        if (isKhoa == 0) {
-          url = "/maindt";
-        } else {
+
+        let url;
+
+        if (role === "ADMIN") {
+          req.session.role = "ADMIN"; // Gán vai trò admin nếu không có vai trò
+          req.session.MaPhongBan = null;
+          url = "/admin"; // Đăng nhập vào trang admin
+        } else if (isKhoa == 1) {
           url = "/mainkhoa";
+        } else {
+          url = "/maindt";
         }
 
         // Trả về phản hồi thành công với url

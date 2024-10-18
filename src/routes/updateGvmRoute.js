@@ -8,6 +8,7 @@ const router = express.Router();
 
 const {
   getUpdateGvm,
+  getViewGvm,
   postUpdateGvm,
 } = require("../controllers/updateGvmController");
 
@@ -53,6 +54,7 @@ const imageFilter = function (req, file, cb) {
 let upload = multer({ storage: storage, fileFilter: imageFilter });
 
 router.get("/updateGvm/:id", getUpdateGvm);
+router.get("/viewGvm/:id", getViewGvm);
 
 router.post(
   "/updateGvm",

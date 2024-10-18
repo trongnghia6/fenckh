@@ -54,7 +54,7 @@
 
     <!-- Phần dưới của navbar chứa các mục nằm ngang -->
     <nav class="navbar navbar-expand-lg navbar-bottom sticky-top">
-      <div class="container-fluid">
+      <div class="" style="width: 100%">
         <button
           class="navbar-toggler"
           type="button"
@@ -67,7 +67,8 @@
           <span class="navbar-toggler-icon"></span>
         </button>
         <div
-          class="collapse navbar-collapse justify-content-center"
+          class="collapse navbar-collapse"
+          style="width: 100%"
           id="navbarNav"
         >
           <ul class="navbar-nav">
@@ -206,24 +207,24 @@
                 </div>
               </div>
             </div>
-            <div class="navbar-nav">
-              <div class="nav-item dropdown">
-                <a
-                  class="nav-link dropdown-toggle fullname"
-                  href="/login"
-                  id="navbarDropdownUser"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                >
-                  Hi, Lê Đức Thuận
-                </a>
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                  <a class="dropdown-item" href="#">Thông tin cá nhân</a>
-                  <a class="dropdown-item" href="/">Đăng xuất</a>
-                </div>
+          </ul>
+          <div class="navbar-nav">
+            <div class="nav-item dropdown">
+              <a
+                class="nav-link dropdown-toggle fullname"
+                href="/login"
+                id="navbarDropdownUser"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                Hi, Lê Đức Thuận
+              </a>
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="dropdown-item" href="#">Thông tin cá nhân</a>
+                <a class="dropdown-item" href="/">Đăng xuất</a>
               </div>
             </div>
-          </ul>
+          </div>
         </div>
       </div>
     </nav>
@@ -295,7 +296,7 @@
                     </button>
                     <button
                       class="action-button view"
-                      onclick="viewClass(<%= i %>)"
+                      onclick="viewClass(this, <%= parseInt(gvmLists[i].id_Gvm) - 1 %>)"
                     >
                       👁️
                     </button>
@@ -391,13 +392,28 @@
         hre = "/updateGvm/" + index;
         window.location.href = hre;
       }
+      function viewClass(button, index) {
+        var hre = "/viewGvm/" + index;
+        window.location.href = hre;
+      }
 
-      async function fetchGVMLists() {
-        try {
-          const response = await fetch("/api/gvm");
-          if (!response.ok) {
-            throw new Error("Network response was not ok");
-          }
+      // Hàm này sẽ được gọi khi trang mới đã tải
+      function disableInputs() {
+        var inputs = document.querySelectorAll("input");
+        inputs.forEach(function (input) {
+          input.disabled = true;
+        });
+      }
+
+      // Gọi hàm disableInputs khi trang đã tải
+      window.onload = disableInputs;
+    </script>
+    <!-- async function fetchGVMLists() {
+      try {
+        const response = await fetch('/api/gvm');
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
 
           const gvmLists = await response.json();
           return gvmLists;
@@ -457,14 +473,15 @@
         document.getElementById("modal").style.display = "none";
       }
 
-      // Thêm sự kiện khi nhấn ra ngoài modal để đóng modal
-      window.onclick = function (event) {
-        let modal = document.getElementById("modal");
-        if (event.target == modal) {
-          modal.style.display = "none";
-        }
-      };
-    </script>
+    // Thêm sự kiện khi nhấn ra ngoài modal để đóng modal
+    window.onclick = function (event) {
+      let modal = document.getElementById("modal");
+      if (event.target == modal) {
+        modal.style.display = "none";
+      }
+    }; -->
+
+    <!-- </script> -->
 
     <script>
       // Lấy query string từ URL
