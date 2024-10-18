@@ -120,19 +120,12 @@
 
           <div class="navbar-nav">
             <div class="nav-item dropdown">
-              <a
-                class="nav-link dropdown-toggle"
-                href="/login"
-                id="navbarDropdownUser"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-              >
+              <a class="nav-link dropdown-toggle" href="/login" id="navbarDropdownUser" data-bs-toggle="dropdown"
+                aria-expanded="false">
                 Giảng Viên Mời
               </a>
               <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a class="nav-link" href="/gvmList"
-                  >Danh sách giảng viên mời</a
-                >
+                <a class="nav-link" href="/gvmList">Danh sách giảng viên mời</a>
                 <a class="nav-link" id="Import" href="">Thêm bằng file</a>
               </div>
             </div>
@@ -243,9 +236,9 @@
         <!-- Combo box Năm -->
         <select class="form-select w-100px mx-1 selectop" id="combobox-nam">
           <option value="2024">2024</option>
-          <option value="2024">2025</option>
-          <option value="2024">2026</option>
-          <option value="2024">2027</option>
+          <option value="2025">2025</option>
+          <option value="2026">2026</option>
+          <option value="2027">2027</option>
         </select>
 
         <!-- Combo box với các giá trị CNTT, ATTT, DTVT -->
@@ -295,82 +288,6 @@
   </div>
   </div>
 
-  <!-- <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      document.getElementById('render').addEventListener('click', function () {
-        const loadingSpinner = document.createElement('div'); // Tạo spinner
-        loadingSpinner.className = 'spinner-border'; // Thêm lớp spinner
-        loadingSpinner.role = 'status'; // Đặt vai trò
-        loadingSpinner.innerHTML = '<span class="visually-hidden">Loading...</span>'; // Thêm thông báo ẩn
-        document.body.appendChild(loadingSpinner); // Thêm spinner vào body
-
-        fetch('http://localhost:3000/bang-qc') // Thay đổi URL API thành URL thực tế của bạn
-          .then(response => {
-            if (!response.ok) {
-              throw new Error('Network response was not ok: ' + response.statusText);
-            }
-            return response.json();
-          })
-          .then(data => {
-            // Tạo bảng HTML từ dữ liệu JSON
-            let tableHtml = '';
-            const headersMap = {
-              'Khoa': 'Khoa',
-              'Dot': 'Đợt',
-              'KiHoc': 'Kì',
-              'NamHoc': 'Năm',
-              'GiaoVien': 'Giảng viên theo TKB',
-              'GiaoVienGiangDay': 'Giảng viên giảng dạy',
-              'MoiGiang': 'Mời giảng?',
-              'SoTinChi': 'Số tín chỉ',
-              'LopHocPhan': 'Lớp học phần',
-              'LL': 'LL',
-              'SoTietCTDT': 'Số tiết CTĐT',
-              'HeSoT7CN': 'Hệ số ngoài giờ',
-              'SoSinhVien': 'Số sinh viên',
-              'HeSoLopDong': 'Hệ số lớp đông',
-              'QuyChuan': 'Quy chuẩn',
-              'GhiChu': 'Ghi chú'
-            };
-
-            const headers = Object.keys(data[0]);
-            headers.forEach(header => {
-              const newHeaderName = headersMap[header] || header; // Sử dụng tên cột mới nếu có
-              tableHtml += `<th>${newHeaderName}</th>`;
-            });
-
-            document.getElementById('table-header').innerHTML = tableHtml;
-
-            // Duyệt qua từng mục trong dữ liệu
-            data.forEach(item => {
-              const row = headers.map(key => `<td>${item[key] !== null ? item[key] : ''}</td>`).join('');
-              document.getElementById('data-table-body').innerHTML += `<tr>${row}</tr>`;
-            });
-            loadingSpinner.remove(); // Xóa spinner sau khi hoàn thành
-          })
-          .catch(error => {
-            console.error('Error fetching data:', error);
-            alert('Có lỗi xảy ra khi gọi API: ' + error.message);
-            loadingSpinner.remove(); // Xóa spinner nếu có lỗi
-          });
-      });
-
-      // Thêm sự kiện cho nút lọc
-      document.getElementById('filter').addEventListener('click', function () {
-        const rows = document.querySelectorAll('#data-table-body tr');
-        rows.forEach(row => {
-          const cells = row.getElementsByTagName('td');
-          const moiGiang = cells[2].textContent; // Giả sử "Mời giảng" là cột thứ 3 (index 2)
-          if (moiGiang !== '1') {
-            row.style.display = 'none'; // Ẩn hàng nếu "Mời giảng" không bằng 1
-          } else {
-            row.style.display = ''; // Hiện hàng nếu "Mời giảng" bằng 1
-          }
-        });
-      });
-    });
-  </script> -->
-
   <script>
 
     // Lắng nghe sự kiện click vào button
@@ -381,13 +298,67 @@
 
     async function loadData() {
       try {
-        // Lấy giá trị từ các combobox
-        const dotValue = document.getElementById('combobox-dot').value;
-        const kiValue = document.getElementById('combobox-ki').value;
-        const namValue = document.getElementById('combobox-nam').value;
-        const khoaValue = document.getElementById('combobox-khoa').value;
+        // Biến để lưu trữ giá trị mặc định
+        let dotValue = document.getElementById('combobox-dot').value;
+        let kiValue = document.getElementById('combobox-ki').value;
+        let namValue = document.getElementById('combobox-nam').value;
+        let khoaValue = document.getElementById('combobox-khoa').value;
 
-        // Tạo đối tượng dữ liệu để gửi
+        // Hàm cập nhật giá trị từ comboboxes
+        const updateValues = () => {
+          dotValue = document.getElementById('combobox-dot').value;
+          kiValue = document.getElementById('combobox-ki').value;
+          namValue = document.getElementById('combobox-nam').value;
+          khoaValue = document.getElementById('combobox-khoa').value;
+
+          console.log({ dotValue, kiValue, namValue, khoaValue }); // In ra giá trị hiện tại
+        };
+
+        // Hàm xử lý sự thay đổi ở bất kỳ combobox nào
+        const handleComboboxChange = async () => {
+          updateValues(); // Cập nhật giá trị khi có sự thay đổi
+
+          // Tạo đối tượng dữ liệu để gửi
+          const requestData = {
+            Khoa: khoaValue,
+            Dot: dotValue,
+            Ki: kiValue,
+            Nam: namValue,
+          };
+
+          console.log(requestData);
+          // Fetch thông tin giảng dạy
+          const teachingResponse = await fetch('http://localhost:3000/quy-chuan-chinh-thuc', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(requestData),
+          });
+
+          if (!teachingResponse.ok) {
+            alert("Lỗi truy vấn!");
+            return;
+          }
+
+          // Xử lý dữ liệu giảng dạy
+          const globalData = await teachingResponse.json();
+          console.log('Tổng hợp bảng dữ liệu:', globalData.results);
+
+          // Sau khi có dữ liệu thành công, thực hiện render bảng
+          renderTable(globalData.results); // Gọi hàm renderTable sau khi đã có đủ dữ liệu
+        };
+
+        // Thêm trình lắng nghe sự kiện cho từng combobox
+        document.getElementById('combobox-dot').addEventListener('change', handleComboboxChange);
+        document.getElementById('combobox-ki').addEventListener('change', handleComboboxChange);
+        document.getElementById('combobox-nam').addEventListener('change', handleComboboxChange);
+        document.getElementById('combobox-khoa').addEventListener('change', handleComboboxChange);
+
+        // Gọi updateValues để lấy giá trị mặc định ngay khi tải trang
+        updateValues();
+
+        // Tạo đối tượng dữ liệu để gửi ngay khi tải trang
         const requestData = {
           Khoa: khoaValue,
           Dot: dotValue,
@@ -395,8 +366,9 @@
           Nam: namValue,
         };
 
-        // Fetch thông tin giảng dạy
-        const teachingResponse = await fetch('http://localhost:3000/teaching-info', {
+        console.log(requestData);
+        // Fetch thông tin giảng dạy ngay khi tải trang
+        const teachingResponse = await fetch('http://localhost:3000/quy-chuan-chinh-thuc', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -409,12 +381,13 @@
           return;
         }
 
-        // Xử lý dữ liệu giảng dạy
+        // Xử lý dữ liệu giảng dạy ngay khi tải trang
         const globalData = await teachingResponse.json();
-        console.log('Tổng hợp bảng dữ liệu:', globalData[0]);
+        console.log('Tổng hợp bảng dữ liệu:', globalData.results);
 
         // Sau khi có dữ liệu thành công, thực hiện render bảng
-        renderTable(globalData); // Gọi hàm renderTable sau khi đã có đủ dữ liệu
+        renderTable(globalData.results); // Gọi hàm renderTable sau khi đã có đủ dữ liệu
+
       } catch (error) {
         console.error('Đã có lỗi xảy ra:', error);
       }
