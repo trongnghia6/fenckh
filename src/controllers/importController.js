@@ -642,7 +642,7 @@ const updateQC = async (req, res) => {
   const duyet = process.env.DUYET;
 
   // Kiểm tra xem người dùng có quyền thực hiện hành động này không
-  if (role == duyet) {
+  if (role != duyet) {
     return res
       .status(403)
       .json({ error: "Bạn không có quyền thực hiện hành động này" });

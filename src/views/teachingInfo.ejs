@@ -383,7 +383,7 @@
       // dùng window onclick đéo được
       document.addEventListener("DOMContentLoaded", function () {
         const role = localStorage.getItem("userRole");
-        alert(role ? role : "Vai trò người dùng là null.");
+        //alert(role ? role : "Vai trò người dùng là null.");
 
         // Chỉ cho nhập ngày bắt đầu ngày kết thúc với role thi hành
         // if (role && role.includes('GV_CNBM')) {
@@ -661,6 +661,10 @@
       // Phân quyền theo phòng ban
       if (isKhoa == 1){ // Nếu là khoa
         if (check.includes(MaPhongBan)){
+          inviteCheckbox.addEventListener('click', function(e){
+            e.preventDefault();
+          })
+
           giaoVienGiangDayInput.readOnly = true;
           boMonInput.readOnly = true;
           ngayBatDauInput.readOnly = true;
@@ -674,7 +678,6 @@
 
           // Ngăn checkbox tổng của 'khoa' không cho thay đổi
           disableCheckAll('khoa');
-          alert("3")
         }
       } 
 

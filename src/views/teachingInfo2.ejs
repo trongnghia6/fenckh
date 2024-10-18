@@ -582,23 +582,6 @@
           }
 
           const check = localStorage.getItem("check");
-          // Phân quyền theo phòng ban
-          if (isKhoa == 1) {
-            // Nếu là khoa
-            if (check.includes(MaPhongBan)) {
-              giaoVienGiangDayInput.readOnly = true;
-              boMonInput.readOnly = true;
-              ngayBatDauInput.readOnly = true;
-              // Ngăn người dùng thay đổi trạng thái ngày kết thúc
-              ngayKetThucInput.readOnly = true;
-              // Ngăn người dùng thay đổi trạng thái checkbox
-              khoaCheckbox.addEventListener("click", function (e) {
-                e.preventDefault(); // Ngăn người dùng thay đổi trạng thái checkbox
-              });
-              // Ngăn checkbox tổng của 'khoa' không cho thay đổi
-              disableCheckAll("khoa");
-            }
-          }
 
           // Nếu là đào tạo hoặc tài chính
           if (MaPhongBan == "DAOTAO") {
@@ -608,13 +591,28 @@
                 e.preventDefault(); // Ngăn người dùng thay đổi trạng thái checkbox
               });
               disableCheckAll("khoa"); // Ngăn checkbox tổng của 'khoa' không cho thay đổi
-
               // Ngăn thay đổi trạng thái check box đào tạo
               daoTaoCheckbox.addEventListener("click", function (e) {
                 e.preventDefault(); // Ngăn người dùng thay đổi trạng thái checkbox
               });
               // Ngăn checkbox tổng không cho thay đổi
               disableCheckAll("daoTao");
+            }
+          } else if (MaPhongBan == "TAICHINH") {
+            if (check.includes(MaPhongBan)) {
+              // Ngăn thay đổi trạng thái check box đào tạo
+              daoTaoCheckbox.addEventListener("click", function (e) {
+                e.preventDefault(); // Ngăn người dùng thay đổi trạng thái checkbox
+              });
+              // Ngăn checkbox tổng không cho thay đổi
+              disableCheckAll("daoTao");
+
+              // Ngăn thay đổi trạng thái check box tài chính
+              taiChinhCheckbox.addEventListener("click", function (e) {
+                e.preventDefault(); // Ngăn người dùng thay đổi trạng thái checkbox
+              });
+              // Ngăn checkbox tổng không cho thay đổi
+              disableCheckAll("taiChinh");
             }
           }
 
