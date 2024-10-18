@@ -641,13 +641,6 @@ const updateQC = async (req, res) => {
   const role = req.session.role;
   const duyet = process.env.DUYET;
 
-  // Kiểm tra xem người dùng có quyền thực hiện hành động này không
-  if (role == duyet) {
-    return res
-      .status(403)
-      .json({ error: "Bạn không có quyền thực hiện hành động này" });
-  }
-
   const tableName = process.env.DB_TABLE_QC; // Giả sử biến này có giá trị là "quychuan"
   const jsonData = req.body; // Lấy dữ liệu từ req.body
 

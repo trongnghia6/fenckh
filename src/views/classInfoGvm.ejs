@@ -44,14 +44,13 @@
         //const role = localStorage.getItem("userRole");
         const MaPhongBan = localStorage.getItem("MaPhongBan");
         // Ẩn phần lọc khoa nếu role là Khoa
-        const filterByDepartment =
-          document.getElementById("filterByDepartment");
+        const departmentFilter = document.getElementById("departmentFilter");
 
         if (
           !MaPhongBan.includes("DAOTAO") &&
           !MaPhongBan.includes("TAICHINH")
         ) {
-          filterByDepartment.style.display = "none";
+          departmentFilter.style.display = "none";
         }
       });
     </script>
@@ -345,6 +344,8 @@
                     <th>Môn học</th>
                     <th>Tên lớp</th>
                     <th>Số tín chỉ</th>
+                    <th>Ngày bắt đầu</th>
+                    <th>Ngày kết thúc</th>
                     <th>Số tiết</th>
                     <th>Tổng số tiết</th>
                     <th>Khoa</th>
@@ -353,44 +354,49 @@
                   </tr>
                 </thead>
                 <tbody class="teacher-group">
-                  <% let index=1; %> <% for (let teacher in GiangDay) { %> <%
-                  let courses=GiangDay[teacher]; %> <% let
-                  totalSoTiet=courses.reduce((total, course)=> total +
-                  course.QuyChuan, 0); %>
-                  <tr
-                    class="teacher-group"
-                    data-department="<%= courses[0].MaPhongBan %>"
-                  >
-                    <% courses.forEach((course, courseIndex)=> { %>
-                  </tr>
-
-                  <tr data-department="<%= course.MaPhongBan %>">
-                    <% if (courseIndex===0) { %>
-                    <td rowspan="<%= courses.length %>"><%= index %></td>
-                    <td rowspan="<%= courses.length %>"><%= teacher %></td>
-                    <% index++; %> <% } %>
-                    <td><%= course.TenHocPhan %></td>
-                    <td><%= course.Lop %></td>
-                    <td><%= course.SoTC %></td>
-                    <td><%= course.QuyChuan %></td>
-                    <% if (courseIndex===0) { %>
-                    <td rowspan="<%= courses.length %>"><%= totalSoTiet %></td>
-                    <td rowspan="<%= courses.length %>">
-                      <%= course.MaPhongBan %>
-                      <!-- Đây là cột Khoa -->
-                    </td>
-                    <td rowspan="<%= courses.length %>">
-                      <button
-                        class="action-button view"
-                        onclick="viewClass('<%= parseInt(course.id_Gvm) - 1 %>')"
-                      >
-                        👁️
-                      </button>
-                    </td>
-                    <% } %>
-                  </tr>
-                  <% }); %> <% } %>
+                  <% let index = 1; %> 
+                  <% for (let teacher of Object.keys(GiangDay)) { %> 
+                    <% let courses = GiangDay[teacher]; %> 
+                    <% let totalSoTiet = courses.reduce((total, course) => total + course.QuyChuan, 0); %>
+                    <tr class="teacher-group" data-department="<%= courses[0].MaPhongBan %>">
+                      <% courses.forEach((course, courseIndex) => { %>
+                        <tr data-department="<%= course.MaPhongBan %>">
+                          <% if (courseIndex === 0) { %>
+                            <td rowspan="<%= courses.length %>"><%= index %></td>
+                            <td rowspan="<%= courses.length %>"><%= course.GiaoVienGiangDay %></td>
+                            <% index++; %> 
+                          <% } %>
+                          <td><%= course.LopHocPhan %></td>
+                          <td><%= course.TenLop %></td>
+                          <td><%= course.SoTinChi %></td>
+                          
+                          <% function formatDate(dateStr) { %>
+                            <% if (!dateStr) return 'N/A'; %>
+                            <% const date = new Date(dateStr); %>
+                            <% if (isNaN(date.getTime())) return 'N/A'; %>
+                            <% const day = String(date.getDate()).padStart(2, '0'); %>
+                            <% const month = String(date.getMonth() + 1).padStart(2, '0'); %>
+                            <% const year = date.getFullYear(); %>
+                            <% return `${day}/${month}/${year}`; %>
+                          <% } %>
+                          
+                          <td><%= formatDate(course.NgayBatDau) %></td>
+                          <td><%= formatDate(course.NgayKetThuc) %></td>
+                          <td><%= course.QuyChuan %></td>
+                          
+                          <% if (courseIndex === 0) { %>
+                            <td rowspan="<%= courses.length %>"><%= totalSoTiet %></td>
+                            <td rowspan="<%= courses.length %>"><%= course.MaPhongBan %></td>
+                            <td rowspan="<%= courses.length %>">
+                              <button class="action-button view" onclick="viewClass('<%= parseInt(course.id_Gvm) - 1 %>')">👁️</button>
+                            </td>
+                          <% } %>
+                        </tr>
+                      <% }); %>
+                    </tr>
+                  <% } %>
                 </tbody>
+                
               </table>
               <!-- <div class="pagination">
                               <span>10 / trang</span>

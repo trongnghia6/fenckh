@@ -23,7 +23,7 @@
     <!-- Phân quyền -->
     <script>
       document.addEventListener("DOMContentLoaded", () => {
-        const role = localStorage.getItem("userRole");
+        const isKhoa = localStorage.getItem("isKhoa");
 
         // Ẩn button ngay khi trang được tải
         const createGvm = document.getElementById("createGvm");
@@ -31,7 +31,7 @@
         const filterByDepartment =
           document.getElementById("filterByDepartment");
 
-        if (role.includes("DAOTAO")) {
+        if (isKhoa == 0) {
           createGvm.style.display = "none"; // Ẩn button
         } else {
           filterByDepartment.style.display = "none";
