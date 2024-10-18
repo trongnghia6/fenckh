@@ -337,12 +337,17 @@ button#render:hover::before,
 }
 
 .selectop {
-  border: 3px solid #315cfd;
-  border-radius: 12px;
+  height: 45px;
+  border: 3px solid #969696;
+  border-radius: 5px;
   font-size: 1.2em;
   font-weight: 550;
+  cursor: pointer;
 }
 
+.selectop option:hover{
+  background-color: #3eacff;
+}
 .input-group {
   border: 5px solid #5b77e0;
   border-radius: 12px;
@@ -483,7 +488,7 @@ td {
   margin: 20px;
   width: 30px;
   /* Điều chỉnh lại chiều rộng */
-  /* padding: 0px 12px 6px; */
+  padding: 5px 12px 6px;
   /* Giảm padding để tạo cảm giác thanh mảnh */
   font-size: 17px;
   /* Thu nhỏ font size */
@@ -599,4 +604,14 @@ img {
 
 .bt {
   width: 40%;
+}
+a{
+  text-decoration: none;
+}
+.action-button {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  margin-right: 5px;
 }

@@ -251,7 +251,8 @@
           <div class="m-3">
             <div class="">
               <h1>THÔNG TIN CÁC LỚP GIẢNG VIÊN MỜI</h1>
-              <div class="header-actions">
+              <div class="header-actions"  style="height: 45px;">
+
                 <!-- <button class="add-class" onclick="addClass()">+ Thêm giảng viên mời</button> -->
                 <input
                   type="text"
@@ -260,12 +261,30 @@
                   id="searchInput"
                   onkeyup="searchClass()"
                 />
-                <!-- <button class="export" onclick="exportSelectedData()">Xuất dữ liệu</button> -->
-                <select
-                  class="filter"
-                  id="departmentFilter"
-                  onchange="filterGvmByDepartment()"
-                >
+                
+              <div class="loc" style="margin-top: -15px;">
+                <select class="selectop" id="combobox-dot">
+                  <option value="">Tất cả đợt</option>
+                  <option value="1">Đợt 1</option>
+                  <option value="2">Đợt 2</option>
+                </select>
+        
+                <!-- Combo box kì -->
+                <select class="selectop" id="combobox-ki">
+                  <option value="">Tất cả kỳ</option>
+                  <option value="1">Kỳ 1</option>
+                  <option value="2">Kỳ 2</option>
+                </select>
+        
+                <!-- Combo box Năm -->
+                <select class="selectop" id="combobox-nam">
+                  <option value="">Tất cả năm</option>
+                  <option value="2024">2024</option>
+                  <option value="2024">2025</option>
+                  <option value="2024">2026</option>
+                  <option value="2024">2027</option>
+                </select>
+                <select class="selectop" id="departmentFilter">
                   <option value="">Tất cả khoa</option>
                   <option value="CNTT">Công nghệ thông tin</option>
                   <option value="ATTT">An toàn thông tin</option>
@@ -274,30 +293,47 @@
                 </select>
                 
                 <script>
-                  function filterGvmByDepartment() {
-                    let select = document.getElementById("departmentFilter");
-                    let department = select.value.trim(); // Lấy giá trị và loại bỏ khoảng trắng
-                    let table = document.getElementById("classTable");
-                    let tr = table.getElementsByTagName("tr");
-
-                    for (let i = 1; i < tr.length; i++) {
-                      // Bỏ qua hàng tiêu đề
-                      let departmentValue =
-                        tr[i].getAttribute("data-department");
-                      if (departmentValue) {
-                        if (
-                          department === "" ||
-                          departmentValue === department
-                        ) {
-                          // Kiểm tra khoa
-                          tr[i].style.display = ""; // Hiển thị hàng
-                        } else {
-                          tr[i].style.display = "none"; // Ẩn hàng
-                        }
+    
+                  function filterTable() {
+                      // Lấy giá trị đã chọn
+                      let dot = document.getElementById("combobox-dot").value;
+                      let ki = document.getElementById("combobox-ki").value;
+                      let nam = document.getElementById("combobox-nam").value;
+                      let department = document.getElementById("departmentFilter").value.trim();
+                
+                      let tbody = document.getElementById("data-table-body");
+                      let rows = tbody.getElementsByTagName("tr");
+                
+                      for (let i = 0; i < rows.length; i++) {
+                          let row = rows[i];
+                          let cells = row.getElementsByTagName("td");
+                          
+                          // Giả sử thứ tự cột là: Khoa, Đợt, Kì, Năm
+                          let rowDepartment = cells[0].textContent.trim();
+                          let rowDot = cells[1].textContent.trim();
+                          let rowKi = cells[2].textContent.trim();
+                          let rowNam = cells[3].textContent.trim();
+                
+                          // Logic lọc
+                          let matchesDepartment = department === "" || rowDepartment === department;
+                          let matchesDot = dot === "" || rowDot === dot;
+                          let matchesKi = ki === "" || rowKi === ki;
+                          let matchesNam = nam === "" || rowNam === nam;
+                
+                          // Hiển thị hoặc ẩn hàng dựa trên kết quả lọc
+                          if (matchesDepartment && matchesDot && matchesKi && matchesNam) {
+                              row.style.display = ""; // Hiển thị hàng
+                          } else {
+                              row.style.display = "none"; // Ẩn hàng
+                          }
                       }
-                    }
                   }
-                </script>
+                    </script>
+                <button class="button text-nowrap" id="render" 
+                  style="margin-top: 17px;" 
+                  onclick="filterTable()">Hiển thị
+                </button>
+                </div>
               </div>
 
               <table class="class-table" id="classTable">
@@ -651,6 +687,8 @@
 
         document.querySelector(".role").innerText = `${Role}`;
       };
+
+      
     </script>
   </body>
 </html>
