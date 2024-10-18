@@ -407,7 +407,9 @@
           // Hiển thị nút 'Cập nhật'
           document.getElementById("save-data-all").style.display =
             "inline-block"; // Sử dụng 'inline-block' để hiển thị nút
-        } else if (role == "GV") {
+        }
+
+        if (role == "Thường") {
           // Ẩn tất cả các cột
           document.getElementById("khoaColumn").style.display = "none";
           document.getElementById("daoTaoColumn").style.display = "none";

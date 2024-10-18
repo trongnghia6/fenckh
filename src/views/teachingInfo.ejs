@@ -644,31 +644,42 @@
           // Thêm ô td vào hàng bảng
           tableRow.appendChild(moiGiangTd);
 
+          let giaoVienGiangDayTd, giaoVienGiangDayInput;
+          if ( role == 'GV'){
+            const giaoVienGiangDayTd = document.createElement("td");
+            // Chuyển ô input giảng viên thành dạng xem
+            const giaoVienGiangDayView = document.createElement("span");
+            giaoVienGiangDayView.textContent = row.GiaoVienGiangDay || "";
+            giaoVienGiangDayTd.appendChild(giaoVienGiangDayView);
+            tableRow.appendChild(giaoVienGiangDayTd);
+          }
+          else{
+            giaoVienGiangDayTd = document.createElement('td');
+            giaoVienGiangDayInput = document.createElement('input');
+            giaoVienGiangDayInput.type = 'text';
+            giaoVienGiangDayInput.placeholder = 'Nhập tên giảng viên';
+            giaoVienGiangDayInput.value = row.GiaoVienGiangDay || '';
+  
+  
+            giaoVienGiangDayTd.appendChild(giaoVienGiangDayInput);
+            tableRow.appendChild(giaoVienGiangDayTd);
+            giaoVienGiangDayInput.onclick = () => {
+              const moiGiang = inviteCheckbox.checked;
+              showSuggestions(giaoVienGiangDayInput, moiGiang);
+            };
+  
+            giaoVienGiangDayInput.oninput = () => {
+              const moiGiang = inviteCheckbox.checked;
+              showSuggestions(giaoVienGiangDayInput, moiGiang);
+            };
+  
+            giaoVienGiangDayTd.appendChild(giaoVienGiangDayInput);
+            tableRow.appendChild(giaoVienGiangDayTd);
+  
+            //giaoVienGiangDayTd.appendChild(giaoVienGiangDayInput);
+            //tableRow.appendChild(giaoVienGiangDayTd);
+          }
 
-          const giaoVienGiangDayTd = document.createElement('td');
-          const giaoVienGiangDayInput = document.createElement('input');
-          giaoVienGiangDayInput.type = 'text';
-          giaoVienGiangDayInput.placeholder = 'Nhập tên giảng viên';
-          giaoVienGiangDayInput.value = row.GiaoVienGiangDay || '';
-
-
-          giaoVienGiangDayTd.appendChild(giaoVienGiangDayInput);
-          tableRow.appendChild(giaoVienGiangDayTd);
-          giaoVienGiangDayInput.onclick = () => {
-            const moiGiang = inviteCheckbox.checked;
-            showSuggestions(giaoVienGiangDayInput, moiGiang);
-          };
-
-          giaoVienGiangDayInput.oninput = () => {
-            const moiGiang = inviteCheckbox.checked;
-            showSuggestions(giaoVienGiangDayInput, moiGiang);
-          };
-
-          giaoVienGiangDayTd.appendChild(giaoVienGiangDayInput);
-          tableRow.appendChild(giaoVienGiangDayTd);
-
-          giaoVienGiangDayTd.appendChild(giaoVienGiangDayInput);
-          tableRow.appendChild(giaoVienGiangDayTd);
 
           const khoaTd = document.createElement('td');
           khoaTd.textContent = row.Khoa || '';
@@ -743,6 +754,18 @@
 
           // Ngăn checkbox tổng của 'khoa' không cho thay đổi
           disableCheckAll('khoa');
+        }
+
+        if (role == 'GV'){
+          inviteCheckbox.addEventListener('click', function(e){
+            e.preventDefault();
+          })
+
+          //giaoVienGiangDayInput.readOnly = true;
+          boMonInput.readOnly = true;
+          ngayBatDauInput.readOnly = true;
+          // Ngăn người dùng thay đổi trạng thái ngày kết thúc
+          ngayKetThucInput.readOnly = true;
         }
       } 
 
