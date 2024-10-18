@@ -33,9 +33,12 @@ const getViewGvm = async (req, res) => {
 
   res.render("viewGvm.ejs", { value: user });
 };
-
-const upload = multer().single("truocCCCD");
-
+const upload = multer().fields([
+  { name: "truocCCCD", maxCount: 1 },
+  { name: "sauCCCD", maxCount: 1 },
+  { name: "FileLyLich", maxCount: 1 },
+  { name: "bangTotNghiep", maxCount: 1}
+]);
 const postUpdateGvm = async (req, res) => {
   // Lấy các thông tin từ form
   let IdGvm = req.body.IdGvm;
@@ -62,6 +65,7 @@ const postUpdateGvm = async (req, res) => {
   let oldTruocCCCD = req.body.oldTruocCCCD;
   let oldSauCCCD = req.body.oldSauCCCD;
   let oldFileLyLich = req.body.oldFileLyLich;
+  let oldbangTotNghiep = req.body.oldbangTotNghiep;
 
   const MaPhongBan = Array.isArray(req.body.maPhongBan)
     ? req.body.maPhongBan.join(",") // Nếu là mảng
@@ -96,6 +100,9 @@ const postUpdateGvm = async (req, res) => {
     let sauCCCD = req.files["sauCCCD"]
       ? req.files["sauCCCD"][0].filename
       : oldSauCCCD; // Giữ nguyên đường dẫn cũ nếu không chọn file mới
+    let bangTotNghiep = req.files["bangTotNghiep"]
+      ? req.files["bangTotNghiep"][0].filename
+      : oldbangTotNghiep;
     let FileLyLich = req.files["FileLyLich"]
       ? req.files["FileLyLich"][0].filename
       : oldFileLyLich;
@@ -121,6 +128,7 @@ const postUpdateGvm = async (req, res) => {
     BangTotNghiepLoai = ?,
     MatTruocCCCD = ?,
     MatSauCCCD = ?,
+    BangTotNghiep=?,
     FileLyLich = ?,
     MaPhongBan = ?,
     TinhTrangGiangDay = ? WHERE id_Gvm = ? `;
@@ -145,6 +153,7 @@ const postUpdateGvm = async (req, res) => {
         STK,
         NganHang,
         BangTotNghiepLoai,
+        bangTotNghiep,
         truocCCCD, // Ảnh mặt trước CCCD
         sauCCCD, // Ảnh mặt sau CCCD
         FileLyLich, // Giả sử đây là vị trí của FileLyLich (có thể cập nhật sau)

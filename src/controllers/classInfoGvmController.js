@@ -23,15 +23,19 @@ const getClassInfoGvm = async (req, res) => {
   // }
 
   if (isKhoa == 0) {
-    query = `SELECT * 
-    FROM quychuan 
+    query = `
+    SELECT 
+    *
+    FROM quychuan
     JOIN gvmoi 
-    ON quychuan.GiaoVienGiangDay LIKE CONCAT('%', gvmoi.HoTen, '%')`;
+    ON SUBSTRING_INDEX(quychuan.GiaoVienGiangDay, '-', 1) = gvmoi.HoTen;
+    `;
+
     //ORDER BY GiaoVien`; // Sắp xếp theo tên giảng viên
   } else {
     query = `SELECT * 
     FROM quychuan 
-    JOIN gvmoi ON quychuan.GiaoVienGiangDay LIKE CONCAT('%', gvmoi.HoTen, '%')
+    JOIN gvmoi ON SUBSTRING_INDEX(quychuan.GiaoVienGiangDay, '-', 1) = gvmoi.HoTen
     WHERE MaHocPhan LIKE '${MaPhongBan}%'`;
   }
 
@@ -40,7 +44,7 @@ const getClassInfoGvm = async (req, res) => {
   //console.log("danh sách = ", results);
   // Nhóm các môn học theo giảng viên
   const groupedByTeacher = results.reduce((acc, current) => {
-    const teacher = current.GiaoVien;
+    const teacher = current.GiaoVienGiangDay;
     if (!acc[teacher]) {
       acc[teacher] = [];
     }
@@ -60,7 +64,6 @@ const getGvm = async (req, res) => {
 
   const [results2, fields2] = await connection2.query(query2);
 
-  console.log("result2: ", results2);
   try {
     res.json(results2); // Trả về danh sách giảng viên mời
   } catch (error) {
