@@ -993,11 +993,15 @@
           .then(data => {
             // Hiển thị thông báo từ server
             alert(data.message);
+
+            // Load lại trang sau khi nhận được phản hồi
+            //location.reload();
           })
           .catch(error => {
             console.error('Có lỗi xảy ra:', error);
             alert('Có lỗi xảy ra khi cập nhật dữ liệu.');
           });
+
       }
 
 

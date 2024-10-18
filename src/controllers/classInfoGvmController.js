@@ -23,13 +23,15 @@ const getClassInfoGvm = async (req, res) => {
   // }
 
   if (isKhoa == 0) {
-    query = `SELECT * from quychuan JOIN gvmoi
-    on quychuan.GiaoVienGiangDay = gvmoi.HoTen`;
+    query = `SELECT * 
+    FROM quychuan 
+    JOIN gvmoi 
+    ON quychuan.GiaoVienGiangDay LIKE CONCAT('%', gvmoi.HoTen, '%')`;
     //ORDER BY GiaoVien`; // Sắp xếp theo tên giảng viên
   } else {
     query = `SELECT * 
     FROM quychuan 
-    JOIN gvmoi ON quychuan.GiaoVienGiangDay = gvmoi.HoTen
+    JOIN gvmoi ON quychuan.GiaoVienGiangDay LIKE CONCAT('%', gvmoi.HoTen, '%')
     WHERE MaHocPhan LIKE '${MaPhongBan}%'`;
   }
 
@@ -45,6 +47,7 @@ const getClassInfoGvm = async (req, res) => {
     acc[teacher].push(current);
     return acc;
   }, {});
+  console.log("ds = ", groupedByTeacher);
 
   res.render("classInfoGvm.ejs", { GiangDay: groupedByTeacher });
 };
