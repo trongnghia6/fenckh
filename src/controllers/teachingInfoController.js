@@ -121,7 +121,11 @@ function handleDuplicateCourses(firstCourse, courses) {
 // };
 const renderInfo = (req, res) => {
   const role = req.session.role;
-  const { Khoa, Dot, Ki, Nam } = req.body; // Lấy giá trị khoa, dot, ki từ body của yêu cầu
+  const isKhoa = req.session.isKhoa;
+  const maPhongBan = req.session.MaPhongBan;
+
+
+  const { Dot, Ki, Nam } = req.body; // Lấy giá trị khoa, dot, ki từ body của yêu cầu
   const tableName = process.env.DB_TABLE_QC;
   let query = "";
 
@@ -145,43 +149,36 @@ const renderInfo = (req, res) => {
   const roleATTTXem = process.env.ATTT_XEM;
   const roleDTVTXem = process.env.DTVT_XEM;
 
-  if (Khoa == "CNTT" || Khoa == "ATTT" || Khoa == "DTVT") {
+  if (isKhoa) {
     query = `SELECT * FROM ${tableName}
     WHERE Dot = ? AND KiHoc = ? AND NamHoc = ? AND Khoa = '${Khoa}';`
   }
   // Xây dựng câu truy vấn SQL sử dụng các tham số
   if (
-    role == roleDaoTaoALL ||
-    role == roleDaoTaoXem ||
-    role == roleTaiChinhALL ||
-    role == roleTaiChinhXem
+    maPhongBan == 'DAOTAO'
   ) {
     query = `
     SELECT * FROM ${tableName}
     WHERE Dot = ? AND KiHoc = ? AND NamHoc = ?;
   `;
   } else if (
-    role == roleCNTTAll ||
-    role == roleCNTTThiHanh ||
-    role == roleCNTTXem
+    maPhongBan == 'CNTT'
   ) {
     query = `
     SELECT * FROM ${tableName}
     WHERE Dot = ? AND KiHoc = ? AND NamHoc = ? AND Khoa = 'CNTT';
   `;
   } else if (
-    role == roleATTTAll ||
-    role == roleATTTThiHanh ||
-    role == roleATTTXem
+    maPhongBan == 'ATTT'
+
   ) {
     query = `
     SELECT * FROM ${tableName}
     WHERE Dot = ? AND KiHoc = ? AND NamHoc = ? AND Khoa = 'ATTT';
   `;
   } else if (
-    role == roleDTVTAll ||
-    role == roleDTVTThiHanh ||
-    role == roleDTVTXem
+    maPhongBan == 'DTVT'
+
   ) {
     query = `
     SELECT * FROM ${tableName}

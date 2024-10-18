@@ -171,7 +171,7 @@
           Thêm
         </button>
         <button class="btn btn-outline-primary button" id="viewtam">
-          Xem dữ liệu
+          Xem bảng quy chuẩn dự kiến
         </button>
 
         <!-- <button class="btn btn-outline-primary" id="importFile">Import</button> -->
@@ -616,7 +616,14 @@
   </script>
 
 
-    <!-- Phần phân quyền -->
+  <!- Phần phân quyền -->
+
+  <script>
+    document.getElementById('viewtam').onclick = function () {
+      window.location.href = 'http://localhost:3000/tableTam'; // Thay URL bằng trang bạn muốn chuyển hướng đến
+    }
+  </script>
+
   <script>
     document.addEventListener("DOMContentLoaded", () => {
       // Thêm sự kiện click cho phần tử có id "import"

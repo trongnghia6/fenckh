@@ -188,7 +188,7 @@
   <div class="container-fluid my-4">
     <div class="mx-5 flex-grow-1">
       <button class="btn btn-outline-primary button" id="ban-hanh">Ban Hành</button>
-      <button class="btn btn-outline-primary button" id="import">Thêm bảng quy chuẩn</button>
+      <button class="btn btn-outline-primary button" id="quychuandukien">Thêm bảng quy chuẩn</button>
 
       <!-- <button class="btn btn-outline-primary button">
         <a href="/import">Thêm bảng quy chuẩn</a>
@@ -286,7 +286,7 @@
   </script>
 
   <!-- Phần phân quyền -->
-  <script>
+  <!-- <script>
     document.addEventListener('DOMContentLoaded', () => {
       const importLink = document.getElementById("Import");
 
@@ -329,9 +329,12 @@
           window.location.href = "/mainkhoa";
         }
       });
+
+
+     
     });
 
-  </script>
+  </script> -->
 
   <script>
     let dataQC = [];
@@ -389,8 +392,18 @@
   <!-- Phần phân quyền -->
   <script>
     document.addEventListener('DOMContentLoaded', () => {
+
+
+      const importQuyChuan = document.getElementById("quychuandukien");
+
+      importQuyChuan.addEventListener("click", function (event) {
+        window.location.href = "/import";
+      });
+
+
       // Thêm sự kiện click cho phần tử có id "import"
       const importLink = document.getElementById("Import");
+
 
       importLink.addEventListener("click", function (event) {
         event.preventDefault(); // Ngăn chặn hành vi mặc định của liên kết
@@ -398,8 +411,10 @@
         const isKhoa = localStorage.getItem("isKhoa"); // Lấy role từ localStorage
 
         if (isKhoa == 0) { // Nếu là đào tạo hoặc tài chính
+          alert("linh ko ngu" + isKhoa)
           window.location.href = "/import";
         } else { // Nếu là khoa
+          alert("linh ngu" + isKhoa)
           window.location.href = "/importGvmList";
         }
       });
