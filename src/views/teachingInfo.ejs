@@ -211,22 +211,12 @@
                 </div>
               </div>
             </div>
-            <div class="navbar-nav">
-              <div class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle fullname" href="/login" id="navbarDropdownUser"
-                  data-bs-toggle="dropdown" aria-expanded="false">
-                  Hi, Lê Đức Thuận
-                </a>
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                  <a class="dropdown-item" href="#">Thông tin cá nhân</a>
-                  <a class="dropdown-item" href="/">Đăng xuất</a>
-                </div>
-              </div>
-            </div>
             </ul>
           </div>
         </div>
       </nav>
+    </div>
+  </nav>
       <div class="container-fluid box m-4">
         <div class="">
           <div class="d-flex justify-content-between">
@@ -249,6 +239,7 @@
                 <option value="2026">2026</option>
                 <option value="2027">2027</option>
               </select>
+              <button id="getData" class="button text-nowrap">Lấy dữ liệu</button>
               <button id="infoGvm" class="button text-nowrap">Xem dữ liệu</button>
               <button id="update-qc" onclick="updateLocalTable()" class="button mx-3">Lưu cục bộ</button>
               <button id="update-qc" onclick="submitData()" class="button mx-3">Gửi duyệt</button>
@@ -392,7 +383,7 @@
       // dùng window onclick đéo được
       document.addEventListener("DOMContentLoaded", function () {
         const role = localStorage.getItem("userRole");
-        // alert(role ? role : "Vai trò người dùng là null.");
+        alert(role ? role : "Vai trò người dùng là null.");
 
         // Chỉ cho nhập ngày bắt đầu ngày kết thúc với role thi hành
         // if (role && role.includes('GV_CNBM')) {
@@ -428,7 +419,6 @@
 
         // Lấy dữ liệu từ localStorage (giả sử dữ liệu được lưu dưới dạng JSON)
         let data = JSON.parse(localStorage.getItem('tableData')); // Nếu không có, tạo mảng trống
-
         // Cập nhật từng đối tượng trong dữ liệu
         data.forEach(item => {
           item.NgayBatDau = globalStartDate; // Cập nhật ngày bắt đầu
@@ -438,8 +428,11 @@
         // Lưu lại dữ liệu đã cập nhật vào localStorage
         localStorage.setItem('tableData', JSON.stringify(data));
 
+
+        console.log('sau khi cập nhật ngày :', data);
         // lấy ra bảng 
-        let table = JSON.parse(localStorage.getItem('tableData')); // Nếu không có, tạo mảng trống
+        // let table = JSON.parse(localStorage.getItem('tableData')); // Nếu không có, tạo mảng trống
+
 
         // Thông báo cho người dùng
         alert('Đã chèn ngày cho tất cả các đối tượng.');
@@ -451,11 +444,22 @@
     <!-- phần render bảng dùng localStorage -->
     <script>
 
-      let globalData = [];
+      var globalDataNew = [];
 
       // gọi hàm này sau khi đọc hết script
       function init() {
-        document.getElementById('infoGvm').addEventListener('click', loadData);
+        document.getElementById('infoGvm').addEventListener('click', viewData);
+        document.getElementById('getData').addEventListener('click', loadData);
+
+      }
+
+      function viewData() {
+        // Nếu có sự thay đổi, cập nhật localStorage
+        // localStorage.getItem('nameGv');
+        // localStorage.getItem('nameGvm');
+        let data = JSON.parse(localStorage.getItem('tableData'));
+        renderTable(data);
+        calculateTotals()
       }
 
       async function loadData() {
@@ -498,27 +502,20 @@
           const rs = await teachingResponse.json();
 
           // Thêm check
-          let globalDataNew = rs.results; // Dữ liệu kết quả
-          globalData = globalDataNew;
+          globalDataNew = rs.results; // Dữ liệu kết quả
+          // globalData = globalDataNew;
           const check = rs.check; // Dữ liệu check
 
           localStorage.setItem("check", check);
 
           // Kiểm tra dữ liệu trong localStorage
-          let cachedData = localStorage.getItem('globalData');
-          let nameGv = localStorage.getItem('nameGv');
-          let nameGvm = localStorage.getItem('nameGvm');
+          let cachedData = localStorage.getItem('tableData');
 
           // Nếu có dữ liệu trong localStorage
-          if (cachedData && nameGv && nameGvm) {
+          if (cachedData) {
             cachedData = JSON.parse(cachedData);
-            nameGv = JSON.parse(nameGv);
-            nameGvm = JSON.parse(nameGvm);
-
             // So sánh dữ liệu mới với dữ liệu cũ
-            const isDataEqual = (JSON.stringify(nameGv) === JSON.stringify(nameGvNew)) &&
-              (JSON.stringify(nameGvm) === JSON.stringify(nameGvmNew)) &&
-              (JSON.stringify(cachedData) === JSON.stringify(globalDataNew));
+            const isDataEqual = (JSON.stringify(cachedData) === JSON.stringify(globalDataNew));
 
             if (isDataEqual) {
               console.log('Dữ liệu không thay đổi, sử dụng dữ liệu từ localStorage');
@@ -532,11 +529,8 @@
           // Nếu có sự thay đổi, cập nhật localStorage
           localStorage.setItem('nameGv', JSON.stringify(nameGvNew));
           localStorage.setItem('nameGvm', JSON.stringify(nameGvmNew));
-          localStorage.setItem('globalData', JSON.stringify(globalDataNew));
+          localStorage.setItem('tableData', JSON.stringify(globalDataNew));
 
-          // Render bảng từ dữ liệu mới
-          renderTable(globalDataNew);
-          calculateTotals();
         } catch (error) {
           console.error('Đã có lỗi xảy ra:', error);
         }
@@ -546,7 +540,7 @@
       // render ra bảng
       function renderTable(data) {
         // Kiểm tra nếu đã có dữ liệu lưu trữ cục bộ trong localStorage
-        
+
 
         const tableBody = document.getElementById('tableBody');
         tableBody.innerHTML = ''; // Xóa nội dung cũ
@@ -800,7 +794,7 @@
 
         // Lấy dữ liệu từ localStorage nếu có
         let data = localStorage.getItem('tableData');
-        let localData = data ? JSON.parse(data) : globalData;
+        let localData = JSON.parse(data);
 
         rows.forEach((row, index) => {
           // Bỏ qua các hàng đang bị ẩn
@@ -869,7 +863,7 @@
         totalQC = 0; // Reset tổng số tiết QC
 
         // Duyệt qua từng phần tử trong globalData để cộng dồn số tiết
-        globalData.forEach(item => {
+        globalDataNew.forEach(item => {
           totalLL += item.LL; // Cộng dồn số tiết LL
           totalQC += item.QuyChuan; // Cộng dồn số tiết QC
         });

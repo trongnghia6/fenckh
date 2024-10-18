@@ -203,7 +203,10 @@ body {
 #import,
 #viewtam,
 #ban-hanh,
-#chooseFile {
+#chooseFile,
+#quychuandukien,
+button#render,
+#fillDay {
   --color: #0077ff;
   font-family: inherit;
   display: inline-block;
@@ -222,24 +225,31 @@ body {
   transition: 0.7s;
 }
 
-#chosseFile {
+#chosseFile{
   margin-top: 0px;
+}
+
+#fillDay{
+  margin-top: 12px;
 }
 
 button#chosseFile,
 button#chooseFile,
 button#import,
 button#viewtam,
-button#ban-hanh {
+button#ban-hanh,
+#quychuandukien,
+button#render {
   padding-top: 0;
 }
 
+#viewtam,
 #infoGvm {
   width: 150px;
 }
 
-#viewtam {
-  width: 150px;
+#quychuandukien {
+  width: 200px;
 }
 
 #ban-hanh {
@@ -257,7 +267,10 @@ button#ban-hanh {
 #import::before,
 #viewtam::before,
 #ban-hanh::before,
-#chooseFile::before {
+#chooseFile::before,
+#quychuandukien::before,
+button#render::before
+#fillDay::before {
   position: absolute;
   content: "";
   background: var(--color);
@@ -274,7 +287,10 @@ button#ban-hanh {
 #import:hover,
 #viewtam:hover,
 #ban-hanh:hover,
-#chooseFile:hover {
+#chooseFile:hover,
+#quychuandukien:hover,
+button#render:hover,
+#fillDay:hover {
   color: white;
 }
 
@@ -285,7 +301,10 @@ button#ban-hanh {
 #import:before,
 #viewtam:before,
 #ban-hanh:before,
-#chooseFile:before {
+#chooseFile:before,
+#quychuandukien:before,
+button#render:before
+#fillDay:before {
   top: 100%;
   left: 100%;
   transition: 0.3s all;
@@ -298,7 +317,10 @@ button#ban-hanh {
 #import:hover::before,
 #viewtam:hover::before,
 #ban-hanh:hover::before,
-#chooseFile:hover::before {
+#chooseFile:hover::before,
+#quychuandukien:hover::before,
+button#render:hover::before,
+#fillDay:hover::before {
   top: -30px;
   left: -30px;
 }
