@@ -272,6 +272,7 @@
                   <option value="DTVT">Điện tử viễn thông</option>
                   <option value="MM">Mật mã</option>
                 </select>
+                
                 <script>
                   function filterGvmByDepartment() {
                     let select = document.getElementById("departmentFilter");
@@ -311,7 +312,7 @@
                     <th>Ngày kết thúc</th>
                     <th>Số tiết</th>
                     <th>Tổng số tiết</th>
-                    <th>Khoa</th>
+                    <th>Mã học phần</th>
                     <!-- Cột Khoa -->
                     <th>Chi tiết giảng viên mời</th>
                   </tr>
@@ -321,9 +322,9 @@
                   <% for (let teacher of Object.keys(GiangDay)) { %> 
                     <% let courses = GiangDay[teacher]; %> 
                     <% let totalSoTiet = courses.reduce((total, course) => total + course.QuyChuan, 0); %>
-                    <tr class="teacher-group" data-department="<%= courses[0].MaPhongBan %>">
+                    <tr class="teacher-group" data-department="<%= courses[0].Khoa %>">
                       <% courses.forEach((course, courseIndex) => { %>
-                        <tr data-department="<%= course.MaPhongBan %>">
+                        <tr data-department="<%= course.Khoa %>">
                           <% if (courseIndex === 0) { %>
                             <td rowspan="<%= courses.length %>"><%= index %></td>
                             <td rowspan="<%= courses.length %>"><%= course.GiaoVienGiangDay %></td>
@@ -349,7 +350,7 @@
                           
                           <% if (courseIndex === 0) { %>
                             <td rowspan="<%= courses.length %>"><%= totalSoTiet %></td>
-                            <td rowspan="<%= courses.length %>"><%= course.MaPhongBan %></td>
+                            <td rowspan="<%= courses.length %>"><%= course.Khoa %></td>
                             <td rowspan="<%= courses.length %>">
                               <button class="action-button view" onclick="viewClass('<%= parseInt(course.id_Gvm) - 1 %>')">👁️</button>
                             </td>
