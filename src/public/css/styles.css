@@ -105,14 +105,26 @@ body {
 }
 
 .navbar-bottom .nav-link {
-  color: white;
+  color: white !important;
   background-color: #3eacff;
   font-weight: bold;
   text-transform: uppercase;
   height: 40px;
   display: flex;
   align-items: center;
+}
 
+.nav-link.dropdown-toggle:focus,
+.nav-link.dropdown-toggle:hover {
+  color: white !important;
+  /* Keep dropdown-toggle color white on hover and focus */
+}
+
+.nav-link.active {
+  background-color: #2d7fbe !important;
+  /* Ensure the background color remains consistent */
+  color: white !important;
+  /* Keep the active color white */
 }
 
 .navbar-nav .dropdown:hover .dropdown-menu {
@@ -129,9 +141,8 @@ body {
   padding: 0;
   /* Xóa mọi padding không cần thiết */
   width: 300px;
-  <<<<<<< HEAD display: none;
-  =======display: none;
-  >>>>>>>6a09cc7c684a8223daaa8de7bad8ff0af3c39251
+  display: none;
+  display: none;
 }
 
 .navbar-bottom .nav-link:hover {
@@ -369,7 +380,7 @@ td {
 .row {
   flex-wrap: wrap;
   /* Cho phép các phần tử tự động xuống dòng */
-  align-items: center;
+  align-items: end;
 }
 
 @media (max-width: 768px) {
@@ -551,4 +562,14 @@ td {
 
 .collapse {
   font-size: 15px;
+  justify-content: space-between;
+}
+
+img {
+  height: 400px;
+  width: 400px;
+}
+
+.bt {
+  width: 40%;
 }

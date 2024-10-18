@@ -64,12 +64,12 @@
 
   <!-- Phần dưới của navbar chứa các mục nằm ngang -->
           <nav class="navbar navbar-expand-lg navbar-bottom sticky-top">
-    <div class="container-fluid">
+    <div class="" style="width: 100%;">
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
         aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
-      <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+      <div class="collapse navbar-collapse" style="width: 100%;" id="navbarNav">
         <ul class="navbar-nav">
           <li class="nav-item">
             <a class="nav-link" id="Home" href=""><i class="fa-solid fa-house"></i></a>
@@ -152,19 +152,19 @@
               </div>
             </div>
           </div>
-          <div class="navbar-nav">
-            <div class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle fullname" href="/login" id="navbarDropdownUser" data-bs-toggle="dropdown"
-                aria-expanded="false">
-                Hi, Lê Đức Thuận
-              </a>
-              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a class="dropdown-item" href="#">Thông tin cá nhân</a>
-                <a class="dropdown-item" href="/">Đăng xuất</a>
-              </div>
+        </ul>
+        <div class="navbar-nav">
+          <div class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle fullname" href="/login" id="navbarDropdownUser" data-bs-toggle="dropdown"
+              aria-expanded="false">
+              Hi, Lê Đức Thuận
+            </a>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+              <a class="dropdown-item" href="#">Thông tin cá nhân</a>
+              <a class="dropdown-item" href="/">Đăng xuất</a>
             </div>
           </div>
-        </ul>
+        </div>
       </div>
     </div>
   </nav>
@@ -187,104 +187,89 @@
                 <option value="DTVT">Điện tử viễn thông</option>
                 <option value="MM">Mật mã</option>
               </select>
-              <!-- <script>
+              <script>
                 function filterGvmByDepartment() {
                   let select = document.getElementById("departmentFilter");
-                  let department = select.value;
+                  let department = select.value.trim(); // Lấy giá trị và loại bỏ khoảng trắng
                   let table = document.getElementById("classTable");
                   let tr = table.getElementsByTagName("tr");
-                  let infoTableBody = document.getElementById("infoTableBody");
 
-                  // Xóa nội dung cũ của bảng
-                  infoTableBody.innerHTML = "";
-
-                  let filteredRows = Array.prototype.filter.call(tr, function (row) {
-                    let td = row.getElementsByTagName("td")[5]; // Giả sử cột Khoa là cột thứ 6
-                    if (td) {
-                      let txtValue = td.textContent || td.innerText;
-                      return department === "Tất cả khoa" || txtValue === department;
+                  for (let i = 1; i < tr.length; i++) { // Bỏ qua hàng tiêu đề
+                    let departmentValue = tr[i].getAttribute("data-department");
+                    if (departmentValue) {
+                      if (department === "" || departmentValue === department) { // Kiểm tra khoa
+                        tr[i].style.display = ""; // Hiển thị hàng
+                      } else {
+                        tr[i].style.display = "none"; // Ẩn hàng
+                      }
                     }
-                    return false;
-                  });
-
-                  filteredRows.forEach(function (row) {
-                    // Hiển thị thông tin ở bảng
-                    let infoRow = document.createElement("tr");
-                    infoTableBody.appendChild(infoRow);
-
-                    let cells = row.getElementsByTagName("td");
-                    for (let j = 0; j < cells.length; j++) {
-                      let cell = cells[j];
-                      let infoCell = document.createElement("td");
-                      infoCell.textContent = cell.textContent;
-                      infoRow.appendChild(infoCell);
-                    }
-                  });
+                  }
                 }
-              </script> -->
+              </script>
+
             </div>
 
-                <table class="class-table" id="classTable">
-                  <thead>
-                    <tr>
-                      <th>STT</th>
-                      <th>Giảng viên</th>
-                      <th>Môn học</th>
-                      <th>Tên lớp</th>
-                      <th>Số tín chỉ</th>
-                      <th>Số tiết</th>
-                      <th>Tổng số tiết</th>
-                      <th>Khoa</th> <!-- Cột Khoa -->
-                      <th>Chi tiết giảng viên mời</th>
-                    </tr>
-                  </thead>
-                  <tbody class="teacher-group">
-                    <% let index=1; %>
-                      <% for (let teacher in GiangDay) { %>
-                        <% let courses=GiangDay[teacher]; %>
-                          <% let totalSoTiet=courses.reduce((total, course)=> total + course.QuyChuan, 0); %>
-                          <tr class="teacher-group" data-department="<%= courses[0].MaPhongBan %>">
+            <table class="class-table" id="classTable">
+              <thead>
+                <tr>
+                  <th>STT</th>
+                  <th>Giảng viên</th>
+                  <th>Môn học</th>
+                  <th>Tên lớp</th>
+                  <th>Số tín chỉ</th>
+                  <th>Số tiết</th>
+                  <th>Tổng số tiết</th>
+                  <th>Khoa</th> <!-- Cột Khoa -->
+                  <th>Chi tiết giảng viên mời</th>
+                </tr>
+              </thead>
+              <tbody class="teacher-group">
+                <% let index=1; %>
+                  <% for (let teacher in GiangDay) { %>
+                    <% let courses=GiangDay[teacher]; %>
+                      <% let totalSoTiet=courses.reduce((total, course)=> total + course.QuyChuan, 0); %>
+                      <tr class="teacher-group" data-department="<%= courses[0].MaPhongBan %>">
 
-                            <% courses.forEach((course, courseIndex)=> { %>
-                              <tr data-department="<%= course.MaPhongBan %>">
-                                <% if (courseIndex===0) { %>
-                                  <td rowspan="<%= courses.length %>">
-                                    <%= index %>
-                                  </td>
-                                  <td rowspan="<%= courses.length %>">
-                                    <%= teacher %>
-                                  </td>
-                                  <% index++; %>
-                                    <% } %>
-                                      <td>
-                                        <%= course.TenHocPhan %>
-                                      </td>
-                                      <td>
-                                        <%= course.Lop %>
-                                      </td>
-                                      <td>
-                                        <%= course.SoTC %>
-                                      </td>
-                                      <td>
-                                        <%= course.QuyChuan %>
-                                      </td>
-                                      <% if (courseIndex===0) { %>
-                                        <td rowspan="<%= courses.length %>">
-                                          <%= totalSoTiet %>
-                                        </td>
-                                        <td rowspan="<%= courses.length %>">
-                                          <%= course.MaPhongBan %> <!-- Đây là cột Khoa -->
-                                        </td>
-                                        <td rowspan="<%= courses.length %>">
-                                          <button class="action-button view"
-                                            onclick="viewClass('<%= parseInt(course.id_Gvm) - 1 %>')">👁️</button>
-                                        </td>
-                                        <% } %>
-                              </tr>
-                              <% }); %>
+                        <% courses.forEach((course, courseIndex)=> { %>
+                          <tr data-department="<%= course.MaPhongBan %>">
+                            <% if (courseIndex===0) { %>
+                              <td rowspan="<%= courses.length %>">
+                                <%= index %>
+                              </td>
+                              <td rowspan="<%= courses.length %>">
+                                <%= teacher %>
+                              </td>
+                              <% index++; %>
                                 <% } %>
-                  </tbody>
-                </table>
+                                  <td>
+                                    <%= course.TenHocPhan %>
+                                  </td>
+                                  <td>
+                                    <%= course.Lop %>
+                                  </td>
+                                  <td>
+                                    <%= course.SoTC %>
+                                  </td>
+                                  <td>
+                                    <%= course.QuyChuan %>
+                                  </td>
+                                  <% if (courseIndex===0) { %>
+                                    <td rowspan="<%= courses.length %>">
+                                      <%= totalSoTiet %>
+                                    </td>
+                                    <td rowspan="<%= courses.length %>">
+                                      <%= course.MaPhongBan %> <!-- Đây là cột Khoa -->
+                                    </td>
+                                    <td rowspan="<%= courses.length %>">
+                                      <button class="action-button view"
+                                        onclick="viewClass('<%= parseInt(course.id_Gvm) - 1 %>')">👁️</button>
+                                    </td>
+                                    <% } %>
+                          </tr>
+                          <% }); %>
+                            <% } %>
+              </tbody>
+            </table>
                 <!-- <div class="pagination">
                               <span>10 / trang</span>
                               <button class="page-button">1</button>

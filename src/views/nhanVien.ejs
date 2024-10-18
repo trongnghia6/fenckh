@@ -84,18 +84,16 @@
       <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
         <ul class="navbar-nav">
           <li class="nav-item">
-            <a class="nav-link active" id="Home" href="/thongTinTK">Thông tin tài khoản </a>
-          </li>
-        </li> <li class="nav-item">
-          <a class="nav-link " id="NhanVien" href="/nhanVien"> Nhân Viên </a>        
-         </li>
-         <li class="nav-item">
-          <a class="nav-link" id="PhongBan" href="/phongBan">Phòng Ban </a>        
-         </li>
+            <a class="nav-link " id="Home" href="/thongTinTK">Thông tin tài khoản </a>
+          </li> <li class="nav-item">
+            <a class="nav-link active" id="NhanVien" href="/nhanVien"> Nhân Viên </a>        
+           </li>
+           <li class="nav-item">
+            <a class="nav-link" id="PhongBan" href="/phongBan">Phòng Ban </a>        
+           </li>
           
 
-          <li class="nav-item">
-          </li>
+          
           <div class="navbar-nav">
             <div class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="/login" id="navbarDropdownUser" data-bs-toggle="dropdown"
@@ -119,43 +117,43 @@
 
         <!-- Nút Lọc màu giống nút Hiển thị -->
 
-        <button id="createTk" class="btn-them">
-          <i class="bi bi-plus-circle"></i> Thêm tài khoản
-      </button>        <script>
-          document.getElementById('createTk').addEventListener('click', function () {
-            window.location.href = '/themTK';
+        <button id="createNv" class="btn-them">
+          <i class="bi bi-plus-circle"></i> Thêm Nhân Viên
+      </button>
+      <script>
+          document.getElementById('createNv').addEventListener('click', function() {
+              window.location.href = '/themNhanVien';
           });
+      </script>
+          
         </script>
         
-        <button id="hienthiTK" class="btn-hien-thi">
-          Hiển thị danh sách tài khoản
+        <button id="btnHienThi" class="btn btn-hien-thi ">
+          Hiển thị danh sách
       </button> 
+      <button id="suaThongTin" class="btn-suaTT">
+        Sửa thông tin
+    </button> 
+    <button id="xoaNV" class="btn-xoa">
+      Xóa nhân viên 
+  </button> 
+
       </div>
       <div>
-        <table class="table table-bordered">
+    <table id="nhanVienTable" class="table table-bordered">
           <thead>
             <tr>
               <th></th>
               <th>ID User</th>
-              <th>Tên tài khoản</th>
-              <th>Mật khẩu</th>
+              <th>Mã nhân viên</th>
+              <th>Tên nhân viên</th>
               <th>Mã Phòng ban</th>
-              <th>Quyền</th> 
-              <th>Khoa</th>
-
             </tr>
           </thead>
           <tbody id="data-table-body">
             <tr>
               <td><input type="checkbox" class="row-checkbox"></td>
-              <td>1</td>
-              <td>admin</td>
-              <td>******</td>
-              <td>IT</td>
-              <td>
-                DAOTAO
-              </td>
-              <td><input type="checkbox" class="khoa-checkbox"></td> <!-- Thay đổi nội dung thành checkbox -->
+             
             </tr>
           </tbody>
         </table>
@@ -199,9 +197,47 @@
     </div>
   </div>
   </div>
-  <script>
 
-  </script>
+  <!-- hiển thị danh sách nv -->
+  <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
+<script>
+    $(document).ready(function() {
+        console.log('Document ready');
+        $('#btnHienThi').on('click', function() {
+            console.log('Button clicked');
+            $.ajax({
+                url: '/api/nhanvien',
+                type: 'GET',
+                success: function(data) {
+                    console.log('Data received:', data);
+                    let tableBody = $('#nhanVienTable tbody');
+                    tableBody.empty();
+
+                    if (data.length === 0) {
+                        console.log('No data received');
+                        tableBody.append('<tr><td colspan="4">Không có dữ liệu</td></tr>');
+                        return;
+                    }
+
+                    data.forEach(function(nhanVien) {
+                        let row = `<tr>
+                             <td></td>
+                            <td>${nhanVien.id_User || ''}</td>
+                            <td>${nhanVien.MaNhanVien || ''}</td>
+                            <td>${nhanVien.TenNhanVien || ''}</td>
+                            <td>${nhanVien.MaPhongBan || ''}</td>
+                        </tr>`;
+                        tableBody.append(row);
+                    });
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error:', xhr.responseText);
+                    alert('Có lỗi xảy ra khi tải danh sách nhân viên.');
+                }
+            });
+        });
+    });
+</script>
 
 </body>
 

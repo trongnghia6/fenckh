@@ -84,14 +84,14 @@
       <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
         <ul class="navbar-nav">
           <li class="nav-item">
-            <a class="nav-link active" id="Home" href="/thongTinTK">Thông tin tài khoản </a>
-          </li>
-        </li> <li class="nav-item">
-          <a class="nav-link " id="NhanVien" href="/nhanVien"> Nhân Viên </a>        
-         </li>
-         <li class="nav-item">
-          <a class="nav-link" id="PhongBan" href="/phongBan">Phòng Ban </a>        
-         </li>
+            <a class="nav-link " id="Home" href="/thongTinTK">Thông tin tài khoản </a>
+          </li> 
+          <li class="nav-item">
+            <a class="nav-link" id="NhanVien" href="/nhanVien">Nhân Viên </a>        
+           </li>
+           <li class="nav-item">
+            <a class="nav-link active" id="PhongBan" href="/phongBan">Phòng Ban </a>        
+           </li>
           
 
           <li class="nav-item">
@@ -119,43 +119,39 @@
 
         <!-- Nút Lọc màu giống nút Hiển thị -->
 
-        <button id="createTk" class="btn-them">
-          <i class="bi bi-plus-circle"></i> Thêm tài khoản
-      </button>        <script>
-          document.getElementById('createTk').addEventListener('click', function () {
-            window.location.href = '/themTK';
+        <button id="createPB" class="btn-them">
+          <i class="bi bi-plus-circle"></i> Thêm Phòng Ban
+      </button>
+      <script>
+          document.getElementById('createPB').addEventListener('click', function() {
+              window.location.href = '/themPhongBan';
           });
-        </script>
+      </script>
         
-        <button id="hienthiTK" class="btn-hien-thi">
-          Hiển thị danh sách tài khoản
+        <button id="btnHienThiPhongBan" class="btn btn-hien-thi ">
+          Hiển thị danh sách phòng ban
       </button> 
+      <button id="suaThongTin" class="btn-suaTT">
+        Sửa thông tin
+    </button> 
+    <button id="xoaNV" class="btn-xoa">
+      Xóa phòng ban
       </div>
       <div>
-        <table class="table table-bordered">
+        <table id="phongBanTable" class="table table-bordered">
           <thead>
             <tr>
               <th></th>
-              <th>ID User</th>
-              <th>Tên tài khoản</th>
-              <th>Mật khẩu</th>
-              <th>Mã Phòng ban</th>
-              <th>Quyền</th> 
-              <th>Khoa</th>
-
+              <th>Mã phòng ban</th>
+              <th>Tên phòng ban</th>
+              <th>Ghi chú </th>
+              <th>Là Khoa</th>
             </tr>
           </thead>
           <tbody id="data-table-body">
             <tr>
               <td><input type="checkbox" class="row-checkbox"></td>
-              <td>1</td>
-              <td>admin</td>
-              <td>******</td>
-              <td>IT</td>
-              <td>
-                DAOTAO
-              </td>
-              <td><input type="checkbox" class="khoa-checkbox"></td> <!-- Thay đổi nội dung thành checkbox -->
+              
             </tr>
           </tbody>
         </table>
@@ -199,10 +195,46 @@
     </div>
   </div>
   </div>
-  <script>
+  <!-- // hiển thị danh sách phòng ban -->
+  <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
+<script>
+    $(document).ready(function() {
+        console.log('Document ready - Phòng Ban');
+        $('#btnHienThiPhongBan').on('click', function() {
+            console.log('Button clicked - Phòng Ban');
+            $.ajax({
+                url: '/api/phongban',
+                type: 'GET',
+                success: function(data) {
+                    console.log('Data received:', data);
+                    let tableBody = $('#phongBanTable tbody');
+                    tableBody.empty();
 
-  </script>
+                    if (data.length === 0) {
+                        console.log('No data received');
+                        tableBody.append('<tr><td colspan="4">Không có dữ liệu</td></tr>');
+                        return;
+                    }
 
+                    data.forEach(function(phongBan) {
+                        let row = `<tr>
+                          <td></td>
+                            <td>${phongBan.maPhongBan || ''}</td>
+                            <td>${phongBan.tenPhongBan || ''}</td>
+                            <td>${phongBan.ghiChu || ''}</td>
+                            <td>${phongBan.isKhoa ? 'Có' : 'Không'}</td>
+                        </tr>`;
+                        tableBody.append(row);
+                    });
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error:', xhr.responseText);
+                    alert('Có lỗi xảy ra khi tải danh sách phòng ban.');
+                }
+            });
+        });
+    });
+</script>
 </body>
 
 </html>
