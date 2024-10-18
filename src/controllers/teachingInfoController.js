@@ -247,25 +247,21 @@ const renderInfo = async (req, res) => {
   const role = req.session.role;
   const isKhoa = req.session.isKhoa;
   const MaPhongBan = req.session.MaPhongBan;
+  console.log("Mã phòng ban = ", MaPhongBan);
 
   const { Dot, Ki, Nam } = req.body; // Lấy giá trị khoa, dot, ki từ body của yêu cầu
   const tableName = process.env.DB_TABLE_QC;
   let query = "";
 
-  if (isKhoa) {
+  if (isKhoa == 1) {
     query = `SELECT * FROM ${tableName}
-    WHERE Dot = ? AND KiHoc = ? AND NamHoc = ? AND Khoa = '${Khoa}';`;
+    WHERE Dot = ? AND KiHoc = ? AND NamHoc = ? AND Khoa = ?;`;
   }
   // Xây dựng câu truy vấn SQL sử dụng các tham số
   if (isKhoa == 0) {
     query = `
       SELECT * FROM ${tableName}
       WHERE Dot = ? AND KiHoc = ? AND NamHoc = ?;
-    `;
-  } else {
-    query = `
-      SELECT * FROM ${tableName}
-      WHERE Dot = ? AND KiHoc = ? AND NamHoc = ? AND Khoa = ?;
     `;
   }
 

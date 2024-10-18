@@ -264,6 +264,7 @@
   let globalData = []; // Biến toàn cục để lưu dữ liệu từ server
   let nameGv = []; // Biến toàn cục để lưu tất cả tên giảng viên
   let nameGvm = []; // Biến toàn cục để lưu tên giảng viên theo khoa
+  let rs = [];
 
   // Hàm khởi động ứng dụng
   function init() {
@@ -311,9 +312,11 @@
       nameGvm = await khoaResponse.json();
       console.log('Dữ liệu giảng viên mời theo khoa:', nameGvm);
 
-      globalData = await teachingResponse.json();
-      console.log('Tổng hợp bảng dữ liệu:', globalData);
+      rs = await teachingResponse.json();
 
+      // Thêm check
+      globalData = rs.results; // Dữ liệu kết quả
+      const check = rs.check; // Dữ liệu check
 
 
       renderTable(globalData); // Gọi hàm renderTable sau khi đã có đủ dữ liệu
