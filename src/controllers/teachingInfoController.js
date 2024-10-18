@@ -4,6 +4,7 @@ require("dotenv").config();
 const path = require("path");
 const connection = require("./connectDB");
 const { getEnvironmentData } = require("worker_threads");
+const createConnection = require("../config/databaseAsync");
 
 // Hàm tách chuỗi - giữ nguyên
 function tachChuoi(chuoi) {
@@ -119,83 +120,175 @@ function handleDuplicateCourses(firstCourse, courses) {
 //     return res.status(200).json(finalResults); // Trả về kết quả sau khi gộp
 //   });
 // };
-const renderInfo = (req, res) => {
+
+// Phương
+const KhoaCheckAll = async (req, Dot, KiHoc, NamHoc) => {
+  const isKhoa = req.session.isKhoa;
+  let kq = ""; // Biến để lưu kết quả
+
+  const query = ` SELECT MaPhongBan FROM phongban where isKhoa = 1 `;
+  const connection1 = await createConnection();
+  const [results, fields] = await connection1.query(query);
+
+  for (let i = 0; i < results.length; i++) {
+    const MaPhongBan = results[i].MaPhongBan;
+
+    const query = ` SELECT KhoaDuyet FROM quychuan where Khoa = ? and Dot = ? and KiHoc = ? and NamHoc = ?`;
+    const connection = await createConnection();
+    const [check, fields] = await connection.query(query, [
+      MaPhongBan,
+      Dot,
+      KiHoc,
+      NamHoc,
+    ]);
+
+    let checkAll = true;
+    for (let j = 0; j < check.length; j++) {
+      if (check[j].KhoaDuyet == 0) {
+        checkAll = false;
+        break;
+      }
+    }
+    if (checkAll == true) {
+      kq += MaPhongBan + ",";
+    }
+  }
+
+  // Đào tạo
+  const queryDT = ` SELECT DaoTaoDuyet FROM quychuan where Dot = ? and KiHoc = ? and NamHoc = ?`;
+  const connection2 = await createConnection();
+  const [check2, fields2] = await connection2.query(queryDT, [
+    Dot,
+    KiHoc,
+    NamHoc,
+  ]);
+
+  let checkAll2 = true;
+  for (let j = 0; j < check2.length; j++) {
+    if (check2[j].DaoTaoDuyet == 0) {
+      checkAll2 = false;
+      break;
+    }
+  }
+
+  if (checkAll2 == true) {
+    kq += "DAOTAO,";
+  }
+
+  // Tài chính
+  const queryTC = ` SELECT TaiChinhDuyet FROM quychuan where Dot = ? and KiHoc = ? and NamHoc = ?`;
+  const connection3 = await createConnection();
+  const [check3, fields3] = await connection3.query(queryTC, [
+    Dot,
+    KiHoc,
+    NamHoc,
+  ]);
+
+  let checkAll3 = true;
+  for (let j = 0; j < check2.length; j++) {
+    if (check3[j].TaiChinhDuyet == 0) {
+      checkAll3 = false;
+      break;
+    }
+  }
+  if (checkAll3 == true) {
+    kq += "TAICHINH,";
+  }
+
+  // Trả về kết quả
+  return kq;
+};
+// Phương
+
+// const renderInfo = (req, res) => {
+//   const role = req.session.role;
+//   const isKhoa = req.session.isKhoa;
+//   const MaPhongBan = req.session.MaPhongBan;
+
+//   const { Dot, Ki, Nam } = req.body; // Lấy giá trị khoa, dot, ki từ body của yêu cầu
+//   const tableName = process.env.DB_TABLE_QC;
+//   let query = "";
+
+//   // Xây dựng câu truy vấn SQL sử dụng các tham số
+//   if (isKhoa == 0) {
+//     query = `
+//     SELECT * FROM ${tableName}
+//     WHERE Dot = ? AND KiHoc = ? AND NamHoc = ?;
+//   `;
+//   } else {
+//     query = `
+//     SELECT * FROM ${tableName}
+//     WHERE Dot = ? AND KiHoc = ? AND NamHoc = ? AND Khoa = '${MaPhongBan}';
+//   `;
+//   }
+
+//   const check = KhoaCheckAll(Dot, Ki, Nam);
+
+//   // Thực thi câu truy vấn với các tham số an toàn
+//   connection.query(query, [Dot, Ki, Nam], (error, results) => {
+//     if (error) {
+//       return res.status(500).json({ error: "Internal server error" });
+//     }
+
+//     if (results.length === 0) {
+//       return res.status(404).json({ message: "No data found" });
+//     }
+
+//     return res.status(200).json(results); // Trả về kết quả tương ứng với đợt, kì, năm
+//     return res.status(200).json({
+//       results : results,
+//       check: check,
+//     }); // Trả về kết quả tương ứng với đợt, kì, năm
+
+//   });
+// };
+
+const renderInfo = async (req, res) => {
   const role = req.session.role;
+  const isKhoa = req.session.isKhoa;
+  const MaPhongBan = req.session.MaPhongBan;
+  console.log("Mã phòng ban = ", MaPhongBan);
+
   const { Dot, Ki, Nam } = req.body; // Lấy giá trị khoa, dot, ki từ body của yêu cầu
   const tableName = process.env.DB_TABLE_QC;
   let query = "";
 
-  const roleDaoTaoALL = process.env.DAOTAO_ALL;
-  const roleTaiChinhALL = process.env.TAICHINH_ALL;
-
-  console.log("daotaoall ", roleDaoTaoALL);
-
-  const roleCNTTAll = process.env.CNTT_ALL;
-  const roleATTTAll = process.env.ATTT_ALL;
-  const roleDTVTAll = process.env.DTVT_ALL;
-
-  // const roleDaoTaoThiHanh = process.env.THIHANH;
-  const roleCNTTThiHanh = process.env.CNTT_THIHANH;
-  const roleATTTThiHanh = process.env.ATTT_THIHANH;
-  const roleDTVTThiHanh = process.env.DTVT_THIHANH;
-
-  const roleDaoTaoXem = process.env.DAOTAO_XEM;
-  const roleTaiChinhXem = process.env.TAICHINH_XEM;
-  const roleCNTTXem = process.env.CNTT_XEM;
-  const roleATTTXem = process.env.ATTT_XEM;
-  const roleDTVTXem = process.env.DTVT_XEM;
-
+  if (isKhoa == 1) {
+    query = `SELECT * FROM ${tableName}
+    WHERE Dot = ? AND KiHoc = ? AND NamHoc = ? AND Khoa = ?;`;
+  }
   // Xây dựng câu truy vấn SQL sử dụng các tham số
-  if (
-    role == roleDaoTaoALL ||
-    role == roleDaoTaoXem ||
-    role == roleTaiChinhALL ||
-    role == roleTaiChinhXem
-  ) {
+  if (isKhoa == 0) {
     query = `
-    SELECT * FROM ${tableName}
-    WHERE Dot = ? AND KiHoc = ? AND NamHoc = ?;
-  `;
-  } else if (
-    role == roleCNTTAll ||
-    role == roleCNTTThiHanh ||
-    role == roleCNTTXem
-  ) {
-    query = `
-    SELECT * FROM ${tableName}
-    WHERE Dot = ? AND KiHoc = ? AND NamHoc = ? AND Khoa = 'CNTT';
-  `;
-  } else if (
-    role == roleATTTAll ||
-    role == roleATTTThiHanh ||
-    role == roleATTTXem
-  ) {
-    query = `
-    SELECT * FROM ${tableName}
-    WHERE Dot = ? AND KiHoc = ? AND NamHoc = ? AND Khoa = 'ATTT';
-  `;
-  } else if (
-    role == roleDTVTAll ||
-    role == roleDTVTThiHanh ||
-    role == roleDTVTXem
-  ) {
-    query = `
-    SELECT * FROM ${tableName}
-    WHERE Dot = ? AND KiHoc = ? AND NamHoc = ? AND Khoa = 'DTVT';
-  `;
+      SELECT * FROM ${tableName}
+      WHERE Dot = ? AND KiHoc = ? AND NamHoc = ?;
+    `;
   }
 
-  // Thực thi câu truy vấn với các tham số an toàn
-  connection.query(query, [Dot, Ki, Nam], (error, results) => {
-    if (error) {
-      return res.status(500).json({ error: "Internal server error" });
-    }
+  // Gọi hàm KhoaCheckAll để kiểm tra
+  const check = await KhoaCheckAll(req, Dot, Ki, Nam);
 
-    if (results.length === 0) {
-      return res.status(404).json({ message: "No data found" });
+  //const connection = await createConnection();
+  // Thực thi câu truy vấn với các tham số an toàn
+  connection.query(
+    query,
+    isKhoa == 0 ? [Dot, Ki, Nam] : [Dot, Ki, Nam, MaPhongBan],
+    (error, results) => {
+      if (error) {
+        return res.status(500).json({ error: "Internal server error" });
+      }
+
+      if (results.length === 0) {
+        return res.status(404).json({ message: "No data found" });
+      }
+
+      // Trả về kết quả tương ứng với đợt, kì, năm và thêm check
+      return res.status(200).json({
+        results: results,
+        check: check,
+      }); // Trả về kết quả tương ứng với đợt, kì, năm và check
     }
-    return res.status(200).json(results); // Trả về kết quả tương ứng với đợt, kì, năm
-  });
+  );
 };
 
 // Hàm lấy tất cả tên giảng viên từ cơ sở dữ liệu
