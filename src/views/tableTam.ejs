@@ -64,13 +64,19 @@
         transform: translate(-50%, -50%);
         z-index: 1000;
       }
+
       .header-actions {
-        display: flex; /* Flexbox container */
-        flex-wrap: wrap; /* Wrap items if they don't fit in one line */
-        align-items: center; /* Vertically center items */
-        gap: 10px; /* Space between the elements */
+        display: flex;
+        /* Flexbox container */
+        flex-wrap: wrap;
+        /* Wrap items if they don't fit in one line */
+        align-items: center;
+        /* Vertically center items */
+        gap: 10px;
+        /* Space between the elements */
         justify-content: space-between;
       }
+
       .right {
         margin-top: 20px;
       }
@@ -518,10 +524,7 @@
             body: JSON.stringify(dataQC), // Gửi dữ liệu đã được cập nhật
           })
             .then((response) => {
-              if (!response.ok) {
-                throw new Error("Gửi dữ liệu thất bại");
-              }
-              return response.json();
+              alert(response.message.json);
             })
             .then((data) => {
               if (data.success) {
