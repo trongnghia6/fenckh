@@ -245,13 +245,12 @@ button#render {
 }
 
 #viewtam,
-#infoGvm {
-  width: 150px;
-}
-
+#infoGvm,
+#getData,
 #quychuandukien {
   width: 200px;
 }
+
 
 #ban-hanh {
   width: auto;
