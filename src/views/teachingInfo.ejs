@@ -659,12 +659,11 @@
         }
 
         if (role == "GV"){
-          giaoVienGiangDayInput.readOnly = true;
-          boMonInput.readOnly = true;
-          ngayBatDauInput.readOnly = true;
+          giaoVienGiangDayInput.disabled = true;
+          boMonInput.disabled = true;
+          ngayBatDauInput.disabled = true;
           // Ngăn người dùng thay đổi trạng thái ngày kết thúc
-          ngayKetThucInput.readOnly = true;
-
+          ngayKetThucInput.disabled = true;
         }
 
         const check = localStorage.getItem("check");
@@ -676,11 +675,11 @@
               e.preventDefault();
             })
 
-            giaoVienGiangDayInput.readOnly = true;
-            boMonInput.readOnly = true;
-            ngayBatDauInput.readOnly = true;
+            giaoVienGiangDayInput.disabled = true;
+            boMonInput.disabled = true;
+            ngayBatDauInput.disabled = true;
             // Ngăn người dùng thay đổi trạng thái ngày kết thúc
-            ngayKetThucInput.readOnly = true;
+            ngayKetThucInput.disabled = true;
 
             if (role == "Lãnh đạo khoa"){
               khoaCheckbox.addEventListener('click', function (e) {

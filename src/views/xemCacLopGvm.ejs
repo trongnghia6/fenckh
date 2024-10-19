@@ -524,8 +524,8 @@
 
       // Nếu không phải khoa -> không có quyền nhập
       if (isKhoa == 0){
-        NgayBatDauInput.readOnly = true; // Chỉ xem
-        NgayKetThucInput.readOnly = true; // Chỉ xem
+        NgayBatDauInput.disabled = true; // Chỉ xem
+        NgayKetThucInput.disabled = true; // Chỉ xem
       }
 
       const soTietLLTd = document.createElement('td');
@@ -602,11 +602,11 @@
       // Phân quyền theo phòng ban
       if (isKhoa == 1){ // Nếu là khoa
         if (check.includes(MaPhongBan)){
-          giaoVienGiangDayInput.readOnly = true;
-          boMonInput.readOnly = true;
-          NgayBatDauInput.readOnly = true;
+          giaoVienGiangDayInput.disabled = true;
+          boMonInput.disabled = true;
+          NgayBatDauInput.disabled = true;
           // Ngăn người dùng thay đổi trạng thái ngày kết thúc
-          NgayKetThucInput.readOnly = true;
+          NgayKetThucInput.disabled = true;
           // Ngăn người dùng thay đổi trạng thái checkbox
           khoaCheckbox.addEventListener('click', function (e) {
             e.preventDefault(); // Ngăn người dùng thay đổi trạng thái checkbox

@@ -154,6 +154,7 @@ const AdminController = {
     const isKhoa = Khoa ? 1 : 0;
     const connection = await createConnection();
 
+    console.log("isKhoa = ", isKhoa);
     try {
       // Cập nhật bảng thứ hai
       const query2 = `

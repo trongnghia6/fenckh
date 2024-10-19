@@ -37,7 +37,60 @@
         /* Viền đen xung quanh nhóm giảng viên */
       }
     </style>
-
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+  }
+  
+  .class-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    table-layout: auto; /* Cho phép bảng tự điều chỉnh kích thước cột */
+  }
+  
+  .class-table th, .class-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+    white-space: normal; /* Cho phép xuống dòng */
+    word-wrap: break-word; /* Chia từ và xuống dòng khi cần */
+  }
+  
+  .class-table th {
+    background-color: #007BFF; /* Đổi màu nền tiêu đề thành xanh dương */
+    color: white;
+    font-weight: bold;
+  }
+  
+  .class-table tbody tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+  
+  .class-table tbody tr:hover {
+    background-color: #ddd;
+  }
+  
+  .action-button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 5px 10px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+  
+  .action-button:hover {
+    background-color: #45a049;
+  }
+  
+  /* Điều chỉnh kích thước các cột */
+  .class-table th, .class-table td {
+    min-width: 50px; /* Đặt kích thước tối thiểu cho cột để không bị quá hẹp */
+  }
+  
+</style>
     <!-- Phân quyền -->
     <script>
       document.addEventListener("DOMContentLoaded", () => {
