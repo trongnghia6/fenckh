@@ -77,6 +77,7 @@ const AdminController = {
         CacMonLienQuan,
       ];
 
+      console.log(MaPhongBan);
       // Chèn nhân viên và lấy id_User vừa tạo
       const [result] = await connection
         .promise()
@@ -120,46 +121,67 @@ const AdminController = {
       res.status(500).json({ message: "Đã xảy ra lỗi khi thêm phòng ban" });
     }
   },
-  themTaiKhoan: async (req, res) => {
-    const { TenDangNhap, MatKhau, id_User } = req.body;
-
+  getthemTaiKhoan: async (req, res) => {
     try {
-      const query = `
-          INSERT INTO taikhoannguoidung (TenDangNhap, MatKhau, id_User)
-          VALUES (?, ?, ?)
-      `;
+      // Kết nối tới cơ sở dữ liệu
+      const connection = await createConnection();
 
-      const values = [TenDangNhap, MatKhau, id_User];
+      // Lấy dữ liệu phòng ban
+      const query2 = "SELECT * FROM phongban";
+      const [results2] = await connection.query(query2);
+      let departmentLists = results2;
 
-      await connection.promise().query(query, values);
-      res.redirect("/thongTinTK?themtaikhoanthanhcong");
-    } catch (error) {
-      console.error("Lỗi khi thêm tài khoản:", error);
-      res.status(500).json({
-        message: "Đã xảy ra lỗi khi thêm tài khoản",
-        error: error.message,
+      // Lấy dữ liệu bảng nhân viên
+      const query4 = "SELECT * FROM nhanvien";
+      const [results4] = await connection.query(query4);
+      let user = results4;
+
+      // Render trang với 2 biến: departmentLists và user
+      res.render("themTk.ejs", {
+        departmentLists: departmentLists,
+        user: user,
       });
+    } catch (error) {
+      console.error("Lỗi: ", error);
+      res.status(500).send("Đã có lỗi xảy ra");
     }
   },
-  phanQuyen: async (req, res) => {
-    const { TenDangNhap, MaPhongBan, Quyen, isKhoa } = req.body;
+  postthemTK: async (req, res) => {
+    const TenDangNhap = req.body.TenDangNhap;
+    const id_User = req.body.id_User;
+    const MatKhau = req.body.MatKhau;
+    const MaPhongBan = req.body.MaPhongBan;
+    const Quyen = req.body.Quyen;
+    const Khoa = req.body.isKhoa;
+    const isKhoa = Khoa ? 1 : 0;
+    const connection = await createConnection();
 
     try {
-      const query = `
+      // Cập nhật bảng thứ hai
+      const query2 = `
+      INSERT INTO taikhoannguoidung (TenDangNhap, id_User, MatKhau)
+      VALUES (?, ?, ?)
+    `;
+      await connection.query(query2, [TenDangNhap, id_User, MatKhau]);
+
+      // Cập nhật bảng đầu tiên
+      const query1 = `
           INSERT INTO role (TenDangNhap, MaPhongBan, Quyen, isKhoa)
           VALUES (?, ?, ?, ?)
       `;
+      await connection.query(query1, [
+        TenDangNhap,
+        MaPhongBan,
+        Quyen,
+        isKhoa ? 1 : 0,
+      ]);
 
-      const values = [TenDangNhap, MaPhongBan, Quyen, isKhoa ? 1 : 0];
-
-      await connection.promise().query(query, values);
-      res.redirect("/thongTinTK?phanquyenthanhcong");
+      res.redirect("/thongTinTK?Success");
     } catch (error) {
-      console.error("Lỗi khi thêm tài khoản:", error);
-      res.status(500).json({
-        message: "Đã xảy ra lỗi khi thêm tài khoản",
-        error: error.message,
-      });
+      console.error("Lỗi khi cập nhật dữ liệu: ", error);
+      res.status(500).send("Lỗi server, không thể cập nhật dữ liệu");
+    } finally {
+      await connection.end(); // Đóng kết nối
     }
   },
 
@@ -223,6 +245,50 @@ const AdminController = {
       res.render("updateNV.ejs", {
         value: user,
         departmentLists: departmentLists,
+      });
+    } catch (error) {
+      console.error("Lỗi: ", error);
+      res.status(500).send("Đã có lỗi xảy ra");
+    }
+  },
+  getUpdateTK: async (req, res) => {
+    try {
+      const TenDangNhap = req.params.TenDangNhap;
+
+      // Lấy dữ liệu tài khoản
+      const connection = await createConnection();
+      const query1 = "SELECT * FROM `taikhoannguoidung` WHERE TenDangNhap = ?";
+      const [results1] = await connection.query(query1, [TenDangNhap]);
+      let accountList = results1 && results1.length > 0 ? results1[0] : {};
+
+      // Lấy dữ liệu phòng ban
+      const query2 = "SELECT * FROM phongban";
+      const [results2] = await connection.query(query2);
+      let departmentLists = results2; // Gán kết quả vào departmentLists
+
+      // Lấy dữ liệu nhân viên
+      const id_User = accountList.id_User;
+      const query3 = "SELECT * FROM nhanvien WHERE id_User = ?";
+      const [results3] = await connection.query(query3, [id_User]);
+      id = results3 && results3.length > 0 ? results3[0] : {}; // Gán kết quả đầu tiên nếu có
+
+      //Lấy dữ liệu bảng nhân viên
+      const query4 = "SELECT * FROM nhanvien";
+      const [results4] = await connection.query(query4);
+      let user = results4; // Gán kết quả vào user
+
+      //Lấy dữ liệu quyền
+      const query5 = "SELECT * FROM `role` WHERE TenDangNhap = ?";
+      const [results5] = await connection.query(query5, [TenDangNhap]);
+      let role = results5 && results5.length > 0 ? results5[0] : {};
+
+      // Render trang với 2 biến: value và departmentLists
+      res.render("updateTK.ejs", {
+        accountList: accountList,
+        departmentLists: departmentLists,
+        user: user,
+        id: id,
+        role: role,
       });
     } catch (error) {
       console.error("Lỗi: ", error);

@@ -11,6 +11,7 @@
     <style>
       .btn {
   padding: 0.5em 1em;
+  margin-bottom: 1rem;
   border: none;
   border-radius: 5px;
   font-weight: bold;
@@ -46,6 +47,33 @@ button::before {
 
 button:hover::before {
   width: 250%;
+}
+.input-wrapper input {
+  background-color: #eee;
+  border: none;
+  font-size: 1rem;
+  width: 100%;
+  border-radius: 5px;
+  color: black;
+  box-shadow: 0 0.4rem #dfd9d9;
+  cursor: pointer;
+}
+select {
+  background-color: #eee;
+  border: none;
+  font-size: 1rem;
+  width: 100%;
+  border-radius: 5px;
+  color: black;
+  box-shadow: 0 0.4rem #dfd9d9;
+  cursor: pointer;
+}
+
+.input-wrapper input:focus {
+  outline-color: black;
+}
+select:focus{
+  outline-color: black;
 }
     </style>
 </head>
@@ -99,27 +127,29 @@ button:hover::before {
             </div>
         </div>
       </nav>
-    <div class="container mt-5 box">
+    <div class="container my-5 box">
         <h2>Thêm Phòng Ban Mới</h2>
         <form action="/themPhongBan" method="POST">
-            <div class="mb-3">
+            <div class="mb-3 col-md-4 input-wrapper">
                 <label for="maPhongBan" class="form-label">Mã Phòng Ban</label>
                 <input type="text" class="form-control" id="maPhongBan" name="maPhongBan" required>
             </div>
-            <div class="mb-3">
+            <div class="mb-3 col-md-4 input-wrapper">
                 <label for="tenPhongBan" class="form-label">Tên Phòng Ban</label>
                 <input type="text" class="form-control" id="tenPhongBan" name="tenPhongBan" required>
             </div>
-            <div class="mb-3">
+            <div class="mb-3 col-md-4 input-wrapper">
             <label for="ghiChu" class="form-label">Ghi chú</label>
             <input type="text" class="form-control" id="ghiChu" name="ghiChu">
             </div>
-            <div class="mb-3S">
+            <div class="mb-3 col-md-4">
             <label for="khoa" class="form-label">Khoa</label>
             <div class="form-check">
             <input class="form-check-input" type="checkbox" value="1" id="khoa" name="khoa">
             <label class="form-check-label" for="khoa"> isKhoa </label>
             </div>
+            </div>
+            <div>
             <button type="submit" class="btn">Thêm Phòng ban</button>
             <button class="btn mx-5" onclick="window.history.back()">Quay lại</button>
             </div>
