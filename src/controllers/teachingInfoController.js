@@ -243,6 +243,43 @@ const KhoaCheckAll = async (req, Dot, KiHoc, NamHoc) => {
 //   });
 // };
 
+const renderInfoWithValueKhoa = async (req, res) => {
+  const { Khoa, Dot, Ki, Nam } = req.body; // Lấy giá trị Khoa, Dot, Ki, Nam từ body của yêu cầu
+  const tableName = process.env.DB_TABLE_QC; // Bảng cần truy vấn
+  let query = ""; // Khởi tạo query
+
+  // Xác định query SQL với điều kiện WHERE cho Khoa, Dot, Ki, Nam
+  query = `
+    SELECT * FROM ${tableName} 
+    WHERE Khoa = ? AND Dot = ? AND KiHoc = ? AND NamHoc = ?`;
+
+  console.log({ Khoa, Dot, Ki, Nam }); // Log the incoming request parameters for debugging
+
+  // Lấy connection từ pool hoặc createConnection
+  connection.query(
+    query,
+    [Khoa, Dot, Ki, Nam], // Truyền các tham số an toàn vào query
+    (error, results) => {
+      if (error) {
+        // Trả về lỗi nếu có vấn đề trong truy vấn SQL
+        return res.status(500).json({ error: "Internal server error" });
+      }
+
+      if (results.length === 0) {
+        // Trả về thông báo nếu không tìm thấy dữ liệu
+        return res.status(404).json({ message: "No data found" });
+      }
+
+      // Trả về kết quả truy vấn dưới dạng JSON
+      return res.status(200).json({
+        results // Trả về kết quả từ query
+      });
+    }
+  );
+};
+
+
+
 const renderInfo = async (req, res) => {
   const role = req.session.role;
   const isKhoa = req.session.isKhoa;
@@ -354,4 +391,5 @@ module.exports = {
   getKhoaAndNameGvmOfKhoa,
   getTeachingInfo1,
   getTeachingInfo2,
+  renderInfoWithValueKhoa
 };

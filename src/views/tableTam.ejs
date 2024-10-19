@@ -64,14 +64,20 @@
         transform: translate(-50%, -50%);
         z-index: 1000;
       }
+
       .header-actions {
-        display: flex;          /* Flexbox container */
-        flex-wrap: wrap;        /* Wrap items if they don't fit in one line */
-        align-items: center;    /* Vertically center items */
-        gap: 10px;              /* Space between the elements */
+        display: flex;
+        /* Flexbox container */
+        flex-wrap: wrap;
+        /* Wrap items if they don't fit in one line */
+        align-items: center;
+        /* Vertically center items */
+        gap: 10px;
+        /* Space between the elements */
         justify-content: space-between;
       }
-      .right{
+
+      .right {
         margin-top: 20px;
       }
     </style>
@@ -163,7 +169,7 @@
             <div class="navbar-nav">
               <div class="nav-item dropdown">
                 <a
-                  class="nav-link dropdown-toggle "
+                  class="nav-link dropdown-toggle"
                   href="/login"
                   id="navbarDropdownUser"
                   data-bs-toggle="dropdown"
@@ -174,7 +180,7 @@
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                   <a class="nav-link" href="/xemCacLopGvm">Xem các lớp mời</a>
 
-                  <a class="nav-link " href="/classInfoGvm"
+                  <a class="nav-link" href="/classInfoGvm"
                     >Thông tin lớp giảng viên mời</a
                   >
                   <a class="nav-link" href="/infoHDGvm" role="button"
@@ -271,7 +277,6 @@
 
     <div class="container-fluid my-4">
       <div class="mx-5 flex-grow-1">
-        
         <div class="header-actions">
           <div class="left">
             <button class="btn btn-outline-primary button" id="ban-hanh">
@@ -281,46 +286,50 @@
               Thêm bảng quy chuẩn
             </button>
           </div>
-  
+
           <!-- <button class="btn btn-outline-primary button">
           <a href="/import">Thêm bảng quy chuẩn</a>
         </button> -->
-        <div class="right">
-          <div class="loc" style="margin-top: -15px;">
-            <select class="selectop" id="combobox-dot">
-              <option value="">Tất cả đợt</option>
-              <option value="1">Đợt 1</option>
-              <option value="2">Đợt 2</option>
-            </select>
-    
-            <!-- Combo box kì -->
-            <select class="selectop" id="combobox-ki">
-              <option value="">Tất cả kỳ</option>
-              <option value="1">Kỳ 1</option>
-              <option value="2">Kỳ 2</option>
-            </select>
-    
-            <!-- Combo box Năm -->
-            <select class="selectop" id="combobox-nam">
-              <option value="">Tất cả năm</option>
-              <option value="2024">2024</option>
-              <option value="2024">2025</option>
-              <option value="2024">2026</option>
-              <option value="2024">2027</option>
-            </select>
-            <select class="selectop" id="departmentFilter">
-              <option value="">Tất cả khoa</option>
-              <option value="CNTT">Công nghệ thông tin</option>
-              <option value="ATTT">An toàn thông tin</option>
-              <option value="DTVT">Điện tử viễn thông</option>
-              <option value="MM">Mật mã</option>
-            </select>       
-            <!-- <button class="export" onclick="exportSelectedData()">Xuất dữ liệu</button> -->
-            
-            <button class="button text-nowrap" id="render" 
-              style="margin-top: 17px;" 
-              onclick="filterTable()">Hiển thị
-            </button>
+          <div class="right">
+            <div class="loc" style="margin-top: -15px">
+              <select class="selectop" id="combobox-dot">
+                <option value="">Tất cả đợt</option>
+                <option value="1">Đợt 1</option>
+                <option value="2">Đợt 2</option>
+              </select>
+
+              <!-- Combo box kì -->
+              <select class="selectop" id="combobox-ki">
+                <option value="">Tất cả kỳ</option>
+                <option value="1">Kỳ 1</option>
+                <option value="2">Kỳ 2</option>
+              </select>
+
+              <!-- Combo box Năm -->
+              <select class="selectop" id="combobox-nam">
+                <option value="">Tất cả năm</option>
+                <option value="2024">2024</option>
+                <option value="2024">2025</option>
+                <option value="2024">2026</option>
+                <option value="2024">2027</option>
+              </select>
+              <select class="selectop" id="departmentFilter">
+                <option value="">Tất cả khoa</option>
+                <option value="CNTT">Công nghệ thông tin</option>
+                <option value="ATTT">An toàn thông tin</option>
+                <option value="DTVT">Điện tử viễn thông</option>
+                <option value="MM">Mật mã</option>
+              </select>
+              <!-- <button class="export" onclick="exportSelectedData()">Xuất dữ liệu</button> -->
+
+              <button
+                class="button text-nowrap"
+                id="render"
+                style="margin-top: 17px"
+                onclick="filterTable()"
+              >
+                Hiển thị
+              </button>
             </div>
           </div>
         </div>
@@ -515,10 +524,7 @@
             body: JSON.stringify(dataQC), // Gửi dữ liệu đã được cập nhật
           })
             .then((response) => {
-              if (!response.ok) {
-                throw new Error("Gửi dữ liệu thất bại");
-              }
-              return response.json();
+              alert(response.message.json);
             })
             .then((data) => {
               if (data.success) {
@@ -538,10 +544,18 @@
     <script>
       document.addEventListener("DOMContentLoaded", () => {
         const importQuyChuan = document.getElementById("quychuandukien");
+        const MaPhongBan = localStorage.getItem("MaPhongBan");
+        const role = localStorage.getItem("userRole");
 
         importQuyChuan.addEventListener("click", function (event) {
           window.location.href = "/import";
         });
+
+        // Thêm ẩn cho button nếu không phải khoa
+        if (MaPhongBan != "DAOTAO" || role == "Thường") {
+          document.getElementById("ban-hanh").style.visibility = "hidden";
+          document.getElementById("quychuandukien").style.visibility = "hidden";
+        }
 
         // Thêm sự kiện click cho phần tử có id "import"
         const importLink = document.getElementById("Import");
@@ -553,11 +567,9 @@
 
           if (isKhoa == 0) {
             // Nếu là đào tạo hoặc tài chính
-            alert("linh ko ngu" + isKhoa);
             window.location.href = "/import";
           } else {
             // Nếu là khoa
-            alert("linh ngu" + isKhoa);
             window.location.href = "/importGvmList";
           }
         });
@@ -615,21 +627,22 @@
       };
     </script>
     <script>
-    
-  function filterTable() {
-      // Lấy giá trị đã chọn
-      let dot = document.getElementById("combobox-dot").value;
-      let ki = document.getElementById("combobox-ki").value;
-      let nam = document.getElementById("combobox-nam").value;
-      let department = document.getElementById("departmentFilter").value.trim();
+      function filterTable() {
+        // Lấy giá trị đã chọn
+        let dot = document.getElementById("combobox-dot").value;
+        let ki = document.getElementById("combobox-ki").value;
+        let nam = document.getElementById("combobox-nam").value;
+        let department = document
+          .getElementById("departmentFilter")
+          .value.trim();
 
-      let tbody = document.getElementById("data-table-body");
-      let rows = tbody.getElementsByTagName("tr");
+        let tbody = document.getElementById("data-table-body");
+        let rows = tbody.getElementsByTagName("tr");
 
-      for (let i = 0; i < rows.length; i++) {
+        for (let i = 0; i < rows.length; i++) {
           let row = rows[i];
           let cells = row.getElementsByTagName("td");
-          
+
           // Giả sử thứ tự cột là: Khoa, Đợt, Kì, Năm
           let rowDepartment = cells[0].textContent.trim();
           let rowDot = cells[1].textContent.trim();
@@ -637,19 +650,20 @@
           let rowNam = cells[3].textContent.trim();
 
           // Logic lọc
-          let matchesDepartment = department === "" || rowDepartment === department;
+          let matchesDepartment =
+            department === "" || rowDepartment === department;
           let matchesDot = dot === "" || rowDot === dot;
           let matchesKi = ki === "" || rowKi === ki;
           let matchesNam = nam === "" || rowNam === nam;
 
           // Hiển thị hoặc ẩn hàng dựa trên kết quả lọc
           if (matchesDepartment && matchesDot && matchesKi && matchesNam) {
-              row.style.display = ""; // Hiển thị hàng
+            row.style.display = ""; // Hiển thị hàng
           } else {
-              row.style.display = "none"; // Ẩn hàng
+            row.style.display = "none"; // Ẩn hàng
           }
+        }
       }
-  }
     </script>
   </body>
 </html>
