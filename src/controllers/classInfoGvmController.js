@@ -51,7 +51,6 @@ const getClassInfoGvm = async (req, res) => {
     acc[teacher].push(current);
     return acc;
   }, {});
-  console.log("ds = ", groupedByTeacher);
 
   res.render("classInfoGvm.ejs", { GiangDay: groupedByTeacher });
 };
