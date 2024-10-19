@@ -25,13 +25,13 @@
   outline: 2px solid #2c9caf;
 }
 
-button:hover {
+.btn:hover {
   color: #ffffff;
   transform: scale(1.1);
   outline: 2px solid #70bdca;
   box-shadow: 4px 5px 17px -4px #268391;
 }
-button::before {
+.btn::before {
   content: "";
   position: absolute;
   left: -50px;
@@ -44,7 +44,7 @@ button::before {
   transition: width 1000ms;
 }
 
-button:hover::before {
+.btn:hover::before {
   width: 250%;
 }
     /* CSS cho bảng */
@@ -149,8 +149,7 @@ button:hover::before {
         </div>
     </div>
   </nav>
-  <div class="container-fluid my-4 mg-top box">
-    <div class="mx-5 flex-grow-1">
+  <div class="container my-5 box">
       <div class="d-flex justify-content-start mb-3">
 
         <!-- Nút Lọc màu giống nút Hiển thị -->
@@ -164,7 +163,7 @@ button:hover::before {
           });
       </script>
       </div>
-      <div>
+      <div class="pb-3">
         <table id="phongBanTable" class="table table-bordered">
           <thead>
             <tr>
@@ -197,6 +196,7 @@ button:hover::before {
           </tbody>
         </table>
       </div>
+  </div>
   <!-- // hiển thị danh sách phòng ban -->
   <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
 <!-- <script>

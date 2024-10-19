@@ -121,12 +121,38 @@ const postUpdatePhongBan = async (req, res) => {
     res.status(500).send("Lỗi server, không thể cập nhật dữ liệu");
   }
 };
+  const postUpdateTK = async (req, res) => {
+  const TenDangNhap = req.params.TenDangNhap;
+  const connection = await createConnection();
+  const id_User = req.body.id_User;
+  const MatKhau = req.body.MatKhau;
+  const MaPhongBan = req.body.MaPhongBan;
+  const Quyen = req.body.Quyen;
+  const Khoa = req.body.isKhoa;
+  const isKhoa = Khoa ? 1 : 0;
 
+  try {
+    // Cập nhật bảng đầu tiên
+    const query1 = 'UPDATE role SET MaPhongBan = ?, Quyen = ?, isKhoa = ? WHERE TenDangNhap = ?';
+    await connection.query(query1, [MaPhongBan, Quyen, isKhoa, TenDangNhap]);
 
+    // Cập nhật bảng thứ hai
+    const query2 = 'UPDATE taikhoannguoidung SET id_User = ?, MatKhau = ? WHERE TenDangNhap = ?';
+    await connection.query(query2, [id_User, MatKhau, TenDangNhap]);
+
+    res.redirect('/thongTinTK?Success');
+  } catch (error) {
+    console.error("Lỗi khi cập nhật dữ liệu: ", error);
+    res.status(500).send("Lỗi server, không thể cập nhật dữ liệu");
+  } finally {
+    await connection.end(); // Đóng kết nối
+  }
+};
 
 
   module.exports = {
     postUpdateNV,
     postDeleteNV,
-    postUpdatePhongBan
+    postUpdatePhongBan,
+    postUpdateTK,
   }

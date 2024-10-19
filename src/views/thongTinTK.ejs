@@ -25,13 +25,13 @@
   outline: 2px solid #2c9caf;
 }
 
-button:hover {
+.btn:hover {
   color: #ffffff;
   transform: scale(1.1);
   outline: 2px solid #70bdca;
   box-shadow: 4px 5px 17px -4px #268391;
 }
-button::before {
+.btn::before {
   content: "";
   position: absolute;
   left: -50px;
@@ -44,7 +44,7 @@ button::before {
   transition: width 1000ms;
 }
 
-button:hover::before {
+.btn:hover::before {
   width: 250%;
 }
     /* CSS cho bảng */
@@ -151,12 +151,8 @@ button:hover::before {
     </div>
   </nav>
 
-  <div class="container-fluid my-4 mg-top box">
-    <div class="mx-5 flex-grow-1">
+    <div class="container my-5 box">
       <div class="d-flex justify-content-start mb-3">
-
-        <!-- Nút Lọc màu giống nút Hiển thị -->
-
         <button id="createTk" class="btn">
           <i class="bi bi-plus-circle"></i> Thêm tài khoản
       </button>        
@@ -165,9 +161,8 @@ button:hover::before {
             window.location.href = '/themTK';
           });
         </script>
-        <button class="btn mx-5" onclick="window.location.href='/phanQuyen'">Phân quyền</button>
       </div>
-      <div>
+      <div class="pb-3">
         <table class="table table-bordered">
           <thead>
             <tr>
@@ -178,6 +173,7 @@ button:hover::before {
               <th>Mã Phòng ban</th>
               <th>Quyền</th> 
               <th>Khoa</th>
+              <th>Hành động</th>
 
             </tr>
           </thead>
@@ -192,7 +188,12 @@ button:hover::before {
                   <td><%= accountLists[i].MaPhongBan %></td>
                   <td><%= accountLists[i].Quyen %></td>
                   <td><%= accountLists[i].isKhoa %></td>
-
+                  <td class="d-flex" style="border: none;">
+                    <button class="action-button edit"
+                        onclick="editTK(this, '<%=(accountLists[i].TenDangNhap)%>')">
+                        ✏️
+                      </button>
+                  </td>
                 </tr>
               <% } %>
             <% } else { %>
@@ -202,50 +203,16 @@ button:hover::before {
             <% } %>
           </tbody>
         </table>
-        <!DOCTYPE html>
-<html lang="en">
-<head>
-    <!-- Các thẻ meta, title, và link CSS ở đây -->
-</head>
-<body>
-    <!-- Nội dung HTML của trang -->
-    
-    <!-- Bảng với các checkbox -->
-    <table class="table table-bordered">
-        <!-- ... nội dung bảng ... -->
-    </table>
-
-    <!-- Các script khác nếu có -->
-    
-    <!-- Script xử lý checkbox -->
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const selectAllCheckbox = document.getElementById('selectAll');
-            const rowCheckboxes = document.querySelectorAll('.row-checkbox');
-
-            selectAllCheckbox.addEventListener('change', function() {
-                rowCheckboxes.forEach(checkbox => {
-                    checkbox.checked = selectAllCheckbox.checked;
-                });
-            });
-
-            rowCheckboxes.forEach(checkbox => {
-                checkbox.addEventListener('change', function() {
-                    selectAllCheckbox.checked = Array.from(rowCheckboxes).every(cb => cb.checked);
-                });
-            });
-        });
-    </script>
-</body>
-</html>
       </div>
     </div>
-  </div>
-  </div>
   <script>
-
+    function editTK(button, MaNhanVien) {
+      console.log(MaNhanVien);
+    hre = '/updateTK/' + MaNhanVien;
+    window.location.href = hre;
+  
+  }
   </script>
-
 </body>
 
 </html>

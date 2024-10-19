@@ -23,26 +23,7 @@ const getaccountList = async (req, res) => {
       res.status(500).send("Lỗi server, không thể lấy dữ liệu");
     }
   };
-  const getphanQuyen = async (req, res) => {
-    try {
-      const accountQuery = 'SELECT * FROM taikhoannguoidung'; // Câu truy vấn cho tài khoản
-        const departmentQuery = 'SELECT * FROM phongban'; // Câu truy vấn cho phòng ban
 
-        const connection = await createConnection();
-
-        const [accountResults] = await connection.query(accountQuery);
-        const [departmentResults] = await connection.query(departmentQuery);
-
-        // Render trang phanQuyen.ejs và truyền cả hai danh sách vào
-        res.render("phanQuyen.ejs", {
-            accountList: accountResults,
-            departmentList: departmentResults
-        });
-    } catch (error) {
-      console.error("Lỗi khi lấy dữ liệu từ cơ sở dữ liệu: ", error);
-      res.status(500).send("Lỗi server, không thể lấy dữ liệu");
-    }
-  };
   const getnhanvienList = async (req, res) => {
     try {
       query = 'SELECT nhanvien.id_User, nhanvien.MaNhanVien, nhanvien.TenNhanVien, nhanvien.GioiTinh, nhanvien.MaPhongBan, nhanvien.ChucVu, nhanvien.MonGiangDayChinh, nhanvien.DienThoai, nhanvien.CCCD, nhanvien.NgayCapCCCD, nhanvien.NoiCapCCCD, nhanvien.HocVi, phongban.TenPhongBan, taikhoannguoidung.TenDangNhap, taikhoannguoidung.MatKhau  From nhanvien INNER JOIN taikhoannguoidung ON nhanvien.id_User = taikhoannguoidung.id_User INNER JOIN phongban ON nhanvien.MaPhongBan = phongban.MaPhongBan ORDER BY nhanvien.id_User ASC'; // Truy vấn lấy tất cả người dùng  
@@ -119,6 +100,7 @@ const getaccountList = async (req, res) => {
       res.status(500).send("Lỗi server, không thể lấy dữ liệu");
     }
   }
+
   
 
   module.exports = {
@@ -127,6 +109,5 @@ const getaccountList = async (req, res) => {
     getnhanvienList,
     getMaPhongBanList,
     getidUserLists,
-    getphanQuyen,
     getUpdatePhongBan,
   };
