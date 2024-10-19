@@ -48,6 +48,7 @@ const AdminController = {
           MonGiangDayChinh, CacMonLienQuan
       ];
 
+      console.log(MaPhongBan);
       // Chèn nhân viên và lấy id_User vừa tạo
       const [result] = await connection.promise().query(queryInsert, valuesInsert);
       const id_User = result.insertId; // Lấy id_User vừa được tạo

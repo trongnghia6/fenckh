@@ -179,6 +179,7 @@ button{
       <table id="nhanVienTable" class="table table-bordered">
           <thead>
             <tr>
+              <th>STT</th>
               <th>Mã nhân viên</th>
               <th>Tên nhân viên</th>
               <th>Giới tính</th>
@@ -200,6 +201,7 @@ button{
             <% if (nhanvienLists && nhanvienLists.length > 0) { %>
               <% for (var i = 0; i < nhanvienLists.length; i++) { %>
                 <tr>
+                  <td><%= i+1 %></td>
                   <td><%= nhanvienLists[i].MaNhanVien %></td> <!-- Hiển thị tên tài khoản -->
                   <td><%= nhanvienLists[i].TenNhanVien %></td> <!-- Hiển thị email -->
                   <td><%= nhanvienLists[i].GioiTinh %></td>

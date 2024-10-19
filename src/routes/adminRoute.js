@@ -21,7 +21,7 @@ router.get('/themPhongBan', AdminController.showThemPhongBan);
 router.post('/themPhongBan', AdminController.themPhongBan);
 // router.post('/themTK', );
 router.get('/themNhanVien', AdminController.showThemNhanVien);
-router.post('/themNhanVien', AdminController.themNhanVien)
+router.post('/themNhanVien', AdminController.themNhanVien);
 
 
 // hiển thị danh sách
