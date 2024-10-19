@@ -438,7 +438,7 @@
                             <td rowspan="<%= courses.length %>"><%= totalSoTiet %></td>
                             <td rowspan="<%= courses.length %>"><%= course.Khoa %></td>
                             <td rowspan="<%= courses.length %>">
-                              <button class="action-button view" onclick="viewClass('<%= parseInt(course.id_Gvm) - 1 %>')">👁️</button>
+                              <button class="action-button view" onclick="viewClass(this, '<%= parseInt(course.id_Gvm) - 1 %>')">👁️</button>
                             </td>
                           <% } %>
                         </tr>
@@ -595,6 +595,12 @@
         }
       }
 
+      function viewClass(button, index) {
+        var hre = "/viewGvm/" + index;
+        window.location.href = hre;
+      }
+
+      /*
       async function viewClass(index) {
         gvmLists = await fetchGVMLists();
 
@@ -628,6 +634,7 @@
         // Hiển thị modal
         document.getElementById("modal").style.display = "flex";
       }
+      */
 
       // Đóng modal
       function closeModal() {
