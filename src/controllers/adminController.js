@@ -34,8 +34,8 @@ const AdminController = {
       DiaChiHienNay,
       ChucVu,
       NoiCongTac,
-      //MaPhongBan,
-      department,
+      MaPhongBan,
+      //department,
       MaSoThue,
       SoTaiKhoan,
       NganHang,
@@ -67,8 +67,8 @@ const AdminController = {
         DiaChiHienNay,
         ChucVu,
         NoiCongTac,
-        //MaPhongBan,
-        department,
+        MaPhongBan,
+        //department,
         MaSoThue,
         SoTaiKhoan,
         NganHang,
@@ -85,7 +85,7 @@ const AdminController = {
       const id_User = result.insertId; // Lấy id_User vừa được tạo
 
       // Tạo MaNhanVien bằng cách ghép MaPhongBan với id_User
-      const MaNhanVien = `${department}${id_User}`;
+      const MaNhanVien = `${MaPhongBan}${id_User}`;
 
       // Cập nhật lại MaNhanVien trong CSDL
       const queryUpdate = `UPDATE nhanvien SET MaNhanVien = ? WHERE id_User = ?`;
@@ -156,6 +156,7 @@ const AdminController = {
     const isKhoa = Khoa ? 1 : 0;
     const connection = await createConnection();
 
+    console.log("isKhoa = ", isKhoa);
     try {
       // Cập nhật bảng thứ hai
       const query2 = `

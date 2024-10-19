@@ -1195,6 +1195,7 @@ const updateAllTeachingInfo = async () => {
       } = item;
 
       const DanhXung = getDanhXung(GioiTinh);
+      let SoTiet = QuyChuan;
       let SoTien = QuyChuan * 1000000; // Tính toán số tiền
       let TruThue = 0; // Giả định không thu thuế
       let MaBoMon = 0; // Giả định giá trị mặc định là 0
@@ -1216,7 +1217,7 @@ const updateAllTeachingInfo = async () => {
         NgayBatDau,
         NgayKetThuc,
         KiHoc,
-        0, // SoTiet - nếu không có giá trị thì để 0 hoặc kiểm tra
+        SoTiet, // SoTiet - nếu không có giá trị thì để 0 hoặc kiểm tra
         SoTien,
         TruThue,
         Dot,
