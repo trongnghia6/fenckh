@@ -799,14 +799,6 @@ function hideSuggestions() {
 }
 
 
-    // Hàm ẩn gợi ý
-    function hideSuggestions() {
-      const suggestionsContainer = document.querySelector('.suggestions');
-      if (suggestionsContainer) {
-        suggestionsContainer.remove();
-      }
-    }
-
     // Hàm xử lí : ấn lưu dữ liệu sẽ cập nhật vào localStorage, db chưa thay đổi
     function updateLocalTable() {
       const rows = document.querySelectorAll('#tableBody tr'); // Lấy tất cả các hàng trong bảng
