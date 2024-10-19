@@ -40,7 +40,6 @@
 <style>
   body {
     font-family: Arial, sans-serif;
-    margin: 20px;
   }
   
   .class-table {
@@ -343,42 +342,38 @@
                 </select>
                 
                 <script>
-    
                   function filterTable() {
-                      // Lấy giá trị đã chọn
-                      let dot = document.getElementById("combobox-dot").value;
-                      let ki = document.getElementById("combobox-ki").value;
-                      let nam = document.getElementById("combobox-nam").value;
-                      let department = document.getElementById("departmentFilter").value.trim();
+                    // Get selected values
+                    let dot = document.getElementById("combobox-dot").value;
+                    let ki = document.getElementById("combobox-ki").value;
+                    let nam = document.getElementById("combobox-nam").value;
+                    let department = document.getElementById("departmentFilter").value.trim();
                 
-                      let tbody = document.getElementById("data-table-body");
-                      let rows = tbody.getElementsByTagName("tr");
+                    let tbody = document.getElementById("data-table-body");
+                    let rows = tbody.getElementsByTagName("tr");
                 
-                      for (let i = 0; i < rows.length; i++) {
-                          let row = rows[i];
-                          let cells = row.getElementsByTagName("td");
-                          
-                          // Giả sử thứ tự cột là: Khoa, Đợt, Kì, Năm
-                          let rowDepartment = cells[0].textContent.trim();
-                          let rowDot = cells[1].textContent.trim();
-                          let rowKi = cells[2].textContent.trim();
-                          let rowNam = cells[3].textContent.trim();
+                    for (let i = 0; i < rows.length; i++) {
+                      let row = rows[i];
+                      let rowDepartment = row.getAttribute("data-department");
+                      let rowDot = row.getAttribute("data-dot");
+                      let rowKi = row.getAttribute("data-ki");
+                      let rowNam = row.getAttribute("data-nam");
                 
-                          // Logic lọc
-                          let matchesDepartment = department === "" || rowDepartment === department;
-                          let matchesDot = dot === "" || rowDot === dot;
-                          let matchesKi = ki === "" || rowKi === ki;
-                          let matchesNam = nam === "" || rowNam === nam;
+                      // Filtering logic
+                      let matchesDepartment = department === "" || rowDepartment === department;
+                      let matchesDot = dot === "" || rowDot === dot;
+                      let matchesKi = ki === "" || rowKi === ki;
+                      let matchesNam = nam === "" || rowNam === nam;
                 
-                          // Hiển thị hoặc ẩn hàng dựa trên kết quả lọc
-                          if (matchesDepartment && matchesDot && matchesKi && matchesNam) {
-                              row.style.display = ""; // Hiển thị hàng
-                          } else {
-                              row.style.display = "none"; // Ẩn hàng
-                          }
+                      // Show or hide row based on filter results
+                      if (matchesDepartment && matchesDot && matchesKi && matchesNam) {
+                        row.style.display = ""; // Show row
+                      } else {
+                        row.style.display = "none"; // Hide row
                       }
+                    }
                   }
-                    </script>
+                </script>
                 <button class="button text-nowrap" id="render" 
                   style="margin-top: 17px;" 
                   onclick="filterTable()">Hiển thị
@@ -394,6 +389,9 @@
                     <th>Môn học</th>
                     <th>Tên lớp</th>
                     <th>Số tín chỉ</th>
+                    <th>Đợt</th>
+                    <th>Kỳ</th>
+                    <th>Năm</th>
                     <th>Ngày bắt đầu</th>
                     <th>Ngày kết thúc</th>
                     <th>Số tiết</th>
@@ -403,14 +401,14 @@
                     <th>Chi tiết giảng viên mời</th>
                   </tr>
                 </thead>
-                <tbody class="teacher-group">
+                <tbody class="teacher-group" id="data-table-body">
                   <% let index = 1; %> 
                   <% for (let teacher of Object.keys(GiangDay)) { %> 
                     <% let courses = GiangDay[teacher]; %> 
                     <% let totalSoTiet = courses.reduce((total, course) => total + course.QuyChuan, 0); %>
-                    <tr class="teacher-group" data-department="<%= courses[0].Khoa %>">
+                    <tr class="teacher-group" data-department="<%= courses[0].Khoa %>" data-dot="<%= courses[0].Dot %>" data-ki="<%= courses[0].KiHoc %>" data-nam="<%= courses[0].NamHoc %>">
                       <% courses.forEach((course, courseIndex) => { %>
-                        <tr data-department="<%= course.Khoa %>">
+                        <tr data-department="<%= course.Khoa %>" data-dot="<%= course.Dot %>" data-ki="<%= course.KiHoc %>" data-nam="<%= course.NamHoc %>">
                           <% if (courseIndex === 0) { %>
                             <td rowspan="<%= courses.length %>"><%= index %></td>
                             <td rowspan="<%= courses.length %>"><%= course.GiaoVienGiangDay %></td>
@@ -419,7 +417,9 @@
                           <td><%= course.LopHocPhan %></td>
                           <td><%= course.TenLop %></td>
                           <td><%= course.SoTinChi %></td>
-                          
+                          <td><%= course.Dot %></td>
+                          <td><%= course.KiHoc %></td>
+                          <td><%= course.NamHoc %></td>
                           <% function formatDate(dateStr) { %>
                             <% if (!dateStr) return 'N/A'; %>
                             <% const date = new Date(dateStr); %>
