@@ -405,6 +405,8 @@
             return;
           }
 
+
+
           // Xử lý dữ liệu giảng dạy
           const globalData = await teachingResponse.json();
           console.log('Tổng hợp bảng dữ liệu:', globalData.results);
@@ -441,9 +443,13 @@
         });
 
         if (!teachingResponse.ok) {
-          alert("Lỗi truy vấn!");
+          // Lấy thông tin chi tiết lỗi từ server
+          const errorData = await teachingResponse.json(); 
+          // Hiển thị thông báo lỗi từ server
+          alert(errorData.message || "Đã có lỗi xảy ra!");
           return;
         }
+
 
         // Xử lý dữ liệu giảng dạy ngay khi tải trang
         const globalData = await teachingResponse.json();

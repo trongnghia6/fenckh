@@ -5,13 +5,6 @@ require("dotenv").config();
 const login = async (req, res) => {
   const { username, password } = req.body;
 
-  // Lấy tên người dùng
-  query = `select TenNhanVien from nhanvien 
-            join taikhoannguoidung on nhanvien.id_User = taikhoannguoidung.id_User
-            where TenDangNhap = ?`;
-  const [TenNhanViens] = await connection.promise().query(query, [username]);
-  const TenNhanVien = TenNhanViens[0].TenNhanVien;
-
   try {
     // Truy vấn người dùng từ cơ sở dữ liệu
     const [users] = await connection
@@ -27,6 +20,15 @@ const login = async (req, res) => {
       // So sánh mật khẩu
       if (user.MatKhau == password) {
         req.session.userId = user.id_User; // Lưu id_User vào session
+
+        // Lấy tên người dùng
+        query = `select TenNhanVien from nhanvien 
+            join taikhoannguoidung on nhanvien.id_User = taikhoannguoidung.id_User
+            where TenDangNhap = ?`;
+        const [TenNhanViens] = await connection
+          .promise()
+          .query(query, [username]);
+        const TenNhanVien = TenNhanViens[0].TenNhanVien;
 
         // Phân quyền người dùng
         const [roles] = await connection
@@ -45,7 +47,7 @@ const login = async (req, res) => {
 
         let url;
 
-        if (role === "ADMIN") {
+        if (role == "ADMIN" || role == "") {
           req.session.role = "ADMIN"; // Gán vai trò admin nếu không có vai trò
           req.session.MaPhongBan = null;
           url = "/admin"; // Đăng nhập vào trang admin

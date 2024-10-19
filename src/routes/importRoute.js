@@ -57,7 +57,7 @@ router.post("/ban-hanh", role.checkDaotaoRoleThiHanh, async (req, res) => {
     const result = await obj.importTableQC(req.body);
 
     // Kiểm tra kết quả trả về và phản hồi cho client
-    if (result === true) {
+    if (result == true) {
       res
         .status(200)
         .json({ success: true, message: "Dữ liệu đã được lưu thành công!" });
@@ -75,7 +75,6 @@ router.post("/ban-hanh", role.checkDaotaoRoleThiHanh, async (req, res) => {
     });
   }
 });
-
 
 // Định tuyến cho POST request tới /index / save - data
 router.post("/viewtam", role.checkDaotaoRoleThiHanh, async (req, res) => {

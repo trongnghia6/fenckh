@@ -474,6 +474,8 @@
           globalData = rs.results; // Dữ liệu kết quả
           const check = rs.check; // Dữ liệu check
 
+          localStorage.setItem("check", check);
+
           renderTable(globalData); // Gọi hàm renderTable sau khi đã có đủ dữ liệu
 
           calculateTotals();
@@ -584,7 +586,6 @@
           }
 
           const check = localStorage.getItem("check");
-
           // Nếu là đào tạo hoặc tài chính
           if (MaPhongBan == "DAOTAO") {
             if (check.includes(MaPhongBan)) {
@@ -600,7 +601,8 @@
               // Ngăn checkbox tổng không cho thay đổi
               disableCheckAll("daoTao");
             }
-          } else if (MaPhongBan == "TAICHINH") {
+          }
+          if (MaPhongBan == "TAICHINH") {
             if (check.includes(MaPhongBan)) {
               // Ngăn thay đổi trạng thái check box đào tạo
               daoTaoCheckbox.addEventListener("click", function (e) {

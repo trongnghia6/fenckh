@@ -185,7 +185,7 @@ const KhoaCheckAll = async (req, Dot, KiHoc, NamHoc) => {
   ]);
 
   let checkAll3 = true;
-  for (let j = 0; j < check2.length; j++) {
+  for (let j = 0; j < check3.length; j++) {
     if (check3[j].TaiChinhDuyet == 0) {
       checkAll3 = false;
       break;
@@ -194,7 +194,6 @@ const KhoaCheckAll = async (req, Dot, KiHoc, NamHoc) => {
   if (checkAll3 == true) {
     kq += "TAICHINH,";
   }
-
   // Trả về kết quả
   return kq;
 };
@@ -248,6 +247,17 @@ const renderInfoWithValueKhoa = async (req, res) => {
   const tableName = process.env.DB_TABLE_QC; // Bảng cần truy vấn
   let query = ""; // Khởi tạo query
 
+  // Gọi hàm KhoaCheckAll để kiểm tra điều kiện duyệt
+  const kq = await KhoaCheckAll(req, Dot, Ki, Nam);
+
+  // Kiểm tra nếu "TAICHINH" không có trong kết quả, trả về thông báo chưa duyệt
+
+  if (!kq.includes("TAICHINH")) {
+    return res
+      .status(403)
+      .json({ message: "Quy chuẩn chưa được duyệt bởi Tài chính" });
+  }
+
   // Xác định query SQL với điều kiện WHERE cho Khoa, Dot, Ki, Nam
   query = `
     SELECT * FROM ${tableName} 
@@ -267,18 +277,18 @@ const renderInfoWithValueKhoa = async (req, res) => {
 
       if (results.length === 0) {
         // Trả về thông báo nếu không tìm thấy dữ liệu
-        return res.status(404).json({ message: "No data found" });
+        return res
+          .status(404)
+          .json({ message: "Quy chuẩn chưa được duyệt bởi Tài chính" });
       }
 
       // Trả về kết quả truy vấn dưới dạng JSON
       return res.status(200).json({
-        results // Trả về kết quả từ query
+        results, // Trả về kết quả từ query
       });
     }
   );
 };
-
-
 
 const renderInfo = async (req, res) => {
   const role = req.session.role;
@@ -304,7 +314,6 @@ const renderInfo = async (req, res) => {
 
   // Gọi hàm KhoaCheckAll để kiểm tra
   const check = await KhoaCheckAll(req, Dot, Ki, Nam);
-
   //const connection = await createConnection();
   // Thực thi câu truy vấn với các tham số an toàn
   connection.query(
@@ -391,5 +400,5 @@ module.exports = {
   getKhoaAndNameGvmOfKhoa,
   getTeachingInfo1,
   getTeachingInfo2,
-  renderInfoWithValueKhoa
+  renderInfoWithValueKhoa,
 };
