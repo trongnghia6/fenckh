@@ -157,19 +157,6 @@ select:focus{
             </div>
             <div class="row mb-3">
               <div class="col-md-4 input-wrapper">
-                <label for="MaPhongBan" class="form-label">Mã Phòng ban</label>
-                <select id="MaPhongBan" name="MaPhongBan">
-                    <% departmentLists.forEach(function(departmentLists) { %>
-                      <option value="<%= departmentLists.MaPhongBan %>"
-                        <%= String(departmentLists.MaPhongBan) === String(id.MaPhongBan) ? 'selected': '' %>>
-                        <%= departmentLists.MaPhongBan %>
-                      </option>
-                    <% }); %>
-                  </select>
-              </div>
-            </div>
-            <div class="row mb-3">
-              <div class="col-md-4 input-wrapper">
                 <label for="Quyền" class="form-label">Quyền</label>
                 <input type="text" class="form-control" id="Quyen" name="Quyen" value="<%= role.Quyen %>" required>
               </div>
@@ -178,12 +165,12 @@ select:focus{
               <div class="col-md-4">
               <label for="khoa" class="form-label">Khoa</label>
               <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="1" id="khoa" name="khoa" <%= role.isKhoa ? "checked" : "" %>>
-                <label class="form-check-label" for="khoa"> isKhoa </label>
+                <input class="form-check-input" type="checkbox" value="1" id="isKhoa" name="isKhoa" <%= role.isKhoa ? "checked" : "" %>>
+                <label class="form-check-label" for="isKhoa"> isKhoa </label>
               </div>
               </div>
             </div>
-            <button type="submit" class="btn">Thêm Tài Khoản</button>
+            <button type="submit" class="btn">Cập nhật</button>
             <button class="btn mx-5" onclick="window.history.back()">Quay lại</button>
         </form>
     </div>

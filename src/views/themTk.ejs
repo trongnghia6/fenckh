@@ -154,18 +154,6 @@ select:focus{
               <input type="password" class="form-control" id="MatKhau" name="MatKhau" required>
             </div>
           </div>
-          <div class="row mb-3 ">
-            <div class="col-md-4 input-wrapper">
-              <label for="MaPhongBan" class="form-label">Mã Phòng ban</label>
-              <select id="MaPhongBan" name="MaPhongBan">
-                  <% departmentLists.forEach(function(departmentLists) { %>
-                    <option value="<%= departmentLists.MaPhongBan %>">
-                      <%= departmentLists.MaPhongBan %>
-                    </option>
-                  <% }); %>
-                </select>
-            </div>
-          </div>
           <div class="row mb-3">
             <div class="col-md-4 input-wrapper">
               <label for="Quyền" class="form-label">Quyền</label>
@@ -175,8 +163,8 @@ select:focus{
           <div class="mb-3">
             <label for="khoa" class="form-label">Khoa</label>
             <div class="form-check">
-            <input class="form-check-input" type="checkbox" value="1" id="khoa" name="khoa">
-            <label class="form-check-label" for="khoa"> isKhoa </label>
+            <input class="form-check-input" type="checkbox" value="1" id="isKhoa" name="isKhoa">
+            <label class="form-check-label" for="isKhoa"> isKhoa </label>
             </div>
           </div>
           <button type="submit" class="btn">Thêm Tài Khoản</button>
