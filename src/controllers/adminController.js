@@ -34,8 +34,7 @@ const AdminController = {
       DiaChiHienNay,
       ChucVu,
       NoiCongTac,
-      //MaPhongBan,
-      department,
+      MaPhongBan,
       MaSoThue,
       SoTaiKhoan,
       NganHang,
@@ -67,8 +66,7 @@ const AdminController = {
         DiaChiHienNay,
         ChucVu,
         NoiCongTac,
-        //MaPhongBan,
-        department,
+        MaPhongBan,
         MaSoThue,
         SoTaiKhoan,
         NganHang,
@@ -85,7 +83,7 @@ const AdminController = {
       const id_User = result.insertId; // Lấy id_User vừa được tạo
 
       // Tạo MaNhanVien bằng cách ghép MaPhongBan với id_User
-      const MaNhanVien = `${department}${id_User}`;
+      const MaNhanVien = `${MaPhongBan}${id_User}`;
 
       // Cập nhật lại MaNhanVien trong CSDL
       const queryUpdate = `UPDATE nhanvien SET MaNhanVien = ? WHERE id_User = ?`;
