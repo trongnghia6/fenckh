@@ -524,9 +524,14 @@
             body: JSON.stringify(dataQC), // Gửi dữ liệu đã được cập nhật
           })
             .then((response) => {
-              alert(response.message.json);
+              // Kiểm tra nếu phản hồi từ server là OK
+              if (!response.ok) {
+                throw new Error("Server trả về lỗi"); // Nếu không OK, ném lỗi để vào catch
+              }
+              return response.json(); // Chuyển phản hồi sang JSON
             })
             .then((data) => {
+              // Kiểm tra dữ liệu trả về có chứa thuộc tính success hay không
               if (data.success) {
                 alert("Ban hành thành công!");
               } else {
@@ -534,6 +539,7 @@
               }
             })
             .catch((error) => {
+              // Xử lý lỗi
               alert("Gửi dữ liệu thất bại!");
               console.error("Error:", error);
             });

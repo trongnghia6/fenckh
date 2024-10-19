@@ -30,7 +30,6 @@ const getaccountList = async (req, res) => {
       const connection = await createConnection(); // Kết nối tới cơ sở dữ liệu
       const [results, fields] = await connection.query(query); // Thực hiện truy vấn
       nhanvienLists = results; // Gán kết quả vào nhanvienLists
-      console.log(nhanvienLists);
   
       // Render trang nhanVien.ejs và truyền danh sách tài khoản vào
       res.render("nhanVien.ejs", { nhanvienLists: nhanvienLists });

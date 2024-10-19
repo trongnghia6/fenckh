@@ -242,8 +242,8 @@
           </select>
           <button id="getData" class="button text-nowrap">Lấy bảng quy chuẩn</button>
           <button id="infoGvm" class="button text-nowrap">Xem bảng quy chuẩn</button>
-          <button id="update-qc" onclick="updateLocalTable()" class="button mx-3">Lưu tạm thời</button>
-          <button id="update-qc" onclick="submitData()" class="button mx-3">Lưu</button>
+          <button id="update-qc" onclick="updateLocalTable()" class="button mx-3 luuTamThoi">Lưu tạm thời</button>
+          <button id="update-qc" onclick="submitData()" class="button mx-3 luu">Lưu</button>
         </div>
 
       </div>
@@ -384,7 +384,6 @@
     // dùng window onclick đéo được
     document.addEventListener("DOMContentLoaded", function () {
       const role = localStorage.getItem("userRole");
-      //alert(role ? role : "Vai trò người dùng là null.");
 
       // Chỉ cho nhập ngày bắt đầu ngày kết thúc với role thi hành
       // if (role && role.includes('GV_CNBM')) {
@@ -644,6 +643,7 @@
         ngayKetThucTd.appendChild(ngayKetThucInput);
         tableRow.appendChild(ngayKetThucTd);
 
+        
 
         let khoaCheckboxTd, khoaCheckbox;
         // Điều kiện ẩn checkbox Khoa nếu role không phải "CNTT_ALL"
@@ -658,7 +658,17 @@
           tableRow.appendChild(khoaCheckboxTd);
         }
 
+        if (role == "GV"){
+          giaoVienGiangDayInput.readOnly = true;
+          boMonInput.readOnly = true;
+          ngayBatDauInput.readOnly = true;
+          // Ngăn người dùng thay đổi trạng thái ngày kết thúc
+          ngayKetThucInput.readOnly = true;
+
+        }
+
         const check = localStorage.getItem("check");
+     
         // Phân quyền theo phòng ban
         if (isKhoa == 1) { // Nếu là khoa
           if (check.includes(MaPhongBan)) {
@@ -672,13 +682,17 @@
             // Ngăn người dùng thay đổi trạng thái ngày kết thúc
             ngayKetThucInput.readOnly = true;
 
+            if (role == "Lãnh đạo khoa"){
+              khoaCheckbox.addEventListener('click', function (e) {
+                e.preventDefault(); // Ngăn người dùng thay đổi trạng thái checkbox
+              });
+            
+              // Ngăn checkbox tổng của 'khoa' không cho thay đổi
+              disableCheckAll('khoa');
+            
+            }
             // Ngăn người dùng thay đổi trạng thái checkbox
-            khoaCheckbox.addEventListener('click', function (e) {
-              e.preventDefault(); // Ngăn người dùng thay đổi trạng thái checkbox
-            });
 
-            // Ngăn checkbox tổng của 'khoa' không cho thay đổi
-            disableCheckAll('khoa');
           }
         }
 
@@ -1074,7 +1088,11 @@
       }
 
       //document.querySelector('.role').innerText = `${Role}`;
+      if (Role == 'GV'){
+        document.querySelector('.luuTamThoi').style.display = 'none';
+        document.querySelector('.luu').style.display = 'none';
 
+      }
     };
   </script>
 </body>
