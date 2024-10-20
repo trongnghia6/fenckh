@@ -254,10 +254,11 @@
                 class="filter"
                 onchange="filterClasses()"
               >
-                <option value="">Công nghệ thông tin</option>
-                <option value="">An toàn thông tin</option>
-                <option value="">Điện tử viễn thông</option>
-                <option value="">Mật mã</option>
+                <option value="">Tất cả</option>
+                <option value="CNTT">Công nghệ thông tin</option>
+                <option value="ATTT">An toàn thông tin</option>
+                <option value="DTVT">Điện tử viễn thông</option>
+                <option value="MM">Mật mã</option>
                 <!-- Các tùy chọn lọc khác -->
               </select>
             </div>
@@ -582,6 +583,26 @@
 
         document.querySelector(".role").innerText = `${Role}`;
       };
+    </script>
+    <script>
+      function filterClasses() {
+    let filterValue = document.getElementById("filterByDepartment").value;
+    let table = document.getElementById("classTable");
+    let tr = table.getElementsByTagName("tr");
+
+    for (let i = 1; i < tr.length; i++) {
+        let td = tr[i].getElementsByTagName("td")[1]; // Lấy mã giảng viên mời
+        if (td) {
+            let textValue = td.textContent || td.innerText;
+            // Kiểm tra xem mã khoa có trong mã giảng viên mời không
+            if (filterValue === "" || textValue.startsWith(filterValue)) {
+                tr[i].style.display = ""; // Hiển thị hàng
+            } else {
+                tr[i].style.display = "none"; // Ẩn hàng
+            }
+        }
+    }
+    }
     </script>
   </body>
 </html>
