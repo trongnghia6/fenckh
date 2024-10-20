@@ -37,7 +37,59 @@
         /* Viền đen xung quanh nhóm giảng viên */
       }
     </style>
-
+<style>
+  body {
+    font-family: Arial, sans-serif;
+  }
+  
+  .class-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    table-layout: auto; /* Cho phép bảng tự điều chỉnh kích thước cột */
+  }
+  
+  .class-table th, .class-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+    white-space: normal; /* Cho phép xuống dòng */
+    word-wrap: break-word; /* Chia từ và xuống dòng khi cần */
+  }
+  
+  .class-table th {
+    background-color: #007BFF; /* Đổi màu nền tiêu đề thành xanh dương */
+    color: white;
+    font-weight: bold;
+  }
+  
+  .class-table tbody tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+  
+  .class-table tbody tr:hover {
+    background-color: #ddd;
+  }
+  
+  .action-button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 5px 10px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+  
+  .action-button:hover {
+    background-color: #45a049;
+  }
+  
+  /* Điều chỉnh kích thước các cột */
+  .class-table th, .class-table td {
+    min-width: 50px; /* Đặt kích thước tối thiểu cho cột để không bị quá hẹp */
+  }
+  
+</style>
     <!-- Phân quyền -->
     <script>
       document.addEventListener("DOMContentLoaded", () => {
@@ -264,25 +316,22 @@
                 
               <div class="loc" style="margin-top: -15px;">
                 <select class="selectop" id="combobox-dot">
-                  <option value="">Tất cả đợt</option>
                   <option value="1">Đợt 1</option>
                   <option value="2">Đợt 2</option>
                 </select>
         
                 <!-- Combo box kì -->
                 <select class="selectop" id="combobox-ki">
-                  <option value="">Tất cả kỳ</option>
                   <option value="1">Kỳ 1</option>
                   <option value="2">Kỳ 2</option>
                 </select>
         
                 <!-- Combo box Năm -->
                 <select class="selectop" id="combobox-nam">
-                  <option value="">Tất cả năm</option>
                   <option value="2024">2024</option>
-                  <option value="2024">2025</option>
-                  <option value="2024">2026</option>
-                  <option value="2024">2027</option>
+                  <option value="2025">2025</option>
+                  <option value="2026">2026</option>
+                  <option value="2027">2027</option>
                 </select>
                 <select class="selectop" id="departmentFilter">
                   <option value="">Tất cả khoa</option>
@@ -293,42 +342,38 @@
                 </select>
                 
                 <script>
-    
                   function filterTable() {
-                      // Lấy giá trị đã chọn
-                      let dot = document.getElementById("combobox-dot").value;
-                      let ki = document.getElementById("combobox-ki").value;
-                      let nam = document.getElementById("combobox-nam").value;
-                      let department = document.getElementById("departmentFilter").value.trim();
+                    // Get selected values
+                    let dot = document.getElementById("combobox-dot").value;
+                    let ki = document.getElementById("combobox-ki").value;
+                    let nam = document.getElementById("combobox-nam").value;
+                    let department = document.getElementById("departmentFilter").value.trim();
                 
-                      let tbody = document.getElementById("data-table-body");
-                      let rows = tbody.getElementsByTagName("tr");
+                    let tbody = document.getElementById("data-table-body");
+                    let rows = tbody.getElementsByTagName("tr");
                 
-                      for (let i = 0; i < rows.length; i++) {
-                          let row = rows[i];
-                          let cells = row.getElementsByTagName("td");
-                          
-                          // Giả sử thứ tự cột là: Khoa, Đợt, Kì, Năm
-                          let rowDepartment = cells[0].textContent.trim();
-                          let rowDot = cells[1].textContent.trim();
-                          let rowKi = cells[2].textContent.trim();
-                          let rowNam = cells[3].textContent.trim();
+                    for (let i = 0; i < rows.length; i++) {
+                      let row = rows[i];
+                      let rowDepartment = row.getAttribute("data-department");
+                      let rowDot = row.getAttribute("data-dot");
+                      let rowKi = row.getAttribute("data-ki");
+                      let rowNam = row.getAttribute("data-nam");
                 
-                          // Logic lọc
-                          let matchesDepartment = department === "" || rowDepartment === department;
-                          let matchesDot = dot === "" || rowDot === dot;
-                          let matchesKi = ki === "" || rowKi === ki;
-                          let matchesNam = nam === "" || rowNam === nam;
+                      // Filtering logic
+                      let matchesDepartment = department === "" || rowDepartment === department;
+                      let matchesDot = dot === "" || rowDot === dot;
+                      let matchesKi = ki === "" || rowKi === ki;
+                      let matchesNam = nam === "" || rowNam === nam;
                 
-                          // Hiển thị hoặc ẩn hàng dựa trên kết quả lọc
-                          if (matchesDepartment && matchesDot && matchesKi && matchesNam) {
-                              row.style.display = ""; // Hiển thị hàng
-                          } else {
-                              row.style.display = "none"; // Ẩn hàng
-                          }
+                      // Show or hide row based on filter results
+                      if (matchesDepartment && matchesDot && matchesKi && matchesNam) {
+                        row.style.display = ""; // Show row
+                      } else {
+                        row.style.display = "none"; // Hide row
                       }
+                    }
                   }
-                    </script>
+                </script>
                 <button class="button text-nowrap" id="render" 
                   style="margin-top: 17px;" 
                   onclick="filterTable()">Hiển thị
@@ -344,6 +389,9 @@
                     <th>Môn học</th>
                     <th>Tên lớp</th>
                     <th>Số tín chỉ</th>
+                    <th>Đợt</th>
+                    <th>Kỳ</th>
+                    <th>Năm</th>
                     <th>Ngày bắt đầu</th>
                     <th>Ngày kết thúc</th>
                     <th>Số tiết</th>
@@ -353,14 +401,14 @@
                     <th>Chi tiết giảng viên mời</th>
                   </tr>
                 </thead>
-                <tbody class="teacher-group">
+                <tbody class="teacher-group" id="data-table-body">
                   <% let index = 1; %> 
                   <% for (let teacher of Object.keys(GiangDay)) { %> 
                     <% let courses = GiangDay[teacher]; %> 
                     <% let totalSoTiet = courses.reduce((total, course) => total + course.QuyChuan, 0); %>
-                    <tr class="teacher-group" data-department="<%= courses[0].Khoa %>">
+                    <tr class="teacher-group" data-department="<%= courses[0].Khoa %>" data-dot="<%= courses[0].Dot %>" data-ki="<%= courses[0].KiHoc %>" data-nam="<%= courses[0].NamHoc %>">
                       <% courses.forEach((course, courseIndex) => { %>
-                        <tr data-department="<%= course.Khoa %>">
+                        <tr data-department="<%= course.Khoa %>" data-dot="<%= course.Dot %>" data-ki="<%= course.KiHoc %>" data-nam="<%= course.NamHoc %>">
                           <% if (courseIndex === 0) { %>
                             <td rowspan="<%= courses.length %>"><%= index %></td>
                             <td rowspan="<%= courses.length %>"><%= course.GiaoVienGiangDay %></td>
@@ -369,7 +417,9 @@
                           <td><%= course.LopHocPhan %></td>
                           <td><%= course.TenLop %></td>
                           <td><%= course.SoTinChi %></td>
-                          
+                          <td><%= course.Dot %></td>
+                          <td><%= course.KiHoc %></td>
+                          <td><%= course.NamHoc %></td>
                           <% function formatDate(dateStr) { %>
                             <% if (!dateStr) return 'N/A'; %>
                             <% const date = new Date(dateStr); %>
@@ -388,7 +438,7 @@
                             <td rowspan="<%= courses.length %>"><%= totalSoTiet %></td>
                             <td rowspan="<%= courses.length %>"><%= course.Khoa %></td>
                             <td rowspan="<%= courses.length %>">
-                              <button class="action-button view" onclick="viewClass('<%= parseInt(course.id_Gvm) - 1 %>')">👁️</button>
+                              <button class="action-button view" onclick="viewClass(this, '<%= parseInt(course.id_Gvm) - 1 %>')">👁️</button>
                             </td>
                           <% } %>
                         </tr>
@@ -545,39 +595,11 @@
         }
       }
 
-      async function viewClass(index) {
-        gvmLists = await fetchGVMLists();
-
-        index = parseInt(index);
-
-        var gvm = gvmLists[index];
-
-        // Hiển thị thông tin vào modal
-        document.getElementById("modal-ma-gv").innerText = gvm.MaGvm;
-        document.getElementById("modal-ho-ten").innerText = gvm.HoTen;
-        document.getElementById("modal-ngay-sinh").innerText = new Date(
-          gvm.NgaySinh
-        ).toLocaleDateString("vi-VN");
-        document.getElementById("modal-cccd").innerText = gvm.CCCD;
-        document.getElementById("modal-ngay-cap").innerText = new Date(
-          gvm.NgayCapCCCD
-        ).toLocaleDateString("vi-VN");
-        document.getElementById("modal-noi-cap").innerText = gvm.NoiCapCCCD;
-        document.getElementById("modal-dia-chi-cccd").innerText = gvm.DiaChi;
-        document.getElementById("modal-so-tk").innerText = gvm.STK;
-        document.getElementById("modal-ngan-hang").innerText = gvm.NganHang;
-        document.getElementById("modal-email").innerText = gvm.Email;
-        document.getElementById("modal-heso-luong").innerText = gvm.HSL; //
-        document.getElementById("modal-noi-cong-tac").innerText =
-          gvm.NoiCongTac;
-        document.getElementById("modal-chuc-vu").innerText = gvm.ChucVu;
-        document.getElementById("modal-ma-so-thue").innerText = gvm.MaSoThue;
-        document.getElementById("modal-tot-nghiep-loai").innerText =
-          gvm.TotNghiepLoai;
-
-        // Hiển thị modal
-        document.getElementById("modal").style.display = "flex";
+      function viewClass(button, index) {
+        var hre = "/viewGvm/" + index;
+        window.location.href = hre;
       }
+
 
       // Đóng modal
       function closeModal() {

@@ -305,25 +305,22 @@
           <div class="right">
             <div class="loc" style="margin-top: -15px">
               <select class="selectop" id="combobox-dot">
-                
                 <option value="1">Đợt 1</option>
                 <option value="2">Đợt 2</option>
               </select>
 
               <!-- Combo box kì -->
               <select class="selectop" id="combobox-ki">
-                
                 <option value="1">Kỳ 1</option>
                 <option value="2">Kỳ 2</option>
               </select>
 
               <!-- Combo box Năm -->
               <select class="selectop" id="combobox-nam">
-                
                 <option value="2024">2024</option>
-                <option value="2024">2025</option>
-                <option value="2024">2026</option>
-                <option value="2024">2027</option>
+                <option value="2025">2025</option>
+                <option value="2026">2026</option>
+                <option value="2027">2027</option>
               </select>
               <select class="selectop" id="departmentFilter">
                 <option value="">Tất cả khoa</option>
@@ -536,14 +533,9 @@
             body: JSON.stringify(dataQC), // Gửi dữ liệu đã được cập nhật
           })
             .then((response) => {
-              // Kiểm tra nếu phản hồi từ server là OK
-              if (!response.ok) {
-                throw new Error("Server trả về lỗi"); // Nếu không OK, ném lỗi để vào catch
-              }
-              return response.json(); // Chuyển phản hồi sang JSON
+              alert(response.message.json);
             })
             .then((data) => {
-              // Kiểm tra dữ liệu trả về có chứa thuộc tính success hay không
               if (data.success) {
                 alert("Ban hành thành công!");
               } else {
@@ -551,7 +543,6 @@
               }
             })
             .catch((error) => {
-              // Xử lý lỗi
               alert("Gửi dữ liệu thất bại!");
               console.error("Error:", error);
             });
@@ -640,42 +631,39 @@
     </script>
     <script>
       function filterTable() {
-        // Lấy giá trị đã chọn
-        let dot = document.getElementById("combobox-dot").value;
-        let ki = document.getElementById("combobox-ki").value;
-        let nam = document.getElementById("combobox-nam").value;
-        let department = document
-          .getElementById("departmentFilter")
-          .value.trim();
+  // Lấy giá trị đã chọn từ các combobox
+  let dot = document.getElementById("combobox-dot").value;
+  let ki = document.getElementById("combobox-ki").value;
+  let nam = document.getElementById("combobox-nam").value;
+  let department = document.getElementById("departmentFilter").value.trim();
 
-        let tbody = document.getElementById("data-table-body");
-        let rows = tbody.getElementsByTagName("tr");
+  let tbody = document.getElementById("data-table-body");
+  let rows = tbody.getElementsByTagName("tr");
 
-        for (let i = 0; i < rows.length; i++) {
-          let row = rows[i];
-          let cells = row.getElementsByTagName("td");
+  for (let i = 0; i < rows.length; i++) {
+    let row = rows[i];
+    let cells = row.getElementsByTagName("td");
 
-          // Giả sử thứ tự cột là: Khoa, Đợt, Kì, Năm
-          let rowDepartment = cells[0].textContent.trim();
-          let rowDot = cells[1].textContent.trim();
-          let rowKi = cells[2].textContent.trim();
-          let rowNam = cells[3].textContent.trim();
+    // Giả sử thứ tự cột là: Khoa, Đợt, Kì, Năm
+    let rowDepartment = cells[0].textContent.trim(); // Khoa
+    let rowDot = cells[1].textContent.trim(); // Đợt
+    let rowKi = cells[2].textContent.trim(); // Kì
+    let rowNam = cells[3].textContent.trim(); // Năm
 
-          // Logic lọc
-          let matchesDepartment =
-            department === "" || rowDepartment === department;
-          let matchesDot = dot === "" || rowDot === dot;
-          let matchesKi = ki === "" || rowKi === ki;
-          let matchesNam = nam === "" || rowNam === nam;
+    // Logic lọc
+    let matchesDepartment = department === "" || rowDepartment === department;
+    let matchesDot = dot === "" || rowDot === dot;
+    let matchesKi = ki === "" || rowKi === ki;
+    let matchesNam = nam === "" || rowNam === nam; // Kiểm tra năm
 
-          // Hiển thị hoặc ẩn hàng dựa trên kết quả lọc
-          if (matchesDepartment && matchesDot && matchesKi && matchesNam) {
-            row.style.display = ""; // Hiển thị hàng
-          } else {
-            row.style.display = "none"; // Ẩn hàng
-          }
-        }
-      }
+    // Hiển thị hoặc ẩn hàng dựa trên kết quả lọc
+    if (matchesDepartment && matchesDot && matchesKi && matchesNam) {
+      row.style.display = ""; // Hiển thị hàng
+    } else {
+      row.style.display = "none"; // Ẩn hàng
+    }
+  }
+}
     </script>
   </body>
 </html>
