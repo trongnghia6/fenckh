@@ -390,7 +390,6 @@
             Nam: namValue,
           };
 
-          console.log(requestData);
           // Fetch thông tin giảng dạy
           const teachingResponse = await fetch('http://localhost:3000/quy-chuan-chinh-thuc', {
             method: 'POST',
@@ -399,11 +398,17 @@
             },
             body: JSON.stringify(requestData),
           });
-
           if (!teachingResponse.ok) {
-            alert("Lỗi truy vấn!");
+            // Lấy thông tin chi tiết lỗi từ server
+            const errorData = await teachingResponse.json();
+            // Hiển thị thông báo lỗi từ server
+            alert(errorData.message || "Đã có lỗi xảy ra!");
             return;
           }
+          //if (!teachingResponse.ok) {
+          //  alert("Lỗi truy vấn!");
+          //  return;
+          //}
 
 
 

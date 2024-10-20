@@ -252,18 +252,18 @@ const renderInfoWithValueKhoa = async (req, res) => {
 
   // Kiểm tra nếu "TAICHINH" không có trong kết quả, trả về thông báo chưa duyệt
 
-  if (!kq.includes("TAICHINH")) {
-    return res
-      .status(403)
-      .json({ message: "Quy chuẩn chưa được duyệt bởi Tài chính" });
-  }
+  // if (!kq.includes("TAICHINH")) {
+  //   return res
+  //     .status(403)
+  //     .json({ message: "Quy chuẩn chưa được duyệt bởi Tài chính" });
+  // }
 
   // Xác định query SQL với điều kiện WHERE cho Khoa, Dot, Ki, Nam
   query = `
     SELECT * FROM ${tableName} 
     WHERE Khoa = ? AND Dot = ? AND KiHoc = ? AND NamHoc = ?`;
 
-  console.log({ Khoa, Dot, Ki, Nam }); // Log the incoming request parameters for debugging
+  //console.log({ Khoa, Dot, Ki, Nam }); // Log the incoming request parameters for debugging
 
   // Lấy connection từ pool hoặc createConnection
   connection.query(
@@ -272,14 +272,14 @@ const renderInfoWithValueKhoa = async (req, res) => {
     (error, results) => {
       if (error) {
         // Trả về lỗi nếu có vấn đề trong truy vấn SQL
-        return res.status(500).json({ error: "Internal server error" });
+        return res.status(500).json({ error: "Lỗi truy vấn" });
       }
 
       if (results.length === 0) {
         // Trả về thông báo nếu không tìm thấy dữ liệu
         return res
           .status(404)
-          .json({ message: "Quy chuẩn chưa được duyệt bởi Tài chính" });
+          .json({ message: "Quy chuẩn chưa được ban hành" });
       }
 
       // Trả về kết quả truy vấn dưới dạng JSON
