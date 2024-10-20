@@ -23,6 +23,7 @@ const classInfoGvm = require("./routes/classInfoGvmRoute");
 const importGvmList = require("./routes/importGvmListRoute");
 const infoHDGvmRoutes = require('./routes/infoHDGvmRoute');
 const adminRoute = require('./routes/adminRoute');
+const phuLucHDRoute = require('./routes/phuLucHDRoute');
 
 
 const app = express();
@@ -70,6 +71,8 @@ app.use("/", classInfoGvm);
 app.use("/", importGvmList);
 app.use('/', infoHDGvmRoutes);
 app.use('/', adminRoute);
+app.use('/', phuLucHDRoute);
+
 
 
 
