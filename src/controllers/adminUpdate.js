@@ -130,6 +130,7 @@ const postUpdatePhongBan = async (req, res) => {
   const Quyen = req.body.Quyen;
   const Khoa = req.body.isKhoa;
   const isKhoa = Khoa ? 1 : 0;
+  console.log(MaPhongBan);
 
   try {
     // Cập nhật bảng đầu tiên

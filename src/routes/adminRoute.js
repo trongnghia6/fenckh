@@ -43,6 +43,7 @@ router.get('/updateTK/:TenDangNhap', AdminController.getUpdateTK);
 router.post('/updateTK/:TenDangNhap', postUpdateTK);
 router.get('/themTK', AdminController.getthemTaiKhoan);
 router.post('/themTK', AdminController.postthemTK);
+router.get("/getId_User", AdminController.getId_User);
 
 
 module.exports = router;

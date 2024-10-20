@@ -119,31 +119,31 @@ const AdminController = {
       res.status(500).json({ message: "Đã xảy ra lỗi khi thêm phòng ban" });
     }
   },
-  getthemTaiKhoan: async (req, res) => {
-    try {
-      // Kết nối tới cơ sở dữ liệu
-      const connection = await createConnection();
+  // getthemTaiKhoan: async (req, res) => {
+  //   try {
+  //     // Kết nối tới cơ sở dữ liệu
+  //     const connection = await createConnection();
 
-      // Lấy dữ liệu phòng ban
-      const query2 = "SELECT * FROM phongban";
-      const [results2] = await connection.query(query2);
-      let departmentLists = results2;
+  //     // Lấy dữ liệu phòng ban
+  //     const query2 = "SELECT * FROM phongban";
+  //     const [results2] = await connection.query(query2);
+  //     let departmentLists = results2;
 
-      // Lấy dữ liệu bảng nhân viên
-      const query4 = "SELECT * FROM nhanvien";
-      const [results4] = await connection.query(query4);
-      let user = results4;
+  //     // Lấy dữ liệu bảng nhân viên
+  //     const query4 = "SELECT * FROM nhanvien";
+  //     const [results4] = await connection.query(query4);
+  //     let user = results4;
 
-      // Render trang với 2 biến: departmentLists và user
-      res.render("themTk.ejs", {
-        departmentLists: departmentLists,
-        user: user,
-      });
-    } catch (error) {
-      console.error("Lỗi: ", error);
-      res.status(500).send("Đã có lỗi xảy ra");
-    }
-  },
+  //     // Render trang với 2 biến: departmentLists và user
+  //     res.render("themTk.ejs", {
+  //       departmentLists: departmentLists,
+  //       user: user,
+  //     });
+  //   } catch (error) {
+  //     console.error("Lỗi: ", error);
+  //     res.status(500).send("Đã có lỗi xảy ra");
+  //   }
+  // },
   postthemTK: async (req, res) => {
     const TenDangNhap = req.body.TenDangNhap;
     const id_User = req.body.id_User;
@@ -266,7 +266,7 @@ const AdminController = {
 
       // Lấy dữ liệu nhân viên
       const id_User = accountList.id_User;
-      const query3 = "SELECT * FROM nhanvien WHERE id_User = ?";
+      const query3 = "SELECT nhanvien.id_User, nhanvien.MaPhongBan, phongban.isKhoa FROM nhanvien INNER JOIN phongban ON nhanvien.MaPhongBan = phongban.MaPhongBan WHERE id_User = ?";
       const [results3] = await connection.query(query3, [id_User]);
       id = results3 && results3.length > 0 ? results3[0] : {}; // Gán kết quả đầu tiên nếu có
 
@@ -293,8 +293,56 @@ const AdminController = {
       res.status(500).send("Đã có lỗi xảy ra");
     }
   },
+  getId_User: async (req, res) => {
+    const id_User = req.query.id_user; // Lấy id_User từ query string
+
+    try {
+        const connection = await createConnection();
+
+        // Lấy MaPhongBan và isKhoa từ bảng nhanvien và phongban dựa vào id_User
+        const query1 = `
+            SELECT nhanvien.MaPhongBan, phongban.isKhoa 
+            FROM nhanvien 
+            INNER JOIN phongban ON nhanvien.MaPhongBan = phongban.MaPhongBan 
+            WHERE nhanvien.id_User = ?
+        `;
+        const [results1] = await connection.query(query1, [id_User]);
+
+        // Nếu có kết quả thì lấy MaPhongBan và isKhoa
+        const MaPhongBan = results1.length > 0 ? results1[0].MaPhongBan : null;
+        const isKhoa = results1.length > 0 ? results1[0].isKhoa : null;
+
+        // Trả về dữ liệu JSON
+        res.json({ MaPhongBan, isKhoa });
+    } catch (error) {
+        console.error("Lỗi khi truy vấn cơ sở dữ liệu: ", error);
+        res.status(500).json({ error: "Đã có lỗi xảy ra" });
+    }
+},
+
+
+getthemTaiKhoan: async (req, res) => {
+    try {
+      // Kết nối tới cơ sở dữ liệu
+      const connection = await createConnection();
+
+      const query2 = "SELECT id_User FROM nhanvien";
+        const [results2] = await connection.query(query2);
+        let id_User = results2; 
+
+      // Render trang với 2 biến: departmentLists và user
+      res.render("themTk.ejs", {
+        id_User: id_User,
+      });
+    } catch (error) {
+      console.error("Lỗi: ", error);
+      res.status(500).send("Đã có lỗi xảy ra");
+    }
+  },
+
 
   // Other methods can be added here as needed...
 };
+
 
 module.exports = AdminController; // Export the entire controller
