@@ -5,8 +5,11 @@ const obj2 = require("../controllers/getTableDBController"); // Import hàm xử
 const role = require("../controllers/middlewares"); // Check role
 const getMainHTML = require("../controllers/homeController");
 // const test = require('../controllers/fileController');
-
+const app = express();
 const router = express.Router();
+
+app.use(express.json({ limit: '100mb' }));
+app.use(express.urlencoded({ limit: '100mb', extended: true }));
 
 // Cấu hình multer để lưu file tạm thời trong thư mục 'uploads'
 const upload = multer({
