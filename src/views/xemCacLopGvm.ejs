@@ -16,41 +16,33 @@
       border-bottom-width: 2px;
     }
 
+    /* CSS để căn chỉnh label tổng số tiết */
     .table {
       border-color: #ffffff;
+      z-index: 1;
     }
 
     /* CSS để căn chỉnh label tổng số tiết */
     .total-label {
-      margin-top: 10px;
-      /* Khoảng cách với bảng */
-      text-align: right;
-      /* Căn phải */
+      position: relative; /* Change this if necessary */
+    z-index: 1; /* Ensure this is lower than .suggestions */
+    margin-top: 10px; /* Adjust spacing if needed */
+    text-align: right;
     }
 
     .suggestions {
-      position: absolute;
-      bottom: 100%; /* Hiển thị phía trên input */
-      left: 0;
-      background-color: #f0f0f0;
-      /* Màu nền trắng xám */
-      color: #000;
-      /* Màu chữ đen */
-      border: 1px solid #ccc;
-      /* Đường viền mờ để tạo phân tách */
-      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-      /* Tạo bóng cho khung */
-      z-index: 10000000;
-      /* Đảm bảo khung hiển thị đè lên bảng */
-      border-radius: 4px;
-      /* Bo tròn các góc */
-      max-height: 300px;
-      /* Giới hạn chiều cao tối đa cho danh sách gợi ý */
-      overflow-y: auto;
-      /* Tự động thêm cuộn khi danh sách quá dài */
-      transition: background-color 0.3s, box-shadow 0.3s;
-      /* Thêm hiệu ứng chuyển đổi */
-    }
+    position: absolute; /* Đảm bảo gợi ý nằm bên trên các thành phần khác */
+    top: calc(100% + 5px); /* Đặt gợi ý phía trên input với một khoảng cách */
+    left: 0;
+    background-color: #f0f0f0;
+    color: #000;
+    border: 1px solid #ccc;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1000; /* Đảm bảo gợi ý nằm trên các thành phần khác */
+    border-radius: 4px;
+    max-height: 300px;
+    overflow-y: auto;
+  }
 
     /* Hiệu ứng lung linh khi hover */
     .suggestions:hover {
@@ -652,78 +644,81 @@
   }
 
       // Hàm hiển thị gợi ý đã được cập nhật
-      function showSuggestions(input) {
-        const value = input.value.toLowerCase(); // Lấy giá trị nhập vào và chuyển thành chữ thường
-        hideSuggestions(); // Ẩn gợi ý cũ trước khi hiển thị gợi ý mới
+      function showSuggestions(input, moiGiang) {
+  const value = input.value.toLowerCase(); // Lấy giá trị nhập vào và chuyển thành chữ thường
+  hideSuggestions(); // Ẩn gợi ý cũ trước khi hiển thị gợi ý mới
 
-        // Tạo thẻ div chứa gợi ý
-        const suggestionsContainer = document.createElement('div');
-        suggestionsContainer.className = 'suggestions'; // Đặt class cho khung gợi ý
+  // Tạo thẻ div chứa gợi ý
+  const suggestionsContainer = document.createElement('div');
+  suggestionsContainer.className = 'suggestions'; // Đặt class cho khung gợi ý
 
-        // Đặt vị trí cho suggestionsContainer
-        const { bottom, left, width } = input.getBoundingClientRect(); // Lấy vị trí của input
-        suggestionsContainer.style.position = 'absolute'; // Để đè lên bảng
-        suggestionsContainer.style.top = `${bottom + window.scrollY} px;` // Đặt vị trí dưới input
-        suggestionsContainer.style.left = `${left + window.scrollX} px;` // Căn trái với input
-        suggestionsContainer.style.width = `${width}px;` // Chiều rộng bằng với input
-        suggestionsContainer.style.zIndex = '100000000000'; // Hiện lên cho tao
+  // Đặt vị trí cho suggestionsContainer
+  const { bottom, left, width } = input.getBoundingClientRect(); // Lấy vị trí của input
+  suggestionsContainer.style.position = 'absolute'; // Để đè lên bảng
+  suggestionsContainer.style.top = `${bottom + window.scrollY}px`; // Đặt vị trí ngay dưới input
+  suggestionsContainer.style.left = `${left + window.scrollX}px`; // Căn trái với input
+  suggestionsContainer.style.width = `${width}px`; // Chiều rộng bằng với input
+  suggestionsContainer.style.zIndex = '1000'; // Đảm bảo luôn hiển thị trên các thành phần khác
+  suggestionsContainer.style.maxHeight = '200px'; // Giới hạn chiều cao để không quá lớn
+  suggestionsContainer.style.overflowY = 'auto';  // Cho phép cuộn dọc nếu quá nhiều gợi ý
 
-        // Thêm tính năng cuộn khi có quá nhiều gợi ý
-        suggestionsContainer.style.overflowY = 'auto';  // Cho phép cuộn dọc
+  // Thêm suggestionsContainer vào DOM
+  document.body.appendChild(suggestionsContainer); // Đặt suggestionsContainer vào body thay vì cha của input
 
-        input.parentElement.appendChild(suggestionsContainer); // Thêm suggestionsContainer vào DOM
+  let suggestions = []; // Khởi tạo mảng gợi ý
 
-        let suggestions = []; // Khởi tạo mảng gợi ý
+  // Lấy dữ liệu từ localStorage
+  const nameGvm = JSON.parse(localStorage.getItem("nameGvm")) || []; // Giảng viên mời
+  const nameGv = JSON.parse(localStorage.getItem("nameGv")) || []; // Giảng viên
 
-        // Lấy dữ liệu từ localStorage
-        const nameGvm = JSON.parse(localStorage.getItem("nameGvm")) || []; // Giảng viên mời
+  // Kiểm tra giá trị moiGiang để xác định dữ liệu nào sẽ hiển thị
+  if (moiGiang) {
+    // Hiển thị toàn bộ giảng viên mời
+    suggestions = nameGvm.map(item => `${item.HoTen} - ${item.MaPhongBan}`);
+  } else {
+    // Hiển thị toàn bộ giảng viên
+    suggestions = nameGv.map(item => `${item.TenNhanVien} - ${item.MaPhongBan}`);
+  }
 
-        // Kiểm tra giá trị moiGiang để xác định dữ liệu nào sẽ hiển thị
- 
-        // Hiển thị toàn bộ giảng viên mời
-        suggestions = nameGvm.map(item => `${item.HoTen} - ${item.MaPhongBan}`);
+  // Nếu người dùng nhập dữ liệu, lọc kết quả theo tên giảng viên
+  if (value) {
+    suggestions = suggestions.filter(name => name.toLowerCase().includes(value));
+  }
 
+  // Nếu không có gợi ý, ẩn container
+  if (suggestions.length === 0) {
+    suggestionsContainer.remove();
+    return; // Kết thúc hàm nếu không có gợi ý
+  }
 
-        // Nếu người dùng nhập dữ liệu, lọc kết quả theo tên giảng viên
-        if (value) {
-          suggestions = suggestions.filter(name => name.toLowerCase().includes(value));
-        }
+  // Tạo gợi ý dưới dạng danh sách (list)
+  suggestions.forEach(name => {
+    const suggestionItem = document.createElement('div'); // Tạo phần tử cho từng gợi ý
+    suggestionItem.className = 'suggestion-item'; // Đặt class để tùy chỉnh giao diện
+    suggestionItem.textContent = name; // Hiển thị tên giảng viên kèm theo khoa
 
-        // Nếu suggestions vẫn rỗng, ẩn container
-        if (suggestions.length === 0) {
-          suggestionsContainer.remove(); // Ẩn container nếu không có gợi ý
-          return; // Kết thúc hàm nếu không có gợi ý
-        }
-        // Tạo gợi ý dưới dạng danh sách (list)
-        suggestions.forEach(name => {
-          const suggestionItem = document.createElement('div'); // Tạo phần tử cho từng gợi ý
-          suggestionItem.className = 'suggestion-item'; // Đặt class để tùy chỉnh giao diện
-          suggestionItem.textContent = name; // Hiển thị tên giảng viên kèm theo khoa
+    // Thêm sự kiện click để điền tên vào ô input
+    suggestionItem.onclick = function () {
+      input.value = name; // Điền tên gợi ý vào ô input
+      hideSuggestions(); // Ẩn gợi ý sau khi chọn
+    };
 
-          // Thêm sự kiện click để điền tên vào ô input
-          suggestionItem.onclick = function () {
-            input.value = name; // Điền tên gợi ý vào ô input
-            hideSuggestions(); // Ẩn gợi ý sau khi chọn
-          };
+    suggestionsContainer.appendChild(suggestionItem); // Thêm mục vào danh sách gợi ý
+  });
 
-          suggestionsContainer.appendChild(suggestionItem); // Thêm mục vào danh sách gợi ý
-        });
+  // Ẩn gợi ý khi input không còn focus
+  input.onblur = function () {
+    setTimeout(() => {
+      hideSuggestions();
+    }, 100); // Thời gian chờ để nhận diện click
+  };
+}
 
-        // Ẩn gợi ý khi input không còn focus
-        input.onblur = function () {
-          setTimeout(() => {
-            hideSuggestions();
-          }, 100); // Thời gian chờ để nhận diện click
-        };
-      }
-
-      // Hàm ẩn gợi ý
-      function hideSuggestions() {
-        const suggestionsContainer = document.querySelector('.suggestions');
-        if (suggestionsContainer) {
-          suggestionsContainer.remove();
-        }
-      }
+// Hàm ẩn gợi ý
+function hideSuggestions() {
+  const existingSuggestions = document.querySelectorAll('.suggestions');
+  existingSuggestions.forEach(suggestion => suggestion.remove());
+}
 
   //
   async function submitData() {
