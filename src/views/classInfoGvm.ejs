@@ -600,41 +600,6 @@
         window.location.href = hre;
       }
 
-      /*
-      async function viewClass(index) {
-        gvmLists = await fetchGVMLists();
-
-        index = parseInt(index);
-
-        var gvm = gvmLists[index];
-
-        // Hiển thị thông tin vào modal
-        document.getElementById("modal-ma-gv").innerText = gvm.MaGvm;
-        document.getElementById("modal-ho-ten").innerText = gvm.HoTen;
-        document.getElementById("modal-ngay-sinh").innerText = new Date(
-          gvm.NgaySinh
-        ).toLocaleDateString("vi-VN");
-        document.getElementById("modal-cccd").innerText = gvm.CCCD;
-        document.getElementById("modal-ngay-cap").innerText = new Date(
-          gvm.NgayCapCCCD
-        ).toLocaleDateString("vi-VN");
-        document.getElementById("modal-noi-cap").innerText = gvm.NoiCapCCCD;
-        document.getElementById("modal-dia-chi-cccd").innerText = gvm.DiaChi;
-        document.getElementById("modal-so-tk").innerText = gvm.STK;
-        document.getElementById("modal-ngan-hang").innerText = gvm.NganHang;
-        document.getElementById("modal-email").innerText = gvm.Email;
-        document.getElementById("modal-heso-luong").innerText = gvm.HSL; //
-        document.getElementById("modal-noi-cong-tac").innerText =
-          gvm.NoiCongTac;
-        document.getElementById("modal-chuc-vu").innerText = gvm.ChucVu;
-        document.getElementById("modal-ma-so-thue").innerText = gvm.MaSoThue;
-        document.getElementById("modal-tot-nghiep-loai").innerText =
-          gvm.TotNghiepLoai;
-
-        // Hiển thị modal
-        document.getElementById("modal").style.display = "flex";
-      }
-      */
 
       // Đóng modal
       function closeModal() {
