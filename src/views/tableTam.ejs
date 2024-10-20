@@ -518,6 +518,7 @@
       }
 
       // Gọi hàm fetchData để lấy dữ liệu khi click
+      /*
       document
         .getElementById("ban-hanh")
         .addEventListener("click", async function () {
@@ -540,6 +541,35 @@
                 alert("Ban hành thành công!");
               } else {
                 alert("Ban hành thất bại!");
+              }
+            })
+            .catch((error) => {
+              alert("Gửi dữ liệu thất bại!");
+              console.error("Error:", error);
+            });
+        });
+        */
+      document
+        .getElementById("ban-hanh")
+        .addEventListener("click", async function () {
+          await fetchData(); // Gọi để lấy dữ liệu trước
+
+          // Sau khi lấy dữ liệu, gửi dữ liệu đã cập nhật đến server
+          console.log("Dữ liệu sẽ được gửi:", dataQC);
+
+          fetch("http://localhost:3000/ban-hanh", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(dataQC), // Gửi dữ liệu đã được cập nhật
+          })
+            .then((response) => response.json()) // Phân tích phản hồi JSON từ server
+            .then((data) => {
+              if (data.success) {
+                alert(data.message || "Ban hành thành công!"); // Hiển thị thông báo từ server
+              } else {
+                alert(data.message || "Ban hành thất bại!");
               }
             })
             .catch((error) => {
@@ -631,39 +661,42 @@
     </script>
     <script>
       function filterTable() {
-  // Lấy giá trị đã chọn từ các combobox
-  let dot = document.getElementById("combobox-dot").value;
-  let ki = document.getElementById("combobox-ki").value;
-  let nam = document.getElementById("combobox-nam").value;
-  let department = document.getElementById("departmentFilter").value.trim();
+        // Lấy giá trị đã chọn từ các combobox
+        let dot = document.getElementById("combobox-dot").value;
+        let ki = document.getElementById("combobox-ki").value;
+        let nam = document.getElementById("combobox-nam").value;
+        let department = document
+          .getElementById("departmentFilter")
+          .value.trim();
 
-  let tbody = document.getElementById("data-table-body");
-  let rows = tbody.getElementsByTagName("tr");
+        let tbody = document.getElementById("data-table-body");
+        let rows = tbody.getElementsByTagName("tr");
 
-  for (let i = 0; i < rows.length; i++) {
-    let row = rows[i];
-    let cells = row.getElementsByTagName("td");
+        for (let i = 0; i < rows.length; i++) {
+          let row = rows[i];
+          let cells = row.getElementsByTagName("td");
 
-    // Giả sử thứ tự cột là: Khoa, Đợt, Kì, Năm
-    let rowDepartment = cells[0].textContent.trim(); // Khoa
-    let rowDot = cells[1].textContent.trim(); // Đợt
-    let rowKi = cells[2].textContent.trim(); // Kì
-    let rowNam = cells[3].textContent.trim(); // Năm
+          // Giả sử thứ tự cột là: Khoa, Đợt, Kì, Năm
+          let rowDepartment = cells[0].textContent.trim(); // Khoa
+          let rowDot = cells[1].textContent.trim(); // Đợt
+          let rowKi = cells[2].textContent.trim(); // Kì
+          let rowNam = cells[3].textContent.trim(); // Năm
 
-    // Logic lọc
-    let matchesDepartment = department === "" || rowDepartment === department;
-    let matchesDot = dot === "" || rowDot === dot;
-    let matchesKi = ki === "" || rowKi === ki;
-    let matchesNam = nam === "" || rowNam === nam; // Kiểm tra năm
+          // Logic lọc
+          let matchesDepartment =
+            department === "" || rowDepartment === department;
+          let matchesDot = dot === "" || rowDot === dot;
+          let matchesKi = ki === "" || rowKi === ki;
+          let matchesNam = nam === "" || rowNam === nam; // Kiểm tra năm
 
-    // Hiển thị hoặc ẩn hàng dựa trên kết quả lọc
-    if (matchesDepartment && matchesDot && matchesKi && matchesNam) {
-      row.style.display = ""; // Hiển thị hàng
-    } else {
-      row.style.display = "none"; // Ẩn hàng
-    }
-  }
-}
+          // Hiển thị hoặc ẩn hàng dựa trên kết quả lọc
+          if (matchesDepartment && matchesDot && matchesKi && matchesNam) {
+            row.style.display = ""; // Hiển thị hàng
+          } else {
+            row.style.display = "none"; // Ẩn hàng
+          }
+        }
+      }
     </script>
   </body>
 </html>

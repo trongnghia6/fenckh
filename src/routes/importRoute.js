@@ -8,8 +8,8 @@ const getMainHTML = require("../controllers/homeController");
 const app = express();
 const router = express.Router();
 
-app.use(express.json({ limit: '100mb' }));
-app.use(express.urlencoded({ limit: '100mb', extended: true }));
+app.use(express.json({ limit: "100mb" }));
+app.use(express.urlencoded({ limit: "100mb", extended: true }));
 
 // Cấu hình multer để lưu file tạm thời trong thư mục 'uploads'
 const upload = multer({
@@ -61,13 +61,9 @@ router.post("/ban-hanh", role.checkDaotaoRoleThiHanh, async (req, res) => {
 
     // Kiểm tra kết quả trả về và phản hồi cho client
     if (result == true) {
-      res
-        .status(200)
-        .json({ success: true, message: "Dữ liệu đã được lưu thành công!" });
+      res.status(200).json({ success: true, message: "Ban hành thành công" });
     } else {
-      res
-        .status(500)
-        .json({ success: false, message: "Lưu dữ liệu thất bại!" });
+      res.status(500).json({ success: false, message: "Ban hành thất bại" });
     }
   } catch (error) {
     console.error("Lỗi server:", error);
