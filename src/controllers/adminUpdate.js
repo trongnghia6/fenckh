@@ -130,7 +130,7 @@ const postUpdatePhongBan = async (req, res) => {
   const Quyen = req.body.Quyen;
   const Khoa = req.body.isKhoa;
   const isKhoa = Khoa ? 1 : 0;
-  console.log(MaPhongBan);
+  console.log(TenDangNhap,id_User, MatKhau, MaPhongBan, Quyen, isKhoa);
 
   try {
     // Cập nhật bảng đầu tiên
@@ -142,12 +142,15 @@ const postUpdatePhongBan = async (req, res) => {
     await connection.query(query2, [id_User, MatKhau, TenDangNhap]);
 
     res.redirect('/thongTinTK?Success');
-  } catch (error) {
-    console.error("Lỗi khi cập nhật dữ liệu: ", error);
-    res.status(500).send("Lỗi server, không thể cập nhật dữ liệu");
-  } finally {
-    await connection.end(); // Đóng kết nối
-  }
+} catch (error) {
+    console.error("Lỗi khi cập nhật dữ liệu: ", error.message);
+    res.status(500).send(`Lỗi server, không thể cập nhật dữ liệu. Chi tiết: ${error.message}`);
+} finally {
+    if (connection) {
+        await connection.end(); // Đóng kết nối
+    }
+}
+
 };
 
 

@@ -9,5 +9,6 @@ router.get('/infoHDGvm', (req, res) => {
 
 // Route để xuất dữ liệu ra file Excel
 router.get("/hdgvm/export-excel", infoHDGvmController.exportHDGvmToExcel);
+router.get("/api/hdgvm", infoHDGvmController.getHDGvmData);
 
 module.exports = router;

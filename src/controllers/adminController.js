@@ -148,11 +148,19 @@ const AdminController = {
     const TenDangNhap = req.body.TenDangNhap;
     const id_User = req.body.id_User;
     const MatKhau = req.body.MatKhau;
-    const MaPhongBan = req.body.MaPhongBan;
+    //const MaPhongBan = req.body.MaPhongBan;
     const Quyen = req.body.Quyen;
     const Khoa = req.body.isKhoa;
     const isKhoa = Khoa ? 1 : 0;
     const connection = await createConnection();
+
+    // thêm
+
+    // Lấy dữ liệu phòng ban
+    const queryP = "SELECT MaPhongBan FROM nhanvien where id_User = ?";
+    const [rs] = await connection.query(queryP, [id_User]);
+
+    let MaPhongBan = rs[0].MaPhongBan;
 
     try {
       // Cập nhật bảng thứ hai

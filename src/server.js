@@ -1,4 +1,5 @@
 const express = require("express");
+const bodyParser = require('body-parser');
 const path = require("path");
 require("dotenv").config();
 const session = require("express-session");
@@ -24,6 +25,8 @@ const importGvmList = require("./routes/importGvmListRoute");
 const infoHDGvmRoutes = require("./routes/infoHDGvmRoute");
 const adminRoute = require("./routes/adminRoute");
 const xemCacLopGvmRoute = require("./routes/xemCacLopGvmRoute");
+const phuLucHDRoute = require('./routes/phuLucHDRoute');
+
 
 const app = express();
 const port = process.env.port || 8888;
@@ -70,6 +73,8 @@ app.use("/", classInfoGvm);
 app.use("/", importGvmList);
 app.use("/", infoHDGvmRoutes);
 app.use("/", adminRoute);
+app.use('/', phuLucHDRoute);
+
 app.use("/", xemCacLopGvmRoute);
 
 app.listen(port, hostname, () => {
@@ -108,7 +113,7 @@ const tableQc = require("./routes/gvmRoute");
 app.use("/", importFile); // cấu hình import
 app.use("/", infoGvm); // cấu hình import
 app.use("/", tableQc); // cấu hình import
+// Thay đổi giới hạn kích thước payload (ví dụ: 10mb)
 
-// truyền json kích thước lớn
-app.use(express.json({ limit: "50mb" }));
-app.use(express.urlencoded({ limit: "50mb", extended: true }));
+app.use(bodyParser.json({ limit: '500mb' }));
+app.use(bodyParser.urlencoded({ limit: '500mb', extended: true }));

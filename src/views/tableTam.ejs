@@ -82,6 +82,18 @@
       }
     </style>
 
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const MaPhongBan = localStorage.getItem("MaPhongBan");
+        const role = localStorage.getItem("userRole");
+        // Nếu
+        if (MaPhongBan != "DAOTAO" || role == "Thường") {
+          document.getElementById("ban-hanh").style.visibility = "hidden";
+          document.getElementById("quychuandukien").style.visibility = "hidden";
+        }
+      });
+    </script>
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   </head>
@@ -252,6 +264,9 @@
                   <a class="nav-link" id="ThongTinGD" href="#">COMING SOON</a>
                 </div>
               </div>
+              <li class="nav-item"></li>
+              <a class="nav-link " href="/phuLucHD" >Phụ lục hợp đồng</a>
+              </li>
             </div>
           </ul>
           <div class="navbar-nav">
@@ -293,25 +308,22 @@
           <div class="right">
             <div class="loc" style="margin-top: -15px">
               <select class="selectop" id="combobox-dot">
-                <option value="">Tất cả đợt</option>
                 <option value="1">Đợt 1</option>
                 <option value="2">Đợt 2</option>
               </select>
 
               <!-- Combo box kì -->
               <select class="selectop" id="combobox-ki">
-                <option value="">Tất cả kỳ</option>
                 <option value="1">Kỳ 1</option>
                 <option value="2">Kỳ 2</option>
               </select>
 
               <!-- Combo box Năm -->
               <select class="selectop" id="combobox-nam">
-                <option value="">Tất cả năm</option>
                 <option value="2024">2024</option>
-                <option value="2024">2025</option>
-                <option value="2024">2026</option>
-                <option value="2024">2027</option>
+                <option value="2025">2025</option>
+                <option value="2026">2026</option>
+                <option value="2027">2027</option>
               </select>
               <select class="selectop" id="departmentFilter">
                 <option value="">Tất cả khoa</option>
@@ -361,7 +373,7 @@
           '<span class="visually-hidden">Loading...</span>'; // Thêm thông báo ẩn
         document.body.appendChild(loadingSpinner); // Thêm spinner vào body
 
-        fetch("http://localhost:3000/bang-tam") // Thay đổi URL API thành URL thực tế của bạn
+        fetch("http://localhost:3000/bang-tam")
           .then((response) => {
             if (!response.ok) {
               throw new Error(
@@ -509,6 +521,7 @@
       }
 
       // Gọi hàm fetchData để lấy dữ liệu khi click
+      /*
       document
         .getElementById("ban-hanh")
         .addEventListener("click", async function () {
@@ -524,14 +537,9 @@
             body: JSON.stringify(dataQC), // Gửi dữ liệu đã được cập nhật
           })
             .then((response) => {
-              // Kiểm tra nếu phản hồi từ server là OK
-              if (!response.ok) {
-                throw new Error("Server trả về lỗi"); // Nếu không OK, ném lỗi để vào catch
-              }
-              return response.json(); // Chuyển phản hồi sang JSON
+              alert(response.message.json);
             })
             .then((data) => {
-              // Kiểm tra dữ liệu trả về có chứa thuộc tính success hay không
               if (data.success) {
                 alert("Ban hành thành công!");
               } else {
@@ -539,7 +547,35 @@
               }
             })
             .catch((error) => {
-              // Xử lý lỗi
+              alert("Gửi dữ liệu thất bại!");
+              console.error("Error:", error);
+            });
+        });
+        */
+      document
+        .getElementById("ban-hanh")
+        .addEventListener("click", async function () {
+          await fetchData(); // Gọi để lấy dữ liệu trước
+
+          // Sau khi lấy dữ liệu, gửi dữ liệu đã cập nhật đến server
+          console.log("Dữ liệu sẽ được gửi:", dataQC);
+
+          fetch("http://localhost:3000/ban-hanh", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(dataQC), // Gửi dữ liệu đã được cập nhật
+          })
+            .then((response) => response.json()) // Phân tích phản hồi JSON từ server
+            .then((data) => {
+              if (data.success) {
+                alert(data.message || "Ban hành thành công!"); // Hiển thị thông báo từ server
+              } else {
+                alert(data.message || "Ban hành thất bại!");
+              }
+            })
+            .catch((error) => {
               alert("Gửi dữ liệu thất bại!");
               console.error("Error:", error);
             });
@@ -556,12 +592,6 @@
         importQuyChuan.addEventListener("click", function (event) {
           window.location.href = "/import";
         });
-
-        // Thêm ẩn cho button nếu không phải khoa
-        if (MaPhongBan != "DAOTAO" || role == "Thường") {
-          document.getElementById("ban-hanh").style.visibility = "hidden";
-          document.getElementById("quychuandukien").style.visibility = "hidden";
-        }
 
         // Thêm sự kiện click cho phần tử có id "import"
         const importLink = document.getElementById("Import");
@@ -634,7 +664,7 @@
     </script>
     <script>
       function filterTable() {
-        // Lấy giá trị đã chọn
+        // Lấy giá trị đã chọn từ các combobox
         let dot = document.getElementById("combobox-dot").value;
         let ki = document.getElementById("combobox-ki").value;
         let nam = document.getElementById("combobox-nam").value;
@@ -650,17 +680,17 @@
           let cells = row.getElementsByTagName("td");
 
           // Giả sử thứ tự cột là: Khoa, Đợt, Kì, Năm
-          let rowDepartment = cells[0].textContent.trim();
-          let rowDot = cells[1].textContent.trim();
-          let rowKi = cells[2].textContent.trim();
-          let rowNam = cells[3].textContent.trim();
+          let rowDepartment = cells[0].textContent.trim(); // Khoa
+          let rowDot = cells[1].textContent.trim(); // Đợt
+          let rowKi = cells[2].textContent.trim(); // Kì
+          let rowNam = cells[3].textContent.trim(); // Năm
 
           // Logic lọc
           let matchesDepartment =
             department === "" || rowDepartment === department;
           let matchesDot = dot === "" || rowDot === dot;
           let matchesKi = ki === "" || rowKi === ki;
-          let matchesNam = nam === "" || rowNam === nam;
+          let matchesNam = nam === "" || rowNam === nam; // Kiểm tra năm
 
           // Hiển thị hoặc ẩn hàng dựa trên kết quả lọc
           if (matchesDepartment && matchesDot && matchesKi && matchesNam) {
