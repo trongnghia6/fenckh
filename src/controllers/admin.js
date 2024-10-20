@@ -26,7 +26,7 @@ const getaccountList = async (req, res) => {
 
   const getnhanvienList = async (req, res) => {
     try {
-      query = 'SELECT nhanvien.id_User, nhanvien.MaNhanVien, nhanvien.TenNhanVien, nhanvien.GioiTinh, nhanvien.MaPhongBan, nhanvien.ChucVu, nhanvien.MonGiangDayChinh, nhanvien.DienThoai, nhanvien.CCCD, nhanvien.NgayCapCCCD, nhanvien.NoiCapCCCD, nhanvien.HocVi, phongban.TenPhongBan, taikhoannguoidung.TenDangNhap, taikhoannguoidung.MatKhau  From nhanvien LEFT JOIN taikhoannguoidung ON nhanvien.id_User = taikhoannguoidung.id_User LEFT JOIN phongban ON nhanvien.MaPhongBan = phongban.MaPhongBan ORDER BY nhanvien.id_User ASC'; // Truy vấn lấy tất cả người dùng  
+      query = 'SELECT nhanvien.id_User, nhanvien.MaNhanVien, nhanvien.TenNhanVien,  nhanvien.MaPhongBan, nhanvien.ChucVu, nhanvien.MonGiangDayChinh, nhanvien.DienThoai, nhanvien.CCCD, nhanvien.NgayCapCCCD, nhanvien.NoiCapCCCD, nhanvien.HocVi, phongban.TenPhongBan, taikhoannguoidung.TenDangNhap, taikhoannguoidung.MatKhau  From nhanvien LEFT JOIN taikhoannguoidung ON nhanvien.id_User = taikhoannguoidung.id_User LEFT JOIN phongban ON nhanvien.MaPhongBan = phongban.MaPhongBan ORDER BY nhanvien.id_User ASC'; // Truy vấn lấy tất cả người dùng  
       const connection = await createConnection(); // Kết nối tới cơ sở dữ liệu
       const [results, fields] = await connection.query(query); // Thực hiện truy vấn
       nhanvienLists = results; // Gán kết quả vào nhanvienLists
