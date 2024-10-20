@@ -25,6 +25,8 @@ const importGvmList = require("./routes/importGvmListRoute");
 const infoHDGvmRoutes = require("./routes/infoHDGvmRoute");
 const adminRoute = require("./routes/adminRoute");
 const xemCacLopGvmRoute = require("./routes/xemCacLopGvmRoute");
+const phuLucHDRoute = require('./routes/phuLucHDRoute');
+
 
 const app = express();
 const port = process.env.port || 8888;
@@ -74,6 +76,8 @@ app.use("/", classInfoGvm);
 app.use("/", importGvmList);
 app.use("/", infoHDGvmRoutes);
 app.use("/", adminRoute);
+app.use('/', phuLucHDRoute);
+
 app.use("/", xemCacLopGvmRoute);
 
 app.listen(port, hostname, () => {

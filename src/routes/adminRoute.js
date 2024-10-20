@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const AdminController = require('../controllers/adminController');
 const GetTable = require('../controllers/admin');
-const { postUpdateGvm, postUpdateNV, postDeleteNV, postUpdatePhongBan, postUpdateTK } = require('../controllers/adminupdate');
+const { postUpdateGvm, postUpdateNV, postDeleteNV, postUpdatePhongBan, postUpdateTK } = require('../controllers/adminUpdate');
 
 router.get('/admin', (req, res) => {
     res.render('admin');
@@ -43,6 +43,7 @@ router.get('/updateTK/:TenDangNhap', AdminController.getUpdateTK);
 router.post('/updateTK/:TenDangNhap', postUpdateTK);
 router.get('/themTK', AdminController.getthemTaiKhoan);
 router.post('/themTK', AdminController.postthemTK);
+router.get("/getId_User", AdminController.getId_User);
 
 
 module.exports = router;

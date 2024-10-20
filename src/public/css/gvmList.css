@@ -211,3 +211,63 @@
   text-decoration: none;
   cursor: pointer;
 }
+.gvmList .view {
+  background-color: #4CAF50; /* Giữ nguyên màu nền */
+  color: #ffffff; /* Giữ nguyên màu chữ */
+  border: none;
+  padding: 6px 12px; /* Giảm padding */
+  font-size: 16px; /* Giảm kích thước chữ */
+  cursor: pointer;
+  border-radius: 4px; /* Giảm độ cong của góc */
+  margin-left: 10px; /* Giữ nguyên khoảng cách */
+  height: 40px; /* Giảm chiều cao */
+  line-height: 1; /* Đảm bảo text căn giữa theo chiều dọc */
+}
+
+.gvmList .view:hover {
+  background-color: #3e8e41; /* Màu xanh lá cây đậm hơn */
+}
+.controls-container {
+  margin-bottom: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.gvmList {
+  padding: 20px;
+}
+
+.controls-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 20px;
+  align-items: center;
+}
+
+.form-select {
+  width: auto;
+}
+
+.action-button {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.view {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.export {
+  background-color: #008CBA;
+  color: white;
+}
+
+#tableContainer {
+  margin-top: 20
+}
