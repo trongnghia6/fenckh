@@ -709,6 +709,7 @@
       }
 
       // Phương
+      /*
       async function submitData2() {
         fetch("/submitData2", {
           method: "POST", // Dùng POST nếu bạn muốn gửi tín hiệu theo yêu cầu HTTP POST
@@ -726,7 +727,31 @@
             // Xử lý lỗi, ví dụ: hiển thị thông báo lỗi
           });
       }
+          */
       // Phương
+
+      async function submitData2() {
+        try {
+          const response = await fetch("/submitData2", {
+            method: "POST", // Dùng POST nếu bạn muốn gửi tín hiệu theo yêu cầu HTTP POST
+            //headers: {
+            //  'Content-Type': 'application/json'
+            //}
+          });
+
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+
+          const data = await response.json();
+
+          // Hiển thị thông báo theo message từ server
+          alert(data.message); // Sử dụng message từ server để hiển thị thông báo
+        } catch (error) {
+          console.error("Error sending signal:", error);
+          alert("Đã xảy ra lỗi trong quá trình lưu dữ liệu."); // Hiển thị thông báo lỗi
+        }
+      }
 
       function filterByName() {
         const input = document.getElementById("filterName");

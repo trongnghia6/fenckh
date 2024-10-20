@@ -921,16 +921,6 @@ const themHocPhan = async (MaHocPhan, TenHocPhan, DVHT, Khoa) => {
 };
 
 const updateAllTeachingInfo = async () => {
-  // const query2 = `
-  //   SELECT
-  //     qc.*,
-  //     gvmoi.*,
-  //     SUBSTRING_INDEX(qc.GiaoVienGiangDay, ' - ', 1) AS TenGiangVien
-  //   FROM quychuan qc
-  //   JOIN gvmoi ON SUBSTRING_INDEX(qc.GiaoVienGiangDay, ' - ', 1) = gvmoi.HoTen;
-  // `;
-  //   //GROUP BY gvmoi.HoTen;
-
   const query2 = `
   SELECT
     qc.*,
@@ -952,6 +942,7 @@ const updateAllTeachingInfo = async () => {
         message: "Không có dữ liệu để chèn.",
       };
     }
+
     // Chuẩn bị dữ liệu để chèn từng loạt
     const insertValues = dataJoin.map((item) => {
       const {
@@ -980,8 +971,6 @@ const updateAllTeachingInfo = async () => {
         TaiChinhDuyet,
         GioiTinh,
       } = item;
-
-      console.log("item = ", item);
 
       const DanhXung = getDanhXung(GioiTinh);
       // const getDanhXung = (GioiTinh) => {
@@ -1051,7 +1040,7 @@ const updateAllTeachingInfo = async () => {
     console.error("Lỗi:", err.message); // Ghi lại lỗi để gỡ lỗi
     return {
       success: false,
-      message: "Đã xảy ra lỗi trong quá trình cập nhật thông tin.",
+      message: "Đã xảy ra lỗi trong quá trình lưu hợp đồng",
     };
   }
 };
@@ -1104,10 +1093,6 @@ const insertGiangDay = async () => {
           id_Gvm = await getGvmId(gv1[0]);
           gv = gv1[0];
         } else {
-          // Nếu không có giảng viên thì lấy id_User
-          // id_User = !GiaoVienGiangDay
-          //   ? await getNhanvienId(gv2[0])
-          //   : await getNhanvienId(gv1[0]);
           if (!GiaoVienGiangDay) {
             id_User = await getNhanvienId(gv2[0]);
             gv = gv2[0];
@@ -1167,7 +1152,7 @@ const insertGiangDay = async () => {
     console.error(err); // Ghi lại lỗi để gỡ lỗi
     return {
       success: false,
-      message: "Đã xảy ra lỗi trong quá trình cập nhật thông tin.",
+      message: "Đã xảy ra lỗi trong quá trình thêm dl vào giảng dạy",
     };
   }
 };
@@ -1266,8 +1251,6 @@ const insertGiangDay2 = async () => {
       return { success: false, message: "Không có dữ liệu để chèn!" };
     }
 
-    console.log("gà");
-
     // Định nghĩa câu lệnh chèn
     const queryInsert = `
       INSERT INTO giangday (
@@ -1292,6 +1275,7 @@ const insertGiangDay2 = async () => {
 const submitData2 = async (req, res) => {
   try {
     const updateResult = await updateAllTeachingInfo(); // Gọi hàm mà không cần res
+
     const update2 = await insertGiangDay2();
 
     if (updateResult.success) {

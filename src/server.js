@@ -1,5 +1,5 @@
 const express = require("express");
-const bodyParser = require('body-parser');
+const bodyParser = require("body-parser");
 const path = require("path");
 require("dotenv").config();
 const session = require("express-session");
@@ -29,6 +29,9 @@ const xemCacLopGvmRoute = require("./routes/xemCacLopGvmRoute");
 const app = express();
 const port = process.env.port || 8888;
 const hostname = process.env.HOST_NAME;
+
+app.use(bodyParser.json({ limit: "500mb" }));
+app.use(bodyParser.urlencoded({ limit: "500mb", extended: true }));
 
 // config engine template
 configViewEngine(app);
@@ -110,6 +113,3 @@ app.use("/", importFile); // cấu hình import
 app.use("/", infoGvm); // cấu hình import
 app.use("/", tableQc); // cấu hình import
 // Thay đổi giới hạn kích thước payload (ví dụ: 10mb)
-
-app.use(bodyParser.json({ limit: '500mb' }));
-app.use(bodyParser.urlencoded({ limit: '500mb', extended: true }));
