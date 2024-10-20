@@ -241,9 +241,9 @@
             <option value="2027">2027</option>
           </select>
           <button id="getData" class="button text-nowrap">Lấy bảng quy chuẩn</button>
-          <button id="infoGvm" class="button text-nowrap">Xem bảng quy chuẩn</button>
-          <button id="update-qc" onclick="updateLocalTable()" class="button mx-3 luuTamThoi">Lưu tạm thời</button>
-          <button id="update-qc" onclick="submitData()" class="button mx-3 luu">Lưu</button>
+          <!-- <button id="infoGvm" class="button text-nowrap">Xem bảng cục bộ</button> -->
+          <button id="update-qc" onclick="updateLocalTable()" class="button mx-3 luuTamThoi">Lưu</button>
+          <button id="update-qc" onclick="submitData()" class="button mx-3 luu">Cập nhật</button>
         </div>
 
       </div>
@@ -435,7 +435,8 @@
 
 
       // Thông báo cho người dùng
-      alert('Đã chèn ngày cho tất cả các đối tượng.');
+      alert('Chèn thành công');
+      window.location.reload();
     });
 
 
@@ -443,20 +444,18 @@
 
   <!-- phần render bảng dùng localStorage -->
   <script>
-
+    var totalLL;
+    var totalQC;
     var globalDataNew = [];
 
     // gọi hàm này sau khi đọc hết script
     function init() {
-      document.getElementById('infoGvm').addEventListener('click', viewData);
+      // document.getElementById('infoGvm').addEventListener('click', viewData);
       document.getElementById('getData').addEventListener('click', loadData);
 
     }
 
     function viewData() {
-      // Nếu có sự thay đổi, cập nhật localStorage
-      // localStorage.getItem('nameGv');
-      // localStorage.getItem('nameGvm');
       let data = JSON.parse(localStorage.getItem('tableData'));
       renderTable(data);
       calculateTotals()
@@ -519,9 +518,11 @@
 
           if (isDataEqual) {
             console.log('Dữ liệu không thay đổi, sử dụng dữ liệu từ localStorage');
+            console.log(cachedData)
             // Render bảng từ dữ liệu đã cache
             renderTable(cachedData);
             calculateTotals();
+            window.location.reload();
             return;
           }
         }
@@ -530,6 +531,10 @@
         localStorage.setItem('nameGv', JSON.stringify(nameGvNew));
         localStorage.setItem('nameGvm', JSON.stringify(nameGvmNew));
         localStorage.setItem('tableData', JSON.stringify(globalDataNew));
+        console.log(globalDataNew)
+
+        window.location.reload();
+
 
       } catch (error) {
         console.error('Đã có lỗi xảy ra:', error);
@@ -643,7 +648,7 @@
         ngayKetThucTd.appendChild(ngayKetThucInput);
         tableRow.appendChild(ngayKetThucTd);
 
-        
+
 
         let khoaCheckboxTd, khoaCheckbox;
         // Điều kiện ẩn checkbox Khoa nếu role không phải "CNTT_ALL"
@@ -658,7 +663,7 @@
           tableRow.appendChild(khoaCheckboxTd);
         }
 
-        if (role == "GV"){
+        if (role == "GV") {
           giaoVienGiangDayInput.disabled = true;
           boMonInput.disabled = true;
           ngayBatDauInput.disabled = true;
@@ -667,7 +672,7 @@
         }
 
         const check = localStorage.getItem("check");
-     
+
         // Phân quyền theo phòng ban
         if (isKhoa == 1) { // Nếu là khoa
           if (check.includes(MaPhongBan)) {
@@ -681,14 +686,14 @@
             // Ngăn người dùng thay đổi trạng thái ngày kết thúc
             ngayKetThucInput.disabled = true;
 
-            if (role == "Lãnh đạo khoa"){
+            if (role == "Lãnh đạo khoa") {
               khoaCheckbox.addEventListener('click', function (e) {
                 e.preventDefault(); // Ngăn người dùng thay đổi trạng thái checkbox
               });
-            
+
               // Ngăn checkbox tổng của 'khoa' không cho thay đổi
               disableCheckAll('khoa');
-            
+
             }
             // Ngăn người dùng thay đổi trạng thái checkbox
 
@@ -865,24 +870,32 @@
       localStorage.setItem('tableData', JSON.stringify(localData));
 
       // Hiển thị thông báo thành công
-      alert('Lưu thành công');
+      alert('Lưu cục bộ thành công');
+      window.location.reload();
     }
 
-    // gọi hàm init
-    init();
-  </script>
-
-  <!-- các hàm phụ xử lí trong bảng -->
-  <script>
-    // Hàm tính tổng số tiết từ globalData
     function calculateTotals() {
-      totalLL = 0; // Reset tổng số tiết LL
-      totalQC = 0; // Reset tổng số tiết QC
+      let totalLL = 0; // Reset tổng số tiết LL
+      let totalQC = 0; // Reset tổng số tiết QC
 
-      // Duyệt qua từng phần tử trong globalData để cộng dồn số tiết
-      globalDataNew.forEach(item => {
-        totalLL += item.LL; // Cộng dồn số tiết LL
-        totalQC += item.QuyChuan; // Cộng dồn số tiết QC
+      const rows = document.querySelectorAll('#tableBody tr'); // Lấy tất cả các hàng trong bảng
+
+      rows.forEach((row) => {
+        // Bỏ qua các hàng đang bị ẩn
+        if (row.style.display === 'none') {
+          return;
+        }
+
+        // Giả sử cột LL là cột thứ 2 và cột QuyChuan là cột thứ 3
+        const LLCell = row.querySelector('td:nth-child(8)'); // Lấy ô của cột LL
+        const QuyChuanCell = row.querySelector('td:nth-child(9)'); // Lấy ô của cột QuyChuan
+
+        // Chuyển đổi giá trị của các ô thành số và cộng dồn
+        const LL = parseFloat(LLCell.textContent) || 0; // Nếu không phải số, mặc định là 0
+        const QuyChuan = parseFloat(QuyChuanCell.textContent) || 0;
+
+        totalLL += LL; // Cộng dồn số tiết LL
+        totalQC += QuyChuan; // Cộng dồn số tiết QC
       });
 
       // Cập nhật tổng số tiết vào HTML
@@ -890,6 +903,15 @@
       document.getElementById('totalQC').textContent = totalQC;
     }
 
+    document.addEventListener('DOMContentLoaded', function () {
+      viewData();
+      init();
+    });
+
+  </script>
+
+  <!-- các hàm phụ xử lí trong bảng -->
+  <script>
 
     // xử lí tìm theo tên
     function filterByName() {
@@ -1087,7 +1109,7 @@
       }
 
       //document.querySelector('.role').innerText = `${Role}`;
-      if (Role == 'GV'){
+      if (Role == 'GV') {
         document.querySelector('.luuTamThoi').style.display = 'none';
         document.querySelector('.luu').style.display = 'none';
 
