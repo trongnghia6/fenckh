@@ -1,4 +1,5 @@
 const express = require("express");
+const bodyParser = require('body-parser');
 const path = require("path");
 require("dotenv").config();
 const session = require("express-session");
@@ -17,12 +18,13 @@ const configViewEngine = require("./config/viewEngine");
 // Cấu hình đường dẫn routes
 const webRoutes = require("./routes/web");
 const createGvmRoutes = require("./routes/createGvmRoute");
-const gvmListRoutes = require('./routes/gvmListRoute');
+const gvmListRoutes = require("./routes/gvmListRoute");
 const updateGvm = require("./routes/updateGvmRoute");
 const classInfoGvm = require("./routes/classInfoGvmRoute");
 const importGvmList = require("./routes/importGvmListRoute");
-const infoHDGvmRoutes = require('./routes/infoHDGvmRoute');
-const adminRoute = require('./routes/adminRoute');
+const infoHDGvmRoutes = require("./routes/infoHDGvmRoute");
+const adminRoute = require("./routes/adminRoute");
+const xemCacLopGvmRoute = require("./routes/xemCacLopGvmRoute");
 const phuLucHDRoute = require('./routes/phuLucHDRoute');
 
 
@@ -65,16 +67,15 @@ app.use(express.urlencoded({ extended: true })); // for form data
 app.use("/", webRoutes);
 app.use("/", login);
 app.use("/", createGvmRoutes);
-app.use('/', gvmListRoutes);
+app.use("/", gvmListRoutes);
 app.use("/", updateGvm);
 app.use("/", classInfoGvm);
 app.use("/", importGvmList);
-app.use('/', infoHDGvmRoutes);
-app.use('/', adminRoute);
+app.use("/", infoHDGvmRoutes);
+app.use("/", adminRoute);
 app.use('/', phuLucHDRoute);
 
-
-
+app.use("/", xemCacLopGvmRoute);
 
 app.listen(port, hostname, () => {
   console.log(`Server running on http://localhost:${port}`);
@@ -112,7 +113,7 @@ const tableQc = require("./routes/gvmRoute");
 app.use("/", importFile); // cấu hình import
 app.use("/", infoGvm); // cấu hình import
 app.use("/", tableQc); // cấu hình import
+// Thay đổi giới hạn kích thước payload (ví dụ: 10mb)
 
-// truyền json kích thước lớn
-app.use(express.json({ limit: '50mb' }));
-app.use(express.urlencoded({ limit: '50mb', extended: true }));
+app.use(bodyParser.json({ limit: '500mb' }));
+app.use(bodyParser.urlencoded({ limit: '500mb', extended: true }));

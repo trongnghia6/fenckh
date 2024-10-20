@@ -173,11 +173,16 @@ const saveToDB = async (req, res) => {
 
     if (data && data.length > 0) {
       for (const row of data) {
+        // const sql = `
+        //   INSERT INTO gvmoi
+        //   (GioiTinh, MaGvm, HoTen, NgaySinh, CCCD, NgayCapCCCD, NoiCapCCCD, DiaChi, Email, MaSoThue, HocVi, ChucVu, HSL, DienThoai, STK, NganHang, MaPhongBan, TinhTrangGiangDay)
+        //   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        // `;
         const sql = `
-          INSERT INTO gvmoi
-          (GioiTinh, MaGvm, HoTen, NgaySinh, CCCD, NgayCapCCCD, NoiCapCCCD, DiaChi, Email, MaSoThue, HocVi, ChucVu, HSL, DienThoai, STK, NganHang, MaPhongBan, TinhTrangGiangDay)
-          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-        `;
+        INSERT INTO gvmoi
+        (GioiTinh, MaGvm, HoTen, NgaySinh, BangTotNghiepLoai, NoiCongTac, MonGiangDayChinh, DiaChi, Email, MaSoThue, HocVi, ChucVu, HSL, DienThoai, STK, NganHang, TinhTrangGiangDay, CCCD, NgayCapCCCD, NoiCapCCCD)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      `;
 
         const gvms = await gvmList.getGvmLists(req, res);
         let length = parseInt(gvms.length) + 1;
@@ -187,6 +192,7 @@ const saveToDB = async (req, res) => {
         // Chuyển đổi dữ liệu để phù hợp với cột trong DB
         const GioiTinh = row["Danh xưng"] === "Ông" ? "Nam" : "Nữ";
         const HoTen = row["Họ và tên"];
+        //const GioiTinh = row["Giới tính"];
         const NgaySinh = row["Ngày sinh"];
         const CCCD = row["CCCD"];
         const NgayCapCCCD = row["Ngày cấp"];
@@ -200,58 +206,55 @@ const saveToDB = async (req, res) => {
         const DienThoai = row["Điện thoại"];
         const STK = row["Số tài khoản"];
         const NganHang = row["Tại ngân hàng"];
+        const NoiCongTac = row["Nơi công tác"];
+        const MonGiangDayChinh = row["Bộ môn"] || " ";
+        const BangTotNghiepLoai = row["Bằng loại"] || " ";
 
-        // const values = [
-        //   GioiTinh,
-        //   MaGvm,
-        //   HoTen,
-        //   NgaySinh,
-        //   CCCD,
-        //   NgayCapCCCD,
-        //   NoiCapCCCD,
-        //   DiaChi,
-        //   Email,
-        //   MaSoThue,
-        //   HocVi,
-        //   ChucVu,
-        //   HSL,
-        //   DienThoai,
-        //   STK,
-        //   NganHang,
-        //   MaPhongBan,
-        //   TinhTrangGiangDay,
-        // ];
+        //
+
+        //const HocVi = row["Cấp bậc"];
 
         let isDuplicate = false;
 
-        // Kiểm tra trùng CCCD và MaPhongBan
+        // Kiểm tra trùng CCCD
         for (const gvm of gvms) {
           if (gvm.CCCD === CCCD) {
-            if (gvm.MaPhongBan === MaPhongBan) {
-              // Nếu CCCD và MaPhongBan trùng
-              return res.status(400).json({
-                message: `CCCD ${CCCD} bị trùng trong cùng Phòng ban`,
-              });
-            }
-            const query = `UPDATE gvmoi SET MaPhongBan = ? where id_Gvm = ?`;
-            // Nối thêm MaPhongBan nếu CCCD trùng nhưng MaPhongBan khác
-            const MaPhongBan2 = `${gvm.MaPhongBan},${MaPhongBan}`;
+            return res.status(400).json({
+              message: `Giảng viên mời ${HoTen} với CCCD ${CCCD} bị trùng, dữ liệu từ giảng viên này sẽ không được nhập`,
+            });
 
-            await connection.query(query, [MaPhongBan2, gvm.id_Gvm]);
             //MaPhongBan = null;
-            isDuplicate = true;
-            break;
+            // isDuplicate = true;
+            // break;
           }
         }
+        // for (const gvm of gvms) {
+        //   if (gvm.CCCD === CCCD) {
+        //     if (gvm.MaPhongBan === MaPhongBan) {
+        //       // Nếu CCCD và MaPhongBan trùng
+        //       return res.status(400).json({
+        //         message: `CCCD ${CCCD} bị trùng trong cùng Phòng ban`,
+        //       });
+        //     }
+        //     const query = `UPDATE gvmoi SET MaPhongBan = ? where id_Gvm = ?`;
+        //     // Nối thêm MaPhongBan nếu CCCD trùng nhưng MaPhongBan khác
+        //     const MaPhongBan2 = `${gvm.MaPhongBan},${MaPhongBan}`;
+
+        //     await connection.query(query, [MaPhongBan2, gvm.id_Gvm]);
+        //     //MaPhongBan = null;
+        //     isDuplicate = true;
+        //     break;
+        //   }
+        // }
 
         const values = [
           GioiTinh,
           MaGvm,
           HoTen,
           NgaySinh,
-          CCCD,
-          NgayCapCCCD,
-          NoiCapCCCD,
+          BangTotNghiepLoai,
+          NoiCongTac,
+          MonGiangDayChinh,
           DiaChi,
           Email,
           MaSoThue,
@@ -261,14 +264,19 @@ const saveToDB = async (req, res) => {
           DienThoai,
           STK,
           NganHang,
-          MaPhongBan,
+          //MaPhongBan,
           TinhTrangGiangDay,
+          CCCD,
+          NgayCapCCCD,
+          NoiCapCCCD,
         ];
 
-        if (!isDuplicate) {
-          // Thêm mới vào DB
-          await connection.query(sql, values);
-        }
+        await connection.query(sql, values);
+
+        // if (!isDuplicate) {
+        //   // Thêm mới vào DB
+        //   await connection.query(sql, values);
+        // }
       }
 
       // Gửi phản hồi thành công

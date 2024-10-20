@@ -641,13 +641,6 @@ const updateQC = async (req, res) => {
   const role = req.session.role;
   const duyet = process.env.DUYET;
 
-  // Kiểm tra xem người dùng có quyền thực hiện hành động này không
-  if (role == duyet) {
-    return res
-      .status(403)
-      .json({ error: "Bạn không có quyền thực hiện hành động này" });
-  }
-
   const tableName = process.env.DB_TABLE_QC; // Giả sử biến này có giá trị là "quychuan"
   const jsonData = req.body; // Lấy dữ liệu từ req.body
 
@@ -669,6 +662,7 @@ const updateQC = async (req, res) => {
     let completedIDs = [];
 
     // Duyệt qua từng phần tử trong jsonData
+    console.log("data = ", jsonData);
     for (let item of jsonData) {
       const {
         ID,
@@ -802,9 +796,9 @@ const updateQC = async (req, res) => {
 //     GROUP BY gvmoi.HoTen;
 //   `;
 
-//   const getDanhXung = (gioiTinh) => {
-//     return gioiTinh === "Nam" ? "Ông" : gioiTinh === "Nữ" ? "Bà" : "";
-//   };
+const getDanhXung = (gioiTinh) => {
+  return gioiTinh === "Nam" ? "Ông" : gioiTinh === "Nữ" ? "Bà" : "";
+};
 
 //   try {
 //     const [dataJoin] = await connection.promise().query(query2);
@@ -909,9 +903,9 @@ const getNhanvienId = async (HoTen) => {
   return rows[0].id_User;
 };
 
-const hocPhanDaTonTai = async (MaHocPhan) => {
-  const query = "SELECT MaHocPhan FROM `hocphan` WHERE MaHocPhan = ?";
-  const [rows] = await connection.promise().query(query, [MaHocPhan]);
+const hocPhanDaTonTai = async (TenHocPhan) => {
+  const query = "SELECT TenHocPhan FROM `hocphan` WHERE TenHocPhan = ?";
+  const [rows] = await connection.promise().query(query, [TenHocPhan]);
 
   return rows.length > 0; // Nếu có ít nhất một kết quả, môn học đã tồn tại
 };
@@ -926,252 +920,38 @@ const themHocPhan = async (MaHocPhan, TenHocPhan, DVHT, Khoa) => {
   await connection.promise().query(query, values);
 };
 
-// const insertGiangDay = async (req, res) => {
-//   const query2 = `
-//     SELECT
-//       qc.*,
-//       gvmoi.*,
-//       SUBSTRING_INDEX(qc.GiaoVienGiangDay, ' - ', 1) AS TenGiangVien
-//     FROM quychuan qc
-//     JOIN gvmoi ON SUBSTRING_INDEX(qc.GiaoVienGiangDay, ' - ', 1) = gvmoi.HoTen
-//   `;
-
-//   try {
-//     const [dataJoin] = await connection.promise().query(query2);
-//     let id_Gvm = 1;
-//     let id_User = 1;
-
-//     // Chuẩn bị dữ liệu để chèn từng loạt
-//     const insertValues = await Promise.all(
-//       dataJoin.map(async (item) => {
-//         const {
-//           Khoa,
-//           MoiGiang,
-//           SoTinChi,
-//           LopHocPhan,
-//           GiaoVien,
-//           GiaoVienGiangDay,
-//           LL,
-//           SoTietCTDT,
-//           HeSoT7CN,
-//           SoSinhVien,
-//           HeSoLopDong,
-//           QuyChuan,
-//           KiHoc,
-//           NamHoc,
-//           MaHocPhan,
-//           TenLop,
-//           Dot,
-//         } = item;
-
-//         const TenHocPhan = LopHocPhan;
-//         const gv1 = GiaoVienGiangDay ? GiaoVienGiangDay.split(" - ") : [];
-//         const gv2 = GiaoVien ? GiaoVien.split(" - ") : [];
-
-//         if (MoiGiang == 1) {
-//           // Lấy id_Gvm khi giảng viên mới giảng
-//           id_Gvm = await getGvmId(gv1[0]);
-//         } else {
-//           // Nếu không có giảng viên thì lấy id_User
-//           id_User = !GiaoVienGiangDay
-//             ? await getNhanvienId(gv2[0])
-//             : await getNhanvienId(gv1[0]);
-//         }
-
-//         // Kiểm tra môn học đã tồn tại chưa
-//         if (!(await hocPhanDaTonTai(MaHocPhan))) {
-//           await themHocPhan(MaHocPhan, TenHocPhan, SoTinChi, Khoa);
-//         }
-
-//         // Trả về mảng các giá trị đã chờ để đưa vào câu INSERT
-//         return [
-//           SoTinChi,
-//           TenHocPhan,
-//           id_User,
-//           id_Gvm,
-//           LL,
-//           SoTietCTDT,
-//           HeSoT7CN,
-//           SoSinhVien,
-//           HeSoLopDong,
-//           QuyChuan,
-//           KiHoc,
-//           NamHoc,
-//           MaHocPhan,
-//           TenLop,
-//         ];
-//       })
-//     );
-
-//     // Kiểm tra xem có dữ liệu để chèn không
-//     if (insertValues.length === 0) {
-//       return res.status(400).json({ message: "Không có dữ liệu để chèn!" });
-//     }
-
-//     // Định nghĩa câu lệnh chèn
-//     const queryInsert = `
-//       INSERT INTO giangday (
-//         SoTC, TenHocPhan, id_User, id_Gvm, LenLop, SoTietCTDT, HeSoT7CN, SoSV, HeSoLopDong,
-//         QuyChuan, HocKy, NamHoc, MaHocPhan, Lop
-//       ) VALUES ?;
-//     `;
-
-//     // Thực hiện câu lệnh chèn
-//     await connection.promise().query(queryInsert, [insertValues]);
-//     console.log("done");
-
-//     // Đảm bảo chỉ gửi phản hồi một lần
-//     return res
-//       .status(200)
-//       .json({ message: "Dữ liệu đã được chèn thành công!" });
-//   } catch (err) {
-//     console.error(err); // Ghi lại lỗi để gỡ lỗi
-//     if (!res.headersSent) {
-//       return res
-//         .status(500)
-//         .json({ error: "Đã xảy ra lỗi trong quá trình cập nhật thông tin." });
-//     }
-//   }
-// };
-
-// const submitData2 = async (req, res) => {
-//   try {
-//     await updateAllTeachingInfo(req, res); // Chờ cho hàm này hoàn thành
-//     await insertGiangDay(req, res); // Chờ cho hàm này hoàn thành
-//     // Có thể thêm một phản hồi sau khi cả hai hàm đã hoàn tất, nếu cần
-//     return res.status(200).json({ message: "Cập nhật dữ liệu thành công!" });
-//   } catch (error) {
-//     console.error(error);
-//     // Kiểm tra xem tiêu đề đã được gửi chưa trước khi gửi phản hồi lỗi
-//     if (!res.headersSent) {
-//       return res
-//         .status(500)
-//         .json({ error: "Đã xảy ra lỗi trong quá trình xử lý yêu cầu." });
-//     }
-//   }
-// };
-
-// const updateAllTeachingInfo = async () => {
-//   const query2 = `
-//     SELECT
-//       qc.*,
-//       gvmoi.*,
-//       SUBSTRING_INDEX(qc.GiaoVienGiangDay, ' - ', 1) AS TenGiangVien
-//     FROM quychuan qc
-//     JOIN gvmoi ON SUBSTRING_INDEX(qc.GiaoVienGiangDay, ' - ', 1) = gvmoi.HoTen
-//     GROUP BY gvmoi.HoTen;
-//   `;
-
-//   const getDanhXung = (gioiTinh) => {
-//     return gioiTinh === "Nam" ? "Ông" : gioiTinh === "Nữ" ? "Bà" : "";
-//   };
-
-//   try {
-//     const [dataJoin] = await connection.promise().query(query2);
-
-//     // Chuẩn bị dữ liệu để chèn từng loạt
-//     const insertValues = dataJoin.map((item) => {
-//       const {
-//         id_Gvm,
-//         DienThoai,
-//         Email,
-//         MaSoThue,
-//         HoTen,
-//         NgaySinh,
-//         HSL,
-//         CCCD,
-//         NoiCapCCCD,
-//         DiaChi,
-//         STK,
-//         NganHang,
-//         NgayBatDau,
-//         NgayKetThuc,
-//         KiHoc,
-//         QuyChuan,
-//         Dot,
-//         NamHoc,
-//         MaPhongBan,
-//         KhoaDuyet,
-//         DaoTaoDuyet,
-//         TaiChinhDuyet,
-//         GioiTinh,
-//       } = item;
-
-//       const DanhXung = getDanhXung(GioiTinh);
-//       let SoTien = QuyChuan * 1000000;
-//       let TruThue = 0;
-//       let MaBoMon = 0; // Giả định giá trị mặc định là 0
-
-//       return [
-//         id_Gvm,
-//         DienThoai,
-//         Email,
-//         MaSoThue,
-//         DanhXung,
-//         HoTen,
-//         NgaySinh,
-//         HSL,
-//         CCCD,
-//         NoiCapCCCD,
-//         DiaChi,
-//         STK,
-//         NganHang,
-//         NgayBatDau,
-//         NgayKetThuc,
-//         KiHoc,
-//         SoTien,
-//         TruThue,
-//         Dot,
-//         NamHoc,
-//         MaPhongBan,
-//         MaBoMon,
-//         KhoaDuyet,
-//         DaoTaoDuyet,
-//         TaiChinhDuyet,
-//       ];
-//     });
-
-//     // Định nghĩa câu lệnh chèn
-//     const queryInsert = `
-//       INSERT INTO hopdonggvmoi (
-//         id_Gvm, DienThoai, Email, MaSoThue, DanhXung, HoTen, NgaySinh, HSL, CCCD, NoiCapCCCD,
-//         DiaChi, STK, NganHang, NgayBatDau, NgayKetThuc, KiHoc, SoTiet, SoTien, TruThue,
-//         Dot, NamHoc, MaPhongBan, MaBoMon, KhoaDuyet, DaoTaoDuyet, TaiChinhDuyet
-//       ) VALUES ?;
-//     `;
-
-//     // Thực hiện câu lệnh chèn
-//     await connection.promise().query(queryInsert, [insertValues]);
-
-//     // Trả về kết quả thành công
-//     return { success: true, message: "Dữ liệu đã được chèn thành công!" };
-//   } catch (err) {
-//     console.error(err); // Ghi lại lỗi để gỡ lỗi
-//     return {
-//       success: false,
-//       message: "Đã xảy ra lỗi trong quá trình cập nhật thông tin.",
-//     };
-//   }
-// };
-
 const updateAllTeachingInfo = async () => {
-  const query2 = `
-    SELECT
-      qc.*, 
-      gvmoi.*, 
-      SUBSTRING_INDEX(qc.GiaoVienGiangDay, ' - ', 1) AS TenGiangVien
-    FROM quychuan qc
-    JOIN gvmoi ON SUBSTRING_INDEX(qc.GiaoVienGiangDay, ' - ', 1) = gvmoi.HoTen
-    GROUP BY gvmoi.HoTen;
-  `;
+  // const query2 = `
+  //   SELECT
+  //     qc.*,
+  //     gvmoi.*,
+  //     SUBSTRING_INDEX(qc.GiaoVienGiangDay, ' - ', 1) AS TenGiangVien
+  //   FROM quychuan qc
+  //   JOIN gvmoi ON SUBSTRING_INDEX(qc.GiaoVienGiangDay, ' - ', 1) = gvmoi.HoTen;
+  // `;
+  //   //GROUP BY gvmoi.HoTen;
 
-  const getDanhXung = (gioiTinh) => {
-    return gioiTinh === "Nam" ? "Ông" : gioiTinh === "Nữ" ? "Bà" : "";
-  };
+  const query2 = `
+  SELECT
+    qc.*,
+    gvmoi.*,
+    SUM(qc.QuyChuan) AS TongSoTiet,  
+    SUBSTRING_INDEX(qc.GiaoVienGiangDay, ' - ', 1) AS TenGiangVien
+  FROM quychuan qc
+  JOIN gvmoi ON SUBSTRING_INDEX(qc.GiaoVienGiangDay, ' - ', 1) = gvmoi.HoTen
+  GROUP BY gvmoi.HoTen;  
+`;
 
   try {
     const [dataJoin] = await connection.promise().query(query2);
 
+    // Kiểm tra xem có dữ liệu không
+    if (!dataJoin || dataJoin.length === 0) {
+      return {
+        success: false,
+        message: "Không có dữ liệu để chèn.",
+      };
+    }
     // Chuẩn bị dữ liệu để chèn từng loạt
     const insertValues = dataJoin.map((item) => {
       const {
@@ -1190,6 +970,7 @@ const updateAllTeachingInfo = async () => {
         NgayBatDau,
         NgayKetThuc,
         KiHoc,
+        TongSoTiet, // Lấy cột tổng số tiết đã tính từ SQL
         QuyChuan,
         Dot,
         NamHoc,
@@ -1200,10 +981,16 @@ const updateAllTeachingInfo = async () => {
         GioiTinh,
       } = item;
 
+      console.log("item = ", item);
+
       const DanhXung = getDanhXung(GioiTinh);
-      let SoTien = QuyChuan * 1000000; // Tính toán số tiền
+      // const getDanhXung = (GioiTinh) => {
+      //   return GioiTinh === "Nam" ? "Ông" : GioiTinh === "Nữ" ? "Bà" : "";
+      // };
+      let SoTiet = TongSoTiet || 0; // Nếu QuyChuan không có thì để 0
+      let SoTien = (TongSoTiet || 0) * 1000000; // Tính toán số tiền
       let TruThue = 0; // Giả định không thu thuế
-      let MaBoMon = 0; // Giả định giá trị mặc định là 0
+      let MaBoMon = 0; // Giá trị mặc định là 0
 
       return [
         id_Gvm,
@@ -1222,7 +1009,7 @@ const updateAllTeachingInfo = async () => {
         NgayBatDau,
         NgayKetThuc,
         KiHoc,
-        0, // SoTiet - nếu không có giá trị thì để 0 hoặc kiểm tra
+        SoTiet,
         SoTien,
         TruThue,
         Dot,
@@ -1234,6 +1021,17 @@ const updateAllTeachingInfo = async () => {
         TaiChinhDuyet,
       ];
     });
+
+    // Kiểm tra xem insertValues có rỗng không
+    if (
+      insertValues.length === 0 ||
+      insertValues.some((row) => row.length === 0)
+    ) {
+      return {
+        success: false,
+        message: "Không có dữ liệu hợp lệ để chèn.",
+      };
+    }
 
     // Định nghĩa câu lệnh chèn
     const queryInsert = `
@@ -1250,7 +1048,7 @@ const updateAllTeachingInfo = async () => {
     // Trả về kết quả thành công
     return { success: true, message: "Dữ liệu đã được chèn thành công!" };
   } catch (err) {
-    console.error(err); // Ghi lại lỗi để gỡ lỗi
+    console.error("Lỗi:", err.message); // Ghi lại lỗi để gỡ lỗi
     return {
       success: false,
       message: "Đã xảy ra lỗi trong quá trình cập nhật thông tin.",
@@ -1318,9 +1116,12 @@ const insertGiangDay = async () => {
             gv = gv1[0];
           }
         }
-        console.log("Mã học phần = ", MaHocPhan);
+
         // Kiểm tra môn học đã tồn tại chưa
-        if (!(await hocPhanDaTonTai(MaHocPhan))) {
+        const exists = await hocPhanDaTonTai(TenHocPhan);
+        console.log("Học phần đã tồn tại:", exists); // In ra giá trị tồn tại
+
+        if (exists === false) {
           await themHocPhan(MaHocPhan, TenHocPhan, SoTinChi, Khoa);
         }
 
@@ -1371,9 +1172,127 @@ const insertGiangDay = async () => {
   }
 };
 
+const insertGiangDay2 = async () => {
+  const query2 = `
+    SELECT
+      qc.*, 
+      nhanvien.*, 
+      SUBSTRING_INDEX(qc.GiaoVienGiangDay, ' - ', 1) AS TenGiangVien
+    FROM quychuan qc
+    JOIN nhanvien ON SUBSTRING_INDEX(qc.GiaoVienGiangDay, ' - ', 1) = nhanvien.TenNhanVien
+  `;
+
+  try {
+    const [dataJoin] = await connection.promise().query(query2);
+
+    // Chuẩn bị dữ liệu để chèn từng loạt
+    const insertValues = await Promise.all(
+      dataJoin.map(async (item) => {
+        const {
+          Khoa,
+          MoiGiang,
+          SoTinChi,
+          LopHocPhan,
+          GiaoVien,
+          GiaoVienGiangDay,
+          LL,
+          SoTietCTDT,
+          HeSoT7CN,
+          SoSinhVien,
+          HeSoLopDong,
+          QuyChuan,
+          KiHoc,
+          NamHoc,
+          MaHocPhan,
+          TenLop,
+        } = item;
+
+        const TenHocPhan = LopHocPhan;
+
+        const gv1 = GiaoVienGiangDay ? GiaoVienGiangDay.split(" - ") : [];
+        const gv2 = GiaoVien ? GiaoVien.split(" - ") : [];
+        let gv = gv1.length > 0 ? gv1[0] : gv2[0];
+        let id_Gvm = 1;
+        let id_User = 1;
+
+        if (MoiGiang == 1) {
+          // Lấy id_Gvm khi giảng viên mới giảng
+          id_Gvm = await getGvmId(gv1[0]);
+          gv = gv1[0];
+        } else {
+          // Nếu không có giảng viên thì lấy id_User
+          // id_User = !GiaoVienGiangDay
+          //   ? await getNhanvienId(gv2[0])
+          //   : await getNhanvienId(gv1[0]);
+          if (!GiaoVienGiangDay) {
+            id_User = await getNhanvienId(gv2[0]);
+            gv = gv2[0];
+          } else {
+            id_User = await getNhanvienId(gv1[0]);
+            gv = gv1[0];
+          }
+        }
+
+        const exists = await hocPhanDaTonTai(TenHocPhan);
+        console.log("Học phần đã tồn tại:", exists); // In ra giá trị tồn tại
+
+        if (exists === false) {
+          await themHocPhan(MaHocPhan, TenHocPhan, SoTinChi, Khoa);
+        }
+
+        // Trả về mảng các giá trị đã chờ để đưa vào câu INSERT
+        return [
+          gv,
+          SoTinChi,
+          TenHocPhan,
+          id_User,
+          id_Gvm,
+          LL,
+          SoTietCTDT,
+          HeSoT7CN,
+          SoSinhVien,
+          HeSoLopDong,
+          QuyChuan,
+          KiHoc,
+          NamHoc,
+          MaHocPhan,
+          TenLop,
+        ];
+      })
+    );
+
+    // Kiểm tra xem có dữ liệu để chèn không
+    if (insertValues.length === 0) {
+      return { success: false, message: "Không có dữ liệu để chèn!" };
+    }
+
+    console.log("gà");
+
+    // Định nghĩa câu lệnh chèn
+    const queryInsert = `
+      INSERT INTO giangday (
+        GiangVien, SoTC, TenHocPhan, id_User, id_Gvm, LenLop, SoTietCTDT, HeSoT7CN, SoSV, HeSoLopDong, 
+        QuyChuan, HocKy, NamHoc, MaHocPhan, Lop
+      ) VALUES ?;
+    `;
+
+    // Thực hiện câu lệnh chèn
+    await connection.promise().query(queryInsert, [insertValues]);
+    // Trả về kết quả thành công
+    return { success: true, message: "Dữ liệu đã được chèn thành công!" };
+  } catch (err) {
+    console.error(err); // Ghi lại lỗi để gỡ lỗi
+    return {
+      success: false,
+      message: "Đã xảy ra lỗi trong quá trình cập nhật thông tin.",
+    };
+  }
+};
+
 const submitData2 = async (req, res) => {
   try {
     const updateResult = await updateAllTeachingInfo(); // Gọi hàm mà không cần res
+    const update2 = await insertGiangDay2();
 
     if (updateResult.success) {
       const insertResult = await insertGiangDay(); // Gọi hàm insertGiangDay cũng tương tự
