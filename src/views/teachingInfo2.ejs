@@ -145,6 +145,9 @@
                   <a class="nav-link" href="/infoHDGvm" role="button"
                     >Thông tin hợp đồng</a
                   >
+                  <li class="nav-item"></li>
+                  <a class="nav-link " href="/phuLucHD" >Phụ lục hợp đồng</a>
+                  </li>
                 </div>
               </div>
             </div>
@@ -211,9 +214,7 @@
                   <a class="nav-link" id="ThongTinGD" href="#">COMING SOON</a>
                 </div>
               </div>
-              <li class="nav-item"></li>
-              <a class="nav-link " href="/phuLucHD" >Phụ lục hợp đồng</a>
-              </li>
+
             </div>
           </ul>
           <div class="navbar-nav">
@@ -461,7 +462,7 @@
             ]);
 
           if (!gvmResponse.ok || !khoaResponse.ok || !teachingResponse.ok) {
-            alert("Lỗi truy vấn!");
+            alert("Không tìm thấy dữ liệu!");
           }
 
           // Lưu dữ liệu giảng viên cùng với mã phòng ban
