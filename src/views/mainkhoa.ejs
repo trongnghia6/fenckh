@@ -203,6 +203,7 @@
               <!-- <p class="nav-link dropdown-toggle role">Role</p> -->
               <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                 <a class="dropdown-item" href="#">Thông tin cá nhân</a>
+                <a class="dropdown-item" id="changePasswordLink">Đổi mật khẩu</a>
                 <a class="dropdown-item" href="/">Đăng xuất</a>
               </div>
             </div>
@@ -327,12 +328,13 @@
       window.onload = function () {
         const TenNhanVien = localStorage.getItem("TenNhanVien"); // Lấy tên người dùng từ localStorage
         const Role = localStorage.getItem("userRole");
+        const TenDangNhap = localStorage.getItem("TenDangNhap");
 
         if (TenNhanVien) {
           // Hiển thị tên người dùng trên phần tử HTML
           document.querySelector(
             ".fullname"
-          ).innerText = `${TenNhanVien} - ${Role}`;
+          ).innerText = `${TenNhanVien} - ${Role}` ;
         } else {
           document.querySelector(".fullname").innerText = "Hi, Guest"; // Hiển thị nếu không có tên người dùng
         }
@@ -399,6 +401,20 @@
           }
         });
       });
+    </script>
+    <script>
+      document.getElementById("changePasswordLink").addEventListener("click", function(event) {
+    event.preventDefault(); // Ngăn chặn hành vi mặc định của thẻ a
+    const tenDangNhap = localStorage.getItem("TenDangNhap"); // Lấy TenDangNhap từ localStorage
+    alert(tenDangNhap);
+
+    if (tenDangNhap) {
+        // Chuyển hướng đến trang changePassword và truyền TenDangNhap trong URL
+        window.location.href = `/changePassword?tenDangNhap=${encodeURIComponent(tenDangNhap)}`;
+    } else {
+        alert("Không tìm thấy TenDangNhap trong localStorage.");
+    }
+});
     </script>
   </body>
 </html>

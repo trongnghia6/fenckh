@@ -205,10 +205,10 @@
         </div>
         <div class="col-md-4">
             <label>Bằng đại học:</label>
-            <img src="/images/certificates/<%= value.imgbangdh %>" alt="Bằng đại học" width="100" id="imgbang">
+            <img src="/images/certificates/<%= value.BangTotNghiep %>" alt="Bằng đại học" width="100" id="imgbang">
             <br>
-            <input class="form-control" type="file" name="imgbangdh" id="imgbangdh" disabled>
-            <input type="hidden" name="oldimgbangdh" value="<%= value.imgbangdh %>" disabled>
+            <input class="form-control" type="file" name="BangTotNghiep" id="BangTotNghiep" disabled>
+            <input type="hidden" name="oldimgbangdh" value="<%= value.BangTotNghiep %>" disabled>
         </div>
       </div>
       <div class="row mb-3">
@@ -221,7 +221,10 @@
             <input class="form-control" type="email" name="email" id="email" value="<%= value.Email %>" disabled>
         </div>
         <div class="col-md-4">
-            <label>File lý lịch (PDF):</label> <%= value.FileLyLich %>   
+            <label>File lý lịch (PDF):</label>
+            <a href="/resumes/<%= value.FileLyLich %>" download>
+              <%= value.FileLyLich %>
+            </a>
             <input class="form-control" type="file" name="FileLyLich" id="FileLyLich" disabled>
             <input type="hidden" name="oldFileLyLich" value="<%= value.FileLyLich %>" disabled>
         </div>
@@ -435,6 +438,20 @@
         reader.readAsDataURL(file);
       }
     });
+  </script>
+  <script>
+    document.getElementById("changePasswordLink").addEventListener("click", function(event) {
+  event.preventDefault(); // Ngăn chặn hành vi mặc định của thẻ a
+  const tenDangNhap = localStorage.getItem("TenDangNhap"); // Lấy TenDangNhap từ localStorage
+  alert(tenDangNhap);
+
+  if (tenDangNhap) {
+      // Chuyển hướng đến trang changePassword và truyền TenDangNhap trong URL
+      window.location.href = `/changePassword?tenDangNhap=${encodeURIComponent(tenDangNhap)}`;
+  } else {
+      alert("Không tìm thấy TenDangNhap trong localStorage.");
+  }
+});
   </script>
 
 </body>
