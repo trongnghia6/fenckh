@@ -100,6 +100,74 @@ const getaccountList = async (req, res) => {
       res.status(500).send("Lỗi server, không thể lấy dữ liệu");
     }
   }
+  const getchangePassword = async (req, res) => {
+    try {
+        // Lấy TenDangNhap từ query parameters
+        const tenDangNhap = req.query.tenDangNhap;
+
+        // Kiểm tra xem TenDangNhap có tồn tại không
+        if (!tenDangNhap) {
+            return res.status(400).send("Thiếu tham số TenDangNhap");
+        }
+
+        // Truy vấn lấy thông tin người dùng
+        const query = 'SELECT * FROM taikhoannguoidung WHERE TenDangNhap = ?'; // Sử dụng tham số để tránh SQL Injection
+        const connection = await createConnection(); // Kết nối tới cơ sở dữ liệu
+        
+        const [results] = await connection.query(query, [tenDangNhap]); // Thực hiện truy vấn
+        
+        if (results.length === 0) {
+            return res.status(404).send("Không tìm thấy tài khoản với TenDangNhap đã cho");
+        }
+        
+        const account = results[0]; // Lấy thông tin tài khoản đầu tiên (giả sử TenDangNhap là duy nhất)
+  
+        // Render trang changePassword.ejs và truyền thông tin tài khoản vào
+        res.render("changePassword.ejs", { account: account });
+    } catch (error) {
+        console.error("Lỗi khi lấy trang đổi mật khẩu:", error);
+        res.status(500).send("Lỗi hệ thống");
+    }
+}
+const updatePassword = async (req, res) => {
+  try {
+      const { currentPassword, newPassword } = req.body;
+      const tenDangNhap = req.query.tenDangNhap;
+
+      // Kiểm tra xem TenDangNhap có tồn tại không
+      if (!tenDangNhap) {
+          return res.status(400).send("Thiếu tham số TenDangNhap");
+      }
+
+      // Truy vấn lấy tài khoản từ CSDL
+      const query = 'SELECT * FROM taikhoannguoidung WHERE TenDangNhap = ?';
+      const connection = await createConnection();
+      const [results] = await connection.query(query, [tenDangNhap]);
+
+      if (results.length === 0) {
+          return res.status(404).send("Tài khoản không tồn tại");
+      }
+
+      const account = results[0];
+
+      // So sánh mật khẩu nhập vào với mật khẩu trong CSDL
+      if (account.password !== currentPassword) {
+          return res.status(401).send("Mật khẩu hiện tại không đúng");
+      }
+
+      // Cập nhật mật khẩu mới
+      const updateQuery = 'UPDATE taikhoannguoidung SET password = ? WHERE TenDangNhap = ?';
+      await connection.query(updateQuery, [newPassword, tenDangNhap]);
+
+      res.send("Cập nhật mật khẩu thành công");
+  } catch (error) {
+      console.error("Lỗi khi cập nhật mật khẩu:", error);
+      res.status(500).send("Lỗi hệ thống");
+  }
+};
+
+
+
   
   module.exports = {
     getaccountList,
@@ -108,4 +176,6 @@ const getaccountList = async (req, res) => {
     getMaPhongBanList,
     getidUserLists,
     getUpdatePhongBan,
+    getchangePassword,
+    updatePassword,
   };

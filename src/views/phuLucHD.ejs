@@ -140,7 +140,8 @@
             </a>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
               <a class="dropdown-item" href="#">Thông tin cá nhân</a>
-              <a class="dropdown-item" href="/">Đăng xuất</a>
+                <a class="dropdown-item" id="changePasswordLink">Đổi mật khẩu</a>
+                <a class="dropdown-item" href="/">Đăng xuất</a>
             </div>
           </div>
         </div>
@@ -304,6 +305,20 @@ fetch('/export-excel')
       })
       .catch(error => console.error('Lỗi khi xuất dữ liệu:', error));
   }
+  </script>
+  <script>
+    document.getElementById("changePasswordLink").addEventListener("click", function(event) {
+  event.preventDefault(); // Ngăn chặn hành vi mặc định của thẻ a
+  const tenDangNhap = localStorage.getItem("TenDangNhap"); // Lấy TenDangNhap từ localStorage
+  alert(tenDangNhap);
+
+  if (tenDangNhap) {
+      // Chuyển hướng đến trang changePassword và truyền TenDangNhap trong URL
+      window.location.href = `/changePassword?tenDangNhap=${encodeURIComponent(tenDangNhap)}`;
+  } else {
+      alert("Không tìm thấy TenDangNhap trong localStorage.");
+  }
+});
   </script>
 </body>
 

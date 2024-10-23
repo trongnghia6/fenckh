@@ -45,4 +45,7 @@ router.post('/themTK', AdminController.postthemTK);
 router.get("/getId_User", AdminController.getId_User);
 router.get("/getQuyenByPhongBan", AdminController.getQuyenByPhongBan);
 
+//Đổi mật khẩu
+router.get('/changePassword', GetTable.getchangePassword);
+router.post('/changePassword', AdminController.updatePassword);
 module.exports = router;

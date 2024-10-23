@@ -127,6 +127,7 @@
                   </a>
                   <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                     <a class="dropdown-item" href="#">Thông tin cá nhân</a>
+                    <a class="dropdown-item" id="changePasswordLink">Đổi mật khẩu</a>
                     <a class="dropdown-item" href="/">Đăng xuất</a>
                   </div>
                 </div>
@@ -185,7 +186,7 @@
               <input required class="form-control" type="text" name="MaSoThue" id="msthue">
             </div>
             <div class="col-md-4">
-              <label for="nganHang">Bằng tốt nghiệp loại:</label>
+              <label for="BangTotNghiepLoai">Bằng tốt nghiệp loại:</label>
               <input required class="form-control" type="text" name="BangTotNghiepLoai" id="BangTotNghiepLoai">
             </div>
           </div>
@@ -414,6 +415,20 @@
                   reader.readAsDataURL(file);
               }
           }
+          </script>
+          <script>
+            document.getElementById("changePasswordLink").addEventListener("click", function(event) {
+          event.preventDefault(); // Ngăn chặn hành vi mặc định của thẻ a
+          const tenDangNhap = localStorage.getItem("TenDangNhap"); // Lấy TenDangNhap từ localStorage
+          alert(tenDangNhap);
+      
+          if (tenDangNhap) {
+              // Chuyển hướng đến trang changePassword và truyền TenDangNhap trong URL
+              window.location.href = `/changePassword?tenDangNhap=${encodeURIComponent(tenDangNhap)}`;
+          } else {
+              alert("Không tìm thấy TenDangNhap trong localStorage.");
+          }
+      });
           </script>
 </body>
 </html>

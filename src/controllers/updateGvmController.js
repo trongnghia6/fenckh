@@ -33,14 +33,9 @@ const getViewGvm = async (req, res) => {
 
   res.render("viewGvm.ejs", { value: user });
 };
-const upload = multer().fields([
-  { name: "truocCCCD", maxCount: 1 },
-  { name: "sauCCCD", maxCount: 1 },
-  { name: "FileLyLich", maxCount: 1 },
-  { name: "bangTotNghiep", maxCount: 1}
-]);
+const upload = multer().single("truocCCCD");
+
 const postUpdateGvm = async (req, res) => {
-  console.log('dữ liệu' ,req.body);
   // Lấy các thông tin từ form
   let IdGvm = req.body.IdGvm;
   //let MaGvm = req.body.MaGvm.toUpperCase();
@@ -75,15 +70,15 @@ const postUpdateGvm = async (req, res) => {
   let tinhTrangGiangDay = req.body.tinhTrangGiangDay ? 1 : 0;
 
   upload(req, res, function (err) {
-    if (err instanceof multer.MulterError) {
-      console.error(`Multer error: ${err.message}`);
-      return res.status(400).send(`Multer error: ${err.message}`);
-    } else if (err) {
-      console.error("Upload error: ", err);
-      return res.status(500).send("Upload error: " + err.message);
-    }
-  
-    console.log("Uploaded Files:", req.files); // Kiểm tra xem file đã được tải lên chưa
+    // if (req.fileValidationError) {
+    //   return res.send(req.fileValidationError);
+    // } else if (!req.files || Object.keys(req.files).length === 0) {
+    //   return res.send("Please select images to upload");
+    // } else if (err instanceof multer.MulterError) {
+    //   return res.send(err);
+    // } else if (err) {
+    //   return res.send(err);
+    // }
     let truocCCCD = req.files["truocCCCD"]
       ? req.files["truocCCCD"][0].filename
       : oldTruocCCCD; // Giữ nguyên đường dẫn cũ nếu không chọn file mới
@@ -96,6 +91,7 @@ const postUpdateGvm = async (req, res) => {
     let FileLyLich = req.files["FileLyLich"]
       ? req.files["FileLyLich"][0].filename
       : oldFileLyLich;
+      console.log('dữ liệu' ,bangTotNghiep);
 
     // Truy vấn để update dữ liệu vào cơ sở dữ liệu
     const query = `UPDATE gvmoi SET 
@@ -118,40 +114,40 @@ const postUpdateGvm = async (req, res) => {
     BangTotNghiepLoai = ?,
     MatTruocCCCD = ?,
     MatSauCCCD = ?,
-    BangTotNghiep=?,
+    BangTotNghiep = ?,
     FileLyLich = ?,
     MaPhongBan = ?,
-    TinhTrangGiangDay = ? WHERE id_Gvm = ? `;
+    TinhTrangGiangDay = ? 
+    WHERE id_Gvm = ?`;
 
-    connection.query(
-      query,
-      [
-        HoTen,
-        GioiTinh,
-        NgaySinh,
-        CCCD,
-        NgayCapCCCD,
-        NoiCapCCCD,
-        NoiCongTac,
-        DiaChi,
-        DienThoai,
-        email,
-        MaSoThue,
-        HocVi,
-        ChucVu,
-        HeSoLuong,
-        STK,
-        NganHang,
-        BangTotNghiepLoai,
-        bangTotNghiep,
-        truocCCCD, // Ảnh mặt trước CCCD
-        sauCCCD, // Ảnh mặt sau CCCD
-        FileLyLich, // Giả sử đây là vị trí của FileLyLich (có thể cập nhật sau)
-        MaPhongBan,
-        // "0", // Mã bộ môn (có thể cập nhật sau)
-        tinhTrangGiangDay, // Tình trạng giảng dạy
-        IdGvm,
-      ],
+  connection.query(
+    query,
+    [
+      HoTen,
+      GioiTinh,
+      NgaySinh,
+      CCCD,
+      NgayCapCCCD,
+      NoiCapCCCD,
+      NoiCongTac,
+      DiaChi,
+      DienThoai,
+      email,
+      MaSoThue,
+      HocVi,
+      ChucVu,
+      HeSoLuong,
+      STK,
+      NganHang,
+      BangTotNghiepLoai,
+      truocCCCD,
+      sauCCCD,
+      bangTotNghiep,
+      FileLyLich,
+      MaPhongBan,
+      tinhTrangGiangDay,
+      IdGvm,
+    ],
       function (err, results) {
         if (err) {
           console.error("Error executing query: ", err);
@@ -160,33 +156,6 @@ const postUpdateGvm = async (req, res) => {
         res.redirect("/gvmList?message=insertSuccess");
       }
     );
-    // console.log({
-    //   HoTen,
-    //   GioiTinh,
-    //   NgaySinh,
-    //   CCCD,
-    //   NgayCapCCCD,
-    //   NoiCapCCCD,
-    //   NoiCongTac,
-    //   DiaChi,
-    //   DienThoai,
-    //   email,
-    //   MaSoThue,
-    //   HocVi,
-    //   ChucVu,
-    //   HeSoLuong,
-    //   STK,
-    //   NganHang,
-    //   BangTotNghiepLoai,
-    //   truocCCCD,
-    //   sauCCCD,
-    //   bangTotNghiep,
-    //   FileLyLich,
-    //   MaPhongBan,
-    //   tinhTrangGiangDay,
-    //   IdGvm,
-    // });
-    
   });
 };
 
