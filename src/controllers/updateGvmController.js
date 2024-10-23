@@ -40,6 +40,7 @@ const upload = multer().fields([
   { name: "bangTotNghiep", maxCount: 1}
 ]);
 const postUpdateGvm = async (req, res) => {
+  console.log('dữ liệu' ,req.body);
   // Lấy các thông tin từ form
   let IdGvm = req.body.IdGvm;
   //let MaGvm = req.body.MaGvm.toUpperCase();
@@ -74,26 +75,15 @@ const postUpdateGvm = async (req, res) => {
   let tinhTrangGiangDay = req.body.tinhTrangGiangDay ? 1 : 0;
 
   upload(req, res, function (err) {
-    // Kiểm tra lỗi của Multer hoặc các vấn đề liên quan đến file upload
-    // if (req.fileValidationError) {
-    //   return res.send(req.fileValidationError);
-    // } else if (!req.files || Object.keys(req.files).length === 0) {
-    //   return res.send("Please select images to upload");
-    // } else if (err instanceof multer.MulterError) {
-    //   return res.send(err);
-    // } else if (err) {
-    //   return res.send(err);
-    // }
-
-    // // Lấy tên file của các file được upload
-    // let truocCCCD = req.files["truocCCCD"]
-    //   ? req.files["truocCCCD"][0].filename
-    //   : null;
-    // let sauCCCD = req.files["sauCCCD"]
-    //   ? req.files["sauCCCD"][0].filename
-    //   : null;
-
-    // Lấy giá trị của các file đã upload (nếu có), nếu không có thì giữ nguyên đường dẫn cũ
+    if (err instanceof multer.MulterError) {
+      console.error(`Multer error: ${err.message}`);
+      return res.status(400).send(`Multer error: ${err.message}`);
+    } else if (err) {
+      console.error("Upload error: ", err);
+      return res.status(500).send("Upload error: " + err.message);
+    }
+  
+    console.log("Uploaded Files:", req.files); // Kiểm tra xem file đã được tải lên chưa
     let truocCCCD = req.files["truocCCCD"]
       ? req.files["truocCCCD"][0].filename
       : oldTruocCCCD; // Giữ nguyên đường dẫn cũ nếu không chọn file mới
@@ -170,6 +160,33 @@ const postUpdateGvm = async (req, res) => {
         res.redirect("/gvmList?message=insertSuccess");
       }
     );
+    // console.log({
+    //   HoTen,
+    //   GioiTinh,
+    //   NgaySinh,
+    //   CCCD,
+    //   NgayCapCCCD,
+    //   NoiCapCCCD,
+    //   NoiCongTac,
+    //   DiaChi,
+    //   DienThoai,
+    //   email,
+    //   MaSoThue,
+    //   HocVi,
+    //   ChucVu,
+    //   HeSoLuong,
+    //   STK,
+    //   NganHang,
+    //   BangTotNghiepLoai,
+    //   truocCCCD,
+    //   sauCCCD,
+    //   bangTotNghiep,
+    //   FileLyLich,
+    //   MaPhongBan,
+    //   tinhTrangGiangDay,
+    //   IdGvm,
+    // });
+    
   });
 };
 

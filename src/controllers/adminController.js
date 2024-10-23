@@ -31,6 +31,7 @@ const AdminController = {
       CCCD,
       NgayCapCCCD,
       NoiCapCCCD,
+      DiaChiCCCD,
       DiaChiHienNay,
       ChucVu,
       NoiCongTac,
@@ -41,6 +42,9 @@ const AdminController = {
       ChiNhanh,
       MonGiangDayChinh,
       CacMonLienQuan,
+      TenDangNhap,  // Lấy từ form
+      MatKhau,      // Lấy từ form
+      Quyen,         // Lấy từ form
     } = req.body;
 
     try {
@@ -48,10 +52,10 @@ const AdminController = {
       const queryInsert = `
           INSERT INTO nhanvien (
               TenNhanVien, NgaySinh, GioiTinh, DienThoai, HocVi, CCCD,
-              NgayCapCCCD, NoiCapCCCD, DiaChiHienNay, ChucVu, NoiCongTac,
+              NgayCapCCCD, NoiCapCCCD, DiaChiHienNay, DiaChiCCCD, ChucVu, NoiCongTac,
               MaPhongBan, MaSoThue, SoTaiKhoan, NganHang, ChiNhanh,
               MonGiangDayChinh, CacMonLienQuan
-          ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+          ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
       `;
 
       const valuesInsert = [
@@ -64,6 +68,7 @@ const AdminController = {
         NgayCapCCCD,
         NoiCapCCCD,
         DiaChiHienNay,
+        DiaChiCCCD,
         ChucVu,
         NoiCongTac,
         MaPhongBan,
@@ -88,6 +93,25 @@ const AdminController = {
       // Cập nhật lại MaNhanVien trong CSDL
       const queryUpdate = `UPDATE nhanvien SET MaNhanVien = ? WHERE id_User = ?`;
       await connection.promise().query(queryUpdate, [MaNhanVien, id_User]);
+
+      const queryInsertTaiKhoanNguoiDung = `
+        INSERT INTO taikhoannguoidung (TenDangNhap, MatKhau, id_User) 
+        VALUES (?, ?, ?)
+      `;
+      await connection.promise().query(queryInsertTaiKhoanNguoiDung, [TenDangNhap, MatKhau, id_User]);
+
+      // Truy vấn lấy isKhoa từ bảng phongban dựa trên MaPhongBan
+      const querySelectIsKhoa = 'SELECT isKhoa FROM phongban WHERE MaPhongBan = ?';
+      const [resultIsKhoa] = await connection.promise().query(querySelectIsKhoa, [MaPhongBan]);
+      const isKhoa = resultIsKhoa.length > 0 ? resultIsKhoa[0].isKhoa : 0;
+
+      // Chèn dữ liệu vào bảng role
+      const queryInsertRole = `
+        INSERT INTO role (TenDangNhap, MaPhongBan, Quyen, isKhoa)
+        VALUES (?, ?, ?, ?)
+      `;
+      await connection.promise().query(queryInsertRole, [TenDangNhap, MaPhongBan, Quyen, isKhoa]);
+
 
       res
         .status(200)
@@ -247,10 +271,25 @@ const AdminController = {
       const [results2] = await connection.query(query2);
       let departmentLists = results2; // Gán kết quả vào departmentLists
 
+      // Lấy dữ liệu tài khoản
+      const connection3 = await createConnection();
+      const query3 = "SELECT * FROM `taikhoannguoidung` WHERE id_User = ?";
+      const [results3] = await connection3.query(query3, [id_User]);
+      let account = results3 && results3.length > 0 ? results3[0] : {};
+      let TenDangNhap = account.TenDangNhap || '';
+
+      // Lấy dữ liệu role
+      const connection4 = await createConnection();
+      const query4 = "SELECT * FROM `role` WHERE TenDangNhap = ?";
+      const [results4] = await connection4.query(query4, [TenDangNhap]);
+      let role = results4 && results4.length > 0 ? results4[0] : {};
+
       // Render trang với 2 biến: value và departmentLists
       res.render("updateNV.ejs", {
         value: user,
         departmentLists: departmentLists,
+        account: account,
+        role: role,
       });
     } catch (error) {
       console.error("Lỗi: ", error);
@@ -348,9 +387,40 @@ getthemTaiKhoan: async (req, res) => {
     }
   },
 
+  getQuyenByPhongBan: async (req, res) => {
+    const maPhongBan = req.query.MaPhongBan;
+
+  try {
+    // Tạo kết nối đến database
+    const connection = await createConnection();
+
+    // Thực hiện truy vấn
+    const [results] = await connection.execute(
+      'SELECT isKhoa FROM phongban WHERE MaPhongBan = ?',
+      [maPhongBan]
+    );
+
+    // Đóng kết nối
+    await connection.end();
+
+    // Trả về kết quả isKhoa
+    if (results.length > 0) {
+      return res.json({ isKhoa: results[0].isKhoa });
+    } else {
+      return res.json({ isKhoa: 0 }); // Giá trị mặc định nếu không tìm thấy
+    }
+
+  } catch (err) {
+    console.error('Lỗi khi truy vấn cơ sở dữ liệu:', err);
+    return res.status(500).json({ error: 'Database error' });
+  }
+}
+
 
   // Other methods can be added here as needed...
 };
+
+
 
 
 module.exports = AdminController; // Export the entire controller

@@ -34,7 +34,6 @@ router.get('/api/phongban', AdminController.getListPhongBan);
 //Nhân viên
 router.get('/updateNV/:id',AdminController.getUpdateNV );
 router.post('/updateNV/:id',postUpdateNV);
-router.post('/deleteNV/:id',postDeleteNV);
 //Phòng ban
 router.get('/updatePhongBan/:MaPhongBan', GetTable.getUpdatePhongBan);
 router.post('/updatePhongBan/:MaPhongBan', postUpdatePhongBan);
@@ -44,6 +43,6 @@ router.post('/updateTK/:TenDangNhap', postUpdateTK);
 router.get('/themTK', AdminController.getthemTaiKhoan);
 router.post('/themTK', AdminController.postthemTK);
 router.get("/getId_User", AdminController.getId_User);
-
+router.get("/getQuyenByPhongBan", AdminController.getQuyenByPhongBan);
 
 module.exports = router;
