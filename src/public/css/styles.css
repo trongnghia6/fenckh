@@ -337,13 +337,24 @@ button#render:hover::before,
 
 .selectop {
   height: 45px;
-  border: 3px solid #969696;
+  border: 2px solid #0077ff;
   border-radius: 5px;
   font-size: 1.2em;
   font-weight: 550;
   cursor: pointer;
+  &:hover{
+    stroke: #07f;
+  }
+}
+#combobox-dot, #combobox-ki, #combobox-nam{
+  width: 80px;
 }
 
+.selectop:focus {
+  outline: none;
+  border-color: #07f;
+  box-shadow: 0 0 0 2px rgba(0,119,255,0.2);
+}
 .selectop option:hover{
   background-color: #3eacff;
 }
