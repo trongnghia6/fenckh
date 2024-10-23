@@ -175,7 +175,6 @@ const AdminController = {
     //const MaPhongBan = req.body.MaPhongBan;
     const Quyen = req.body.Quyen;
     const Khoa = req.body.isKhoa;
-    const isKhoa = Khoa ? 1 : 0;
     const connection = await createConnection();
 
     // thêm
@@ -203,7 +202,7 @@ const AdminController = {
         TenDangNhap,
         MaPhongBan,
         Quyen,
-        isKhoa ? 1 : 0,
+        Khoa,
       ]);
 
       res.redirect("/thongTinTK?Success");
@@ -313,7 +312,7 @@ const AdminController = {
 
       // Lấy dữ liệu nhân viên
       const id_User = accountList.id_User;
-      const query3 = "SELECT nhanvien.id_User, nhanvien.MaPhongBan, phongban.isKhoa FROM nhanvien INNER JOIN phongban ON nhanvien.MaPhongBan = phongban.MaPhongBan WHERE id_User = ?";
+      const query3 = "SELECT nhanvien.TenNhanVien, nhanvien.id_User, nhanvien.MaPhongBan, phongban.isKhoa FROM nhanvien INNER JOIN phongban ON nhanvien.MaPhongBan = phongban.MaPhongBan WHERE id_User = ?";
       const [results3] = await connection.query(query3, [id_User]);
       id = results3 && results3.length > 0 ? results3[0] : {}; // Gán kết quả đầu tiên nếu có
 
@@ -340,27 +339,28 @@ const AdminController = {
       res.status(500).send("Đã có lỗi xảy ra");
     }
   },
-  getId_User: async (req, res) => {
-    const id_User = req.query.id_user; // Lấy id_User từ query string
+  getTenNhanVien: async (req, res) => {
+    const TenNhanVien = req.query.TenNhanVien; // Lấy TenNhanVien từ query string
 
     try {
         const connection = await createConnection();
 
-        // Lấy MaPhongBan và isKhoa từ bảng nhanvien và phongban dựa vào id_User
+        // Lấy MaPhongBan và isKhoa từ bảng nhanvien và phongban dựa vào TenNhanVien
         const query1 = `
-            SELECT nhanvien.MaPhongBan, phongban.isKhoa 
+            SELECT nhanvien.MaPhongBan, phongban.isKhoa, nhanvien.id_User 
             FROM nhanvien 
             INNER JOIN phongban ON nhanvien.MaPhongBan = phongban.MaPhongBan 
-            WHERE nhanvien.id_User = ?
+            WHERE nhanvien.TenNhanVien = ?
         `;
-        const [results1] = await connection.query(query1, [id_User]);
+        const [results1] = await connection.query(query1, [TenNhanVien]);
 
         // Nếu có kết quả thì lấy MaPhongBan và isKhoa
         const MaPhongBan = results1.length > 0 ? results1[0].MaPhongBan : null;
         const isKhoa = results1.length > 0 ? results1[0].isKhoa : null;
+        const id_User = results1.length > 0 ? results1[0].id_User : null;
 
         // Trả về dữ liệu JSON
-        res.json({ MaPhongBan, isKhoa });
+        res.json({ MaPhongBan, isKhoa, id_User });
     } catch (error) {
         console.error("Lỗi khi truy vấn cơ sở dữ liệu: ", error);
         res.status(500).json({ error: "Đã có lỗi xảy ra" });
@@ -373,13 +373,13 @@ getthemTaiKhoan: async (req, res) => {
       // Kết nối tới cơ sở dữ liệu
       const connection = await createConnection();
 
-      const query2 = "SELECT id_User FROM nhanvien";
+      const query2 = "SELECT TenNhanVien FROM nhanvien";
         const [results2] = await connection.query(query2);
-        let id_User = results2; 
+        let TenNhanVien = results2; 
 
       // Render trang với 2 biến: departmentLists và user
       res.render("themTk.ejs", {
-        id_User: id_User,
+        TenNhanVien: TenNhanVien,
       });
     } catch (error) {
       console.error("Lỗi: ", error);

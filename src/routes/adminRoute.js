@@ -42,7 +42,7 @@ router.get('/updateTK/:TenDangNhap', AdminController.getUpdateTK);
 router.post('/updateTK/:TenDangNhap', postUpdateTK);
 router.get('/themTK', AdminController.getthemTaiKhoan);
 router.post('/themTK', AdminController.postthemTK);
-router.get("/getId_User", AdminController.getId_User);
+router.get("/getTenNhanVien", AdminController.getTenNhanVien);
 router.get("/getQuyenByPhongBan", AdminController.getQuyenByPhongBan);
 
 //Đổi mật khẩu
