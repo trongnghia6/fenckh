@@ -230,7 +230,6 @@
               </a>
               <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                 <a class="dropdown-item" href="#">Thông tin cá nhân</a>
-                <a class="dropdown-item" id="changePasswordLink">Đổi mật khẩu</a>
                 <a class="dropdown-item" href="/">Đăng xuất</a>
               </div>
             </div>
@@ -244,9 +243,8 @@
         <div class="d-flex justify-content-between">
           <div class="d-flex justify-content-center">
             <select
-              class="selectop w-100px mx-1"
+              class="form-select w-100px mx-1 selectop custom-select"
               id="combobox-dot"
-              style="margin-top: 20px;"
             >
               <option value="1">Đợt 1</option>
               <option value="2">Đợt 2</option>
@@ -254,19 +252,17 @@
 
             <!-- Combo box Đợt -->
             <select
-              class="selectop w-100px mx-1"
+              class="form-select w-100px mx-1 selectop custom-select"
               id="combobox-ki"
-              style="margin-top: 20px;"
             >
-              <option value="1">Kỳ 1</option>
-              <option value="2">Kỳ 2</option>
+              <option value="1">Kì 1</option>
+              <option value="2">Kì 2</option>
             </select>
 
             <!-- Combo box Năm -->
             <select
-              class="selectop w-100px mx-1"
+              class="form-select w-100px mx-1 selectop custom-select"
               id="combobox-nam"
-              style="margin-top: 20px;"
             >
               <option value="2024">2024</option>
               <option value="2025">2025</option>
@@ -376,6 +372,7 @@
                     >
                   </div>
                 </th>
+                <th style="width: 50px">Ghi chú</th>
               </tr>
             </thead>
             <tbody id="tableBody">
@@ -390,7 +387,22 @@
         </div>
       </div>
     </div>
-
+    <!-- Modal form -->
+    <div id="modalBackdrop" style="display: none;"></div> <!-- Nền tối -->
+    <div id="noteForm" style="display: none;">
+      <h3>Ghi chú</h3>
+      <label for="noteInput">Nội dung:</label>
+      <textarea id="noteInput"></textarea> <!-- Sử dụng textarea cho ghi chú dài -->
+      <br />
+      <label for="deadlineInput">Hạn:</label>
+      <input type="date" id="deadlineInput" style="width: 100%; padding: 5px; border: 1px solid #ccc; border-radius: 4px;" />
+      <br />
+      <div style="text-align: right;">
+        <button onclick="saveNote()">Lưu</button>
+        <button class="cancel" onclick="closeNoteForm()">Đóng</button>
+      </div>
+    </div>
+    
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
@@ -477,9 +489,13 @@
           console.log("Dữ liệu giảng viên mời theo khoa:", nameGvm);
 
           rs = await teachingResponse.json();
-
+          
           // Thêm check
-          globalData = rs.results; // Dữ liệu kết quả
+
+          globalData = rs.results.map(item => ({
+          ...item,
+          ghiChu: "", // Khởi tạo ghi chú rỗng
+        }));
           const check = rs.check; // Dữ liệu check
 
           localStorage.setItem("check", check);
@@ -627,10 +643,19 @@
               disableCheckAll("taiChinh");
             }
           }
+          const ghiChuTd = document.createElement("td");
+          if (row.ghiChu) {
+            ghiChuTd.innerHTML = `📜 <span style="color: red;">•</span>`; // Hiển thị biểu tượng ghi chú và chấm đỏ
+          } else {
+            ghiChuTd.innerHTML = "📜"; // Hiển thị biểu tượng ghi chú nếu không có ghi chú
+          }
+          ghiChuTd.style.cursor = "pointer"; // Thay đổi con trỏ chuột khi di chuột qua biểu tượng
+          ghiChuTd.onclick = () => openNoteForm(tableRow); // Gọi hàm mở form khi nhấn vào biểu tượng
+          tableRow.appendChild(ghiChuTd); // Thêm ô ghi chú vào hàng
 
-          tableBody.appendChild(tableRow);
-        });
-      }
+          tableBody.appendChild(tableRow); // Thêm hàng vào bảng
+              });
+            }
 
       function disableCheckAll(type) {
         const checkAllCheckbox = document.getElementById(
@@ -690,6 +715,7 @@
           globalData[index].KhoaDuyet = khoaDuyet; // Cập nhật Khoa
           globalData[index].DaoTaoDuyet = daoTaoDuyet; // Cập nhật Đào Tạo
           globalData[index].TaiChinhDuyet = taiChinhDuyet; // Cập nhật Tài Chính
+          
         });
 
         // Gửi dữ liệu lên server
@@ -976,18 +1002,91 @@
       };
     </script>
     <script>
-      document.getElementById("changePasswordLink").addEventListener("click", function(event) {
-    event.preventDefault(); // Ngăn chặn hành vi mặc định của thẻ a
-    const tenDangNhap = localStorage.getItem("TenDangNhap"); // Lấy TenDangNhap từ localStorage
-    alert(tenDangNhap);
+       let currentRow; // Biến toàn cục để lưu hàng hiện tại
 
-    if (tenDangNhap) {
-        // Chuyển hướng đến trang changePassword và truyền TenDangNhap trong URL
-        window.location.href = `/changePassword?tenDangNhap=${encodeURIComponent(tenDangNhap)}`;
-    } else {
-        alert("Không tìm thấy TenDangNhap trong localStorage.");
+       function openNoteForm(row) {
+        currentRow = row; // Lưu hàng hiện tại
+        document.getElementById("noteForm").style.display = "block"; // Hiển thị form
+        document.getElementById("modalBackdrop").style.display = "block"; // Hiển thị nền tối
+
+        // Lấy chỉ mục của hàng hiện tại
+        const rows = document.querySelectorAll("#tableBody tr");
+        const rowIndex = Array.from(rows).indexOf(currentRow);
+
+        // Nếu hàng hiện tại có ghi chú, hiển thị ghi chú và hạn
+        if (rowIndex >= 0 && rowIndex < globalData.length) {
+          document.getElementById("noteInput").value = globalData[rowIndex].ghiChu || ""; // Hiển thị ghi chú
+          document.getElementById("deadlineInput").value = globalData[rowIndex].deadline || ""; // Hiển thị hạn
+        } else {
+          // Nếu không có ghi chú, xóa dữ liệu cũ
+          document.getElementById("noteInput").value = "";
+          document.getElementById("deadlineInput").value = "";
+        }
+      }
+
+      function closeNoteForm() {
+        document.getElementById("noteForm").style.display = "none"; // Ẩn form
+        document.getElementById("modalBackdrop").style.display = "none"; // Ẩn nền tối
+      }
+      window.onclick = function(event) {
+        const modal = document.getElementById("noteForm");
+        const modalBackdrop = document.getElementById("modalBackdrop");
+        if (event.target === modalBackdrop) {
+          closeNoteForm();
+        }
+      }
+      function saveNote() {
+        const note = document.getElementById("noteInput").value;
+        const deadline = document.getElementById("deadlineInput").value;
+
+        // Kiểm tra nếu currentRow tồn tại
+        if (currentRow) {
+          const rows = document.querySelectorAll("#tableBody tr"); // Lấy tất cả các hàng trong bảng
+          const rowIndex = Array.from(rows).indexOf(currentRow); // Lấy chỉ mục của hàng hiện tại
+
+          // Kiểm tra nếu rowIndex hợp lệ trong phạm vi của mảng dữ liệu
+          if (rowIndex >= 0 && rowIndex < globalData.length) {
+            // Cập nhật ghi chú và deadline cho hàng hiện tại trong globalData
+            globalData[rowIndex].ghiChu = note; 
+            globalData[rowIndex].deadline = deadline; 
+
+            // Chuyển đổi định dạng deadline sang dd/mm/yy
+            const formattedDeadline = formatDate(deadline);
+
+            // Cập nhật hiển thị cho hàng được chọn với biểu tượng và chấm đỏ
+            const ghiChuTd = currentRow.querySelector("td:last-child");
+            ghiChuTd.innerHTML = `📜 <span style="color: red;">• </br></span>
+            Ghi chú: ${note}<br> Hạn sửa: ${formattedDeadline}`;
+          } else {
+            console.error("Chỉ mục hàng không hợp lệ:", rowIndex);
+          }
+        } else {
+          console.error("currentRow không được xác định.");
+        }
+
+        // Đóng form sau khi lưu
+        closeNoteForm();
+      }
+
+      // Hàm để chuyển đổi định dạng ngày
+      function formatDate(dateString) {
+        const date = new Date(dateString);
+        const day = String(date.getDate()).padStart(2, '0'); // Lấy ngày và đảm bảo có 2 chữ số
+        const month = String(date.getMonth() + 1).padStart(2, '0'); // Lấy tháng (0-11) và đảm bảo có 2 chữ số
+        const year = String(date.getFullYear()).slice(-2); // Lấy 2 chữ số cuối của năm
+
+        return `${day}/${month}/${year}`; // Trả về định dạng dd/mm/yy
+}
+
+
+  // Sự kiện click ngoài modal để đóng modal
+  window.onclick = function(event) {
+    const modal = document.getElementById("noteForm");
+    const modalBackdrop = document.getElementById("modalBackdrop");
+    if (event.target === modalBackdrop) {
+      closeNoteForm();
     }
-});
-    </script>
+  }
+  </script>
   </body>
 </html>
