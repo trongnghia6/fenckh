@@ -79,6 +79,13 @@
     .suggestions {
       overflow: hidden;
     }
+
+        /* Đặt chiều rộng cố định cho cả input[type="date"] và input[type="text"] */
+        input[type="date"], input[type="text"] {
+          width: 120px; /* Điều chỉnh giá trị này theo mong muốn */
+          box-sizing: border-box;
+          padding: 5px; /* Giữ padding như cũ */
+        }
   </style>
 </head>
 
@@ -156,7 +163,7 @@
                 Vượt Giờ
               </a>
               <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a class="nav-link" id="ThongTinGD" href="#">COMING SOON</a>              </div>
+                <a class="nav-link" id="" href="#">COMING SOON</a>              </div>
             </div>
           </div>
           <div class="navbar-nav">
@@ -166,7 +173,7 @@
                 Nghiên Cứu Khoa Học
               </a>
               <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a class="nav-link" id="ThongTinGD" href="#">COMING SOON</a>              </div>
+                <a class="nav-link" id="" href="#">COMING SOON</a>              </div>
             </div>
           </div>
           <div class="navbar-nav">
@@ -176,7 +183,7 @@
                 Đồ Án
               </a>
               <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a class="nav-link" id="ThongTinGD" href="#">COMING SOON</a>              </div>
+                <a class="nav-link" id="" href="#">COMING SOON</a>              </div>
             </div>
           </div>
           <div class="navbar-nav">
@@ -186,7 +193,7 @@
                 Thống Kê
               </a>
               <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a class="nav-link" id="ThongTinGD" href="#">COMING SOON</a>
+                <a class="nav-link" id="" href="#">COMING SOON</a>
               </div>
             </div>
 
@@ -237,7 +244,7 @@
           <button onclick="submitData()" class="button mx-3" id="update-qc">Cập nhật</button>
           <!-- <button onclick="submitData2()" class="button mx-3" id="update-qc" display="none">Cập nhật</button> -->
           <button onclick="submitData2()" class="button mx-3" id="save-data-all" style="display: none;">Lưu</button>
-          <div class="d-flex my-3" style="height: 61px; margin-left: 110px; ">
+          <div class="d-flex my-3" style="height: 61px; position:absolute; right: 25px; ">
             <input type="text" id="filterName" placeholder="Tìm theo tên giảng viên" oninput="filterByName()"
               class="form-control m-2 search" style="width: 200px;" />
             <input type="text" id="filterClass" placeholder="Tìm theo tên học phần" oninput="filterByClass()"
@@ -282,6 +289,7 @@
                   <label class="form-check-label text-nowrap" for="checkAllTaiChinh">Tài Chính</label>
                 </div>
               </th>
+              <th style="width: 50px;">Ghi chú</th>
             </tr>
           </thead>
           <tbody id="tableBody">
@@ -296,6 +304,21 @@
       </div> -->
     </div>
   </div>
+      <!-- Modal form -->
+      <div id="modalBackdrop" style="display: none;"></div> <!-- Nền tối -->
+      <div id="noteForm" style="display: none;">
+        <h3>Ghi chú</h3>
+        <label for="noteInput">Nội dung:</label>
+        <textarea id="noteInput"></textarea> <!-- Sử dụng textarea cho ghi chú dài -->
+        <br />
+        <label for="deadlineInput">Hạn:</label>
+        <input type="date" id="deadlineInput" style="width: 100%; padding: 5px; border: 1px solid #ccc; border-radius: 4px;" />
+        <br />
+        <div style="text-align: right;">
+          <button onclick="saveNote()">Lưu</button>
+          <button class="cancel" onclick="closeNoteForm()">Đóng</button>
+        </div>
+      </div>
 </body>
 
 </html>
@@ -397,7 +420,10 @@ hideButton();
       console.log('Tổng hợp bảng dữ liệu:', globalData);
 
       // Thêm check
-      globalData = rs.results; // Dữ liệu kết quả
+      globalData = rs.results.map(item => ({
+          ...item,
+          ghiChu: "", // Khởi tạo ghi chú rỗng
+        }));
       const check = rs.check; // Dữ liệu check
  
       localStorage.setItem("check", check);
@@ -666,8 +692,41 @@ hideButton();
           disableCheckAll('daoTao');
         }
       }
-      
+      const ghiChuTd = document.createElement("td");
+          if (row.ghiChu) {
+            ghiChuTd.innerHTML = `📜 <span style="color: red;">•</span>`; // Hiển thị biểu tượng ghi chú và chấm đỏ
+          } else {
+            ghiChuTd.innerHTML = "📜"; // Hiển thị biểu tượng ghi chú nếu không có ghi chú
+          }
+          ghiChuTd.style.cursor = "pointer"; // Thay đổi con trỏ chuột khi di chuột qua biểu tượng
+          ghiChuTd.onclick = () => openNoteForm(tableRow); // Gọi hàm mở form khi nhấn vào biểu tượng
+          tableRow.appendChild(ghiChuTd); // Thêm ô ghi chú vào hàng
       tableBody.appendChild(tableRow);
+    });
+
+    addDoubleClickEvents();
+  }
+
+
+  function addDoubleClickEvents() {
+    // get all date input fields
+    let dateInputs = document.querySelectorAll('[type="date"]');
+  
+    dateInputs.forEach(el => {
+      // register double-click event to change date input to text input and select the value
+      el.addEventListener('dblclick', () => {
+        el.type = "text";
+  
+        // After changing input type with JS, .select() needs a timeout to work
+        setTimeout(() => {
+          el.select();
+        });
+      });
+  
+      // register the focusout event to reset the input back to a date input field
+      el.addEventListener('focusout', () => {
+        el.type = "date";
+      });
     });
   }
 
@@ -1054,21 +1113,6 @@ function hideSuggestions() {
   <!-- Phần phân quyền -->
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      
-      // Thêm sự kiện click cho phần tử có id "import"
-      const importLink = document.getElementById("Import");
-
-      importLink.addEventListener("click", function (event) {
-        event.preventDefault(); // Ngăn chặn hành vi mặc định của liên kết
-
-        const isKhoa = localStorage.getItem("isKhoa"); // Lấy role từ localStorage
-
-        if (isKhoa==0) { // Nếu là đào tạo hoặc tài chính
-          window.location.href = "/import";
-        } else { // Nếu là khoa
-          window.location.href = "/importGvmList";
-        }
-      });
 
       // Thêm sự kiện click cho phần tử có id="ThongTinGD"
       const ThongTinGD = document.getElementById("ThongTinGD");
@@ -1101,7 +1145,6 @@ function hideSuggestions() {
         }
       });
 
-
       /// 
     const role = localStorage.getItem("userRole")
     const MaPhongBan = localStorage.getItem("MaPhongBan")
@@ -1115,8 +1158,8 @@ function hideSuggestions() {
     }
    
     if (isKhoa == 1 && role == 'Lãnh đạo khoa'){
-      document.getElementById('daoTaoColumn').style.visibility = 'hidden';
-      document.getElementById('taiChinhColumn').style.visibility = 'hidden';
+      document.getElementById('daoTaoColumn').style.display = 'none';
+      document.getElementById('taiChinhColumn').style.display = 'none';
       
         document.getElementById('khoaColumn').style.display = 'block';
       
@@ -1133,7 +1176,8 @@ function hideSuggestions() {
         document.getElementById('save-data-all').style.display = 'inline-block'; // Sử dụng 'inline-block' để hiển thị nút
       }
     }
-    });
+
+  });
 
   </script>
 
@@ -1153,6 +1197,7 @@ function hideSuggestions() {
 
   };
 </script>
+
 <script>
   document.getElementById("changePasswordLink").addEventListener("click", function(event) {
 event.preventDefault(); // Ngăn chặn hành vi mặc định của thẻ a
@@ -1166,6 +1211,93 @@ if (tenDangNhap) {
     alert("Không tìm thấy TenDangNhap trong localStorage.");
 }
 });
+</script>
+<script>
+  let currentRow; // Biến toàn cục để lưu hàng hiện tại
+
+  function openNoteForm(row) {
+   currentRow = row; // Lưu hàng hiện tại
+   document.getElementById("noteForm").style.display = "block"; // Hiển thị form
+   document.getElementById("modalBackdrop").style.display = "block"; // Hiển thị nền tối
+
+   // Lấy chỉ mục của hàng hiện tại
+   const rows = document.querySelectorAll("#tableBody tr");
+   const rowIndex = Array.from(rows).indexOf(currentRow);
+
+   // Nếu hàng hiện tại có ghi chú, hiển thị ghi chú và hạn
+   if (rowIndex >= 0 && rowIndex < globalData.length) {
+     document.getElementById("noteInput").value = globalData[rowIndex].ghiChu || ""; // Hiển thị ghi chú
+     document.getElementById("deadlineInput").value = globalData[rowIndex].deadline || ""; // Hiển thị hạn
+   } else {
+     // Nếu không có ghi chú, xóa dữ liệu cũ
+     document.getElementById("noteInput").value = "";
+     document.getElementById("deadlineInput").value = "";
+   }
+ }
+
+ function closeNoteForm() {
+   document.getElementById("noteForm").style.display = "none"; // Ẩn form
+   document.getElementById("modalBackdrop").style.display = "none"; // Ẩn nền tối
+ }
+ window.onclick = function(event) {
+   const modal = document.getElementById("noteForm");
+   const modalBackdrop = document.getElementById("modalBackdrop");
+   if (event.target === modalBackdrop) {
+     closeNoteForm();
+   }
+ }
+ function saveNote() {
+   const note = document.getElementById("noteInput").value;
+   const deadline = document.getElementById("deadlineInput").value;
+
+   // Kiểm tra nếu currentRow tồn tại
+   if (currentRow) {
+     const rows = document.querySelectorAll("#tableBody tr"); // Lấy tất cả các hàng trong bảng
+     const rowIndex = Array.from(rows).indexOf(currentRow); // Lấy chỉ mục của hàng hiện tại
+
+     // Kiểm tra nếu rowIndex hợp lệ trong phạm vi của mảng dữ liệu
+     if (rowIndex >= 0 && rowIndex < globalData.length) {
+       // Cập nhật ghi chú và deadline cho hàng hiện tại trong globalData
+       globalData[rowIndex].ghiChu = note; 
+       globalData[rowIndex].deadline = deadline; 
+
+       // Chuyển đổi định dạng deadline sang dd/mm/yy
+       const formattedDeadline = formatDate(deadline);
+
+       // Cập nhật hiển thị cho hàng được chọn với biểu tượng và chấm đỏ
+       const ghiChuTd = currentRow.querySelector("td:last-child");
+       ghiChuTd.innerHTML = `📜 <span style="color: red;">• </br></span>
+       Ghi chú: ${note}<br> Hạn sửa: ${formattedDeadline}`;
+     } else {
+       console.error("Chỉ mục hàng không hợp lệ:", rowIndex);
+     }
+   } else {
+     console.error("currentRow không được xác định.");
+   }
+
+   // Đóng form sau khi lưu
+   closeNoteForm();
+ }
+
+ // Hàm để chuyển đổi định dạng ngày
+ function formatDate(dateString) {
+   const date = new Date(dateString);
+   const day = String(date.getDate()).padStart(2, '0'); // Lấy ngày và đảm bảo có 2 chữ số
+   const month = String(date.getMonth() + 1).padStart(2, '0'); // Lấy tháng (0-11) và đảm bảo có 2 chữ số
+   const year = String(date.getFullYear()).slice(-2); // Lấy 2 chữ số cuối của năm
+
+   return `${day}/${month}/${year}`; // Trả về định dạng dd/mm/yy
+}
+
+
+// Sự kiện click ngoài modal để đóng modal
+window.onclick = function(event) {
+const modal = document.getElementById("noteForm");
+const modalBackdrop = document.getElementById("modalBackdrop");
+if (event.target === modalBackdrop) {
+ closeNoteForm();
+}
+}
 </script>
 </body>
 

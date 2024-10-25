@@ -129,6 +129,16 @@
       color: #333;
       /* Màu chữ đậm cho giá trị */
     }
+
+    /* Đặt chiều rộng cố định cho cả input[type="date"] và input[type="text"] */
+    input[type="date"],
+    input[type="text"] {
+      width: 120px;
+      /* Điều chỉnh giá trị này theo mong muốn */
+      box-sizing: border-box;
+      padding: 5px;
+      /* Giữ padding như cũ */
+    }
   </style>
 </head>
 
@@ -205,7 +215,7 @@
                 Vượt Giờ
               </a>
               <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a class="nav-link" id="ThongTinGD" href="#">COMING SOON</a>
+                <a class="nav-link" id="" href="#">COMING SOON</a>
               </div>
             </div>
           </div>
@@ -216,7 +226,7 @@
                 Nghiên Cứu Khoa Học
               </a>
               <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a class="nav-link" id="ThongTinGD" href="#">COMING SOON</a>
+                <a class="nav-link" id="" href="#">COMING SOON</a>
               </div>
             </div>
           </div>
@@ -227,7 +237,7 @@
                 Đồ Án
               </a>
               <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a class="nav-link" id="ThongTinGD" href="#">COMING SOON</a>
+                <a class="nav-link" id="" href="#">COMING SOON</a>
               </div>
             </div>
           </div>
@@ -238,7 +248,7 @@
                 Thống Kê
               </a>
               <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a class="nav-link" id="ThongTinGD" href="#">COMING SOON</a>
+                <a class="nav-link" id="" href="#">COMING SOON</a>
               </div>
             </div>
           </div>
@@ -294,8 +304,11 @@
 
       <div class="d-flex my-3" style="height: 70px;">
         <!-- Tìm kiếm theo giảng viên  -->
+        <!-- Tìm kiếm theo giảng viên  -->
         <input type="text" id="filterName" placeholder="Tìm theo giảng viên TKB" oninput="filterByName()"
           class="form-control m-2 search" style="width: 180px;" />
+        <!-- Tìm kiếm theo tên học phần -->
+        class="form-control m-2 search" style="width: 180px;" />
         <!-- Tìm kiếm theo tên học phần -->
         <input type="text" id="filterClass" placeholder="Tìm theo tên học phần" oninput="filterByClass()"
           class="form-control m-2 search" style="width: 180px;" />
@@ -1294,20 +1307,6 @@
   <!-- Phần phân quyền -->
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      // Thêm sự kiện click cho phần tử có id "import"
-      const importLink = document.getElementById("Import");
-
-      importLink.addEventListener("click", function (event) {
-        event.preventDefault(); // Ngăn chặn hành vi mặc định của liên kết
-
-        const isKhoa = localStorage.getItem("isKhoa"); // Lấy role từ localStorage
-
-        if (isKhoa == 0) { // Nếu là đào tạo hoặc tài chính
-          window.location.href = "/import";
-        } else { // Nếu là khoa
-          window.location.href = "/importGvmList";
-        }
-      });
 
       // Thêm sự kiện click cho phần tử có id="ThongTinGD"
       const ThongTinGD = document.getElementById("ThongTinGD");
@@ -1339,6 +1338,27 @@
           window.location.href = "/mainkhoa";
         }
       });
+
+      // get all date input fields
+      let dateInputs = document.querySelectorAll('[type="date"]');
+
+      dateInputs.forEach(el => {
+        // register double click event to change date input to text input and select the value
+        el.addEventListener('dblclick', () => {
+          el.type = "text";
+
+          // After changing input type with JS .select() wont work as usual
+          // Needs timeout fn() to make it work
+          setTimeout(() => {
+            el.select();
+          })
+        });
+
+        // register the focusout event to reset the input back to a date input field
+        el.addEventListener('focusout', () => {
+          el.type = "date";
+        });
+      });
     });
 
   </script>
@@ -1363,6 +1383,7 @@
       }
     };
   </script>
+
   <script>
     document.getElementById("changePasswordLink").addEventListener("click", function (event) {
       event.preventDefault(); // Ngăn chặn hành vi mặc định của thẻ a
@@ -1377,6 +1398,7 @@
       }
     });
   </script>
+
 </body>
 
 </html>

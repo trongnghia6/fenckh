@@ -692,6 +692,14 @@ const updateQC = async (req, res) => {
         NgayKetThuc,
       } = item;
 
+      if (KhoaDuyet == 1) {
+        if (GiaoVienGiangDay.length == 0) {
+          return res.status(200).json({
+            message: `Lớp học phần ${LopHocPhan} (${TenLop}) chưa được điền giảng viên`,
+          });
+        }
+      }
+
       // Truy vấn kiểm tra nếu bản ghi đã được duyệt đầy đủ
       const approvalQuery = `SELECT KhoaDuyet, DaoTaoDuyet, TaiChinhDuyet FROM ${tableName} WHERE ID = ?`;
       const approvalResult = await queryAsync(approvalQuery, [ID]);
