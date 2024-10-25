@@ -130,6 +130,23 @@ const KhoaCheckAll = async (req, Dot, KiHoc, NamHoc) => {
   const connection1 = await createConnection();
   const [results, fields] = await connection1.query(query);
 
+  // Chọn hết phòng ban
+  const queryAll = `SELECT KhoaDuyet FROM quychuan where Dot = ? and KiHoc = ? and NamHoc = ?`;
+  const [khoaAll] = await connection1.query(queryAll, [Dot, KiHoc, NamHoc]);
+
+  let khoaCheckAll = true;
+  for (let j = 0; j < khoaAll.length; j++) {
+    if (khoaAll[j].KhoaDuyet == 0) {
+      khoaCheckAll = false;
+      break;
+    }
+  }
+
+  if (khoaCheckAll == true) {
+    kq += "KHOA,";
+  }
+
+  // Chọn theo từng phòng ban
   for (let i = 0; i < results.length; i++) {
     const MaPhongBan = results[i].MaPhongBan;
 
@@ -396,9 +413,9 @@ const getTeachingInfo2 = (req, res) => {
 
 const getBoMon = async (req, res) => {
   const MaPhongBan = req.body.MaPhongBan; // Thay vì req.body
-  console.log(MaPhongBan)
+  console.log(MaPhongBan);
 
-  if (MaPhongBan != 'DAOTAO' && MaPhongBan != 'TAICHINH') {
+  if (MaPhongBan != "DAOTAO" && MaPhongBan != "TAICHINH") {
     try {
       // Truy vấn để lấy MaPhongBan, MaBoMon, TenBoMon
       const results = await new Promise((resolve, reject) => {

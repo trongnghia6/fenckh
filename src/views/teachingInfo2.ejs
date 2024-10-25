@@ -356,23 +356,27 @@
     document.addEventListener("DOMContentLoaded", function () {
       //const duyet = process.env.DUYET;
       //const thuong = process.end.THUONG;
+      const check = localStorage.getItem("check");
       const role = localStorage.getItem("userRole");
       const MaPhongBan = localStorage.getItem("MaPhongBan");
       console.log(role, MaPhongBan);
 
       if (MaPhongBan == "DAOTAO" && role == "Duyệt") {
         // Ẩn cột 'taiChinhColumn'
-        console.log("đào tạo");
         document.getElementById("taiChinhColumn").style.display = "none";
-        document.getElementById("update-qc").style.display = "inline-block"; // Sử dụng 'inline-block' để hiển thị nút
+        if (check.includes("KHOA")){
+          document.getElementById("update-qc").style.display = "inline-block"; // Sử dụng 'inline-block' để hiển thị nút
+        }    
+
       } else if (MaPhongBan == "TAICHINH" && role == "Duyệt") {
         // Ẩn cột 'khoaColumn'
-        console.log("tài chính");
         document.getElementById("khoaColumn").style.display = "none";
-        document.getElementById("update-qc").style.display = "inline-block"; // Sử dụng 'inline-block' để hiển thị nút
-        // Hiển thị nút 'Cập nhật'
-        document.getElementById("save-data-all").style.display =
-          "inline-block"; // Sử dụng 'inline-block' để hiển thị nút
+        if (check.includes("DAOTAO")){
+          document.getElementById("update-qc").style.display = "inline-block"; // Sử dụng 'inline-block' để hiển thị nút
+          // Hiển thị nút 'Cập nhật'
+          document.getElementById("save-data-all").style.display =
+            "inline-block"; // Sử dụng 'inline-block' để hiển thị nút
+        }
       }
 
       if (role == "Thường") {

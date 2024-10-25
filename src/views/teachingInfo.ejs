@@ -516,8 +516,11 @@
       let data = JSON.parse(localStorage.getItem('tableData')); // Nếu không có, tạo mảng trống
       // Cập nhật từng đối tượng trong dữ liệu
       data.forEach(item => {
-        item.NgayBatDau = globalStartDate; // Cập nhật ngày bắt đầu
-        item.NgayKetThuc = globalEndDate; // Cập nhật ngày kết thúc
+        // Nếu khoa chưa duyệt thì mới chèn
+        if (item.KhoaDuyet == 0){
+          item.NgayBatDau = globalStartDate; // Cập nhật ngày bắt đầu
+          item.NgayKetThuc = globalEndDate; // Cập nhật ngày kết thúc
+        }
       });
 
       // Lưu lại dữ liệu đã cập nhật vào localStorage
@@ -790,19 +793,33 @@
 
 
         let khoaCheckboxTd, khoaCheckbox;
+        khoaCheckboxTd = document.createElement('td');
+        khoaCheckbox = document.createElement('input');
+        khoaCheckbox.type = 'checkbox';
+        khoaCheckbox.name = 'khoa';
+        khoaCheckbox.checked = row.KhoaDuyet || false;
+        khoaCheckbox.onchange = () => updateCheckAll('khoa');
+        khoaCheckboxTd.appendChild(khoaCheckbox);
+        tableRow.appendChild(khoaCheckboxTd);
         // Điều kiện ẩn checkbox Khoa nếu role không phải "CNTT_ALL"
-        if (isKhoa === 1 && role === "Lãnh đạo khoa") {
-          khoaCheckboxTd = document.createElement('td');
-          khoaCheckbox = document.createElement('input');
-          khoaCheckbox.type = 'checkbox';
-          khoaCheckbox.name = 'khoa';
-          khoaCheckbox.checked = row.KhoaDuyet || false;
-          khoaCheckbox.onchange = () => updateCheckAll('khoa');
-          khoaCheckboxTd.appendChild(khoaCheckbox);
-          tableRow.appendChild(khoaCheckboxTd);
+        if (role != "Lãnh đạo khoa") {
+          // Thiết lập thuộc tính CSS để thu nhỏ checkbox và ô <td> chứa nó
+          khoaCheckbox.style.width = '10px';    // Đặt chiều rộng nhỏ nhất có thể
+          khoaCheckbox.style.height = '10px';   // Đặt chiều cao nhỏ nhất có thể
+          khoaCheckbox.style.display = 'none';
+
+          // Thu nhỏ <td>
+          khoaCheckboxTd.style.width = '1px';
+          khoaCheckboxTd.style.padding = '0';
         }
 
-        if (role == "GV") {
+
+        // Nếu Lãnh đạo khoa đã duyệt, thi hành sẽ không nhập được
+        // Nếu role là giảng viên thường cũng sẽ không nhập được
+        if (role == "GV" || row.KhoaDuyet==1) {
+          inviteCheckbox.addEventListener('click', function (e) {
+            e.preventDefault();
+          })
           giaoVienGiangDayInput.disabled = true;
           boMonInput.disabled = true;
           ngayBatDauInput.disabled = true;
