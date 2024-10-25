@@ -79,6 +79,13 @@
     .suggestions {
       overflow: hidden;
     }
+
+        /* Đặt chiều rộng cố định cho cả input[type="date"] và input[type="text"] */
+        input[type="date"], input[type="text"] {
+          width: 120px; /* Điều chỉnh giá trị này theo mong muốn */
+          box-sizing: border-box;
+          padding: 5px; /* Giữ padding như cũ */
+        }
   </style>
 </head>
 
@@ -633,6 +640,31 @@
       
       tableBody.appendChild(tableRow);
     });
+
+    addDoubleClickEvents();
+  }
+
+
+  function addDoubleClickEvents() {
+    // get all date input fields
+    let dateInputs = document.querySelectorAll('[type="date"]');
+  
+    dateInputs.forEach(el => {
+      // register double-click event to change date input to text input and select the value
+      el.addEventListener('dblclick', () => {
+        el.type = "text";
+  
+        // After changing input type with JS, .select() needs a timeout to work
+        setTimeout(() => {
+          el.select();
+        });
+      });
+  
+      // register the focusout event to reset the input back to a date input field
+      el.addEventListener('focusout', () => {
+        el.type = "date";
+      });
+    });
   }
 
   //
@@ -1065,7 +1097,6 @@ function hideSuggestions() {
         }
       });
 
-
       /// 
     const role = localStorage.getItem("userRole")
     const MaPhongBan = localStorage.getItem("MaPhongBan")
@@ -1097,7 +1128,8 @@ function hideSuggestions() {
         document.getElementById('save-data-all').style.display = 'inline-block'; // Sử dụng 'inline-block' để hiển thị nút
       }
     }
-    });
+
+  });
 
   </script>
 
@@ -1117,6 +1149,7 @@ function hideSuggestions() {
 
   };
 </script>
+
 </body>
 
 </html>

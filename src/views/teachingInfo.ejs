@@ -82,6 +82,14 @@
     .suggestions {
       overflow: hidden;
     }
+
+    /* Đặt chiều rộng cố định cho cả input[type="date"] và input[type="text"] */
+    input[type="date"], input[type="text"] {
+      width: 120px; /* Điều chỉnh giá trị này theo mong muốn */
+      box-sizing: border-box;
+      padding: 5px; /* Giữ padding như cũ */
+    }
+
   </style>
 </head>
 
@@ -244,10 +252,16 @@
 
 
       <div class="d-flex my-3" style="height: 70px;">
+        <!-- Tìm kiếm theo giảng viên  -->
         <input type="text" id="filterName" placeholder="Tìm theo giảng viên TKB" oninput="filterByName()"
-          class="form-control m-2 search" style="width: 300px;" />
+          class="form-control m-2 search" style="width: 180px;" />
+        <!-- Tìm kiếm theo tên học phần -->
         <input type="text" id="filterClass" placeholder="Tìm theo tên học phần" oninput="filterByClass()"
-          class="form-control m-2 search" style="width: 300px;" />
+          class="form-control m-2 search" style="width: 180px;" />
+        <!-- Tìm kiếm theo bộ môn -->
+        <input type="text" id="filterClass" placeholder="Tìm theo tên bộ môn" oninput=""
+          class="form-control m-2 search" style="width: 180px;" />
+        <!-- Ngày bắt đầu, ngày kết thức -->
         <div class="input-group m-2" style="width: 350px;" id="batdau">
           <label for="startDate" class="input-group-text">Ngày bắt đầu</label>
           <input required type="date" id="startDate" class="form-control" />
@@ -1086,7 +1100,28 @@ function hideSuggestions() {
           window.location.href = "/mainkhoa";
         }
       });
-    });
+
+       // get all date input fields
+      let dateInputs = document.querySelectorAll('[type="date"]');
+
+      dateInputs.forEach(el => {
+      // register double click event to change date input to text input and select the value
+      el.addEventListener('dblclick', () => {
+        el.type = "text";
+        
+        // After changing input type with JS .select() wont work as usual
+        // Needs timeout fn() to make it work
+        setTimeout(() => {
+          el.select();
+        })
+      });
+    
+      // register the focusout event to reset the input back to a date input field
+      el.addEventListener('focusout', () => {
+        el.type = "date";
+      });
+    });   
+  });
 
   </script>
 
@@ -1110,6 +1145,7 @@ function hideSuggestions() {
       }
     };
   </script>
+
 </body>
 
 </html>

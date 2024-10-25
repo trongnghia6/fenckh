@@ -180,8 +180,8 @@ const saveToDB = async (req, res) => {
         // `;
         const sql = `
         INSERT INTO gvmoi
-        (GioiTinh, MaGvm, HoTen, NgaySinh, BangTotNghiepLoai, NoiCongTac, MonGiangDayChinh, DiaChi, Email, MaSoThue, HocVi, ChucVu, HSL, DienThoai, STK, NganHang, TinhTrangGiangDay, CCCD, NgayCapCCCD, NoiCapCCCD)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        (GioiTinh, MaGvm, HoTen, NgaySinh, BangTotNghiepLoai, NoiCongTac, MonGiangDayChinh, DiaChi, Email, MaSoThue, HocVi, ChucVu, HSL, DienThoai, STK, NganHang, MaPhongBan, TinhTrangGiangDay, CCCD, NgayCapCCCD, NoiCapCCCD)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
       `;
 
         const gvms = await gvmList.getGvmLists(req, res);
@@ -191,6 +191,7 @@ const saveToDB = async (req, res) => {
 
         // Chuyển đổi dữ liệu để phù hợp với cột trong DB
         const GioiTinh = row["Danh xưng"] === "Ông" ? "Nam" : "Nữ";
+        //const GioiTinh = row["Giới tính"];
         const HoTen = row["Họ và tên"];
         //const GioiTinh = row["Giới tính"];
         const NgaySinh = row["Ngày sinh"];
@@ -202,7 +203,7 @@ const saveToDB = async (req, res) => {
         const MaSoThue = row["Mã số thuế"];
         const HocVi = row["Cấp bậc"];
         const ChucVu = row["Chức vụ"];
-        const HSL = row["Hệ số lương"];
+        const HSL = row["Hệ số lương"] || " ";
         const DienThoai = row["Điện thoại"];
         const STK = row["Số tài khoản"];
         const NganHang = row["Tại ngân hàng"];
@@ -264,7 +265,7 @@ const saveToDB = async (req, res) => {
           DienThoai,
           STK,
           NganHang,
-          //MaPhongBan,
+          MaPhongBan,
           TinhTrangGiangDay,
           CCCD,
           NgayCapCCCD,
