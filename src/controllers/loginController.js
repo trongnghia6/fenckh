@@ -60,7 +60,7 @@ const login = async (req, res) => {
         // Trả về phản hồi thành công với url
         return res
           .status(200)
-          .json({ url, role, MaPhongBan, isKhoa, TenNhanVien });
+          .json({ url, role, MaPhongBan, isKhoa, TenNhanVien, username });
       } else {
         return res.status(401).json({ message: "Mật khẩu không chính xác" });
       }

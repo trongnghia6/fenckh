@@ -57,7 +57,7 @@ router.get("/updateGvm/:id", getUpdateGvm);
 router.get("/viewGvm/:id", getViewGvm);
 
 router.post(
-  "/updateGvm",
+  "/updateGvm/:id",
   upload.fields([
     { name: "truocCCCD", maxCount: 1 },
     { name: "sauCCCD", maxCount: 1 },

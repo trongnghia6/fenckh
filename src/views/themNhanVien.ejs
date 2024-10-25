@@ -4,83 +4,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Thêm Nhân Viên</title>
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
-    />
+    <link rel="stylesheet" href="/css/admin.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"/>
     <link rel="stylesheet" href="/css/styles.css" />
-    <style>
-      .btn {
-        padding: 0.5em 1em;
-        margin-bottom: 1rem;
-        border: none;
-        border-radius: 5px;
-        font-weight: bold;
-        letter-spacing: 5px;
-        text-transform: uppercase;
-        cursor: pointer;
-        color: #2c9caf;
-        transition: all 1000ms;
-        font-size: 15px;
-        position: relative;
-        overflow: hidden;
-        outline: 2px solid #2c9caf;
-      }
-
-      button:hover {
-        color: #ffffff;
-        transform: scale(1.1);
-        outline: 2px solid #70bdca;
-        box-shadow: 4px 5px 17px -4px #268391;
-      }
-      button::before {
-        content: "";
-        position: absolute;
-        left: -50px;
-        top: 0;
-        width: 0;
-        height: 100%;
-        background-color: #2c9caf;
-        transform: skewX(45deg);
-        z-index: -1;
-        transition: width 1000ms;
-      }
-
-      button:hover::before {
-        width: 250%;
-      }
-      .input-wrapper input {
-        background-color: #eee;
-        border: none;
-        font-size: 1rem;
-        width: 100%;
-        border-radius: 5px;
-        color: black;
-        box-shadow: 0 0.4rem #dfd9d9;
-        cursor: pointer;
-      }
-      select {
-        background-color: #eee;
-        border: none;
-        font-size: 1rem;
-        width: 100%;
-        border-radius: 5px;
-        color: black;
-        box-shadow: 0 0.4rem #dfd9d9;
-        cursor: pointer;
-      }
-
-      .input-wrapper input:focus {
-        outline-color: black;
-      }
-      select:focus {
-        outline-color: black;
-      }
-    </style>
   </head>
   <body>
     <nav class="navbar-top">
@@ -97,22 +24,10 @@
     <!-- Phần dưới của navbar chứa các mục nằm ngang -->
     <nav class="navbar navbar-expand-lg navbar-bottom">
       <div class="" style="width: 100%">
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarNav"
-          aria-controls="navbarNav"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
-        <div
-          class="collapse navbar-collapse"
-          style="width: 100%"
-          id="navbarNav"
-        >
+        <div class="collapse navbar-collapse" style="width: 100%" id="navbarNav">
           <div>
             <ul class="navbar-nav">
               <li class="nav-item">
@@ -140,17 +55,12 @@
 
           <div class="navbar-nav">
             <div class="nav-item dropdown">
-              <a
-                class="nav-link dropdown-toggle"
-                href="/login"
-                id="navbarDropdownUser"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-              >
+              <a class="nav-link dropdown-toggle" href="/login" id="navbarDropdownUser" data-bs-toggle="dropdown" aria-expanded="false">
                 Hi, ADMIN
               </a>
               <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                 <a class="dropdown-item" href="#">Thông tin cá nhân</a>
+                <a class="dropdown-item" id="changePasswordLink">Đổi mật khẩu</a>
                 <a class="dropdown-item" href="/">Đăng xuất</a>
               </div>
             </div>
@@ -161,31 +71,15 @@
     <div class="container my-5 box">
       <h2>Thêm Nhân Viên Mới</h2>
 
-      <form id="themNhanVienForm" action="/themNhanVien" method="POST">
+      <form id="themNhanVienForm" action="/themNhanVien" method="POST" onsubmit="setDefaultPassword()">
         <div class="row mb-3">
-          <!-- <div class="col-md-4 input-wrapper">
-                    <label for="MaNhanVien" class="form-label">Mã Nhân Viên</label>
-                    <input type="text" class="form-control" id="MaNhanVien" name="MaNhanVien" required>
-                </div> -->
-
           <div class="col-md-4 input-wrapper">
             <label for="TenNhanVien" class="form-label">Tên Nhân Viên</label>
-            <input
-              type="text"
-              class="form-control"
-              id="TenNhanVien"
-              name="TenNhanVien"
-              required
-            />
+            <input type="text" class="form-control" id="TenNhanVien" name="TenNhanVien" required />
           </div>
           <div class="col-md-4 input-wrapper">
             <label for="NgaySinh" class="form-label">Ngày Sinh</label>
-            <input
-              type="date"
-              class="form-control"
-              id="NgaySinh"
-              name="NgaySinh"
-            />
+            <input type="date" class="form-control" id="NgaySinh" name="NgaySinh" />
           </div>
           <div class="col-md-4 input-wrapper">
             <label for="HocVi" class="form-label">Học Vị</label>
@@ -199,21 +93,11 @@
           </div>
           <div class="col-md-4 input-wrapper">
             <label for="NgayCapCCCD" class="form-label">Ngày Cấp CCCD</label>
-            <input
-              type="date"
-              class="form-control"
-              id="NgayCapCCCD"
-              name="NgayCapCCCD"
-            />
+            <input type="date" class="form-control" id="NgayCapCCCD" name="NgayCapCCCD" />
           </div>
           <div class="col-md-4 input-wrapper">
             <label for="NoiCapCCCD" class="form-label">Nơi Cấp CCCD</label>
-            <input
-              type="text"
-              class="form-control"
-              id="NoiCapCCCD"
-              name="NoiCapCCCD"
-            />
+            <input type="text" class="form-control" id="NoiCapCCCD" name="NoiCapCCCD" />
           </div>
         </div>
         <div class="row mb-3">
@@ -224,26 +108,16 @@
               <option value="Nu">Nữ</option>
             </select>
           </div>
+          <div class="col-md-4 input-wrapper">
+            <label for="DienThoai" class="form-label">Điện Thoại</label>
+            <input type="tel" class="form-control" id="DienThoai" name="DienThoai" />
+          </div>
+          <div class="col-md-4 input-wrapper">
+            <label for="DiaChiCCCD" class="form-label">Địa Chỉ trong CCCD</label>
+            <input type="text" class="form-control" id="DiaChiCCCD" name="DiaChiCCCD" />
+          </div>
+          
         </div>
-        <div class="col-md-4 input-wrapper">
-          <label for="DienThoai" class="form-label">Điện Thoại</label>
-          <input
-            type="tel"
-            class="form-control"
-            id="DienThoai"
-            name="DienThoai"
-          />
-        </div>
-        <div class="col-md-4 input-wrapper">
-          <label for="DiaChiHienNay" class="form-label">Địa Chỉ Hiện Nay</label>
-          <input
-            type="text"
-            class="form-control"
-            id="DiaChiHienNay"
-            name="DiaChiHienNay"
-          />
-        </div>
-        <!-- </div> -->
         <div class="row mb-3">
           <div class="col-md-4 input-wrapper">
             <label for="ChucVu" class="form-label">Chức Vụ</label>
@@ -251,16 +125,30 @@
           </div>
           <div class="col-md-4 input-wrapper">
             <label for="NoiCongTac" class="form-label">Nơi Công Tác</label>
-            <input
-              type="text"
-              class="form-control"
-              id="NoiCongTac"
-              name="NoiCongTac"
-            />
+            <input type="text" class="form-control" id="NoiCongTac" name="NoiCongTac"/>
+          </div>
+          <div class="col-md-4 input-wrapper">
+            <label for="DiaChiHienNay" class="form-label">Địa Chỉ Hiện Nay</label>
+            <input type="text" class="form-control" id="DiaChiHienNay" name="DiaChiHienNay" />
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="col-md-4 input-wrapper">
+            <label for="TenDangNhap" class="form-label">Tên đăng nhập</label>
+            <input type="text" class="form-control" id="TenDangNhap" name="TenDangNhap"/>
+          </div>
+          <div class="col-md-4 input-wrapper">
+            <label for="Quyen" class="form-label">Quyền</label>
+            <select id="Quyen" class="form-control" name="Quyen">
+              <option value="GV">Giảng Viên</option>
+              <option value="GV_CNBM">Giảng viên-Chủ nhiệm bộ môn</option>
+              <option value="Duyệt">Duyệt</option>
+              <option value="Lãnh đạo khoa">Lãnh đạo khoa</option>
+            </select>
           </div>
           <div class="col-md-4 input-wrapper">
             <label for="MaPhongBan" class="form-label">Mã Phòng Ban</label>
-            <select id="MaPhongBan" name="MaPhongBan">
+            <select class="form-control" id="MaPhongBan" name="MaPhongBan" onchange="fetchQuyen()">
               <% departmentLists.forEach(function(departmentLists) { %>
               <option value="<%= departmentLists.MaPhongBan %>">
                 <%= departmentLists.MaPhongBan %>
@@ -268,78 +156,43 @@
               <% }); %>
             </select>
           </div>
+          <div class="col-md-4 input-wrapper" hidden>
+            <label for="MatKhau" class="form-label">Mật khẩu</label>
+            <input type="text" class="form-control" id="MatKhau" name="MatKhau"/>
+          </div>
         </div>
         <div class="row mb-3">
           <div class="col-md-4 input-wrapper">
             <label for="SoTaiKhoan" class="form-label">Số Tài Khoản</label>
-            <input
-              type="text"
-              class="form-control"
-              id="SoTaiKhoan"
-              name="SoTaiKhoan"
-            />
+            <input type="text" class="form-control" id="SoTaiKhoan" name="SoTaiKhoan"/>
           </div>
           <div class="col-md-4 input-wrapper">
             <label for="NganHang" class="form-label">Ngân Hàng</label>
-            <input
-              type="text"
-              class="form-control"
-              id="NganHang"
-              name="NganHang"
-            />
+            <input type="text" class="form-control" id="NganHang" name="NganHang"/>
           </div>
           <div class="col-md-4 input-wrapper">
             <label for="ChiNhanh" class="form-label">Chi Nhánh</label>
-            <input
-              type="text"
-              class="form-control"
-              id="ChiNhanh"
-              name="ChiNhanh"
-            />
+            <input type="text" class="form-control" id="ChiNhanh" name="ChiNhanh"/>
           </div>
         </div>
         <div class="row mb-3">
           <div class="col-md-4 input-wrapper">
             <label for="MaSoThue" class="form-label">Mã Số Thuế</label>
-            <input
-              type="text"
-              class="form-control"
-              id="MaSoThue"
-              name="MaSoThue"
-            />
+            <input type="text" class="form-control" id="MaSoThue" name="MaSoThue"/>
           </div>
 
           <div class="col-md-4 input-wrapper">
-            <label for="MonGiangDayChinh" class="form-label"
-              >Môn Giảng Dạy Chính</label
-            >
-            <input
-              type="text"
-              class="form-control"
-              id="MonGiangDayChinh"
-              name="MonGiangDayChinh"
-            />
+            <label for="MonGiangDayChinh" class="form-label">Môn Giảng Dạy Chính</label>
+            <input type="text" class="form-control" id="MonGiangDayChinh" name="MonGiangDayChinh"/>
           </div>
           <div class="col-md-4 input-wrapper">
-            <label for="CacMonLienQuan" class="form-label"
-              >Các Môn Liên Quan</label
-            >
-            <input
-              type="text"
-              class="form-control"
-              id="CacMonLienQuan"
-              name="CacMonLienQuan"
-            />
+            <label for="CacMonLienQuan" class="form-label">Các Môn Liên Quan</label>
+            <input type="text" class="form-control" id="CacMonLienQuan" name="CacMonLienQuan" />
           </div>
         </div>
         <div class="row mb-3"></div>
-
-        <button type="submit" class="btn" id="btnThemNhanVien">
-          Thêm Nhân Viên
-        </button>
-        <button class="btn mx-5" onclick="window.history.back()">
-          Quay lại
-        </button>
+        <button type="submit" class="btn" id="btnThemNhanVien">Thêm Nhân Viên</button>
+        <button class="btn mx-5" onclick="window.history.back()">Quay lại</button>
       </form>
     </div>
 
@@ -367,5 +220,66 @@
         });
       });
     </script>
+    <script>
+      function setDefaultPassword(event) {
+        const matKhauField = document.getElementById('MatKhau');
+        
+        // Nếu mật khẩu chưa nhập, đặt mật khẩu mặc định là "1"
+        if (matKhauField.value === '') {
+          matKhauField.value = '1';
+        }
+      }
+    </script>
+    
+    
+    <script>
+      function fetchQuyen() {
+  const maPhongBan = document.getElementById('MaPhongBan').value;
+  alert(maPhongBan);
+  // Gọi API để lấy thông tin isKhoa
+  fetch(`/getQuyenByPhongBan?MaPhongBan=${maPhongBan}`)
+    .then(response => response.json())
+    .then(data => {
+      const quyenSelect = document.getElementById('Quyen');
+      quyenSelect.innerHTML = ''; // Xóa các option cũ
+
+      // Kiểm tra isKhoa và cập nhật quyền dựa theo giá trị
+      if (data.isKhoa === 1) {
+        quyenSelect.innerHTML = `
+          <option value="GV">Giảng Viên</option>
+          <option value="GV_CNBM">Giảng viên-Chủ nhiệm bộ môn</option>
+          <option value="Duyệt">Duyệt</option>
+          <option value="Lãnh đạo khoa">Lãnh đạo khoa</option>`;
+      } else {
+        if (maPhongBan === 'DAOTAO'){
+          quyenSelect.innerHTML = `
+          <option value="Thường">Thường</option>
+          <option value="DAOTAO_THIHANH">Đào tạo thi hành</option>`;
+        } else {
+          quyenSelect.innerHTML = `
+          <option value="Duyệt">Duyệt</option>`;
+          
+        }
+        
+      }
+    })
+    .catch(error => console.error('Error:', error));
+    }
+    </script>
+    <script>
+      document.getElementById("changePasswordLink").addEventListener("click", function(event) {
+    event.preventDefault(); // Ngăn chặn hành vi mặc định của thẻ a
+    const tenDangNhap = localStorage.getItem("TenDangNhap"); // Lấy TenDangNhap từ localStorage
+    alert(tenDangNhap);
+
+    if (tenDangNhap) {
+        // Chuyển hướng đến trang changePassword và truyền TenDangNhap trong URL
+        window.location.href = `/changePassword?tenDangNhap=${encodeURIComponent(tenDangNhap)}`;
+    } else {
+        alert("Không tìm thấy TenDangNhap trong localStorage.");
+    }
+});
+    </script>
+      
   </body>
 </html>
