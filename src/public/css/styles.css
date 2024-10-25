@@ -245,7 +245,8 @@ button#import,
 button#viewtam,
 button#ban-hanh,
 #quychuandukien,
-button#render {
+button#render, 
+#xoa-qc-du-kien{
   padding-top: 0;
 }
 
@@ -275,7 +276,8 @@ button#render {
 #chooseFile::before,
 #quychuandukien::before,
 button#render::before #fillDay::before,
-#getData::before {
+#getData::before,
+#xoa-qc-du-kien::before {
   position: absolute;
   content: "";
   background: var(--color);
@@ -296,7 +298,8 @@ button#render::before #fillDay::before,
 #quychuandukien:hover,
 button#render:hover,
 #fillDay:hover,
-#getData:hover {
+#getData:hover,
+#xoa-qc-du-kien:hover {
   color: white;
 }
 
@@ -311,7 +314,8 @@ button#render:hover,
 #quychuandukien:before,
 button#render:before,
 #fillDay:before,
-#getData::before {
+#getData::before 
+#xoa-qc-du-kien::before{
   top: 100%;
   left: 100%;
   transition: 0.3s all;
@@ -328,7 +332,8 @@ button#render:before,
 #quychuandukien:hover::before,
 button#render:hover::before,
 #fillDay:hover::before,
-#getData:hover::before {
+#getData:hover::before,
+#xoa-qc-du-kien:hover::before {
   top: -30px;
   left: -30px;
 }
