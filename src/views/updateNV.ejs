@@ -4,80 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Học Viện Kỹ Thuật Mật Mã</title>
+  <link rel="stylesheet" href="/css/admin.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
-  <link rel="stylesheet" href="/css/forminput.css">
   <link rel="stylesheet" href="/css/styles.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
-    <!-- <link rel="stylesheet" href="public/css/styles.css"> -->
-  <style>
-    .btn {
-  margin-bottom: 1rem;
-  padding: 0.5em 1em;
-  border: none;
-  border-radius: 5px;
-  font-weight: bold;
-  letter-spacing: 5px;
-  text-transform: uppercase;
-  cursor: pointer;
-  color: #2c9caf;
-  transition: all 1000ms;
-  font-size: 15px;
-  position: relative;
-  overflow: hidden;
-  outline: 2px solid #2c9caf;
-}
-
-.btn:hover {
-  color: #ffffff;
-  transform: scale(1.1);
-  outline: 2px solid #70bdca;
-  box-shadow: 4px 5px 17px -4px #268391;
-}
-.btn::before {
-  content: "";
-  position: absolute;
-  left: -50px;
-  top: 0;
-  width: 0;
-  height: 100%;
-  background-color: #2c9caf;
-  transform: skewX(45deg);
-  z-index: -1;
-  transition: width 1000ms;
-}
-
-.btn:hover::before {
-  width: 250%;
-}
-.input-wrapper input {
-  background-color: #eee;
-  border: none;
-  font-size: 1rem;
-  width: 100%;
-  border-radius: 5px;
-  color: black;
-  box-shadow: 0 0.4rem #dfd9d9;
-  cursor: pointer;
-}
-select {
-  background-color: #eee;
-  border: none;
-  font-size: 1rem;
-  width: 100%;
-  border-radius: 5px;
-  color: black;
-  box-shadow: 0 0.4rem #dfd9d9;
-  cursor: pointer;
-}
-
-.input-wrapper input:focus {
-  outline-color: black;
-}
-select:focus{
-  outline-color: black;
-}
-  </style>
 </head>
 <body>
    
@@ -123,6 +54,7 @@ select:focus{
                     </a>
                   <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                     <a class="dropdown-item" href="#">Thông tin cá nhân</a>
+                    <a class="dropdown-item" id="changePasswordLink">Đổi mật khẩu</a>
                     <a class="dropdown-item" href="/">Đăng xuất</a>
                   </div>
                 </div>
@@ -150,7 +82,7 @@ select:focus{
                                 </div>
                                 <div class="col-md-4 input-wrapper">
                                     <label for="HocVi" class="form-label">Học Vị</label>
-                                    <input type="text" class="form-control" id="HocVi" name="HocVi">
+                                    <input type="text" class="form-control" id="HocVi" name="HocVi" value="<%= value.HocVi %>">
                                 </div>
                             </div>
                             <div class="row mb-3">
@@ -167,21 +99,21 @@ select:focus{
                                     <input type="text" class="form-control" id="NoiCapCCCD" name="NoiCapCCCD" value="<%= value.NoiCapCCCD %>">
                                 </div>
                             </div>
-                            <!-- <div class="row mb-3">
+                            <div class="row mb-3">
                                 <div class="col-md-4 input-wrapper">
                                     <label for="gioitinh">Giới tính:</label>
                                     <select class="form-control" name="GioiTinh" id="gioitinh" >
                                         <option value="Nam" <%= value.GioiTinh === 'Nam' ? 'selected' : '' %>>Nam</option>
                                         <option value="Nu" <%= value.GioiTinh === 'Nu' ? 'selected' : '' %>>Nữ</option>
                                     </select>
-                                </div> -->
+                                </div>
                                 <div class="col-md-4 input-wrapper">
                                     <label for="DienThoai" class="form-label">Điện Thoại</label>
                                     <input type="tel" class="form-control" id="DienThoai" name="DienThoai" value="<%= value.DienThoai %>">
                                 </div>
                                 <div class="col-md-4 input-wrapper">
-                                    <label for="DiaChiHienNay" class="form-label">Địa Chỉ Hiện Nay</label>
-                                    <input type="text" class="form-control" id="DiaChiHienNay" name="DiaChiHienNay" value="<%= value.DiaChiHienNay %>" >
+                                    <label for="DiaChiCCCD" class="form-label">Địa Chỉ Trong CCCD</label>
+                                    <input type="text" class="form-control" id="DiaChiCCCD" name="DiaChiCCCD" value="<%= value.DiaChiCCCD %>" >
                                 </div>
                             </div>
                             <div class="row mb-3">
@@ -194,17 +126,36 @@ select:focus{
                                     <input type="text" class="form-control" id="NoiCongTac" name="NoiCongTac" value="<%= value.NoiCongTac %>">
                                 </div>
                                 <div class="col-md-4 input-wrapper">
-                                    <label for="MaPhongBan" class="form-label">Mã Phòng Ban</label>
-                                    <select id="MaPhongBan" name="MaPhongBan">
-                                        <% departmentLists.forEach(function(department) { %>
-                                          <option value="<%= department.MaPhongBan %>" 
-                                            <%= String(department.MaPhongBan) === String(value.MaPhongBan) ? 'selected' : '' %>>
-                                            <%= department.MaPhongBan %>
-                                          </option>
-                                        <% }); %>
-                                      </select>
-                                      
+                                  <label for="DiaChiHienNay" class="form-label">Địa Chỉ Hiện Nay</label>
+                                  <input type="text" class="form-control" id="DiaChiHienNay" name="DiaChiHienNay" value="<%= value.DiaChiHienNay %>" >
                                 </div>
+                            </div>
+                            <div class="row mb-3">
+                              <div class="col-md-4 input-wrapper">
+                                <label for="TenDangNhap" class="form-label">Tên đăng nhập</label>
+                                <input type="text" class="form-control" id="TenDangNhap" name="TenDangNhap" value="<%= account.TenDangNhap %>" readonly />
+                              </div>
+                              <div class="col-md-4 input-wrapper">
+                                <label for="Quyen" class="form-label">Quyền</label>
+                                <select id="Quyen" class="form-control" name="Quyen">
+                                  <option value="<%= role.Quyen %>"><%= role.Quyen %></option>
+                                </select>
+                              </div>
+                              <div class="col-md-4 input-wrapper">
+                                <label for="MaPhongBan" class="form-label">Mã Phòng Ban</label>
+                                <select class="form-control" id="MaPhongBan" name="MaPhongBan" onchange="fetchQuyen()">
+                                  <option value="<%= role.MaPhongBan %>"><%= role.MaPhongBan %></option>
+                                  <% departmentLists.forEach(function(departmentLists) { %>
+                                  <option value="<%= departmentLists.MaPhongBan %>">
+                                    <%= departmentLists.MaPhongBan %>
+                                  </option>
+                                  <% }); %>
+                                </select>
+                              </div>
+                              <div class="col-md-4 input-wrapper" hidden>
+                                <label for="MatKhau" class="form-label">Mật khẩu</label>
+                                <input type="text" class="form-control" id="MatKhau" name="MatKhau"/>
+                              </div>
                             </div>
                             <div class="row mb-3">
                                 <div class="col-md-4 input-wrapper">
@@ -331,6 +282,54 @@ select:focus{
         reader.readAsDataURL(file);
       }
     });
+  </script>
+  <script>
+    function fetchQuyen() {
+const maPhongBan = document.getElementById('MaPhongBan').value;
+alert(maPhongBan);
+// Gọi API để lấy thông tin isKhoa
+fetch(`/getQuyenByPhongBan?MaPhongBan=${maPhongBan}`)
+  .then(response => response.json())
+  .then(data => {
+    const quyenSelect = document.getElementById('Quyen');
+    quyenSelect.innerHTML = ''; // Xóa các option cũ
+
+    // Kiểm tra isKhoa và cập nhật quyền dựa theo giá trị
+    if (data.isKhoa === 1) {
+      quyenSelect.innerHTML = `
+        <option value="GV">Giảng Viên</option>
+        <option value="GV_CNBM">Giảng viên-Chủ nhiệm bộ môn</option>
+        <option value="Duyệt">Duyệt</option>
+        <option value="Lãnh đạo khoa">Lãnh đạo khoa</option>`;
+    } else {
+      if (maPhongBan === 'DAOTAO'){
+        quyenSelect.innerHTML = `
+        <option value="Thường">Thường</option>
+        <option value="DAOTAO_THIHANH">Đào tạo thi hành</option>`;
+      } else {
+        quyenSelect.innerHTML = `
+        <option value="Duyệt">Duyệt</option>`;
+        
+      }
+      
+    }
+  })
+  .catch(error => console.error('Error:', error));
+  }
+  </script>
+  <script>
+    document.getElementById("changePasswordLink").addEventListener("click", function(event) {
+  event.preventDefault(); // Ngăn chặn hành vi mặc định của thẻ a
+  const tenDangNhap = localStorage.getItem("TenDangNhap"); // Lấy TenDangNhap từ localStorage
+  alert(tenDangNhap);
+
+  if (tenDangNhap) {
+      // Chuyển hướng đến trang changePassword và truyền TenDangNhap trong URL
+      window.location.href = `/changePassword?tenDangNhap=${encodeURIComponent(tenDangNhap)}`;
+  } else {
+      alert("Không tìm thấy TenDangNhap trong localStorage.");
+  }
+});
   </script>
 
 </body>
