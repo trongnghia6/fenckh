@@ -231,14 +231,14 @@
           <button class="btn btn-outline-primary button" id="quychuandukien">
             Thêm bảng quy chuẩn
           </button>
-          <select class="selectop" id="xoa-qc-du-kien">
+          <!-- <select class="selectop" id="xoa-qc-du-kien">
             <option style="display: none;">Xóa</option>
             <option value="ALL">Xóa tất cả</option>
             <option value="CNTT">Xóa dữ liệu khoa CNTT</option>
             <option value="ATTT">Xóa dữ liệu khoa ATTT</option>
             <option value="DTVT">Xóa dữ liệu khoa DTVT</option>
             <option value="MM">Xóa dữ liệu khoa MM</option>
-          </select>
+          </select> -->
         </div>
 
         <!-- <button class="btn btn-outline-primary button">
@@ -265,7 +265,7 @@
               <option value="2027">2027</option>
             </select>
             <select class="selectop" id="departmentFilter">
-              <option value="">Tất cả khoa</option>
+              <option value="ALL">Tất cả khoa</option>
               <option value="CNTT">Công nghệ thông tin</option>
               <option value="ATTT">An toàn thông tin</option>
               <option value="DTVT">Điện tử viễn thông</option>
@@ -276,6 +276,11 @@
             <button class="button text-nowrap" id="render" style="margin-top: 17px" onclick="filterTable()">
               Lọc
             </button>
+
+            <button class="button text-nowrap" id="xoa-qc-du-kien" style="margin-top: 17px">
+              Xóa
+            </button>
+
           </div>
         </div>
       </div>
@@ -419,38 +424,29 @@
   <!-- phần xóa bảng quy chuẩn dự kiến -->
   <script>
     document.addEventListener('DOMContentLoaded', function () {
-      document.getElementById('xoa-qc-du-kien').addEventListener('change', async function () {
+      document.getElementById('xoa-qc-du-kien').addEventListener('click', async function () {
         const selectedValue = this.value;
+        try {
+          // Gọi tới API để xóa dữ liệu
+          const response = await fetch('http://localhost:3000/xoa-qcdk', { // Đường dẫn tới API của bạn
+            method: 'POST', // Phương thức HTTP
+            headers: {
+              'Content-Type': 'application/json', // Định dạng dữ liệu
+            },
+            body: JSON.stringify({ Khoa: selectedValue }) // Gửi Khoa trong body
+          });
 
-        // Sử dụng confirm để hiển thị thông báo với lựa chọn đồng ý hoặc hủy
-        const confirmed = confirm(`Xóa tất cả dữ liệu của khoa: ${selectedValue}?`);
-
-        if (confirmed) {
-          try {
-            // Gọi tới API để xóa dữ liệu
-            const response = await fetch('http://localhost:3000/xoa-qcdk', { // Đường dẫn tới API của bạn
-              method: 'POST', // Phương thức HTTP
-              headers: {
-                'Content-Type': 'application/json', // Định dạng dữ liệu
-              },
-              body: JSON.stringify({ Khoa: selectedValue }) // Gửi Khoa trong body
-            });
-
-            // Kiểm tra xem yêu cầu có thành công không
-            if (response.ok) {
-              const result = await response.json(); // Chuyển đổi phản hồi sang JSON
-              alert(result.message); // Hiển thị thông báo thành công
-            } else {
-              const errorData = await response.json(); // Lấy thông tin lỗi
-              alert(`Lỗi: ${errorData.message}`); // Hiển thị thông báo lỗi
-            }
-          } catch (error) {
-            console.error('Đã xảy ra lỗi:', error);
-            alert('Đã xảy ra lỗi khi gọi API.'); // Hiển thị thông báo lỗi cho người dùng
+          // Kiểm tra xem yêu cầu có thành công không
+          if (response.ok) {
+            const result = await response.json(); // Chuyển đổi phản hồi sang JSON
+            alert(result.message); // Hiển thị thông báo thành công
+          } else {
+            const errorData = await response.json(); // Lấy thông tin lỗi
+            alert(`Lỗi: ${errorData.message}`); // Hiển thị thông báo lỗi
           }
-        } else {
-          // Người dùng đã chọn Cancel, không thực hiện thao tác xóa
-          alert('Hủy thao tác xóa dữ liệu.');
+        } catch (error) {
+          console.error('Đã xảy ra lỗi:', error);
+          alert('Đã xảy ra lỗi khi gọi API.'); // Hiển thị thông báo lỗi cho người dùng
         }
       });
     });
