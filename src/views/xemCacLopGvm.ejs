@@ -222,38 +222,42 @@
     <div class="">
       <div class="d-flex justify-content-between">
         <div class="d-flex justify-content-center">
-          <select class="selectop mx-1 my-3" id="combobox-dot">
-            <option value="1">Đợt 1</option>
-            <option value="2">Đợt 2</option>
-          </select>
-
-          <!-- Combo box Đợt -->
-          <select class="selectop mx-1 my-3" id="combobox-ki">
-            <option value="1">Kỳ 1</option>
-            <option value="2">Kỳ 2</option>
-          </select>
-
-          <!-- Combo box Năm -->
-          <select class="selectop mx-1 my-3" id="combobox-nam">
-            <option value="2024">2024</option>
-            <option value="2025">2025</option>
-            <option value="2026">2026</option>
-            <option value="2027">2027</option>
-          </select>
-          <button id="infoGvm" class="button text-nowrap">Xem dữ liệu</button>
-          <button onclick="submitData()" class="button mx-3" id="update-qc">Cập nhật</button>
-          <!-- <button onclick="submitData2()" class="button mx-3" id="update-qc" display="none">Cập nhật</button> -->
-          <button onclick="submitData2()" class="button mx-3" id="save-data-all" style="display: none;">Lưu</button>
-          <div class="d-flex my-3" style="height: 61px; margin-left: 110px; ">
-            <input type="text" id="filterName" placeholder="Tìm theo tên giảng viên" oninput="filterByName()"
-              class="form-control m-2 search" style="width: 200px;" />
-            <input type="text" id="filterClass" placeholder="Tìm theo tên học phần" oninput="filterByClass()"
-              class="form-control m-2 search" style="width: 200px;" />
-            <input type="text" id="filterKhoa" placeholder="Tìm theo khoa" oninput="filterByKhoa()"
-              class="form-control m-2 search" style="width: 200px;" />
+          <div class="cbb" style="margin-top: 20px;">
+            <select class="selectop mx-1" id="combobox-dot">
+                <option value="1">Đợt 1</option>
+                <option value="2">Đợt 2</option>
+            </select>
+    
+            <!-- Combo box Kỳ -->
+            <select class="selectop mx-1" id="combobox-ki">
+                <option value="1">Kỳ 1</option>
+                <option value="2">Kỳ 2</option>
+            </select>
+    
+            <!-- Combo box Năm -->
+            <select class="selectop mx-1" id="combobox-nam">
+                <option value="2024">2024</option>
+                <option value="2025">2025</option>
+                <option value="2026">2026</option>
+                <option value="2027">2027</option>
+            </select>
           </div>
+    
+            <button id="infoGvm" class="button text-nowrap">Xem dữ liệu</button>
+            <button onclick="submitData()" class="button mx-3" id="update-qc">Cập nhật</button>
+            <button onclick="submitData2()" class="button mx-3" id="save-data-all" style="display: none;">Lưu</button>
         </div>
-      </div>
+    </div>
+    
+    <!-- Phần tìm kiếm xuống dưới -->
+    <div class="d-flex my-3" style="height: 70px;">
+        <input type="text" id="filterName" placeholder="Tìm theo tên giảng viên" oninput="filterByName()"
+            class="form-control m-2 search" style="width: 200px;" />
+        <input type="text" id="filterClass" placeholder="Tìm theo tên học phần" oninput="filterByClass()"
+            class="form-control m-2 search" style="width: 200px;" />
+        <input type="text" id="filterKhoa" placeholder="Tìm theo khoa" oninput="filterByKhoa()"
+            class="form-control m-2 search" style="width: 200px;" />
+    </div>
 
 
       <div id="renderInfo">

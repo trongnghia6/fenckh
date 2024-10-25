@@ -338,6 +338,7 @@ button#render:hover::before,
 }
 
 .selectop {
+  
   height: 45px;
   border: 2px solid #0077ff;
   border-radius: 5px;
@@ -348,8 +349,9 @@ button#render:hover::before,
     stroke: #07f;
   }
 }
-#combobox-dot, #combobox-ki, #combobox-nam{
-  width: 80px;
+#combobox-dot, #combobox-ki, #combobox-nam, #combobox-khoa, #departmentFilter{
+  width: 150px;
+  color: #5476f0;
 }
 
 .selectop:focus {
