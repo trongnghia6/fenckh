@@ -6,16 +6,16 @@ const fs = require('fs');
 
 // Hàm xóa dữ liệu từ bảng
 const deleteTableTam = async (req, res) => {
-  const { Khoa } = req.body; // Lấy Khoa từ body
+  const { Khoa, Dot, Ki, Nam } = req.body; // Lấy Khoa từ body
   console.log('Xóa khoa : ', Khoa)
   // Lấy tên bảng từ biến môi trường
   const tableTam = process.env.DB_TABLE_TAM;
 
   // Câu lệnh SQL để xóa dữ liệu
-  const query = `DELETE FROM ?? WHERE Khoa = ?`; // Sử dụng ?? để tránh SQL injection
+  const query = `DELETE FROM ?? WHERE Khoa = ? AND Dot = ? AND Ki = ? AND Nam = ?`; // Sử dụng ?? để tránh SQL injection
 
   // Thực thi câu lệnh SQL
-  db.query(query, [tableTam, Khoa], (error, results) => {
+  db.query(query, [tableTam, Khoa, Dot, Ki, Nam], (error, results) => {
     if (error) {
       console.error('Lỗi khi xóa dữ liệu:', error);
       return res.status(500).json({ message: 'Đã xảy ra lỗi khi xóa dữ liệu.' });

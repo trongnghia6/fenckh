@@ -425,33 +425,48 @@
   <script>
     document.addEventListener('DOMContentLoaded', function () {
       document.getElementById('xoa-qc-du-kien').addEventListener('click', async function () {
-        const selectedValue = this.value;
-        try {
-          // Gọi tới API để xóa dữ liệu
-          const response = await fetch('http://localhost:3000/xoa-qcdk', { // Đường dẫn tới API của bạn
-            method: 'POST', // Phương thức HTTP
-            headers: {
-              'Content-Type': 'application/json', // Định dạng dữ liệu
-            },
-            body: JSON.stringify({ Khoa: selectedValue }) // Gửi Khoa trong body
-          });
 
-          // Kiểm tra xem yêu cầu có thành công không
-          if (response.ok) {
-            const result = await response.json(); // Chuyển đổi phản hồi sang JSON
-            alert(result.message); // Hiển thị thông báo thành công
-          } else {
-            const errorData = await response.json(); // Lấy thông tin lỗi
-            alert(`Lỗi: ${errorData.message}`); // Hiển thị thông báo lỗi
+        let Dot = document.getElementById("combobox-dot").value;
+        let Ki = document.getElementById("combobox-ki").value;
+        let Nam = document.getElementById("combobox-nam").value;
+        let Khoa = document.getElementById("departmentFilter").value;
+
+        const body = { Khoa, Dot, Ki, Nam };
+        console.log(body);
+
+        // Hiển thị hộp thoại xác nhận
+        const confirmation = confirm(`Xóa dữ liệu của Khoa ${Khoa} Đợt ${Dot} Kì ${Ki} Năm ${Nam}`);
+
+        if (confirmation) { // Nếu người dùng chọn OK
+          try {
+            // Gọi tới API để xóa dữ liệu
+            const response = await fetch('http://localhost:3000/xoa-qcdk', { // Đường dẫn tới API của bạn
+              method: 'POST', // Phương thức HTTP
+              headers: {
+                'Content-Type': 'application/json', // Định dạng dữ liệu
+              },
+              body: JSON.stringify(body) // Gửi Khoa trong body
+            });
+
+            // Kiểm tra xem yêu cầu có thành công không
+            if (response.ok) {
+              const result = await response.json(); // Chuyển đổi phản hồi sang JSON
+              alert(result.message); // Hiển thị thông báo thành công
+            } else {
+              const errorData = await response.json(); // Lấy thông tin lỗi
+              alert(`Lỗi: ${errorData.message}`); // Hiển thị thông báo lỗi
+            }
+          } catch (error) {
+            console.error('Đã xảy ra lỗi:', error);
+            alert('Đã xảy ra lỗi khi gọi API.'); // Hiển thị thông báo lỗi cho người dùng
           }
-        } catch (error) {
-          console.error('Đã xảy ra lỗi:', error);
-          alert('Đã xảy ra lỗi khi gọi API.'); // Hiển thị thông báo lỗi cho người dùng
+        } else {
+          // Nếu người dùng chọn Cancel
+          alert('Đã hủy yêu cầu xóa dữ liệu.'); // Thông báo đã hủy
         }
       });
     });
   </script>
-
 
   <script>
     let dataQC = [];

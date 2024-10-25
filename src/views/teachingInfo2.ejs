@@ -80,6 +80,109 @@
       color: #333;
       /* Màu chữ đậm cho giá trị */
     }
+
+    .suggestions {
+      position: absolute;
+      /* Đảm bảo gợi ý nằm bên trên các thành phần khác */
+      top: calc(100% + 5px);
+      /* Đặt gợi ý phía trên input với một khoảng cách */
+      left: 0;
+      background-color: #f0f0f0;
+      color: #000;
+      border: 1px solid #ccc;
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+      z-index: 1000;
+      /* Đảm bảo gợi ý nằm trên các thành phần khác */
+      border-radius: 4px;
+      max-height: 300px;
+      overflow-y: auto;
+    }
+
+    /* Hiệu ứng lung linh khi hover */
+    .suggestions:hover {
+      background-color: #e0e0e0;
+      /* Thay đổi màu nền khi hover */
+      box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+      /* Tăng độ bóng khi hover */
+    }
+
+
+    /* CSS cho từng mục gợi ý */
+    .suggestion-item {
+      padding: 8px 12px;
+      /* Khoảng cách bên trong từng mục */
+      cursor: pointer;
+      /* Con trỏ chuột thay đổi khi hover */
+      transition: background-color 0.2s ease;
+      /* Tạo hiệu ứng chuyển đổi mượt mà khi hover */
+    }
+
+    /* Hiệu ứng khi người dùng di chuột vào mục gợi ý */
+    .suggestion-item:hover {
+      background-color: #f0f0f0;
+      /* Màu nền khi hover */
+    }
+
+    /* Đặt lại một số thuộc tính khi input mất focus */
+    input:focus+.suggestions {
+      display: block;
+      /* Đảm bảo khung hiển thị khi input được focus */
+    }
+
+    /* Đảm bảo container gợi ý không bị tràn ra ngoài khung nếu có */
+    .suggestions {
+      overflow: hidden;
+    }
+
+    /* phần tổng tiết */
+    /* phần css cho label tổng số tiết  ki*/
+
+    .total-label {
+      margin-left: auto;
+      /* Căn phải cho thẻ total-label */
+      margin-right: 0;
+      font-family: Arial, sans-serif;
+      font-size: 16px;
+      background-color: #f4f4f4;
+      padding: 10px;
+      border-radius: 8px;
+      width: fit-content;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      display: block;
+      /* Đảm bảo thẻ div là khối để căn phải hoạt động */
+    }
+
+    .total-label label {
+      font-weight: bold;
+      /* Giữ chữ in đậm */
+      color: #000;
+      /* Màu chữ đen */
+      margin-right: 8px;
+      /* Thêm khoảng cách bên phải */
+      cursor: pointer;
+      /* Tạo hiệu ứng chuyển màu nền và màu chữ mềm mại */
+      padding: 5px 10px;
+      /* Thêm padding cho label để tạo không gian */
+      border: 1px solid #ccc;
+      /* Khung cho label */
+      border-radius: 4px;
+      /* Bo góc cho khung */
+    }
+
+    .total-label label,
+    .total-label label span {
+      background-color: #007BFF;
+      /* Màu nền khi hover */
+      color: #fff;
+      /* Màu chữ trắng khi hover */
+    }
+
+    .total-label span {
+      font-weight: bold;
+      /* Giữ chữ trong span cũng in đậm */
+      color: #333;
+      /* Màu chữ đậm cho giá trị */
+    }
   </style>
 </head>
 
@@ -251,6 +354,9 @@
           class="form-control m-2 search" style="width: 200px" />
         <input type="text" id="filterKhoa" placeholder="Tìm theo khoa" oninput="filterByKhoa()"
           class="form-control m-2 search" style="width: 200px" />
+        <input type="text" id="filterBoMon" placeholder="Tìm theo tên bộ môn"
+          oninput="filterBoMon(); showSuggestionsBoMon(this)" onclick="showSuggestionsBoMon(this)"
+          class="form-control m-2 search" style="width: 180px;" />
       </div>
       <div id="renderInfo">
         <table class="text-center" style="width: 100%">
@@ -292,9 +398,9 @@
         </table>
       </div>
       <!-- Label tổng số tiết tách riêng với bảng -->
-      <div class="total-label d-flex justify-content-end">
-        <strong>Tổng số tiết LL: </strong><span id="totalLL">0</span> |
-        <strong>Tổng số tiết QC: </strong><span id="totalQC">0</span>
+      <div class="total-label">
+        <label>Tổng số tiết Lên Lớp: <span class="value" id="totalLL">0</span></label>
+        <label>Tổng số tiết Quy Chuẩn: <span class="value" id="totalQC">0</span></label>
       </div>
     </div>
   </div>
@@ -499,6 +605,7 @@
         const boMonTd = document.createElement("td"); // Tạo ô Bộ môn
         const boMonInput = document.createElement("span"); // Tạo span cho Bộ môn
         boMonInput.textContent = row.BoMon || ""; // Lấy giá trị từ row
+        boMonInput.name = "bomon"; // Lấy giá trị từ row
         boMonTd.appendChild(boMonInput); // Thêm span vào ô
         tableRow.appendChild(boMonTd);
 
@@ -1024,6 +1131,131 @@
       }
     }
   </script>
+
+  <script>
+
+    // Hàm gợi ý bộ môn ở ô nhập 
+    function showSuggestionsBoMon(input) {
+      const value = input.value.toLowerCase(); // Lấy giá trị nhập vào và chuyển thành chữ thường
+      hideSuggestionsBoMon(); // Ẩn gợi ý cũ trước khi hiển thị gợi ý mới
+
+      // Tạo thẻ div chứa gợi ý
+      const suggestionsContainer = document.createElement('div');
+      suggestionsContainer.className = 'suggestions'; // Đặt class cho khung gợi ý
+
+      // Đặt vị trí cho suggestionsContainer
+      const { bottom, left, width } = input.getBoundingClientRect(); // Lấy vị trí của input
+      suggestionsContainer.style.position = 'absolute'; // Để đè lên bảng
+      suggestionsContainer.style.top = `${bottom + window.scrollY}px`; // Đặt vị trí ngay dưới input
+      suggestionsContainer.style.left = `${left + window.scrollX}px`; // Căn trái với input
+      suggestionsContainer.style.width = `${width}px`; // Chiều rộng bằng với input
+      suggestionsContainer.style.zIndex = '1000'; // Đảm bảo luôn hiển thị trên các thành phần khác
+      suggestionsContainer.style.maxHeight = '200px'; // Giới hạn chiều cao để không quá lớn
+      suggestionsContainer.style.overflowY = 'auto';  // Cho phép cuộn dọc nếu quá nhiều gợi ý
+
+      // Thêm suggestionsContainer vào DOM
+      document.body.appendChild(suggestionsContainer); // Đặt suggestionsContainer vào body thay vì cha của input
+
+      let suggestions = []; // Khởi tạo mảng gợi ý
+
+      // Lấy dữ liệu từ localStorage
+      const boMon = JSON.parse(localStorage.getItem("boMon")) || []; // Giảng viên mời
+      console.log(boMon)
+
+      suggestions = boMon.map(item => `${item.TenBoMon} - ${item.MaBoMon}`);
+
+
+      // Nếu người dùng nhập dữ liệu, lọc kết quả theo tên giảng viên
+      if (value) {
+        suggestions = suggestions.filter(name => name.toLowerCase().includes(value));
+      }
+
+      // Nếu không có gợi ý, ẩn container
+      if (suggestions.length === 0) {
+        suggestionsContainer.remove();
+        return; // Kết thúc hàm nếu không có gợi ý
+      }
+
+      // Tạo gợi ý dưới dạng danh sách (list)
+      suggestions.forEach(name => {
+        const suggestionItem = document.createElement('div'); // Tạo phần tử cho từng gợi ý
+        suggestionItem.className = 'suggestion-item'; // Đặt class để tùy chỉnh giao diện
+        suggestionItem.textContent = name; // Hiển thị tên giảng viên kèm theo khoa
+
+        // Thêm sự kiện click để điền tên vào ô input
+        // Thêm sự kiện click để điền tên vào ô input
+        suggestionItem.onclick = function () {
+          // Giả sử 'name' là giá trị gợi ý bạn nhận được từ suggestionItem
+          const name = suggestionItem.innerText; // Hoặc có thể là suggestionItem.textContent
+
+          // Tìm vị trí của dấu "-" trong chuỗi
+          const dashIndex = name.indexOf("-");
+
+          // Nếu không có dấu "-", sử dụng tên gợi ý gốc
+          let processedName = name;
+
+          if (dashIndex !== -1) {
+            // Lấy phần sau dấu "-" và loại bỏ khoảng trắng
+            processedName = name.slice(dashIndex + 1).trim().replace(/\s+/g, '');
+          }
+
+          // Điền tên gợi ý đã xử lý vào ô input
+          input.value = processedName;
+          filterBoMon();
+          hideSuggestionsBoMon(); // Ẩn gợi ý sau khi chọn
+        };
+
+
+        suggestionsContainer.appendChild(suggestionItem); // Thêm mục vào danh sách gợi ý
+      });
+
+      // Ẩn gợi ý khi input không còn focus
+      input.onblur = function () {
+        setTimeout(() => {
+          hideSuggestionsBoMon();
+        }, 100); // Thời gian chờ để nhận diện click
+      };
+    }
+
+    // Hàm ẩn gợi ý
+    function hideSuggestionsBoMon() {
+      const existingSuggestions = document.querySelectorAll('.suggestions');
+      existingSuggestions.forEach(suggestion => suggestion.remove());
+    }
+
+    // Hàm xử lý tìm kiếm theo tên bộ môn
+    function filterBoMon() {
+      const input = document.getElementById("filterBoMon");
+      const filter = input.value.toLowerCase();
+      const tableRows = document.querySelectorAll("#tableBody tr");
+
+      // Nếu ô tìm kiếm trống, hiển thị tất cả các dòng
+      if (!filter) {
+        tableRows.forEach((row) => {
+          row.style.display = ""; // Hiện tất cả các dòng
+          const checkbox = row.querySelector('input[type="checkbox"]');
+          checkbox.disabled = false; // Kích hoạt checkbox
+        });
+        return;
+      }
+
+      // Chỉ hiện các dòng có tên giảng viên khớp với giá trị tìm kiếm
+      tableRows.forEach((row) => {
+        const nameCell = row.querySelector("td:nth-child(7)"); // Giả sử tên giảng viên nằm ở cột thứ 5
+        const name = nameCell.textContent.toLowerCase();
+        const checkbox = row.querySelector('input[type="checkbox"]');
+
+        if (name.includes(filter)) {
+          row.style.display = ""; // Hiện hàng nếu khớp
+          checkbox.disabled = false; // Kích hoạt checkbox
+        } else {
+          row.style.display = "none"; // Ẩn hàng nếu không khớp
+          checkbox.disabled = true; // Vô hiệu hóa checkbox
+        }
+      });
+    }
+  </script>
+
 </body>
 
 </html>
