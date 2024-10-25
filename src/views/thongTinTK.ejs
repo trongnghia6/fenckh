@@ -84,6 +84,7 @@
             <tr>
               <th>STT</th>
               <th>ID User</th>
+              <th>Tên Nhân Viên</th>
               <th>Tên tài khoản</th>
               <th>Mật khẩu</th>
               <th>Mã Phòng ban</th>
@@ -99,6 +100,7 @@
                 <tr>
                   <td><%= i+1 %></td> <!-- Số thứ tự -->
                   <td><%= accountLists[i].id_User %></td> <!-- Hiển thị tên tài khoản -->
+                  <td><%= accountLists[i].TenNhanVien %></td>
                   <td><%= accountLists[i].TenDangNhap %></td> <!-- Hiển thị email -->
                   <td><%= accountLists[i].matkhau %></td>
                   <td><%= accountLists[i].MaPhongBan %></td>

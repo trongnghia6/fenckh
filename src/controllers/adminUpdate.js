@@ -127,13 +127,13 @@ const postUpdatePhongBan = async (req, res) => {
   const MaPhongBan = req.body.MaPhongBan;
   const Quyen = req.body.Quyen;
   const Khoa = req.body.isKhoa;
-  const isKhoa = Khoa ? 1 : 0;
-  console.log(TenDangNhap,id_User, MatKhau, MaPhongBan, Quyen, isKhoa);
+  // const isKhoa = Khoa ? 0 : 1;
+  console.log(TenDangNhap,id_User, MatKhau, MaPhongBan, Quyen, Khoa);
 
   try {
     // Cập nhật bảng đầu tiên
     const query1 = 'UPDATE role SET MaPhongBan = ?, Quyen = ?, isKhoa = ? WHERE TenDangNhap = ?';
-    await connection.query(query1, [MaPhongBan, Quyen, isKhoa, TenDangNhap]);
+    await connection.query(query1, [MaPhongBan, Quyen, Khoa, TenDangNhap]);
 
     // Cập nhật bảng thứ hai
     const query2 = 'UPDATE taikhoannguoidung SET id_User = ?, MatKhau = ? WHERE TenDangNhap = ?';

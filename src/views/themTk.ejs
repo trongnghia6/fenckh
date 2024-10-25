@@ -90,6 +90,19 @@
       <form id="themTK" action="/themTK" method="POST">
         <div class="row mb-3">
           <div class="col-md-4 input-wrapper">
+            <input class="form-control mb-3" type="text" id="searchInput" placeholder="Tìm kiếm theo tên...">
+            <label for="username" class="form-label">Tên Nhân Viên</label>
+            <select class="form-control" id="TenNhanVien" name="TenNhanVien" onchange="fetchPhongBan()">
+              <% TenNhanVien.forEach(function(TenNhanVien) { %>
+                <option value="<%= TenNhanVien.TenNhanVien %>">
+                  <%= TenNhanVien.TenNhanVien %>
+                </option>
+              <% }); %>
+            </select>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="col-md-4 input-wrapper">
             <label for="username" class="form-label">Tên đăng nhập</label>
             <input
               type="text"
@@ -102,14 +115,10 @@
         </div>
           <div class="row mb-3">
             <div class="col-md-4 input-wrapper">
+              
               <label for="id_User" class="form-label">id_User</label>
-              <select id="id_User" name="id_User" onchange="fetchPhongBan()">
-                <% id_User.forEach(function(id_User) { %>
-                  <option value="<%= id_User.id_User %>">
-                    <%= id_User.id_User %>
-                  </option>
-                <% }); %>
-              </select>
+              <input type="text" class="form-control" id="id_User" name="id_User" readonly required/>
+              
             </div>
           </div>
         <div class="row mb-3">
@@ -128,12 +137,16 @@
             <div class="col-md-4 input-wrapper">
               <label for="MaPhongBan" class="form-label">Mã Phòng ban</label>
               <input type="text" id="MaPhongBan" name="MaPhongBan" value="" readonly />
+              <button class="animated-button text-black mt-4" onclick="fetchQuyen()"><span>Lấy Quyền</span><span></span></button> 
+              
             </div>
           </div>
           <div class="row mb-3">
             <div class="col-md-4 input-wrapper">
-              <label for="Quyền" class="form-label">Quyền</label>
-              <input type="text" class="form-control" id="Quyen" name="Quyen" required>
+              <label for="Quyen" class="form-label">Quyền</label>
+              <select id="Quyen" name="Quyen" class="form-control">
+                <!-- Options sẽ được cập nhật bởi JavaScript -->
+              </select>
             </div>
           </div>
           <div class="row mb-3">
@@ -150,12 +163,12 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         function fetchPhongBan() {
-    const id_user = document.getElementById('id_User').value;
-    console.log("Giá trị id_User:", id_user); // Kiểm tra giá trị id_user
-    alert(id_user);
+    const TenNhanVien = document.getElementById('TenNhanVien').value;
+    console.log("Giá trị TenNhanVien:", TenNhanVien); // Kiểm tra giá trị TenNhanVien
+    alert(TenNhanVien);
 
     // Gửi yêu cầu tới server để lấy MaPhongBan và isKhoa
-    fetch(`http://localhost:3000/getId_User?id_user=${id_user}`)
+    fetch(`http://localhost:3000/getTenNhanVien?TenNhanVien=${TenNhanVien}`)
   .then(response => {
     console.log("Trạng thái phản hồi:", response.status); // Kiểm tra trạng thái phản hồi
     if (!response.ok) {
@@ -168,6 +181,7 @@
             // Cập nhật giá trị vào các thẻ input
             document.getElementById('MaPhongBan').value = data.MaPhongBan || 'Không có dữ liệu';
             document.getElementById('isKhoa').value = data.isKhoa ? '1' : '0';
+            document.getElementById('id_User').value = data.id_User || 'Không có dữ liệu';
         })
         .catch(error => {
             alert('Lỗi khi lấy dữ liệu: ' + error.message); // Xử lý lỗi nếu có
@@ -190,6 +204,57 @@ if (tenDangNhap) {
     alert("Không tìm thấy TenDangNhap trong localStorage.");
 }
 });
+</script>
+<script>
+  function fetchQuyen() {
+const maPhongBan = document.getElementById('MaPhongBan').value;
+alert(maPhongBan);
+// Gọi API để lấy thông tin isKhoa
+fetch(`/getQuyenByPhongBan?MaPhongBan=${maPhongBan}`)
+.then(response => response.json())
+.then(data => {
+  const quyenSelect = document.getElementById('Quyen');
+  quyenSelect.innerHTML = ''; // Xóa các option cũ
+
+  // Kiểm tra isKhoa và cập nhật quyền dựa theo giá trị
+  if (data.isKhoa === 1) {
+    quyenSelect.innerHTML = `
+      <option value="GV">Giảng Viên</option>
+      <option value="GV_CNBM">Giảng viên-Chủ nhiệm bộ môn</option>
+      <option value="Duyệt">Duyệt</option>
+      <option value="Lãnh đạo khoa">Lãnh đạo khoa</option>`;
+  } else {
+    if (maPhongBan === 'DAOTAO'){
+      quyenSelect.innerHTML = `
+      <option value="Thường">Thường</option>
+      <option value="DAOTAO_THIHANH">Đào tạo thi hành</option>`;
+    } else {
+      quyenSelect.innerHTML = `
+      <option value="Duyệt">Duyệt</option>`;
+      
+    }
+    
+  }
+})
+.catch(error => console.error('Error:', error));
+}
+</script>
+<script>
+  const searchInput = document.getElementById("searchInput");
+  const select = document.getElementById("TenNhanVien");
+
+  searchInput.addEventListener("input", function() {
+      const filter = searchInput.value.toLowerCase();
+      const options = select.options;
+
+      for (let i = 0; i < options.length; i++) {
+          const option = options[i];
+          const text = option.text.toLowerCase();
+          
+          // Hiện/ẩn option dựa trên kết quả tìm kiếm
+          option.style.display = text.includes(filter) ? "" : "none";
+      }
+  });
 </script>
 </body>
 
