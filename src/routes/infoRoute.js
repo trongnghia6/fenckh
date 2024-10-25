@@ -34,7 +34,12 @@ router.post("/check-teaching", (req, res) => obj3.updateQC(req, res));
 
 router.get("/update-all-info", (req, res) => obj3.updateAllTeachingInfo(req, res));
 
-router.get("/bo-mon", (req, res) => obj.getBoMon(req, res));
+// router.post("/bo-mon", (req, res) => obj.getBoMon(req, res));
+router.post("/bo-mon", (req, res) => {
+  // console.log(req.body); // Kiểm tra dữ liệu gửi lên
+  obj.getBoMon(req, res);
+});
+
 
 
 module.exports = router;
