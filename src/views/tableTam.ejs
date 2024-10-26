@@ -258,18 +258,11 @@
             </select>
 
             <!-- Combo box Năm -->
-            <select class="selectop " id="combobox-nam">
-              <option value="2024">2024</option>
-              <option value="2025">2025</option>
-              <option value="2026">2026</option>
-              <option value="2027">2027</option>
+            <select class="selectop " id="NamHoc">
+              <option value="">Chọn năm học</option>
             </select>
             <select class="selectop" id="departmentFilter">
-              <option value="ALL">Tất cả khoa</option>
-              <option value="CNTT">Công nghệ thông tin</option>
-              <option value="ATTT">An toàn thông tin</option>
-              <option value="DTVT">Điện tử viễn thông</option>
-              <option value="MM">Mật mã</option>
+              <option value="">Chọn khoa</option>
             </select>
             <!-- <button class="export" onclick="exportSelectedData()">Xuất dữ liệu</button> -->
 
@@ -428,7 +421,7 @@
 
         let Dot = document.getElementById("combobox-dot").value;
         let Ki = document.getElementById("combobox-ki").value;
-        let Nam = document.getElementById("combobox-nam").value;
+        let Nam = document.getElementById("NamHoc").value;
         let Khoa = document.getElementById("departmentFilter").value;
 
         const body = { Khoa, Dot, Ki, Nam };
@@ -586,7 +579,7 @@
       // Lấy giá trị đã chọn từ các combobox
       let dot = document.getElementById("combobox-dot").value;
       let ki = document.getElementById("combobox-ki").value;
-      let nam = document.getElementById("combobox-nam").value;
+      let nam = document.getElementById("NamHoc").value;
       let department = document
         .getElementById("departmentFilter")
         .value.trim();
@@ -634,6 +627,79 @@
       }
     });
   </script>
+  <script>
+    $(document).ready(function() {
+  $('#NamHoc option[value=""]').remove();
+
+  $.ajax({
+    url: '/getNamHoc',
+    method: 'GET',
+    success: function(response) {
+      if (response.success) {
+        const NamHoc = response.NamHoc;
+        console.log(NamHoc);
+
+        response.NamHoc.forEach(function(item) {
+          if (item.NamHoc === NamHoc) {
+            $('#NamHoc').prepend(
+              `<option value="${item.NamHoc}" selected>${item.NamHoc}</option>`
+            );
+          } else {
+            $('#NamHoc').append(
+              `<option value="${item.NamHoc}">${item.NamHoc}</option>`
+            );
+          }
+        });
+
+        if (!$('#NamHoc option:selected').length) {
+          $('#NamHoc').prepend('<option value="">Chọn Năm Học</option>');
+        }
+      } else {
+        console.error("Không lấy được dữ liệu năm học:", response.message);
+      }
+    },
+    error: function(error) {
+      console.error("Lỗi khi lấy dữ liệu năm học:", error);
+    }
+  });
+});
+</script>
+<script>
+  $(document).ready(function() {
+      $('#departmentFilter option[value=""]').remove();
+    // Gọi AJAX để lấy dữ liệu JSON từ API
+    $.ajax({
+      url: '/getPhongBan', // Đường dẫn tới API getPhongBan
+      method: 'GET',
+      success: function(response) {
+        // Kiểm tra nếu response thành công
+        const MaPhongBan = response.MaPhongBan;
+        if (response.success) {
+          $('#departmentFilter').prepend('<option value="ALL">Tất cả khoa</option>');
+          // Lặp qua từng mục trong mảng MaPhongBan
+          response.MaPhongBan.forEach(function(item) {
+            // Nếu item.MaPhongBan bằng boMon.MaPhongBan, hiển thị trước
+            console.log(item);
+              $('#departmentFilter').append(
+                `<option value="${item.MaPhongBan}">${item.MaPhongBan}</option>`
+              );
+            }
+          );
+
+          // Nếu không có phòng ban nào tương ứng, bạn có thể thêm tùy chọn mặc định ở đây
+          if (!$('#departmentFilter option:selected').length) {
+            $('#departmentFilter').prepend('<option value="">Chọn Phòng Ban</option>');
+          }
+        } else {
+          console.error("Không lấy được dữ liệu phongBan:", response.message);
+        }
+      },
+      error: function(error) {
+        console.error("Lỗi khi lấy dữ liệu phongBan:", error);
+      }
+    });
+  });
+</script>
 </body>
 
 </html>

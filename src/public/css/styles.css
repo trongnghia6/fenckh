@@ -357,7 +357,7 @@ button#render:hover::before,
     stroke: #07f;
   }
 }
-#combobox-dot, #combobox-ki, #combobox-nam, #combobox-khoa, #departmentFilter{
+#combobox-dot, #combobox-ki, #NamHoc, #MaPhongBan, #departmentFilter{
   width: 150px;
   color: #5476f0;
 }

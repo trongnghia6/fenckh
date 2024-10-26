@@ -166,18 +166,13 @@
         </select>
 
         <!-- Combo box Năm -->
-        <select class="selectop mx-1" id="combobox-nam" style="margin-top: 20px;">
-          <option value="2024">2024</option>
-          <option value="2024">2025</option>
-          <option value="2024">2026</option>
-          <option value="2024">2027</option>
+        <select class="selectop mx-1" id="NamHoc" style="margin-top: 20px;">
+          <option value="">Chọn năm học</option>
         </select>
 
         <!-- Combo box với các giá trị CNTT, ATTT, DTVT -->
-        <select class=" selectop" id="combobox-khoa" style="margin-top: 20px;">
-          <option value="CNTT">CNTT</option>
-          <option value="ATTT">ATTT</option>
-          <option value="DTVT">DTVT</option>
+        <select class=" selectop" id="MaPhongBan" style="margin-top: 20px;">
+          <option value="">Tất cả các khoa</option>
         </select>
         <button class="btn btn-outline-primary button" id="import">
           Thêm
@@ -401,6 +396,79 @@
   }
 });
   </script>
+  <script>
+    $(document).ready(function() {
+  $('#NamHoc option[value=""]').remove();
+
+  $.ajax({
+    url: '/getNamHoc',
+    method: 'GET',
+    success: function(response) {
+      if (response.success) {
+        const NamHoc = response.NamHoc;
+        console.log(NamHoc);
+
+        response.NamHoc.forEach(function(item) {
+          if (item.NamHoc === NamHoc) {
+            $('#NamHoc').prepend(
+              `<option value="${item.NamHoc}" selected>${item.NamHoc}</option>`
+            );
+          } else {
+            $('#NamHoc').append(
+              `<option value="${item.NamHoc}">${item.NamHoc}</option>`
+            );
+          }
+        });
+
+        if (!$('#NamHoc option:selected').length) {
+          $('#NamHoc').prepend('<option value="">Chọn Năm Học</option>');
+        }
+      } else {
+        console.error("Không lấy được dữ liệu năm học:", response.message);
+      }
+    },
+    error: function(error) {
+      console.error("Lỗi khi lấy dữ liệu năm học:", error);
+    }
+  });
+});
+</script>
+<script>
+  $(document).ready(function() {
+      $('#MaPhongBan option[value=""]').remove();
+    // Gọi AJAX để lấy dữ liệu JSON từ API
+    $.ajax({
+      url: '/getPhongBan', // Đường dẫn tới API getPhongBan
+      method: 'GET',
+      success: function(response) {
+        // Kiểm tra nếu response thành công
+        const MaPhongBan = response.MaPhongBan;
+        if (response.success) {
+          $('#MaPhongBan').prepend('<option value="ALL">Tất cả khoa</option>');
+          // Lặp qua từng mục trong mảng MaPhongBan
+          response.MaPhongBan.forEach(function(item) {
+            // Nếu item.MaPhongBan bằng boMon.MaPhongBan, hiển thị trước
+            console.log(item);
+              $('#MaPhongBan').append(
+                `<option value="${item.MaPhongBan}">${item.MaPhongBan}</option>`
+              );
+            }
+          );
+
+          // Nếu không có phòng ban nào tương ứng, bạn có thể thêm tùy chọn mặc định ở đây
+          if (!$('#MaPhongBan option:selected').length) {
+            $('#MaPhongBan').prepend('<option value="">Chọn Phòng Ban</option>');
+          }
+        } else {
+          console.error("Không lấy được dữ liệu phongBan:", response.message);
+        }
+      },
+      error: function(error) {
+        console.error("Lỗi khi lấy dữ liệu phongBan:", error);
+      }
+    });
+  });
+</script>
 </body>
 
 </html>

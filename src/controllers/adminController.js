@@ -234,9 +234,6 @@ const AdminController = {
         .json({ message: "Đã xảy ra lỗi khi lấy danh sách nhân viên" });
     }
   },
-  getPhongBan: (req, res) => {
-    res.render("phongBan", { title: "Danh sách phòng ban" });
-  },
 
   getListPhongBan: async (req, res) => {
     try {

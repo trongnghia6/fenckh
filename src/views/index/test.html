@@ -117,7 +117,7 @@
             </select>
 
             <!-- Combo box với các giá trị CNTT, ATTT, DTVT -->
-            <select class="form-select w-25 mx-2" id="combobox-khoa">
+            <select class="form-select w-25 mx-2" id="MaPhongBan">
               <option value="CNTT">CNTT</option>
               <option value="ATTT">ATTT</option>
               <option value="DTVT">DTVT</option>
@@ -207,7 +207,7 @@
 
     document.getElementById('import').addEventListener('click', function () {
       // Lấy giá trị hiện tại từ combo box "Khoa"
-      const khoaValue = document.getElementById('combobox-khoa').value;
+      const khoaValue = document.getElementById('MaPhongBan').value;
       // console.log(khoaValue);
       const dotValue = document.getElementById('combobox-dot').value;
       // console.log(dotValue);

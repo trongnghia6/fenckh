@@ -330,11 +330,8 @@
           </select>
 
           <!-- Combo box Năm -->
-          <select class="form-select w-100px mx-1 selectop custom-select" id="combobox-nam">
-            <option value="2024">2024</option>
-            <option value="2025">2025</option>
-            <option value="2026">2026</option>
-            <option value="2027">2027</option>
+          <select class="form-select w-100px mx-1 selectop custom-select" id="NamHoc">
+            <option value="">Năm học</option>
           </select>
           <button id="infoGvm" class="button text-nowrap">Xem dữ liệu</button>
           <button onclick="submitData()" class="button mx-3" id="update-qc" style="display: none">
@@ -510,7 +507,7 @@
         // Lấy giá trị từ các combobox
         const dotValue = document.getElementById("combobox-dot").value;
         const kiValue = document.getElementById("combobox-ki").value;
-        const namValue = document.getElementById("combobox-nam").value;
+        const namValue = document.getElementById("NamHoc").value;
 
         // Tạo đối tượng dữ liệu để gửi
         const requestData = {
@@ -1255,6 +1252,43 @@
       });
     }
   </script>
+  <script>
+    $(document).ready(function() {
+  $('#NamHoc option[value=""]').remove();
+
+  $.ajax({
+    url: '/getNamHoc',
+    method: 'GET',
+    success: function(response) {
+      if (response.success) {
+        const NamHoc = response.NamHoc;
+        console.log(NamHoc);
+
+        response.NamHoc.forEach(function(item) {
+          if (item.NamHoc === NamHoc) {
+            $('#NamHoc').prepend(
+              `<option value="${item.NamHoc}" selected>${item.NamHoc}</option>`
+            );
+          } else {
+            $('#NamHoc').append(
+              `<option value="${item.NamHoc}">${item.NamHoc}</option>`
+            );
+          }
+        });
+
+        if (!$('#NamHoc option:selected').length) {
+          $('#NamHoc').prepend('<option value="">Chọn Năm Học</option>');
+        }
+      } else {
+        console.error("Không lấy được dữ liệu năm học:", response.message);
+      }
+    },
+    error: function(error) {
+      console.error("Lỗi khi lấy dữ liệu năm học:", error);
+    }
+  });
+});
+</script>
 
 </body>
 
