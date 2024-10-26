@@ -151,9 +151,27 @@ const postUpdatePhongBan = async (req, res) => {
 
 };
 
+  const postUpdateBoMon = async (req, res) => {
+    const connection = await createConnection();
+    try {
+      const { MaPhongBan, MaBoMon, TenBoMon, TruongBoMon} = req.body;
+      const query = 'UPDATE bomon set MaPhongBan = ?, TenBoMon = ?, TruongBoMon = ? WHERE MaBoMon = ?';
+      await connection.query(query, [MaPhongBan, TenBoMon, TruongBoMon, MaBoMon]);
+      res.redirect('/boMon?Success');
+    } catch (error) {
+      console.error("Lỗi khi cập nhật dữ liệu: ", error.message);
+      res.status(500).send(`Lỗi server, không thể cập nhật dữ liệu. Chi tiết: ${error.message}`);
+    } finally {
+      if (connection) {
+        await connection.end(); // Đóng kết nối
+      }
+    }
+  }
+
 
   module.exports = {
     postUpdateNV,
     postUpdatePhongBan,
     postUpdateTK,
+    postUpdateBoMon,
   }

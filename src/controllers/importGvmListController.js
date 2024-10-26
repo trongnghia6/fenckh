@@ -47,6 +47,10 @@ const convertExcelToJSON = (req, res) => {
       res.status(500).send("Đã xảy ra lỗi khi đọc file!");
     });
 };
+function formatDateForMySQL(dateString) {
+  // Chuyển đổi từ định dạng ISO với thời gian sang chỉ ngày
+  return dateString.split('T')[0]; // '1985-09-13'
+};
 
 // Xử lý
 const getArrValue = async (req, res) => {
@@ -162,13 +166,13 @@ const getArrValue = async (req, res) => {
 // };
 
 const saveToDB = async (req, res) => {
-  try {
-    const connection = await createConnection(); // Kết nối đến DB
+  try {const connection = await createConnection(); // Kết nối đến DB
     const data = JSON.parse(req.body.data); // Lấy dữ liệu từ request (dữ liệu đã render ra)
 
     // Lấy Mã giảng viên mời = Mã Khoa + _GVM_ + id
 
     const MaPhongBan = req.session.MaPhongBan;
+    console.log(MaPhongBan);
     const TinhTrangGiangDay = 1; // Tình trạng giảng dạy
 
     if (data && data.length > 0) {
@@ -180,8 +184,8 @@ const saveToDB = async (req, res) => {
         // `;
         const sql = `
         INSERT INTO gvmoi
-        (GioiTinh, MaGvm, HoTen, NgaySinh, BangTotNghiepLoai, NoiCongTac, MonGiangDayChinh, DiaChi, Email, MaSoThue, HocVi, ChucVu, HSL, DienThoai, STK, NganHang, TinhTrangGiangDay, CCCD, NgayCapCCCD, NoiCapCCCD)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        (GioiTinh, MaGvm, HoTen, NgaySinh, BangTotNghiepLoai, NoiCongTac, MonGiangDayChinh, DiaChi, Email, MaSoThue, HocVi, ChucVu, HSL, DienThoai, STK, NganHang, MaPhongBan, TinhTrangGiangDay, CCCD, NgayCapCCCD, NoiCapCCCD)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
       `;
 
         const gvms = await gvmList.getGvmLists(req, res);
@@ -191,24 +195,29 @@ const saveToDB = async (req, res) => {
 
         // Chuyển đổi dữ liệu để phù hợp với cột trong DB
         const GioiTinh = row["Danh xưng"] === "Ông" ? "Nam" : "Nữ";
+        // const GioiTinh = row["Giới tính"];
         const HoTen = row["Họ và tên"];
         //const GioiTinh = row["Giới tính"];
-        const NgaySinh = row["Ngày sinh"];
+        // const NgaySinh = row["Ngày sinh"] || " ";
         const CCCD = row["CCCD"];
-        const NgayCapCCCD = row["Ngày cấp"];
+        // const NgayCapCCCD = row["Ngày cấp"];
         const NoiCapCCCD = row["Nơi cấp"];
         const DiaChi = row["Địa chỉ theo CCCD"];
         const Email = row["Email"];
         const MaSoThue = row["Mã số thuế"];
         const HocVi = row["Cấp bậc"];
         const ChucVu = row["Chức vụ"];
-        const HSL = row["Hệ số lương"];
+        const HSL = row["Hệ số lương"] || " ";
         const DienThoai = row["Điện thoại"];
         const STK = row["Số tài khoản"];
         const NganHang = row["Tại ngân hàng"];
         const NoiCongTac = row["Nơi công tác"];
         const MonGiangDayChinh = row["Bộ môn"] || " ";
         const BangTotNghiepLoai = row["Bằng loại"] || " ";
+        const dateSinh = row["Ngày sinh"]; // '1985-09-13T00:00:00.000Z'
+        const NgaySinh = formatDateForMySQL(dateSinh); // Kết quả: '1985-09-13'
+        const dateCap = row["Ngày sinh"]; // '1985-09-13T00:00:00.000Z'
+        const NgayCapCCCD = formatDateForMySQL(dateCap); // Kết quả: '1985-09-13'
 
         //
 
@@ -264,7 +273,7 @@ const saveToDB = async (req, res) => {
           DienThoai,
           STK,
           NganHang,
-          //MaPhongBan,
+          MaPhongBan,
           TinhTrangGiangDay,
           CCCD,
           NgayCapCCCD,

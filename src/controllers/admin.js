@@ -2,6 +2,7 @@ const express = require('express');
 const createConnection = require("../config/databaseAsync");
 const router = express.Router();
 const mysql = require('mysql2/promise');
+const { getBoMon } = require('./adminController');
 const app = express();
 
 let accountLists;
@@ -164,7 +165,67 @@ const updatePassword = async (req, res) => {
       console.error("Lỗi khi cập nhật mật khẩu:", error);
       res.status(500).send("Lỗi hệ thống");
   }
-};
+}
+
+  const getupdateBoMon = async (req, res) =>{
+    try {
+      const MaBoMon = req.params.MaBoMon;
+      const connection = await createConnection();
+      const query = `SELECT * FROM bomon WHERE MaBoMon = ?`;
+      
+      const [results, fields] = await connection.query(query, [MaBoMon]);
+      const boMon = results[0];
+      res.render("updateBoMon.ejs", {boMon: boMon});
+    } catch (error) {
+      console.error("Lỗi khi lấy dữ liệu:", error);
+      res.status(500).send("Lỗi hệ thống");
+    }
+  }
+  const getNamHoc = async (req, res) =>{
+    try {
+      const connection = await createConnection();
+      const query = `SELECT *FROM namhoc ORDER BY NamHoc ASC`;
+      const [results] = await connection.query(query);
+      res.render("namHoc.ejs", {NamHoc: results});
+    } catch (error) {
+      console.error("Lỗi khi lấy dữ liệu:", error);
+      res.status(500).send("Lỗi hệ thống");
+    }
+  }
+  const postNamHoc = async (req, res) =>{
+    const NamHoc = req.body.NamHoc;
+    const connection = await createConnection();
+    try {
+      const query = `INSERT INTO namhoc (NamHoc) VALUES (?)`;
+      await connection.query(query, [NamHoc]);
+      res.redirect("/namHoc?Success");
+    } catch (error) {
+      console.error("Lỗi khi cập nhật dữ liệu: ", error);
+      res.status(500).send("Lỗi server, không thể cập nhật dữ liệu");
+    } finally {
+      await connection.end(); // Đóng kết nối
+    }
+  }
+  const deleteNamHoc = async (req, res) =>{
+    const NamHoc = req.params.NamHoc;
+    const connection = await createConnection();
+    try {
+      const query = `DELETE FROM namhoc WHERE NamHoc = ?`;
+      const [results] = await connection.query(query, [NamHoc]);
+      
+      if (results.affectedRows > 0) {
+          res.status(200).json({ message: "Xóa thành công!" }); // Trả về thông báo thành công
+      } else {
+          res.status(404).json({ message: "Không tìm thấy năm học để xóa." }); // Nếu không tìm thấy năm học
+      }
+  } catch (error) {
+      console.error("Lỗi khi xóa dữ liệu: ", error);
+      res.status(500).json({ message: "Lỗi server, không thể xóa dữ liệu" }); // Thông báo lỗi
+  } finally {
+      await connection.end(); // Đóng kết nối
+  }
+  }
+;
 
 
 
@@ -178,4 +239,8 @@ const updatePassword = async (req, res) => {
     getUpdatePhongBan,
     getchangePassword,
     updatePassword,
+    getupdateBoMon,
+    getNamHoc,
+    postNamHoc,
+    deleteNamHoc,
   };

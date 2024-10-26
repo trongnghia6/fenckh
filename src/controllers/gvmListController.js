@@ -10,6 +10,15 @@ let gvmLists;
 
 let query;
 const getGvmList = async (req, res) => {
+  const connection = await createConnection();
+
+  // Lấy danh sách bộ môn để lọc
+
+  // Lấy danh sách phòng ban để lọc
+  const qrPhongBan = `select * from phongban where isKhoa = 1`;
+  const [phongBanList] = await connection.query(qrPhongBan);
+
+  // Lấy danh sách giảng viên mời
   const isKhoa = req.session.isKhoa;
   const MaPhongBan = req.session.MaPhongBan;
   if (!isKhoa) {
@@ -19,14 +28,12 @@ const getGvmList = async (req, res) => {
     query = `SELECT * FROM gvmoi WHERE MaPhongBan LIKE '%${MaPhongBan}%'`;
   }
 
-  const connection = await createConnection();
-
   const [results, fields] = await connection.query(query);
   gvmLists = results;
 
   // Push thông tin giảng viên vào mảng gvmLists
 
-  res.render("gvmList.ejs", { gvmLists: gvmLists });
+  res.render("gvmList.ejs", { gvmLists: gvmLists, phongBanList: phongBanList });
 };
 
 const getGvm = async (req, res) => {
