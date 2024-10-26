@@ -111,9 +111,11 @@ app.use(express.json()); // Thêm dòng này để xử lý JSON
 const importFile = require("./routes/importRoute");
 const infoGvm = require("./routes/infoRoute");
 const tableQc = require("./routes/gvmRoute");
+const xoaQCDK = require("./routes/qcdkRoute");
 //const { require } = require("app-root-path");
 
 app.use("/", importFile); // cấu hình import
 app.use("/", infoGvm); // cấu hình import
 app.use("/", tableQc); // cấu hình import
+app.use("/", xoaQCDK)
 // Thay đổi giới hạn kích thước payload (ví dụ: 10mb)

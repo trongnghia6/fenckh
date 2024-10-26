@@ -195,7 +195,7 @@ const saveToDB = async (req, res) => {
 
         // Chuyển đổi dữ liệu để phù hợp với cột trong DB
         const GioiTinh = row["Danh xưng"] === "Ông" ? "Nam" : "Nữ";
-        // const GioiTinh = row["Giới tính"];
+        //const GioiTinh = row["Giới tính"];
         const HoTen = row["Họ và tên"];
         //const GioiTinh = row["Giới tính"];
         // const NgaySinh = row["Ngày sinh"] || " ";
