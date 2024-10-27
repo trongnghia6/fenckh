@@ -266,6 +266,25 @@
               </tr>
             </thead>
             <tbody>
+              <% const options = { year: 'numeric', month: '2-digit', day: '2-digit' }; %>
+              <% for (let i = 0; i < gvmLists.length; i++) { %>
+                <tr>
+                  <td><%= i + 1 %></td>
+                  <td><%= gvmLists[i].MaGvm %></td>
+                  <td><%= gvmLists[i].HoTen %></td>
+                  <td><%= new Date(gvmLists[i].NgaySinh).toLocaleDateString('vi-VN', options) %></td>
+                  <td style="display: none;"><%= gvmLists[i].MaPhongBan %></td>
+                  <td id="BoMon"><%= gvmLists[i].MonGiangDayChinh %></td>
+                  <td>
+                    <button class="action-button edit" onclick="editClass(this, <%= i %>)">✏️</button>
+                    <button class="action-button view" onclick="viewClass(this, <%= i %>)">👁️</button>
+                  </td>
+                </tr>
+              <% } %>
+            </tbody>
+
+            <!-- code cũ -->
+            <!-- <tbody>
               <% for (var i=0; i < gvmLists.length; i++) {%>
                 <tr>
                   <td>
@@ -301,7 +320,7 @@
                     </td>
                 </tr>
                 <% } %>
-            </tbody>
+            </tbody> -->
           </table>
 
         </div>
@@ -446,7 +465,7 @@
         document.getElementById("modal-so-tk").innerText = gvm.STK;
         document.getElementById("modal-ngan-hang").innerText = gvm.NganHang;
         document.getElementById("modal-email").innerText = gvm.Email;
-        document.getElementById("modal-heso-luong").innerText = gvm.HSL; //
+        document.getElementById("modal-heso-luong").innerText = gvm.HSL; 
         document.getElementById("modal-noi-cong-tac").innerText =
           gvm.NoiCongTac;
         document.getElementById("modal-chuc-vu").innerText = gvm.ChucVu;
@@ -559,7 +578,7 @@
         let tr = table.getElementsByTagName("tr");
 
         for (let i = 1; i < tr.length; i++) { // Bỏ qua hàng tiêu đề
-          let td = tr[i].getElementsByTagName("td")[1]; // Lấy mã giảng viên mời từ cột thứ 2
+          let td = tr[i].getElementsByTagName("td")[4]; // Lấy mã giảng viên mời từ cột thứ 2
           if (td) {
             let textValue = td.textContent || td.innerText;
 
