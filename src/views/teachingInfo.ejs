@@ -175,7 +175,8 @@
               </a>
               <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                 <a class="nav-link" href="/gvmList">Danh sách giảng viên mời</a>
-                <a class="nav-link" id="actionButton1" href="/importGvmList">Thêm giảng viên mời bằng file</a>
+                <a class="nav-link" id="actionButton1" href="/importGvmList" style="width: 100%;">Thêm giảng viên mời
+                  bằng file</a>
               </div>
             </div>
           </div>
@@ -287,11 +288,8 @@
             </select>
 
             <!-- Combo box Năm -->
-            <select class="selectop w-100px mx-2 " id="combobox-nam">
-              <option value="2024">2024</option>
-              <option value="2025">2025</option>
-              <option value="2026">2026</option>
-              <option value="2027">2027</option>
+            <select class="selectop w-100px mx-2 " id="NamHoc">
+              <option value="">Năm học</option>
             </select>
           </div>
           <button id="getData" class="button text-nowrap">Lấy bảng quy chuẩn</button>
@@ -517,8 +515,11 @@
       let data = JSON.parse(localStorage.getItem('tableData')); // Nếu không có, tạo mảng trống
       // Cập nhật từng đối tượng trong dữ liệu
       data.forEach(item => {
-        item.NgayBatDau = globalStartDate; // Cập nhật ngày bắt đầu
-        item.NgayKetThuc = globalEndDate; // Cập nhật ngày kết thúc
+        // Nếu khoa chưa duyệt thì mới chèn
+        if (item.KhoaDuyet == 0) {
+          item.NgayBatDau = globalStartDate; // Cập nhật ngày bắt đầu
+          item.NgayKetThuc = globalEndDate; // Cập nhật ngày kết thúc
+        }
       });
 
       // Lưu lại dữ liệu đã cập nhật vào localStorage
@@ -590,7 +591,7 @@
         // Lấy giá trị từ các combobox
         const dotValue = document.getElementById('combobox-dot').value;
         const kiValue = document.getElementById('combobox-ki').value;
-        const namValue = document.getElementById('combobox-nam').value;
+        const namValue = document.getElementById('NamHoc').value;
 
         // Tạo đối tượng dữ liệu để gửi
         const requestData = {
@@ -791,19 +792,31 @@
 
 
         let khoaCheckboxTd, khoaCheckbox;
+        khoaCheckboxTd = document.createElement('td');
+        khoaCheckbox = document.createElement('input');
+        khoaCheckbox.type = 'checkbox';
+        khoaCheckbox.name = 'khoa';
+        khoaCheckbox.checked = row.KhoaDuyet || false;
+        khoaCheckbox.onchange = () => updateCheckAll('khoa');
+        khoaCheckboxTd.appendChild(khoaCheckbox);
+        tableRow.appendChild(khoaCheckboxTd);
         // Điều kiện ẩn checkbox Khoa nếu role không phải "CNTT_ALL"
-        if (isKhoa === 1 && role === "Lãnh đạo khoa") {
-          khoaCheckboxTd = document.createElement('td');
-          khoaCheckbox = document.createElement('input');
-          khoaCheckbox.type = 'checkbox';
-          khoaCheckbox.name = 'khoa';
-          khoaCheckbox.checked = row.KhoaDuyet || false;
-          khoaCheckbox.onchange = () => updateCheckAll('khoa');
-          khoaCheckboxTd.appendChild(khoaCheckbox);
-          tableRow.appendChild(khoaCheckboxTd);
+        if (role != "Lãnh đạo khoa") {
+          // Thiết lập thuộc tính CSS để thu nhỏ checkbox và ô <td> chứa nó
+          khoaCheckbox.style.width = '10px';    // Đặt chiều rộng nhỏ nhất có thể
+          khoaCheckbox.style.height = '10px';   // Đặt chiều cao nhỏ nhất có thể
+          khoaCheckbox.style.display = 'none';
+
+          // Thu nhỏ <td>
+          khoaCheckboxTd.style.width = '1px';
+          khoaCheckboxTd.style.padding = '0';
         }
 
-        if (role == "GV") {
+
+        // Nếu Lãnh đạo khoa đã duyệt, thi hành sẽ không nhập được
+        // Nếu role là giảng viên thường cũng sẽ không nhập được
+        if (role == "GV" || row.KhoaDuyet == 1) {
+          inviteCheckbox.disabled = true
           giaoVienGiangDayInput.disabled = true;
           boMonInput.disabled = true;
           ngayBatDauInput.disabled = true;
@@ -816,9 +829,7 @@
         // Phân quyền theo phòng ban
         if (isKhoa == 1) { // Nếu là khoa
           if (check.includes(MaPhongBan)) {
-            inviteCheckbox.addEventListener('click', function (e) {
-              e.preventDefault();
-            })
+            inviteCheckbox.disabled = true;
 
             giaoVienGiangDayInput.disabled = true;
             boMonInput.disabled = true;
@@ -827,9 +838,7 @@
             ngayKetThucInput.disabled = true;
 
             if (role == "Lãnh đạo khoa") {
-              khoaCheckbox.addEventListener('click', function (e) {
-                e.preventDefault(); // Ngăn người dùng thay đổi trạng thái checkbox
-              });
+              khoaCheckbox.disabled = true;
 
               // Ngăn checkbox tổng của 'khoa' không cho thay đổi
               disableCheckAll('khoa');
@@ -1394,6 +1403,43 @@
       } else {
         alert("Không tìm thấy TenDangNhap trong localStorage.");
       }
+    });
+  </script>
+  <script>
+    $(document).ready(function () {
+      $('#NamHoc option[value=""]').remove();
+
+      $.ajax({
+        url: '/getNamHoc',
+        method: 'GET',
+        success: function (response) {
+          if (response.success) {
+            const NamHoc = response.NamHoc;
+            console.log(NamHoc);
+
+            response.NamHoc.forEach(function (item) {
+              if (item.NamHoc === NamHoc) {
+                $('#NamHoc').prepend(
+                  `<option value="${item.NamHoc}" selected>${item.NamHoc}</option>`
+                );
+              } else {
+                $('#NamHoc').append(
+                  `<option value="${item.NamHoc}">${item.NamHoc}</option>`
+                );
+              }
+            });
+
+            if (!$('#NamHoc option:selected').length) {
+              $('#NamHoc').prepend('<option value="">Chọn Năm Học</option>');
+            }
+          } else {
+            console.error("Không lấy được dữ liệu năm học:", response.message);
+          }
+        },
+        error: function (error) {
+          console.error("Lỗi khi lấy dữ liệu năm học:", error);
+        }
+      });
     });
   </script>
 
