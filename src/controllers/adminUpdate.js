@@ -5,15 +5,14 @@ const connection = require('../config/database'); // Adjust the path as necessar
 
 const postUpdateNV = async (req, res) => {
     // Lấy các thông tin từ form
-    //let MaNV = req.body.MaNV.toUpperCase();
     let TenNhanVien = req.body.TenNhanVien;
     let GioiTinh = req.body.GioiTinh;
     let NgaySinh = req.body.NgaySinh;
     let CCCD = req.body.CCCD;
     let NgayCapCCCD = req.body.NgayCapCCCD;
     let NoiCapCCCD = req.body.NoiCapCCCD;
-    // let NoiCongTac = req.body.NoiCongTac;
-  
+    let NoiCongTac = req.body.NoiCongTac;
+    let DiaChiCCCD = req.body.DiaChiCCCD;
     let DiaChiHienNay = req.body.DiaChiHienNay;
     let DienThoai = req.body.DienThoai;
     // let email = req.body.email;
@@ -24,8 +23,12 @@ const postUpdateNV = async (req, res) => {
     let SoTaiKhoan = req.body.SoTaiKhoan;
     let NganHang = req.body.NganHang;
     let ChiNhanh = req.body.ChiNhanh;
+    let MonGiangDayChinh = req.body.MonGiangDayChinh;
+    let CacMonLienQuan = req.body.CacMonLienQuan;
     let MaPhongBan = req.body.MaPhongBan;
     let Id_User = req.body.Id_User; // Đảm bảo có giá trị này
+    let TenDangNhap = req.body.TenDangNhap;
+    let Quyen = req.body.Quyen;
     console.log(Id_User);
     console.log('TenNhanVien:', TenNhanVien);
 
@@ -46,7 +49,11 @@ const postUpdateNV = async (req, res) => {
       SoTaiKhoan = ?,
       NganHang = ?,
       ChiNhanh = ?,
-      MaPhongBan = ? 
+      MaPhongBan = ?,
+      NoiCongTac = ? ,
+      DiaChiCCCD = ?,
+      MonGiangDayChinh = ?,
+      CacMonLienQuan = ?
       WHERE id_User = ?`;
   
       connection.query(
@@ -67,44 +74,35 @@ const postUpdateNV = async (req, res) => {
           NganHang,
           ChiNhanh,
           MaPhongBan,
+          NoiCongTac,
+          DiaChiCCCD,
+          MonGiangDayChinh,
+          CacMonLienQuan,
           Id_User,
         ],
+        
         function (err, results) {
           if (err) {
             console.error("Error executing query: ", err);
             return res.redirect("/nhanVien?message=insertFalse");
           }
+          // Sau khi cập nhật nhanvien thành công, cập nhật bảng role
+      const queryRole = `UPDATE role SET MaPhongBan = ?, Quyen = ? WHERE TenDangNhap = ?`;
+      connection.query(
+        queryRole,
+        [MaPhongBan, Quyen, TenDangNhap],
+        function (errRole, resultsRole) {
+          if (errRole) {
+            console.error("Error executing query for role: ", errRole);
+            return res.redirect("/nhanVien?message=updateRoleFalse");
+          }
           console.log("Query Results: ", results);
           res.redirect("/nhanVien?message=insertSuccess");
         }
       );
-    // });
-  };
-  const postDeleteNV = async (req, res) => {
-    let Id_User = req.body.Id_User;
-
-    // Xóa bản ghi trong bảng giangday trước
-    const deleteGiangDayQuery = `DELETE FROM giangday WHERE id_User = ?`;
-    
-    connection.query(deleteGiangDayQuery, [Id_User], function(err, results) {
-        if (err) {
-            console.error("Error deleting from giangday: ", err);
-            return res.redirect("/nhanVien?message=deleteFalse");
-        }
-
-        // Sau khi xóa xong, xóa bản ghi trong bảng nhanvien
-        const deleteNVQuery = `DELETE FROM nhanvien WHERE id_User = ?`;
-        
-        connection.query(deleteNVQuery, [Id_User], function(err, results) {
-            if (err) {
-                console.error("Error deleting from nhanvien: ", err);
-                return res.redirect("/nhanVien?message=deleteFalse");
-            }
-
-            res.redirect("/nhanVien?message=deleteSuccess");
-        });
     });
-};
+  };
+
 const postUpdatePhongBan = async (req, res) => {
   try {
     const MaPhongBan = req.params.MaPhongBan;
@@ -129,13 +127,13 @@ const postUpdatePhongBan = async (req, res) => {
   const MaPhongBan = req.body.MaPhongBan;
   const Quyen = req.body.Quyen;
   const Khoa = req.body.isKhoa;
-  const isKhoa = Khoa ? 1 : 0;
-  console.log(TenDangNhap,id_User, MatKhau, MaPhongBan, Quyen, isKhoa);
+  // const isKhoa = Khoa ? 0 : 1;
+  console.log(TenDangNhap,id_User, MatKhau, MaPhongBan, Quyen, Khoa);
 
   try {
     // Cập nhật bảng đầu tiên
     const query1 = 'UPDATE role SET MaPhongBan = ?, Quyen = ?, isKhoa = ? WHERE TenDangNhap = ?';
-    await connection.query(query1, [MaPhongBan, Quyen, isKhoa, TenDangNhap]);
+    await connection.query(query1, [MaPhongBan, Quyen, Khoa, TenDangNhap]);
 
     // Cập nhật bảng thứ hai
     const query2 = 'UPDATE taikhoannguoidung SET id_User = ?, MatKhau = ? WHERE TenDangNhap = ?';
@@ -153,10 +151,27 @@ const postUpdatePhongBan = async (req, res) => {
 
 };
 
+  const postUpdateBoMon = async (req, res) => {
+    const connection = await createConnection();
+    try {
+      const { MaPhongBan, MaBoMon, TenBoMon, TruongBoMon} = req.body;
+      const query = 'UPDATE bomon set MaPhongBan = ?, TenBoMon = ?, TruongBoMon = ? WHERE MaBoMon = ?';
+      await connection.query(query, [MaPhongBan, TenBoMon, TruongBoMon, MaBoMon]);
+      res.redirect('/boMon?Success');
+    } catch (error) {
+      console.error("Lỗi khi cập nhật dữ liệu: ", error.message);
+      res.status(500).send(`Lỗi server, không thể cập nhật dữ liệu. Chi tiết: ${error.message}`);
+    } finally {
+      if (connection) {
+        await connection.end(); // Đóng kết nối
+      }
+    }
+  }
+
 
   module.exports = {
     postUpdateNV,
-    postDeleteNV,
     postUpdatePhongBan,
     postUpdateTK,
+    postUpdateBoMon,
   }

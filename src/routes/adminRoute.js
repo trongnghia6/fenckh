@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const AdminController = require('../controllers/adminController');
 const GetTable = require('../controllers/admin');
-const { postUpdateGvm, postUpdateNV, postDeleteNV, postUpdatePhongBan, postUpdateTK } = require('../controllers/adminUpdate');
+const { postUpdateGvm, postUpdateNV, postDeleteNV, postUpdatePhongBan, postUpdateTK, postUpdateBoMon } = require('../controllers/adminUpdate');
 
 router.get('/admin', (req, res) => {
     res.render('admin');
@@ -34,7 +34,6 @@ router.get('/api/phongban', AdminController.getListPhongBan);
 //Nhân viên
 router.get('/updateNV/:id',AdminController.getUpdateNV );
 router.post('/updateNV/:id',postUpdateNV);
-router.post('/deleteNV/:id',postDeleteNV);
 //Phòng ban
 router.get('/updatePhongBan/:MaPhongBan', GetTable.getUpdatePhongBan);
 router.post('/updatePhongBan/:MaPhongBan', postUpdatePhongBan);
@@ -43,7 +42,27 @@ router.get('/updateTK/:TenDangNhap', AdminController.getUpdateTK);
 router.post('/updateTK/:TenDangNhap', postUpdateTK);
 router.get('/themTK', AdminController.getthemTaiKhoan);
 router.post('/themTK', AdminController.postthemTK);
-router.get("/getId_User", AdminController.getId_User);
+router.get("/getTenNhanVien", AdminController.getTenNhanVien);
+router.get("/getQuyenByPhongBan", AdminController.getQuyenByPhongBan);
 
+//Bộ môn
+router.get("/boMon", AdminController.getBoMon);
+// router.get("/themBoMon", AdminController.getPhongBan);
+router.get("/getPhongBan", AdminController.getPhongBan);
+router.get('/themBoMon', (req, res) => {
+    res.render('themBoMon');
+});
+router.post("/themBoMon", AdminController.themBoMon);
+router.get('/updateBoMon/:MaBoMon', GetTable.getupdateBoMon);
+router.post('/updateBoMon/:MaBoMon',postUpdateBoMon );
+
+//Đổi mật khẩu
+router.get('/changePassword', GetTable.getchangePassword);
+router.post('/changePassword', AdminController.updatePassword);
+
+//Năm học
+router.get('/namHoc', GetTable.getNamHoc);
+router.post('/namHoc', GetTable.postNamHoc);
+router.delete('/namHoc/:NamHoc', GetTable.deleteNamHoc);
 
 module.exports = router;

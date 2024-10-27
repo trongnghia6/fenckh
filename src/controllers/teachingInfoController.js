@@ -130,6 +130,7 @@ const KhoaCheckAll = async (req, Dot, KiHoc, NamHoc) => {
   const connection1 = await createConnection();
   const [results, fields] = await connection1.query(query);
 
+  // Chọn theo từng phòng ban
   for (let i = 0; i < results.length; i++) {
     const MaPhongBan = results[i].MaPhongBan;
 
@@ -154,47 +155,133 @@ const KhoaCheckAll = async (req, Dot, KiHoc, NamHoc) => {
     }
   }
 
+  // Chọn hết phòng ban
+  // const queryAll = `SELECT KhoaDuyet FROM quychuan where Dot = ? and KiHoc = ? and NamHoc = ?`;
+  // const [khoaAll] = await connection1.query(queryAll, [Dot, KiHoc, NamHoc]);
+
+  // let khoaCheckAll = true;
+  // for (let j = 0; j < khoaAll.length; j++) {
+  //   if (khoaAll[j].KhoaDuyet == 0) {
+  //     khoaCheckAll = false;
+  //     break;
+  //   }
+  // }
+
+  // if (khoaCheckAll == true) {
+  //   kq += "KHOA,";
+  // }
+
   // Đào tạo
-  const queryDT = ` SELECT DaoTaoDuyet FROM quychuan where Dot = ? and KiHoc = ? and NamHoc = ?`;
-  const connection2 = await createConnection();
-  const [check2, fields2] = await connection2.query(queryDT, [
-    Dot,
-    KiHoc,
-    NamHoc,
-  ]);
+  // const queryDT = ` SELECT DaoTaoDuyet FROM quychuan where Dot = ? and KiHoc = ? and NamHoc = ?`;
+  // const connection2 = await createConnection();
+  // const [check2, fields2] = await connection2.query(queryDT, [
+  //   Dot,
+  //   KiHoc,
+  //   NamHoc,
+  // ]);
 
-  let checkAll2 = true;
-  for (let j = 0; j < check2.length; j++) {
-    if (check2[j].DaoTaoDuyet == 0) {
-      checkAll2 = false;
-      break;
-    }
-  }
+  // let checkAll2 = true;
+  // for (let j = 0; j < check2.length; j++) {
+  //   if (check2[j].DaoTaoDuyet == 0) {
+  //     checkAll2 = false;
+  //     break;
+  //   }
+  // }
 
-  if (checkAll2 == true) {
-    kq += "DAOTAO,";
-  }
+  // if (checkAll2 == true) {
+  //   kq += "DAOTAO,";
+  // }
 
-  // Tài chính
-  const queryTC = ` SELECT TaiChinhDuyet FROM quychuan where Dot = ? and KiHoc = ? and NamHoc = ?`;
-  const connection3 = await createConnection();
-  const [check3, fields3] = await connection3.query(queryTC, [
-    Dot,
-    KiHoc,
-    NamHoc,
-  ]);
+  // // Tài chính
+  // const queryTC = ` SELECT TaiChinhDuyet FROM quychuan where Dot = ? and KiHoc = ? and NamHoc = ?`;
+  // const connection3 = await createConnection();
+  // const [check3, fields3] = await connection3.query(queryTC, [
+  //   Dot,
+  //   KiHoc,
+  //   NamHoc,
+  // ]);
 
-  let checkAll3 = true;
-  for (let j = 0; j < check3.length; j++) {
-    if (check3[j].TaiChinhDuyet == 0) {
-      checkAll3 = false;
-      break;
-    }
-  }
-  if (checkAll3 == true) {
-    kq += "TAICHINH,";
-  }
+  // let checkAll3 = true;
+  // for (let j = 0; j < check3.length; j++) {
+  //   if (check3[j].TaiChinhDuyet == 0) {
+  //     checkAll3 = false;
+  //     break;
+  //   }
+  // }
+  // if (checkAll3 == true) {
+  //   kq += "TAICHINH,";
+  // }
   // Trả về kết quả
+  return kq;
+};
+
+const DaoTaoCheckAll = async (req, Dot, KiHoc, NamHoc) => {
+  let kq = ""; // Biến để lưu kết quả
+
+  const query = ` SELECT MaPhongBan FROM phongban where isKhoa = 1 `;
+  const connection1 = await createConnection();
+  const [results, fields] = await connection1.query(query);
+
+  // Chọn theo từng phòng ban
+  for (let i = 0; i < results.length; i++) {
+    const MaPhongBan = results[i].MaPhongBan;
+
+    const query = ` SELECT DaoTaoDuyet FROM quychuan where Khoa = ? and Dot = ? and KiHoc = ? and NamHoc = ?`;
+    const connection = await createConnection();
+    const [check, fields] = await connection.query(query, [
+      MaPhongBan,
+      Dot,
+      KiHoc,
+      NamHoc,
+    ]);
+
+    let checkAll = true;
+    for (let j = 0; j < check.length; j++) {
+      if (check[j].DaoTaoDuyet == 0) {
+        checkAll = false;
+        break;
+      }
+    }
+    if (checkAll == true) {
+      kq += MaPhongBan + ",";
+    }
+  }
+
+  return kq;
+};
+
+const TaiChinhCheckAll = async (req, Dot, KiHoc, NamHoc) => {
+  let kq = ""; // Biến để lưu kết quả
+
+  const query = ` SELECT MaPhongBan FROM phongban where isKhoa = 1 `;
+  const connection1 = await createConnection();
+  const [results, fields] = await connection1.query(query);
+
+  // Chọn theo từng phòng ban
+  for (let i = 0; i < results.length; i++) {
+    const MaPhongBan = results[i].MaPhongBan;
+
+    const query = ` SELECT TaiChinhDuyet FROM quychuan where Khoa = ? and Dot = ? and KiHoc = ? and NamHoc = ?`;
+    const connection = await createConnection();
+    const [check, fields] = await connection.query(query, [
+      MaPhongBan,
+      Dot,
+      KiHoc,
+      NamHoc,
+    ]);
+
+    let checkAll = true;
+    for (let j = 0; j < check.length; j++) {
+      if (check[j].TaiChinhDuyet == 0) {
+        checkAll = false;
+        break;
+      }
+    }
+    if (checkAll == true) {
+      kq += MaPhongBan + ",";
+    }
+  }
+
   return kq;
 };
 // Phương
@@ -279,7 +366,7 @@ const renderInfoWithValueKhoa = async (req, res) => {
         // Trả về thông báo nếu không tìm thấy dữ liệu
         return res
           .status(404)
-          .json({ message: "Quy chuẩn chưa được ban hành" });
+          .json({ message: "Không có dữ liệu" });
       }
 
       // Trả về kết quả truy vấn dưới dạng JSON
@@ -299,6 +386,7 @@ const renderInfo = async (req, res) => {
   const { Dot, Ki, Nam } = req.body; // Lấy giá trị khoa, dot, ki từ body của yêu cầu
   const tableName = process.env.DB_TABLE_QC;
   let query = "";
+  console.log(Dot, Ki, Nam)
 
   if (isKhoa == 1) {
     query = `SELECT * FROM ${tableName}
@@ -314,7 +402,9 @@ const renderInfo = async (req, res) => {
 
   // Gọi hàm KhoaCheckAll để kiểm tra
   const check = await KhoaCheckAll(req, Dot, Ki, Nam);
-  //const connection = await createConnection();
+  const DaoTaoCheck = await DaoTaoCheckAll(req, Dot, Ki, Nam);
+  const TaiChinhCheck = await TaiChinhCheckAll(req, Dot, Ki, Nam);
+
   // Thực thi câu truy vấn với các tham số an toàn
   connection.query(
     query,
@@ -332,6 +422,8 @@ const renderInfo = async (req, res) => {
       return res.status(200).json({
         results: results,
         check: check,
+        DaoTaoCheck: DaoTaoCheck,
+        TaiChinhCheck: TaiChinhCheck,
       }); // Trả về kết quả tương ứng với đợt, kì, năm và check
     }
   );
@@ -394,6 +486,75 @@ const getTeachingInfo2 = (req, res) => {
   res.render("teachingInfo2.ejs");
 };
 
+const getBoMon = async (req, res) => {
+  const MaPhongBan = req.body.MaPhongBan; // Thay vì req.body
+  console.log(MaPhongBan);
+
+  if (MaPhongBan != "DAOTAO" && MaPhongBan != "TAICHINH") {
+    try {
+      // Truy vấn để lấy MaPhongBan, MaBoMon, TenBoMon
+      const results = await new Promise((resolve, reject) => {
+        const query = `
+        SELECT 
+          bomon.MaPhongBan, 
+          bomon.MaBoMon, 
+          bomon.TenBoMon
+        FROM 
+          bomon
+        WHERE 
+          MaPhongBan = '${MaPhongBan}';
+      `;
+
+        connection.query(query, (error, results) => {
+          if (error) {
+            console.error("Lỗi truy vấn cơ sở dữ liệu:", error);
+            return reject(
+              new Error("Không thể truy xuất dữ liệu từ cơ sở dữ liệu.")
+            );
+          }
+          resolve(results); // Trả về kết quả truy vấn
+        });
+      });
+
+      // Trả về dữ liệu lấy từ bảng gvmoi
+      return res.status(200).json(results);
+    } catch (error) {
+      console.error("Lỗi trong hàm getBoMon:", error);
+      return res
+        .status(500)
+        .json({ error: "Đã xảy ra lỗi trong quá trình xử lý dữ liệu." });
+    }
+  } else {
+    try {
+      // Truy vấn để lấy MaPhongBan, MaBoMon, TenBoMon
+      const results = await new Promise((resolve, reject) => {
+        const query = `
+        SELECT bomon.MaPhongBan, bomon.MaBoMon, bomon.TenBoMon
+        FROM bomon;
+      `;
+
+        connection.query(query, (error, results) => {
+          if (error) {
+            console.error("Lỗi truy vấn cơ sở dữ liệu:", error);
+            return reject(
+              new Error("Không thể truy xuất dữ liệu từ cơ sở dữ liệu.")
+            );
+          }
+          resolve(results); // Trả về kết quả truy vấn
+        });
+      });
+
+      // Trả về dữ liệu lấy từ bảng gvmoi
+      return res.status(200).json(results);
+    } catch (error) {
+      console.error("Lỗi trong hàm getBoMon:", error);
+      return res
+        .status(500)
+        .json({ error: "Đã xảy ra lỗi trong quá trình xử lý dữ liệu." });
+    }
+  }
+};
+
 module.exports = {
   renderInfo,
   getNameGV,
@@ -401,4 +562,5 @@ module.exports = {
   getTeachingInfo1,
   getTeachingInfo2,
   renderInfoWithValueKhoa,
+  getBoMon,
 };

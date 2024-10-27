@@ -19,6 +19,8 @@ const storage = multer.diskStorage({
       cb(null, appRoot + "/src/public/images/userIdCardPhotos/frontPhotos/");
     } else if (file.fieldname == "sauCCCD") {
       cb(null, appRoot + "/src/public/images/userIdCardPhotos/backPhotos/");
+    } else if (file.fieldname == "bangTotNghiep") {
+      cb(null, appRoot + "/src/public/images/certificates/");
     } else if (file.fieldname == "FileLyLich") {
       // Xử lý file PDF
       cb(null, appRoot + "/src/public/resumes/");
@@ -57,10 +59,11 @@ router.get("/updateGvm/:id", getUpdateGvm);
 router.get("/viewGvm/:id", getViewGvm);
 
 router.post(
-  "/updateGvm",
+  "/updateGvm/:id",
   upload.fields([
     { name: "truocCCCD", maxCount: 1 },
     { name: "sauCCCD", maxCount: 1 },
+    { name: "bangTotNghiep", maxCount: 1 },
     { name: "FileLyLich", maxCount: 1 }, // Thêm dòng này để upload file PDF
   ]),
   postUpdateGvm

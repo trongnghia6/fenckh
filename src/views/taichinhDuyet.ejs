@@ -75,7 +75,7 @@
               </a>
               <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                 <a class="nav-link" href="/gvmList">Danh sách giảng viên mời</a>
-                <a class="nav-link" id="Import" href="">Thêm bằng file</a>
+                <a class="nav-link" id="actionButton1" href="/importGvmList" style="width: 100%;">Thêm giảng viên mời bằng file</a>
               </div>
             </div>
           </div>
@@ -86,6 +86,7 @@
                 Bảng Quy Chuẩn
               </a>
               <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="nav-link" href="/import" id="actionButton2" style="width: 100%;">Thêm file quy chuẩn</a>
                 <a class="nav-link" href="/tableTam">Bảng quy chuẩn dự kiến</a>
                 <a class="nav-link" href="/tableQC">Bảng quy chuẩn chính thức</a>
                 <a class="nav-link active" id="ThongTinGD" href="">Thông tin giảng viên theo lớp</a>
@@ -158,7 +159,8 @@
             </a>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
               <a class="dropdown-item" href="#">Thông tin cá nhân</a>
-              <a class="dropdown-item" href="/">Đăng xuất</a>
+                <a class="dropdown-item" id="changePasswordLink">Đổi mật khẩu</a>
+                <a class="dropdown-item" href="/">Đăng xuất</a>
             </div>
           </div>
         </div>
@@ -182,7 +184,7 @@
       </select>
 
       <!-- Combo box Năm -->
-      <select class="form-select w-100px mx-2" id="combobox-nam">
+      <select class="form-select w-100px mx-2" id="NamHoc">
         <option value="2024">2024</option>
         <option value="2025">2025</option>
         <option value="2026">2026</option>
@@ -259,6 +261,40 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  $(document).ready(function() {
+const isKhoa = localStorage.getItem("isKhoa");
+console.log('Giá trị isKhoa từ localStorage: ', isKhoa);
+hideButton();
+});
+
+  function hideButton() {
+      const isKhoa = localStorage.getItem("isKhoa");
+      if (isKhoa === null) {
+          console.log('Không tìm thấy giá trị isKhoa trong localStorage');
+      } else {
+          console.log('Giá trị isKhoa: ', isKhoa);
+          
+          const actionButton = document.getElementById('actionButton');
+          const actionButton1 = document.getElementById('actionButton1');
+  const actionButton2 = document.getElementById('actionButton2');
+  
+  if (actionButton1 && actionButton2) {
+      if (isKhoa === "0") {
+          actionButton1.style.display = 'none'; // Ẩn actionButton1 nếu isKhoa = 0
+          actionButton2.style.display = 'inline-block'; // Hiện actionButton2
+          console.log('Nút actionButton1 đã được ẩn, actionButton2 đã được hiển thị');
+      } else {
+          actionButton1.style.display = 'inline-block'; // Hiện actionButton1 nếu isKhoa khác 0
+          actionButton2.style.display = 'none'; // Ẩn actionButton2
+          console.log('Nút actionButton1 đã được hiển thị, actionButton2 đã được ẩn');
+      }
+  } else {
+      console.log('Không tìm thấy các nút actionButton1 hoặc actionButton2');
+  }
+      }
+  }
+</script>
 
 
 
@@ -277,7 +313,7 @@
       // Lấy giá trị từ các combobox
       const dotValue = document.getElementById('combobox-dot').value;
       const kiValue = document.getElementById('combobox-ki').value;
-      const namValue = document.getElementById('combobox-nam').value;
+      const namValue = document.getElementById('NamHoc').value;
 
 
       // Tạo đối tượng dữ liệu để gửi
@@ -303,7 +339,7 @@
 
 
       if (!gvmResponse.ok || !khoaResponse.ok || !teachingResponse.ok) {
-        alert("Lỗi truy vấn!")
+        alert("Không tìm thấy dữ liệu!")
       }
 
       // Lưu dữ liệu giảng viên cùng với mã phòng ban
@@ -540,20 +576,6 @@
   <!-- Phần phân quyền -->
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      // Thêm sự kiện click cho phần tử có id "import"
-      const importLink = document.getElementById("Import");
-
-      importLink.addEventListener("click", function (event) {
-        event.preventDefault(); // Ngăn chặn hành vi mặc định của liên kết
-
-        const isKhoa = localStorage.getItem("isKhoa"); // Lấy role từ localStorage
-
-        if (isKhoa==0) { // Nếu là đào tạo hoặc tài chính
-          window.location.href = "/import";
-        } else { // Nếu là khoa
-          window.location.href = "/importGvmList";
-        }
-      });
 
       // Thêm sự kiện click cho phần tử có id="ThongTinGD"
       const ThongTinGD = document.getElementById("ThongTinGD");
@@ -604,6 +626,20 @@
     document.querySelector('.role').innerText = `${Role}`;
 
   };
+</script>
+<script>
+  document.getElementById("changePasswordLink").addEventListener("click", function(event) {
+event.preventDefault(); // Ngăn chặn hành vi mặc định của thẻ a
+const tenDangNhap = localStorage.getItem("TenDangNhap"); // Lấy TenDangNhap từ localStorage
+alert(tenDangNhap);
+
+if (tenDangNhap) {
+    // Chuyển hướng đến trang changePassword và truyền TenDangNhap trong URL
+    window.location.href = `/changePassword?tenDangNhap=${encodeURIComponent(tenDangNhap)}`;
+} else {
+    alert("Không tìm thấy TenDangNhap trong localStorage.");
+}
+});
 </script>
 
 </body>

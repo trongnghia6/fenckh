@@ -13,9 +13,12 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
   <style>
     .container {
-  position: relative; /* Ensure the dropdown positions relative to this container */
-  display: inline-block; /* Allows for proper alignment */
-}
+      position: relative;
+      /* Ensure the dropdown positions relative to this container */
+      display: inline-block;
+      /* Allows for proper alignment */
+    }
+
     .table>:not(caption)>*>* {
       border-bottom-width: 2px;
     }
@@ -25,27 +28,22 @@
       z-index: 1;
     }
 
-    /* CSS để căn chỉnh label tổng số tiết */
-    .total-label {
-      position: relative; /* Change this if necessary */
-    z-index: 1; /* Ensure this is lower than .suggestions */
-    margin-top: 10px; /* Adjust spacing if needed */
-    text-align: right;
-    }
-
     .suggestions {
-    position: absolute; /* Đảm bảo gợi ý nằm bên trên các thành phần khác */
-    top: calc(100% + 5px); /* Đặt gợi ý phía trên input với một khoảng cách */
-    left: 0;
-    background-color: #f0f0f0;
-    color: #000;
-    border: 1px solid #ccc;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-    z-index: 1000; /* Đảm bảo gợi ý nằm trên các thành phần khác */
-    border-radius: 4px;
-    max-height: 300px;
-    overflow-y: auto;
-  }
+      position: absolute;
+      /* Đảm bảo gợi ý nằm bên trên các thành phần khác */
+      top: calc(100% + 5px);
+      /* Đặt gợi ý phía trên input với một khoảng cách */
+      left: 0;
+      background-color: #f0f0f0;
+      color: #000;
+      border: 1px solid #ccc;
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+      z-index: 1000;
+      /* Đảm bảo gợi ý nằm trên các thành phần khác */
+      border-radius: 4px;
+      max-height: 300px;
+      overflow-y: auto;
+    }
 
     /* Hiệu ứng lung linh khi hover */
     .suggestions:hover {
@@ -81,6 +79,64 @@
     /* Đảm bảo container gợi ý không bị tràn ra ngoài khung nếu có */
     .suggestions {
       overflow: hidden;
+    }
+
+    /* phần css cho label tổng số tiết  ki*/
+    .total-label {
+      margin-left: auto;
+      /* Căn phải cho thẻ total-label */
+      margin-right: 0;
+      font-family: Arial, sans-serif;
+      font-size: 16px;
+      background-color: #f4f4f4;
+      padding: 10px;
+      border-radius: 8px;
+      width: fit-content;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      display: block;
+      /* Đảm bảo thẻ div là khối để căn phải hoạt động */
+    }
+
+    .total-label label {
+      font-weight: bold;
+      /* Giữ chữ in đậm */
+      color: #000;
+      /* Màu chữ đen */
+      margin-right: 8px;
+      /* Thêm khoảng cách bên phải */
+      cursor: pointer;
+      /* Tạo hiệu ứng chuyển màu nền và màu chữ mềm mại */
+      padding: 5px 10px;
+      /* Thêm padding cho label để tạo không gian */
+      border: 1px solid #ccc;
+      /* Khung cho label */
+      border-radius: 4px;
+      /* Bo góc cho khung */
+    }
+
+    .total-label label,
+    .total-label label span {
+      background-color: #007BFF;
+      /* Màu nền khi hover */
+      color: #fff;
+      /* Màu chữ trắng khi hover */
+    }
+
+    .total-label span {
+      font-weight: bold;
+      /* Giữ chữ trong span cũng in đậm */
+      color: #333;
+      /* Màu chữ đậm cho giá trị */
+    }
+
+    /* Đặt chiều rộng cố định cho cả input[type="date"] và input[type="text"] */
+    input[type="date"],
+    input[type="text"] {
+      width: 120px;
+      /* Điều chỉnh giá trị này theo mong muốn */
+      box-sizing: border-box;
+      padding: 5px;
+      /* Giữ padding như cũ */
     }
   </style>
 </head>
@@ -119,7 +175,8 @@
               </a>
               <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                 <a class="nav-link" href="/gvmList">Danh sách giảng viên mời</a>
-                <a class="nav-link" id="Import" href="">Thêm bằng file</a>
+                <a class="nav-link" id="actionButton1" href="/importGvmList" style="width: 100%;">Thêm giảng viên mời
+                  bằng file</a>
               </div>
             </div>
           </div>
@@ -130,6 +187,7 @@
                 Bảng Quy Chuẩn
               </a>
               <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="nav-link" href="/import" id="actionButton2" style="width: 100%;">Thêm file quy chuẩn</a>
                 <a class="nav-link" href="/tableTam">Bảng quy chuẩn dự kiến</a>
                 <a class="nav-link" href="/tableQC">Bảng quy chuẩn chính thức</a>
                 <a class="nav-link active" id="ThongTinGD" href="">Thông tin giảng viên theo lớp</a>
@@ -157,7 +215,7 @@
                 Vượt Giờ
               </a>
               <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a class="nav-link" id="ThongTinGD" href="#">COMING SOON</a>
+                <a class="nav-link" id="" href="#">COMING SOON</a>
               </div>
             </div>
           </div>
@@ -168,7 +226,7 @@
                 Nghiên Cứu Khoa Học
               </a>
               <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a class="nav-link" id="ThongTinGD" href="#">COMING SOON</a>
+                <a class="nav-link" id="" href="#">COMING SOON</a>
               </div>
             </div>
           </div>
@@ -179,7 +237,7 @@
                 Đồ Án
               </a>
               <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a class="nav-link" id="ThongTinGD" href="#">COMING SOON</a>
+                <a class="nav-link" id="" href="#">COMING SOON</a>
               </div>
             </div>
           </div>
@@ -190,7 +248,7 @@
                 Thống Kê
               </a>
               <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a class="nav-link" id="ThongTinGD" href="#">COMING SOON</a>
+                <a class="nav-link" id="" href="#">COMING SOON</a>
               </div>
             </div>
           </div>
@@ -203,6 +261,7 @@
             </a>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
               <a class="dropdown-item" href="#">Thông tin cá nhân</a>
+              <a class="dropdown-item" id="changePasswordLink">Đổi mật khẩu</a>
               <a class="dropdown-item" href="/">Đăng xuất</a>
             </div>
           </div>
@@ -216,24 +275,23 @@
     <div class="">
       <div class="d-flex justify-content-between">
         <div class="d-flex justify-content-center">
-          <select class="form-select w-100px mx-2 " id="combobox-dot">
-            <option value="1">Đợt 1</option>
-            <option value="2">Đợt 2</option>
-          </select>
+          <div class="cbb" style="margin-top: 20px;">
+            <select class="selectop w-100px mx-2 " id="combobox-dot">
+              <option value="1">Đợt 1</option>
+              <option value="2">Đợt 2</option>
+            </select>
 
-          <!-- Combo box Đợt -->
-          <select class="form-select w-100px mx-2 " id="combobox-ki">
-            <option value="1">Kì 1</option>
-            <option value="2">Kì 2</option>
-          </select>
+            <!-- Combo box Đợt -->
+            <select class="selectop w-100px mx-2 " id="combobox-ki">
+              <option value="1">Kỳ 1</option>
+              <option value="2">Kỳ 2</option>
+            </select>
 
-          <!-- Combo box Năm -->
-          <select class="form-select w-100px mx-2 " id="combobox-nam">
-            <option value="2024">2024</option>
-            <option value="2025">2025</option>
-            <option value="2026">2026</option>
-            <option value="2027">2027</option>
-          </select>
+            <!-- Combo box Năm -->
+            <select class="selectop w-100px mx-2 " id="NamHoc">
+              <option value="">Năm học</option>
+            </select>
+          </div>
           <button id="getData" class="button text-nowrap">Lấy bảng quy chuẩn</button>
           <!-- <button id="infoGvm" class="button text-nowrap">Xem bảng cục bộ</button> -->
           <button id="update-qc" onclick="updateLocalTable()" class="button mx-3 luuTamThoi">Lưu</button>
@@ -244,10 +302,18 @@
 
 
       <div class="d-flex my-3" style="height: 70px;">
+        <!-- Tìm kiếm theo giảng viên  -->
         <input type="text" id="filterName" placeholder="Tìm theo giảng viên TKB" oninput="filterByName()"
-          class="form-control m-2 search" style="width: 300px;" />
+          class="form-control m-2 search" style="width: 180px;" />
+        <!-- Tìm kiếm theo tên học phần -->
         <input type="text" id="filterClass" placeholder="Tìm theo tên học phần" oninput="filterByClass()"
-          class="form-control m-2 search" style="width: 300px;" />
+          class="form-control m-2 search" style="width: 180px;" />
+        <!-- Tìm kiếm theo bộ môn -->
+        <input type="text" id="filterBoMon" placeholder="Tìm theo tên bộ môn"
+          oninput="filterBoMon(); showSuggestionsBoMon(this)" onclick="showSuggestionsBoMon(this)"
+          class="form-control m-2 search" style="width: 180px;" />
+
+
         <div class="input-group m-2" style="width: 350px;" id="batdau">
           <label for="startDate" class="input-group-text">Ngày bắt đầu</label>
           <input required type="date" id="startDate" class="form-control" />
@@ -363,8 +429,8 @@
     </div>
     <!-- Label tổng số tiết tách riêng với bảng -->
     <div class="total-label">
-      <strong>Tổng số tiết LL: </strong><span id="totalLL">0</span> |
-      <strong>Tổng số tiết QC: </strong><span id="totalQC">0</span>
+      <label>Tổng số tiết Lên Lớp: <span class="value" id="totalLL">0</span></label>
+      <label>Tổng số tiết Quy Chuẩn: <span class="value" id="totalQC">0</span></label>
     </div>
   </div>
   </div>
@@ -372,6 +438,40 @@
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    $(document).ready(function () {
+      const isKhoa = localStorage.getItem("isKhoa");
+      console.log('Giá trị isKhoa từ localStorage: ', isKhoa);
+      hideButton();
+    });
+
+    function hideButton() {
+      const isKhoa = localStorage.getItem("isKhoa");
+      if (isKhoa === null) {
+        console.log('Không tìm thấy giá trị isKhoa trong localStorage');
+      } else {
+        console.log('Giá trị isKhoa: ', isKhoa);
+
+        const actionButton = document.getElementById('actionButton');
+        const actionButton1 = document.getElementById('actionButton1');
+        const actionButton2 = document.getElementById('actionButton2');
+
+        if (actionButton1 && actionButton2) {
+          if (isKhoa === "0") {
+            actionButton1.style.display = 'none'; // Ẩn actionButton1 nếu isKhoa = 0
+            actionButton2.style.display = 'inline-block'; // Hiện actionButton2
+            console.log('Nút actionButton1 đã được ẩn, actionButton2 đã được hiển thị');
+          } else {
+            actionButton1.style.display = 'inline-block'; // Hiện actionButton1 nếu isKhoa khác 0
+            actionButton2.style.display = 'none'; // Ẩn actionButton2
+            console.log('Nút actionButton1 đã được hiển thị, actionButton2 đã được ẩn');
+          }
+        } else {
+          console.log('Không tìm thấy các nút actionButton1 hoặc actionButton2');
+        }
+      }
+    }
+  </script>
 
   <!-- phần hiển thị phân theo role -->
   <script>
@@ -415,8 +515,11 @@
       let data = JSON.parse(localStorage.getItem('tableData')); // Nếu không có, tạo mảng trống
       // Cập nhật từng đối tượng trong dữ liệu
       data.forEach(item => {
-        item.NgayBatDau = globalStartDate; // Cập nhật ngày bắt đầu
-        item.NgayKetThuc = globalEndDate; // Cập nhật ngày kết thúc
+        // Nếu khoa chưa duyệt thì mới chèn
+        if (item.KhoaDuyet == 0) {
+          item.NgayBatDau = globalStartDate; // Cập nhật ngày bắt đầu
+          item.NgayKetThuc = globalEndDate; // Cập nhật ngày kết thúc
+        }
       });
 
       // Lưu lại dữ liệu đã cập nhật vào localStorage
@@ -446,21 +549,49 @@
     function init() {
       // document.getElementById('infoGvm').addEventListener('click', viewData);
       document.getElementById('getData').addEventListener('click', loadData);
-
     }
 
+    // lấy ra bảng trong localstorage truyền vào hàm render, bắt buộc gọi hàm tính tổng để lấy dữ liệu từ bảng :)
     function viewData() {
       let data = JSON.parse(localStorage.getItem('tableData'));
       renderTable(data);
-      calculateTotals()
+      calculateTotals();
     }
 
+
+
+    // lấy dữ liệu tương ứng từ bảng quy chuẩn, lưu vào bảng trong local storage
     async function loadData() {
+
+      const MaPhongBan = localStorage.getItem("MaPhongBan");
+      try {
+        const response = await fetch('http://localhost:3000/bo-mon', {
+          method: 'POST', // Thay đổi thành POST
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ MaPhongBan }) // Gửi MaPhongBan trong thân yêu cầu
+        });
+
+        if (!response.ok) {
+          throw new Error(`Error: ${response.status} - ${response.statusText}`);
+        }
+        // alert(MaPhongBan)
+        const data = await response.json(); // Chuyển đổi dữ liệu JSON
+        localStorage.setItem('boMon', JSON.stringify(data));
+        // Thêm vào bảng hoặc xử lý dữ liệu theo nhu cầu của bạn
+
+      } catch (error) {
+        console.error('Có lỗi xảy ra khi lấy dữ liệu bộ môn:', error);
+      }
+
+
+
       try {
         // Lấy giá trị từ các combobox
         const dotValue = document.getElementById('combobox-dot').value;
         const kiValue = document.getElementById('combobox-ki').value;
-        const namValue = document.getElementById('combobox-nam').value;
+        const namValue = document.getElementById('NamHoc').value;
 
         // Tạo đối tượng dữ liệu để gửi
         const requestData = {
@@ -471,6 +602,7 @@
 
         // Gọi API để lấy dữ liệu mới
         console.log('Gọi API lấy dữ liệu mới...');
+
         const [gvmResponse, khoaResponse, teachingResponse] = await Promise.all([
           fetch('http://localhost:3000/index/name-gvm'),
           fetch('http://localhost:3000/index/name-gvm-khoa'),
@@ -485,7 +617,7 @@
 
         // Kiểm tra xem có lỗi trong các phản hồi không
         if (!gvmResponse.ok || !khoaResponse.ok || !teachingResponse.ok) {
-          alert("Lỗi truy vấn!");
+          alert("Không tìm thấy dữ liệu!");
           return; // Dừng lại nếu có lỗi
         }
 
@@ -525,7 +657,8 @@
         localStorage.setItem('nameGv', JSON.stringify(nameGvNew));
         localStorage.setItem('nameGvm', JSON.stringify(nameGvmNew));
         localStorage.setItem('tableData', JSON.stringify(globalDataNew));
-        console.log(globalDataNew)
+
+        console.log('Bảng : ', globalDataNew);
 
         window.location.reload();
 
@@ -538,9 +671,6 @@
 
     // render ra bảng
     function renderTable(data) {
-      // Kiểm tra nếu đã có dữ liệu lưu trữ cục bộ trong localStorage
-
-
       const tableBody = document.getElementById('tableBody');
       tableBody.innerHTML = ''; // Xóa nội dung cũ
 
@@ -611,10 +741,15 @@
         const boMonTd = document.createElement('td');
         const boMonInput = document.createElement('input');
         boMonInput.type = 'text';
+        boMonInput.name = 'bomon';
         boMonInput.value = row.BoMon || '';
         boMonInput.placeholder = 'Nhập tên bộ môn';
         boMonTd.appendChild(boMonInput);
         tableRow.appendChild(boMonTd);
+
+        boMonInput.onclick = () => {
+          showSuggestionsBoMon(boMonInput);
+        };
 
         const soTietLLTd = document.createElement('td');
         soTietLLTd.textContent = row.LL || '';
@@ -630,6 +765,12 @@
         ngayBatDauInput.type = 'date';
         ngayBatDauInput.name = 'startDate';
         ngayBatDauInput.value = formatDate(row.NgayBatDau); // Định dạng ngày
+
+        // Thêm sự kiện paste cho input ngày bắt đầu
+        ngayBatDauInput.addEventListener('paste', (event) => {
+          handleDatePaste(event, ngayBatDauInput);
+        });
+
         ngayBatDauTd.appendChild(ngayBatDauInput);
         tableRow.appendChild(ngayBatDauTd);
 
@@ -639,25 +780,43 @@
         ngayKetThucInput.type = 'date';
         ngayKetThucInput.name = 'endDate';
         ngayKetThucInput.value = formatDate(row.NgayKetThuc); // Định dạng ngày
+
+        // Thêm sự kiện paste cho input ngày kết thúc
+        ngayKetThucInput.addEventListener('paste', (event) => {
+          handleDatePaste(event, ngayKetThucInput);
+        });
+
         ngayKetThucTd.appendChild(ngayKetThucInput);
         tableRow.appendChild(ngayKetThucTd);
 
 
 
         let khoaCheckboxTd, khoaCheckbox;
+        khoaCheckboxTd = document.createElement('td');
+        khoaCheckbox = document.createElement('input');
+        khoaCheckbox.type = 'checkbox';
+        khoaCheckbox.name = 'khoa';
+        khoaCheckbox.checked = row.KhoaDuyet || false;
+        khoaCheckbox.onchange = () => updateCheckAll('khoa');
+        khoaCheckboxTd.appendChild(khoaCheckbox);
+        tableRow.appendChild(khoaCheckboxTd);
         // Điều kiện ẩn checkbox Khoa nếu role không phải "CNTT_ALL"
-        if (isKhoa === 1 && role === "Lãnh đạo khoa") {
-          khoaCheckboxTd = document.createElement('td');
-          khoaCheckbox = document.createElement('input');
-          khoaCheckbox.type = 'checkbox';
-          khoaCheckbox.name = 'khoa';
-          khoaCheckbox.checked = row.KhoaDuyet || false;
-          khoaCheckbox.onchange = () => updateCheckAll('khoa');
-          khoaCheckboxTd.appendChild(khoaCheckbox);
-          tableRow.appendChild(khoaCheckboxTd);
+        if (role != "Lãnh đạo khoa") {
+          // Thiết lập thuộc tính CSS để thu nhỏ checkbox và ô <td> chứa nó
+          khoaCheckbox.style.width = '10px';    // Đặt chiều rộng nhỏ nhất có thể
+          khoaCheckbox.style.height = '10px';   // Đặt chiều cao nhỏ nhất có thể
+          khoaCheckbox.style.display = 'none';
+
+          // Thu nhỏ <td>
+          khoaCheckboxTd.style.width = '1px';
+          khoaCheckboxTd.style.padding = '0';
         }
 
-        if (role == "GV") {
+
+        // Nếu Lãnh đạo khoa đã duyệt, thi hành sẽ không nhập được
+        // Nếu role là giảng viên thường cũng sẽ không nhập được
+        if (role == "GV" || row.KhoaDuyet == 1) {
+          inviteCheckbox.disabled = true
           giaoVienGiangDayInput.disabled = true;
           boMonInput.disabled = true;
           ngayBatDauInput.disabled = true;
@@ -670,9 +829,7 @@
         // Phân quyền theo phòng ban
         if (isKhoa == 1) { // Nếu là khoa
           if (check.includes(MaPhongBan)) {
-            inviteCheckbox.addEventListener('click', function (e) {
-              e.preventDefault();
-            })
+            inviteCheckbox.disabled = true;
 
             giaoVienGiangDayInput.disabled = true;
             boMonInput.disabled = true;
@@ -681,9 +838,7 @@
             ngayKetThucInput.disabled = true;
 
             if (role == "Lãnh đạo khoa") {
-              khoaCheckbox.addEventListener('click', function (e) {
-                e.preventDefault(); // Ngăn người dùng thay đổi trạng thái checkbox
-              });
+              khoaCheckbox.disabled = true;
 
               // Ngăn checkbox tổng của 'khoa' không cho thay đổi
               disableCheckAll('khoa');
@@ -728,80 +883,80 @@
 
     // Hàm hiển thị gợi ý đã được cập nhật
     function showSuggestions(input, moiGiang) {
-  const value = input.value.toLowerCase(); // Lấy giá trị nhập vào và chuyển thành chữ thường
-  hideSuggestions(); // Ẩn gợi ý cũ trước khi hiển thị gợi ý mới
+      const value = input.value.toLowerCase(); // Lấy giá trị nhập vào và chuyển thành chữ thường
+      hideSuggestions(); // Ẩn gợi ý cũ trước khi hiển thị gợi ý mới
 
-  // Tạo thẻ div chứa gợi ý
-  const suggestionsContainer = document.createElement('div');
-  suggestionsContainer.className = 'suggestions'; // Đặt class cho khung gợi ý
+      // Tạo thẻ div chứa gợi ý
+      const suggestionsContainer = document.createElement('div');
+      suggestionsContainer.className = 'suggestions'; // Đặt class cho khung gợi ý
 
-  // Đặt vị trí cho suggestionsContainer
-  const { bottom, left, width } = input.getBoundingClientRect(); // Lấy vị trí của input
-  suggestionsContainer.style.position = 'absolute'; // Để đè lên bảng
-  suggestionsContainer.style.top = `${bottom + window.scrollY}px`; // Đặt vị trí ngay dưới input
-  suggestionsContainer.style.left = `${left + window.scrollX}px`; // Căn trái với input
-  suggestionsContainer.style.width = `${width}px`; // Chiều rộng bằng với input
-  suggestionsContainer.style.zIndex = '1000'; // Đảm bảo luôn hiển thị trên các thành phần khác
-  suggestionsContainer.style.maxHeight = '200px'; // Giới hạn chiều cao để không quá lớn
-  suggestionsContainer.style.overflowY = 'auto';  // Cho phép cuộn dọc nếu quá nhiều gợi ý
+      // Đặt vị trí cho suggestionsContainer
+      const { bottom, left, width } = input.getBoundingClientRect(); // Lấy vị trí của input
+      suggestionsContainer.style.position = 'absolute'; // Để đè lên bảng
+      suggestionsContainer.style.top = `${bottom + window.scrollY}px`; // Đặt vị trí ngay dưới input
+      suggestionsContainer.style.left = `${left + window.scrollX}px`; // Căn trái với input
+      suggestionsContainer.style.width = `${width}px`; // Chiều rộng bằng với input
+      suggestionsContainer.style.zIndex = '1000'; // Đảm bảo luôn hiển thị trên các thành phần khác
+      suggestionsContainer.style.maxHeight = '200px'; // Giới hạn chiều cao để không quá lớn
+      suggestionsContainer.style.overflowY = 'auto';  // Cho phép cuộn dọc nếu quá nhiều gợi ý
 
-  // Thêm suggestionsContainer vào DOM
-  document.body.appendChild(suggestionsContainer); // Đặt suggestionsContainer vào body thay vì cha của input
+      // Thêm suggestionsContainer vào DOM
+      document.body.appendChild(suggestionsContainer); // Đặt suggestionsContainer vào body thay vì cha của input
 
-  let suggestions = []; // Khởi tạo mảng gợi ý
+      let suggestions = []; // Khởi tạo mảng gợi ý
 
-  // Lấy dữ liệu từ localStorage
-  const nameGvm = JSON.parse(localStorage.getItem("nameGvm")) || []; // Giảng viên mời
-  const nameGv = JSON.parse(localStorage.getItem("nameGv")) || []; // Giảng viên
+      // Lấy dữ liệu từ localStorage
+      const nameGvm = JSON.parse(localStorage.getItem("nameGvm")) || []; // Giảng viên mời
+      const nameGv = JSON.parse(localStorage.getItem("nameGv")) || []; // Giảng viên
 
-  // Kiểm tra giá trị moiGiang để xác định dữ liệu nào sẽ hiển thị
-  if (moiGiang) {
-    // Hiển thị toàn bộ giảng viên mời
-    suggestions = nameGvm.map(item => `${item.HoTen} - ${item.MaPhongBan}`);
-  } else {
-    // Hiển thị toàn bộ giảng viên
-    suggestions = nameGv.map(item => `${item.TenNhanVien} - ${item.MaPhongBan}`);
-  }
+      // Kiểm tra giá trị moiGiang để xác định dữ liệu nào sẽ hiển thị
+      if (moiGiang) {
+        // Hiển thị toàn bộ giảng viên mời
+        suggestions = nameGvm.map(item => `${item.HoTen} - ${item.MaPhongBan}`);
+      } else {
+        // Hiển thị toàn bộ giảng viên
+        suggestions = nameGv.map(item => `${item.TenNhanVien} - ${item.MaPhongBan}`);
+      }
 
-  // Nếu người dùng nhập dữ liệu, lọc kết quả theo tên giảng viên
-  if (value) {
-    suggestions = suggestions.filter(name => name.toLowerCase().includes(value));
-  }
+      // Nếu người dùng nhập dữ liệu, lọc kết quả theo tên giảng viên
+      if (value) {
+        suggestions = suggestions.filter(name => name.toLowerCase().includes(value));
+      }
 
-  // Nếu không có gợi ý, ẩn container
-  if (suggestions.length === 0) {
-    suggestionsContainer.remove();
-    return; // Kết thúc hàm nếu không có gợi ý
-  }
+      // Nếu không có gợi ý, ẩn container
+      if (suggestions.length === 0) {
+        suggestionsContainer.remove();
+        return; // Kết thúc hàm nếu không có gợi ý
+      }
 
-  // Tạo gợi ý dưới dạng danh sách (list)
-  suggestions.forEach(name => {
-    const suggestionItem = document.createElement('div'); // Tạo phần tử cho từng gợi ý
-    suggestionItem.className = 'suggestion-item'; // Đặt class để tùy chỉnh giao diện
-    suggestionItem.textContent = name; // Hiển thị tên giảng viên kèm theo khoa
+      // Tạo gợi ý dưới dạng danh sách (list)
+      suggestions.forEach(name => {
+        const suggestionItem = document.createElement('div'); // Tạo phần tử cho từng gợi ý
+        suggestionItem.className = 'suggestion-item'; // Đặt class để tùy chỉnh giao diện
+        suggestionItem.textContent = name; // Hiển thị tên giảng viên kèm theo khoa
 
-    // Thêm sự kiện click để điền tên vào ô input
-    suggestionItem.onclick = function () {
-      input.value = name; // Điền tên gợi ý vào ô input
-      hideSuggestions(); // Ẩn gợi ý sau khi chọn
-    };
+        // Thêm sự kiện click để điền tên vào ô input
+        suggestionItem.onclick = function () {
+          input.value = name; // Điền tên gợi ý vào ô input
+          hideSuggestions(); // Ẩn gợi ý sau khi chọn
+        };
 
-    suggestionsContainer.appendChild(suggestionItem); // Thêm mục vào danh sách gợi ý
-  });
+        suggestionsContainer.appendChild(suggestionItem); // Thêm mục vào danh sách gợi ý
+      });
 
-  // Ẩn gợi ý khi input không còn focus
-  input.onblur = function () {
-    setTimeout(() => {
-      hideSuggestions();
-    }, 100); // Thời gian chờ để nhận diện click
-  };
-}
+      // Ẩn gợi ý khi input không còn focus
+      input.onblur = function () {
+        setTimeout(() => {
+          hideSuggestions();
+        }, 100); // Thời gian chờ để nhận diện click
+      };
+    }
 
-// Hàm ẩn gợi ý
-function hideSuggestions() {
-  const existingSuggestions = document.querySelectorAll('.suggestions');
-  existingSuggestions.forEach(suggestion => suggestion.remove());
-}
+    // Hàm ẩn gợi ý
+    function hideSuggestions() {
+      const existingSuggestions = document.querySelectorAll('.suggestions');
+      existingSuggestions.forEach(suggestion => suggestion.remove());
+    }
 
 
     // Hàm xử lí : ấn lưu dữ liệu sẽ cập nhật vào localStorage, db chưa thay đổi
@@ -827,6 +982,7 @@ function hideSuggestions() {
         // Lấy giá trị từ các ô nhập liệu
         const giaoVienGiangDay = giaoVienGiangDayInput ? giaoVienGiangDayInput.value : '';
         const boMon = boMonInput ? boMonInput.value : '';
+
 
         // Lấy trạng thái của checkbox "Khoa" và "Đào Tạo"
         const khoaDuyet = khoaCheckbox ? khoaCheckbox.checked : false;
@@ -855,14 +1011,14 @@ function hideSuggestions() {
 
         // Cập nhật các giá trị khác không thay đổi
         localData[index].GiaoVienGiangDay = giaoVienGiangDay;
-        localData[index].BoMon = boMon;
         localData[index].KhoaDuyet = khoaDuyet;
         localData[index].MoiGiang = moiGiang;
+        localData[index].BoMon = boMon;
       });
 
       // Cập nhật lại localStorage với dữ liệu mới
       localStorage.setItem('tableData', JSON.stringify(localData));
-
+      console.log(localData)
       // Hiển thị thông báo thành công
       alert('Lưu cục bộ thành công');
       window.location.reload();
@@ -902,6 +1058,123 @@ function hideSuggestions() {
       init();
     });
 
+  </script>
+
+  <!-- phần lọc bộ môn -->
+  <script>
+
+    // Hàm gợi ý bộ môn ở ô nhập 
+    function showSuggestionsBoMon(input) {
+      const value = input.value.toLowerCase(); // Lấy giá trị nhập vào và chuyển thành chữ thường
+      hideSuggestionsBoMon(); // Ẩn gợi ý cũ trước khi hiển thị gợi ý mới
+
+      // Tạo thẻ div chứa gợi ý
+      const suggestionsContainer = document.createElement('div');
+      suggestionsContainer.className = 'suggestions'; // Đặt class cho khung gợi ý
+
+      // Đặt vị trí cho suggestionsContainer
+      const { bottom, left, width } = input.getBoundingClientRect(); // Lấy vị trí của input
+      suggestionsContainer.style.position = 'absolute'; // Để đè lên bảng
+      suggestionsContainer.style.top = `${bottom + window.scrollY}px`; // Đặt vị trí ngay dưới input
+      suggestionsContainer.style.left = `${left + window.scrollX}px`; // Căn trái với input
+      suggestionsContainer.style.width = `${width}px`; // Chiều rộng bằng với input
+      suggestionsContainer.style.zIndex = '1000'; // Đảm bảo luôn hiển thị trên các thành phần khác
+      suggestionsContainer.style.maxHeight = '200px'; // Giới hạn chiều cao để không quá lớn
+      suggestionsContainer.style.overflowY = 'auto';  // Cho phép cuộn dọc nếu quá nhiều gợi ý
+
+      // Thêm suggestionsContainer vào DOM
+      document.body.appendChild(suggestionsContainer); // Đặt suggestionsContainer vào body thay vì cha của input
+
+      let suggestions = []; // Khởi tạo mảng gợi ý
+
+      // Lấy dữ liệu từ localStorage
+      const boMon = JSON.parse(localStorage.getItem("boMon")) || []; // Giảng viên mời
+      console.log(boMon)
+
+      suggestions = boMon.map(item => `${item.TenBoMon} - ${item.MaBoMon}`);
+
+
+      // Nếu người dùng nhập dữ liệu, lọc kết quả theo tên giảng viên
+      if (value) {
+        suggestions = suggestions.filter(name => name.toLowerCase().includes(value));
+      }
+
+      // Nếu không có gợi ý, ẩn container
+      if (suggestions.length === 0) {
+        suggestionsContainer.remove();
+        return; // Kết thúc hàm nếu không có gợi ý
+      }
+
+      // Tạo gợi ý dưới dạng danh sách (list)
+      suggestions.forEach(name => {
+        const suggestionItem = document.createElement('div'); // Tạo phần tử cho từng gợi ý
+        suggestionItem.className = 'suggestion-item'; // Đặt class để tùy chỉnh giao diện
+        suggestionItem.textContent = name; // Hiển thị tên giảng viên kèm theo khoa
+
+        // Thêm sự kiện click để điền tên vào ô input
+        // Thêm sự kiện click để điền tên vào ô input
+        suggestionItem.onclick = function () {
+          // Giả sử 'name' là giá trị gợi ý bạn nhận được từ suggestionItem
+          const name = suggestionItem.innerText; // Hoặc có thể là suggestionItem.textContent
+
+          // Tìm vị trí của dấu "-" trong chuỗi
+          const dashIndex = name.indexOf("-");
+
+          // Nếu không có dấu "-", sử dụng tên gợi ý gốc
+          let processedName = name;
+
+          if (dashIndex !== -1) {
+            // Lấy phần sau dấu "-" và loại bỏ khoảng trắng
+            processedName = name.slice(dashIndex + 1).trim().replace(/\s+/g, '');
+          }
+
+          // Điền tên gợi ý đã xử lý vào ô input
+          input.value = processedName;
+          filterBoMon();
+          hideSuggestionsBoMon(); // Ẩn gợi ý sau khi chọn
+        };
+
+
+        suggestionsContainer.appendChild(suggestionItem); // Thêm mục vào danh sách gợi ý
+      });
+
+      // Ẩn gợi ý khi input không còn focus
+      input.onblur = function () {
+        setTimeout(() => {
+          hideSuggestionsBoMon();
+        }, 100); // Thời gian chờ để nhận diện click
+      };
+    }
+
+    // Hàm ẩn gợi ý
+    function hideSuggestionsBoMon() {
+      const existingSuggestions = document.querySelectorAll('.suggestions');
+      existingSuggestions.forEach(suggestion => suggestion.remove());
+    }
+
+    // Hàm xử lý tìm kiếm theo tên bộ môn
+    function filterBoMon() {
+      const input = document.getElementById('filterBoMon');
+      const filter = input.value.trim().toLowerCase(); // Bỏ khoảng trắng và chuyển chữ thường
+      const tableRows = document.querySelectorAll('#tableBody tr');
+
+      tableRows.forEach(row => {
+        const nameInput = row.querySelector('td:nth-child(7) input[name="bomon"]'); // Lấy input có name="bomon" ở cột thứ 7
+        const checkbox = row.querySelector('input[type="checkbox"]');
+
+        if (nameInput) {
+          const name = nameInput.value.toLowerCase(); // Lấy giá trị của input có name="bomon"
+
+          if (filter === '' || name.includes(filter)) {
+            row.style.display = ''; // Hiện hàng nếu khớp hoặc filter trống
+            checkbox.disabled = false; // Kích hoạt checkbox
+          } else {
+            row.style.display = 'none'; // Ẩn hàng nếu không khớp
+            checkbox.disabled = true; // Vô hiệu hóa checkbox
+          }
+        }
+      });
+    }
   </script>
 
   <!-- các hàm phụ xử lí trong bảng -->
@@ -1041,20 +1314,6 @@ function hideSuggestions() {
   <!-- Phần phân quyền -->
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      // Thêm sự kiện click cho phần tử có id "import"
-      const importLink = document.getElementById("Import");
-
-      importLink.addEventListener("click", function (event) {
-        event.preventDefault(); // Ngăn chặn hành vi mặc định của liên kết
-
-        const isKhoa = localStorage.getItem("isKhoa"); // Lấy role từ localStorage
-
-        if (isKhoa == 0) { // Nếu là đào tạo hoặc tài chính
-          window.location.href = "/import";
-        } else { // Nếu là khoa
-          window.location.href = "/importGvmList";
-        }
-      });
 
       // Thêm sự kiện click cho phần tử có id="ThongTinGD"
       const ThongTinGD = document.getElementById("ThongTinGD");
@@ -1086,6 +1345,27 @@ function hideSuggestions() {
           window.location.href = "/mainkhoa";
         }
       });
+
+      // get all date input fields
+      let dateInputs = document.querySelectorAll('[type="date"]');
+
+      dateInputs.forEach(el => {
+        // register double click event to change date input to text input and select the value
+        el.addEventListener('dblclick', () => {
+          el.type = "text";
+
+          // After changing input type with JS .select() wont work as usual
+          // Needs timeout fn() to make it work
+          setTimeout(() => {
+            el.select();
+          })
+        });
+
+        // register the focusout event to reset the input back to a date input field
+        el.addEventListener('focusout', () => {
+          el.type = "date";
+        });
+      });
     });
 
   </script>
@@ -1110,6 +1390,59 @@ function hideSuggestions() {
       }
     };
   </script>
+
+  <script>
+    document.getElementById("changePasswordLink").addEventListener("click", function (event) {
+      event.preventDefault(); // Ngăn chặn hành vi mặc định của thẻ a
+      const tenDangNhap = localStorage.getItem("TenDangNhap"); // Lấy TenDangNhap từ localStorage
+      alert(tenDangNhap);
+
+      if (tenDangNhap) {
+        // Chuyển hướng đến trang changePassword và truyền TenDangNhap trong URL
+        window.location.href = `/changePassword?tenDangNhap=${encodeURIComponent(tenDangNhap)}`;
+      } else {
+        alert("Không tìm thấy TenDangNhap trong localStorage.");
+      }
+    });
+  </script>
+  <script>
+    $(document).ready(function () {
+      $('#NamHoc option[value=""]').remove();
+
+      $.ajax({
+        url: '/getNamHoc',
+        method: 'GET',
+        success: function (response) {
+          if (response.success) {
+            const NamHoc = response.NamHoc;
+            console.log(NamHoc);
+
+            response.NamHoc.forEach(function (item) {
+              if (item.NamHoc === NamHoc) {
+                $('#NamHoc').prepend(
+                  `<option value="${item.NamHoc}" selected>${item.NamHoc}</option>`
+                );
+              } else {
+                $('#NamHoc').append(
+                  `<option value="${item.NamHoc}">${item.NamHoc}</option>`
+                );
+              }
+            });
+
+            if (!$('#NamHoc option:selected').length) {
+              $('#NamHoc').prepend('<option value="">Chọn Năm Học</option>');
+            }
+          } else {
+            console.error("Không lấy được dữ liệu năm học:", response.message);
+          }
+        },
+        error: function (error) {
+          console.error("Lỗi khi lấy dữ liệu năm học:", error);
+        }
+      });
+    });
+  </script>
+
 </body>
 
 </html>

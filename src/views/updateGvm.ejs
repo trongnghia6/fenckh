@@ -45,7 +45,7 @@
                   </a>
                   <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                     <a class="nav-link active" href="/gvmList">Danh sách giảng viên mời</a>
-                    <a class="nav-link" id="Import" href="">Thêm bằng file</a>
+                    <a class="nav-link" id="actionButton1" href="/importGvmList" style="width: 100%;">Thêm giảng viên mời bằng file</a>
                   </div>
                 </div>
               </div>
@@ -56,7 +56,8 @@
                     Bảng Quy Chuẩn
                   </a>
                   <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <a class="nav-link" href="/tableTam">Bảng quy chuẩn dự kiến</a>
+                    <a class="nav-link" href="/import" id="actionButton2" style="width: 100%;">Thêm file quy chuẩn</a>
+                <a class="nav-link" href="/tableTam">Bảng quy chuẩn dự kiến</a>
                     <a class="nav-link" href="/tableQC">Bảng quy chuẩn chính thức</a>
                     <a class="nav-link" id="ThongTinGD" href="">Thông tin giảng viên theo lớp</a>
                   </div>
@@ -137,7 +138,7 @@
       </nav>
                       <!-- Main content -->
                       <div class="m-3 box">
-                        <form action="/updateGvm" method="POST" class="form d-flex flex-column" enctype="multipart/form-data">
+                        <form action="/updateGvm/:<%= value.id_Gvm %>" method="POST" class="form d-flex flex-column" enctype="multipart/form-data">
                            <!-- //enctype="multipart/form-data" -->
                            <fieldset>
                                <div style="display: none;">
@@ -195,22 +196,22 @@
        <label>Mặt trước CCCD:</label>
        <img src="/images/userIdCardPhotos/frontPhotos/<%= value.MatTruocCCCD %>" alt="Mặt trước CCCD" id="imgtruoc">
        <br>
-       <input class="form-control" type="file" name="truocCCCD" id="imgtruocinput" >
+       <input class="form-control" type="file" name="truocCCCD" id="imgtruocinput" value="<%= value.MatTruocCCCD %>">
        <input type="hidden" name="oldTruocCCCD" value="<%= value.MatTruocCCCD %>" >
    </div>
    <div class="col-md-4">
        <label>Mặt sau CCCD:</label>
        <img src="/images/userIdCardPhotos/backPhotos/<%= value.MatSauCCCD %>" alt="Mặt sau CCCD" id="imgsau">
        <br>
-       <input class="form-control" type="file" name="sauCCCD" id="sauCCCD" >
+       <input class="form-control" type="file" name="sauCCCD" id="sauCCCD" value="<%= value.MatSauCCCD %>">
        <input type="hidden" name="oldSauCCCD" value="<%= value.MatSauCCCD %>" >
    </div>
    <div class="col-md-4">
        <label>Bằng đại học:</label>
-       <img src="/images/certificates/<%= value.bangTotNghiep %>" alt="Bằng đại học" id="imgbang">
+       <img src="/images/certificates/<%= value.BangTotNghiep %>" alt="Bằng đại học" id="imgbang">
        <br>
-       <input class="form-control" type="file" name="bangTotNghiep" id="bangTotNghiep" >
-       <input type="hidden" name="oldbangTotNghiep" value="<%= value.bangTotNghiep %>" >
+       <input class="form-control" type="file" name="bangTotNghiep" id="bangTotNghiep" value="<%= value.BangTotNghiep %>">
+       <input type="hidden" name="oldbangTotNghiep" value="<%= value.BangTotNghiep %>" >
    </div>
   </div>
 <div class="row mb-3">
@@ -223,7 +224,10 @@
        <input required class="form-control" type="email" name="email" id="email" value="<%= value.Email %>" >
    </div>
    <div class="col-md-4">
-       <label>File lý lịch (PDF):</label> <%= value.FileLyLich %>   
+       <label>File lý lịch (PDF):</label> 
+       <a href="/resumes/<%= value.FileLyLich %>" download>
+        <%= value.FileLyLich %>
+      </a>
        <input class="form-control" type="file" name="FileLyLich" id="FileLyLich" >
        <input type="hidden" name="oldFileLyLich" value="<%= value.FileLyLich %>" >
    </div>
@@ -281,7 +285,7 @@
    </div>
    <div class="col-md-4 d-flex justify-content-between">
       <button class="button-class bt" id="submit">Cập nhật</button>
-      <button class="button-class bt" id="return" onclick="goBack()">Quay lại</button>
+      <button class="button-class bt" id="return"><a class="text-white" href="/gvmList">Quay lại</a></button>
    </div>
                                </div>
                            </fieldset>
@@ -290,6 +294,40 @@
                    </div>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    $(document).ready(function() {
+const isKhoa = localStorage.getItem("isKhoa");
+console.log('Giá trị isKhoa từ localStorage: ', isKhoa);
+hideButton();
+});
+
+    function hideButton() {
+        const isKhoa = localStorage.getItem("isKhoa");
+        if (isKhoa === null) {
+            console.log('Không tìm thấy giá trị isKhoa trong localStorage');
+        } else {
+            console.log('Giá trị isKhoa: ', isKhoa);
+            
+            const actionButton = document.getElementById('actionButton');
+            const actionButton1 = document.getElementById('actionButton1');
+    const actionButton2 = document.getElementById('actionButton2');
+    
+    if (actionButton1 && actionButton2) {
+        if (isKhoa === "0") {
+            actionButton1.style.display = 'none'; // Ẩn actionButton1 nếu isKhoa = 0
+            actionButton2.style.display = 'inline-block'; // Hiện actionButton2
+            console.log('Nút actionButton1 đã được ẩn, actionButton2 đã được hiển thị');
+        } else {
+            actionButton1.style.display = 'inline-block'; // Hiện actionButton1 nếu isKhoa khác 0
+            actionButton2.style.display = 'none'; // Ẩn actionButton2
+            console.log('Nút actionButton1 đã được hiển thị, actionButton2 đã được ẩn');
+        }
+    } else {
+        console.log('Không tìm thấy các nút actionButton1 hoặc actionButton2');
+    }
+        }
+    }
+</script>
 
   <script>
     // Lấy query string từ URL
@@ -320,20 +358,6 @@
   <!-- Phần phân quyền -->
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      // Thêm sự kiện click cho phần tử có id "import"
-      const importLink = document.getElementById("Import");
-
-      importLink.addEventListener("click", function (event) {
-        event.preventDefault(); // Ngăn chặn hành vi mặc định của liên kết
-
-        const isKhoa = localStorage.getItem("isKhoa"); // Lấy role từ localStorage
-
-        if (isKhoa==0) { // Nếu là đào tạo hoặc tài chính
-          window.location.href = "/import";
-        } else { // Nếu là khoa
-          window.location.href = "/importGvmList";
-        }
-      });
 
       // Thêm sự kiện click cho phần tử có id="ThongTinGD"
       const ThongTinGD = document.getElementById("ThongTinGD");
@@ -432,6 +456,20 @@
         reader.readAsDataURL(file);
       }
     });
+  </script>
+  <script>
+    document.getElementById("changePasswordLink").addEventListener("click", function(event) {
+  event.preventDefault(); // Ngăn chặn hành vi mặc định của thẻ a
+  const tenDangNhap = localStorage.getItem("TenDangNhap"); // Lấy TenDangNhap từ localStorage
+  alert(tenDangNhap);
+
+  if (tenDangNhap) {
+      // Chuyển hướng đến trang changePassword và truyền TenDangNhap trong URL
+      window.location.href = `/changePassword?tenDangNhap=${encodeURIComponent(tenDangNhap)}`;
+  } else {
+      alert("Không tìm thấy TenDangNhap trong localStorage.");
+  }
+});
   </script>
 
 </body>

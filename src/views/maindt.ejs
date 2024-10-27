@@ -49,7 +49,7 @@
               </a>
               <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                 <a class="nav-link" href="/gvmList">Danh sách giảng viên mời</a>
-                <a class="nav-link" id="Import" href="">Thêm bằng file</a>
+                <a class="nav-link" id="actionButton1" href="/importGvmList" style="width: 100%;">Thêm giảng viên mời bằng file</a>
               </div>
             </div>
           </div>
@@ -60,6 +60,7 @@
                 Bảng Quy Chuẩn
               </a>
               <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="nav-link" href="/import" id="actionButton2" style="width: 100%;">Thêm file quy chuẩn</a>
                 <a class="nav-link" href="/tableTam">Bảng quy chuẩn dự kiến</a>
                 <a class="nav-link" href="/tableQC">Bảng quy chuẩn chính thức</a>
                 <a class="nav-link" id="ThongTinGD" href="">Thông tin giảng viên theo lớp</a>
@@ -67,15 +68,18 @@
             </div>
           </div>
           <div class="navbar-nav">
-            <div class="nav-item dropdown">
+            <div class="nav-item dropdown" style="width: max-content;">
               <a class="nav-link dropdown-toggle" href="/login" id="navbarDropdownUser" data-bs-toggle="dropdown"
                 aria-expanded="false">
                 Mời Giảng
               </a>
               <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                 <a class="nav-link" href="/xemCacLopGvm">Xem các lớp mời</a>
-                <a class="nav-link" href="/classInfoGvm">Thống kê lớp mời theo giảng viên</a>
+                <a class="nav-link text-nowrap" href="/classInfoGvm">Thống kê lớp mời theo giảng viên</a>
                 <a class="nav-link" href="/infoHDGvm" role="button">Thông tin hợp đồng</a>
+                <li class="nav-item"></li>
+                <a class="nav-link " href="/phuLucHD" >Phụ lục hợp đồng</a>
+                </li>
               </div>
             </div>
           </div>
@@ -86,7 +90,7 @@
                 Vượt Giờ
               </a>
               <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a class="nav-link" id="ThongTinGD" href="#">COMING SOON</a>
+                <a class="nav-link" id="" href="#">COMING SOON</a>
               </div>
             </div>
           </div>
@@ -97,7 +101,7 @@
                 Nghiên Cứu Khoa Học
               </a>
               <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a class="nav-link" id="ThongTinGD" href="#">COMING SOON</a>
+                <a class="nav-link" id="" href="#">COMING SOON</a>
               </div>
             </div>
           </div>
@@ -108,7 +112,7 @@
                 Đồ Án
               </a>
               <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a class="nav-link" id="ThongTinGD" href="#">COMING SOON</a>
+                <a class="nav-link" id="" href="#">COMING SOON</a>
               </div>
             </div>
           </div>
@@ -119,12 +123,9 @@
                 Thống Kê
               </a>
               <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a class="nav-link" id="ThongTinGD" href="#">COMING SOON</a>
+                <a class="nav-link" id="" href="#">COMING SOON</a>
               </div>
             </div>
-            <li class="nav-item"></li>
-            <a class="nav-link " href="/phuLucHD" >Phụ lục hợp đồng</a>
-            </li>
           </div>
 
         </ul>
@@ -136,7 +137,8 @@
             </a>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
               <a class="dropdown-item" href="#">Thông tin cá nhân</a>
-              <a class="dropdown-item" href="/">Đăng xuất</a>
+                <a class="dropdown-item" id="changePasswordLink">Đổi mật khẩu</a>
+                <a class="dropdown-item" href="/">Đăng xuất</a>
             </div>
           </div>
         </div>
@@ -314,6 +316,26 @@
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const isKhoa = localStorage.getItem("isKhoa");
+
+        // Ẩn button ngay khi trang được tải
+        const actionButton = document.getElementById('actionButton');
+            const actionButton1 = document.getElementById('actionButton1');
+    const actionButton2 = document.getElementById('actionButton2');
+
+    if (isKhoa == 0) {
+            actionButton1.style.display = 'none'; // Ẩn actionButton1 nếu isKhoa = 0
+            actionButton2.style.display = 'inline-block'; // Hiện actionButton2
+            
+        } else {
+            actionButton1.style.display = 'inline-block'; // Hiện actionButton1 nếu isKhoa khác 0
+            actionButton2.style.display = 'none'; // Ẩn actionButton2
+            
+        }
+      });
+</script>
   <!-- 
   <script>
     // handle event click
@@ -387,22 +409,6 @@
   <!-- Phần phân quyền -->
   <script>
     document.addEventListener("DOMContentLoaded", () => {
-      // Thêm sự kiện click cho phần tử có id "import"
-      const importLink = document.getElementById("Import");
-
-      importLink.addEventListener("click", function (event) {
-        event.preventDefault(); // Ngăn chặn hành vi mặc định của liên kết
-
-        const isKhoa = localStorage.getItem("isKhoa"); // Lấy role từ localStorage
-
-        if (isKhoa == 0) {
-          // Nếu là đào tạo hoặc tài chính
-          window.location.href = "/import";
-        } else {
-          // Nếu là khoa
-          window.location.href = "/importGvmList";
-        }
-      });
 
       // Thêm sự kiện click cho phần tử có id="ThongTinGD"
       const ThongTinGD = document.getElementById("ThongTinGD");
@@ -455,6 +461,20 @@
 
       document.querySelector(".role").innerText = `${Role}`;
     };
+  </script>
+  <script>
+    document.getElementById("changePasswordLink").addEventListener("click", function(event) {
+  event.preventDefault(); // Ngăn chặn hành vi mặc định của thẻ a
+  const tenDangNhap = localStorage.getItem("TenDangNhap"); // Lấy TenDangNhap từ localStorage
+  alert(tenDangNhap);
+
+  if (tenDangNhap) {
+      // Chuyển hướng đến trang changePassword và truyền TenDangNhap trong URL
+      window.location.href = `/changePassword?tenDangNhap=${encodeURIComponent(tenDangNhap)}`;
+  } else {
+      alert("Không tìm thấy TenDangNhap trong localStorage.");
+  }
+});
   </script>
 </body>
 

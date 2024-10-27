@@ -94,27 +94,14 @@
 
   <nav class="navbar navbar-expand-lg navbar-bottom sticky-top">
     <div class="" style="width: 100%">
-      <button
-        class="navbar-toggler"
-        type="button"
-        data-bs-toggle="collapse"
-        data-bs-target="#navbarNav"
-        aria-controls="navbarNav"
-        aria-expanded="false"
-        aria-label="Toggle navigation"
-      >
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
-      <div
-        class="collapse navbar-collapse"
-        style="width: 100%"
-        id="navbarNav"
-      >
+      <div class="collapse navbar-collapse" style="width: 100%" id="navbarNav">
         <ul class="navbar-nav">
           <li class="nav-item">
-            <a class="nav-link" id="Home" href=""
-              ><i class="fa-solid fa-house"></i
-            ></a>
+            <a class="nav-link" id="Home" href=""><i class="fa-solid fa-house"></i></a>
           </li>
           <!-- <div class="navbar-nav">
             <div class="nav-item dropdown">
@@ -131,7 +118,7 @@
                 <a class="nav-link" href="/gvmList"
                   >Danh sách giảng viên mời</a
                 >
-                <a class="nav-link" id="Import" href="">Thêm bằng file</a>
+                <a class="nav-link" id="actionButton1" href="/importGvmList" style="width: 100%;">Thêm giảng viên mời bằng file</a>
               </div>
             </div>
           </div> -->
@@ -144,66 +131,45 @@
               </a>
               <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                 <a class="nav-link" href="/gvmList">Danh sách giảng viên mời</a>
-                <a class="nav-link" id="Import" href="">Thêm bằng file</a>
+                <a class="nav-link" id="actionButton1" href="/importGvmList" style="width: 100%;">Thêm giảng viên mời bằng file</a>
               </div>
             </div>
           </div>
           <div class="navbar-nav">
             <div class="nav-item dropdown">
-              <a
-                class="nav-link dropdown-toggle active"
-                href="/login"
-                id="navbarDropdownUser"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-              >
+              <a class="nav-link dropdown-toggle active" href="/login" id="navbarDropdownUser" data-bs-toggle="dropdown"
+                aria-expanded="false">
                 Bảng Quy Chuẩn
               </a>
               <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a class="nav-link" href="/tableTam"
-                  >Bảng quy chuẩn dự kiến</a
-                >
-                <a class="nav-link active" href="/tableQC"
-                  >Bảng quy chuẩn chính thức</a
-                >
-                <a class="nav-link" id="ThongTinGD" href=""
-                  >Thông tin giảng viên theo lớp</a
-                >
+                <a class="nav-link" href="/import" id="actionButton2" style="width: 100%;">Thêm file quy chuẩn</a>
+                <a class="nav-link" href="/tableTam">Bảng quy chuẩn dự kiến</a>
+                <a class="nav-link active" href="/tableQC">Bảng quy chuẩn chính thức</a>
+                <a class="nav-link" id="ThongTinGD" href="">Thông tin giảng viên theo lớp</a>
               </div>
             </div>
           </div>
           <div class="navbar-nav">
             <div class="nav-item dropdown">
-              <a
-                class="nav-link dropdown-toggle "
-                href="/login"
-                id="navbarDropdownUser"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-              >
+              <a class="nav-link dropdown-toggle " href="/login" id="navbarDropdownUser" data-bs-toggle="dropdown"
+                aria-expanded="false">
                 Mời Giảng
               </a>
               <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                 <a class="nav-link" href="/xemCacLopGvm">Xem các lớp mời</a>
 
-                <a class="nav-link " href="/classInfoGvm"
-                  >Thông tin lớp giảng viên mời</a
-                >
-                <a class="nav-link" href="/infoHDGvm" role="button"
-                  >Thông tin hợp đồng</a
-                >
+                <a class="nav-link " href="/classInfoGvm">Thông tin lớp giảng viên mời</a>
+                <a class="nav-link" href="/infoHDGvm" role="button">Thông tin hợp đồng</a>
+                <li class="nav-item"></li>
+                <a class="nav-link " href="/phuLucHD">Phụ lục hợp đồng</a>
+                </li>
               </div>
             </div>
           </div>
           <div class="navbar-nav">
             <div class="nav-item dropdown">
-              <a
-                class="nav-link dropdown-toggle"
-                href="/login"
-                id="navbarDropdownUser"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-              >
+              <a class="nav-link dropdown-toggle" href="/login" id="navbarDropdownUser" data-bs-toggle="dropdown"
+                aria-expanded="false">
                 Vượt Giờ
               </a>
               <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
@@ -213,13 +179,8 @@
           </div>
           <div class="navbar-nav">
             <div class="nav-item dropdown">
-              <a
-                class="nav-link dropdown-toggle"
-                href="/login"
-                id="navbarDropdownUser"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-              >
+              <a class="nav-link dropdown-toggle" href="/login" id="navbarDropdownUser" data-bs-toggle="dropdown"
+                aria-expanded="false">
                 Nghiên Cứu Khoa Học
               </a>
               <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
@@ -229,13 +190,8 @@
           </div>
           <div class="navbar-nav">
             <div class="nav-item dropdown">
-              <a
-                class="nav-link dropdown-toggle"
-                href="/login"
-                id="navbarDropdownUser"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-              >
+              <a class="nav-link dropdown-toggle" href="/login" id="navbarDropdownUser" data-bs-toggle="dropdown"
+                aria-expanded="false">
                 Đồ Án
               </a>
               <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
@@ -245,38 +201,27 @@
           </div>
           <div class="navbar-nav">
             <div class="nav-item dropdown">
-              <a
-                class="nav-link dropdown-toggle"
-                href="/login"
-                id="navbarDropdownUser"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-              >
+              <a class="nav-link dropdown-toggle" href="/login" id="navbarDropdownUser" data-bs-toggle="dropdown"
+                aria-expanded="false">
                 Thống Kê
               </a>
               <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                 <a class="nav-link" href="#">COMING SOON</a>
               </div>
             </div>
-            <li class="nav-item"></li>
-            <a class="nav-link " href="/phuLucHD" >Phụ lục hợp đồng</a>
-            </li>
+
           </div>
         </ul>
         <div class="navbar-nav">
           <div class="nav-item dropdown">
-            <a
-              class="nav-link dropdown-toggle fullname"
-              href="/login"
-              id="navbarDropdownUser"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-            >
+            <a class="nav-link dropdown-toggle fullname" href="/login" id="navbarDropdownUser" data-bs-toggle="dropdown"
+              aria-expanded="false">
               Hi, Lê Đức Thuận
             </a>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
               <a class="dropdown-item" href="#">Thông tin cá nhân</a>
-              <a class="dropdown-item" href="/">Đăng xuất</a>
+                <a class="dropdown-item" id="changePasswordLink">Đổi mật khẩu</a>
+                <a class="dropdown-item" href="/">Đăng xuất</a>
             </div>
           </div>
         </div>
@@ -301,18 +246,13 @@
         </select>
 
         <!-- Combo box Năm -->
-        <select class="form-select w-100px mx-1 selectop" id="combobox-nam">
-          <option value="2024">2024</option>
-          <option value="2025">2025</option>
-          <option value="2026">2026</option>
-          <option value="2027">2027</option>
+        <select class="form-select w-100px mx-1 selectop" id="NamHoc">
+          <option value="">Chọn năm học</option>
         </select>
 
         <!-- Combo box với các giá trị CNTT, ATTT, DTVT -->
-        <select class="form-select w-100px mx-1 selectop" id="combobox-khoa">
-          <option value="CNTT">CNTT</option>
-          <option value="ATTT">ATTT</option>
-          <option value="DTVT">DTVT</option>
+        <select class="form-select w-100px mx-1 selectop" id="MaPhongBan">
+          <option value="">Chọn khoa</option>
         </select>
 
         <button class="button text-nowrap" id="render">Hiển thị</button>
@@ -354,6 +294,42 @@
     </div>
   </div>
   </div>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      $(document).ready(function() {
+  const isKhoa = localStorage.getItem("isKhoa");
+  console.log('Giá trị isKhoa từ localStorage: ', isKhoa);
+  hideButton();
+  });
+  
+      function hideButton() {
+          const isKhoa = localStorage.getItem("isKhoa");
+          if (isKhoa === null) {
+              console.log('Không tìm thấy giá trị isKhoa trong localStorage');
+          } else {
+              console.log('Giá trị isKhoa: ', isKhoa);
+              
+              const actionButton = document.getElementById('actionButton');
+              const actionButton1 = document.getElementById('actionButton1');
+      const actionButton2 = document.getElementById('actionButton2');
+      
+      if (actionButton1 && actionButton2) {
+          if (isKhoa === "0") {
+              actionButton1.style.display = 'none'; // Ẩn actionButton1 nếu isKhoa = 0
+              actionButton2.style.display = 'inline-block'; // Hiện actionButton2
+              console.log('Nút actionButton1 đã được ẩn, actionButton2 đã được hiển thị');
+          } else {
+              actionButton1.style.display = 'inline-block'; // Hiện actionButton1 nếu isKhoa khác 0
+              actionButton2.style.display = 'none'; // Ẩn actionButton2
+              console.log('Nút actionButton1 đã được hiển thị, actionButton2 đã được ẩn');
+          }
+      } else {
+          console.log('Không tìm thấy các nút actionButton1 hoặc actionButton2');
+      }
+          }
+      }
+  </script>
 
   <script>
 
@@ -368,15 +344,15 @@
         // Biến để lưu trữ giá trị mặc định
         let dotValue = document.getElementById('combobox-dot').value;
         let kiValue = document.getElementById('combobox-ki').value;
-        let namValue = document.getElementById('combobox-nam').value;
-        let khoaValue = document.getElementById('combobox-khoa').value;
+        let namValue = document.getElementById('NamHoc').value;
+        let khoaValue = document.getElementById('MaPhongBan').value;
 
         // Hàm cập nhật giá trị từ comboboxes
         const updateValues = () => {
           dotValue = document.getElementById('combobox-dot').value;
           kiValue = document.getElementById('combobox-ki').value;
-          namValue = document.getElementById('combobox-nam').value;
-          khoaValue = document.getElementById('combobox-khoa').value;
+          namValue = document.getElementById('NamHoc').value;
+          khoaValue = document.getElementById('MaPhongBan').value;
 
           console.log({ dotValue, kiValue, namValue, khoaValue }); // In ra giá trị hiện tại
         };
@@ -408,10 +384,6 @@
             alert(errorData.message || "Đã có lỗi xảy ra!");
             return;
           }
-          //if (!teachingResponse.ok) {
-          //  alert("Lỗi truy vấn!");
-          //  return;
-          //}
 
 
 
@@ -426,8 +398,8 @@
         // Thêm trình lắng nghe sự kiện cho từng combobox
         document.getElementById('combobox-dot').addEventListener('change', handleComboboxChange);
         document.getElementById('combobox-ki').addEventListener('change', handleComboboxChange);
-        document.getElementById('combobox-nam').addEventListener('change', handleComboboxChange);
-        document.getElementById('combobox-khoa').addEventListener('change', handleComboboxChange);
+        document.getElementById('NamHoc').addEventListener('change', handleComboboxChange);
+        document.getElementById('MaPhongBan').addEventListener('change', handleComboboxChange);
 
         // Gọi updateValues để lấy giá trị mặc định ngay khi tải trang
         updateValues();
@@ -452,7 +424,7 @@
 
         if (!teachingResponse.ok) {
           // Lấy thông tin chi tiết lỗi từ server
-          const errorData = await teachingResponse.json(); 
+          const errorData = await teachingResponse.json();
           // Hiển thị thông báo lỗi từ server
           alert(errorData.message || "Đã có lỗi xảy ra!");
           return;
@@ -474,7 +446,7 @@
     // Hàm renderTable sẽ được sử dụng để render bảng
     function renderTable(data) {
       // Chọn các cột bạn muốn hiển thị
-      const columnsToDisplay = ['Khoa', 'Dot', 'KiHoc', 'NamHoc', 'GiaoVienGiangDay', 'MoiGiang', 'SoTinChi', 'TenLop', 'LL', 'QuyChuan'];
+      const columnsToDisplay = ['Khoa', 'Dot', 'KiHoc', 'NamHoc', 'LopHocPhan', 'GiaoVienGiangDay', 'MoiGiang', 'SoTinChi', 'TenLop', 'LL', 'QuyChuan'];
       let tableHtml = '';
 
       const headersMap = {
@@ -482,6 +454,7 @@
         'Dot': 'Đợt',
         'KiHoc': 'Kì',
         'NamHoc': 'Năm',
+        'LopHocPhan': 'Lớp học phần',
         'GiaoVienGiangDay': 'Giảng viên giảng dạy',
         'MoiGiang': 'Mời giảng?',
         'SoTinChi': 'Số tín chỉ',
@@ -538,70 +511,11 @@
       });
     });
 
-
-    // Phần phân quyền
-    document.addEventListener('DOMContentLoaded', () => {
-      const importLink = document.getElementById("Import");
-
-      importLink.addEventListener("click", function (event) {
-        event.preventDefault(); // Ngăn chặn hành vi mặc định của liên kết
-
-        const role = localStorage.getItem("userRole"); // Lấy role từ localStorage
-
-        if (role.includes("DAOTAO") || role.includes("TAICHINH")) {
-          window.location.href = "/import";
-        } else {
-          window.location.href = "/importGvmList";
-        }
-      });
-
-      const ThongTinGD = document.getElementById("ThongTinGD");
-
-      ThongTinGD.addEventListener("click", function (event) {
-        event.preventDefault(); // Ngăn chặn hành vi mặc định của liên kết
-
-        const role = localStorage.getItem("userRole");
-
-        if (role.includes("DAOTAO") || role.includes("TAICHINH")) {
-          window.location.href = "/info2";
-        } else {
-          window.location.href = "/info";
-        }
-      });
-
-      const Home = document.getElementById("Home");
-
-      Home.addEventListener("click", function (event) {
-        event.preventDefault(); // Ngăn chặn hành vi mặc định của liên kết
-
-        const role = localStorage.getItem("userRole");
-
-        if (role.includes("DAOTAO") || role.includes("TAICHINH")) {
-          window.location.href = "/maindt";
-        } else {
-          window.location.href = "/mainkhoa";
-        }
-      });
-    });
   </script>
 
   <!-- Phần phân quyền -->
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      // Thêm sự kiện click cho phần tử có id "import"
-      const importLink = document.getElementById("Import");
-
-      importLink.addEventListener("click", function (event) {
-        event.preventDefault(); // Ngăn chặn hành vi mặc định của liên kết
-
-        const isKhoa = localStorage.getItem("isKhoa"); // Lấy role từ localStorage
-
-        if (isKhoa == 0) { // Nếu là đào tạo hoặc tài chính
-          window.location.href = "/import";
-        } else { // Nếu là khoa
-          window.location.href = "/importGvmList";
-        }
-      });
 
       // Thêm sự kiện click cho phần tử có id="ThongTinGD"
       const ThongTinGD = document.getElementById("ThongTinGD");
@@ -653,6 +567,93 @@
 
     };
   </script>
+  <script>
+    document.getElementById("changePasswordLink").addEventListener("click", function(event) {
+  event.preventDefault(); // Ngăn chặn hành vi mặc định của thẻ a
+  const tenDangNhap = localStorage.getItem("TenDangNhap"); // Lấy TenDangNhap từ localStorage
+  alert(tenDangNhap);
+
+  if (tenDangNhap) {
+      // Chuyển hướng đến trang changePassword và truyền TenDangNhap trong URL
+      window.location.href = `/changePassword?tenDangNhap=${encodeURIComponent(tenDangNhap)}`;
+  } else {
+      alert("Không tìm thấy TenDangNhap trong localStorage.");
+  }
+});
+  </script>
+  <script>
+    $(document).ready(function() {
+  $('#NamHoc option[value=""]').remove();
+
+  $.ajax({
+    url: '/getNamHoc',
+    method: 'GET',
+    success: function(response) {
+      if (response.success) {
+        const NamHoc = response.NamHoc;
+        console.log(NamHoc);
+
+        response.NamHoc.forEach(function(item) {
+          if (item.NamHoc === NamHoc) {
+            $('#NamHoc').prepend(
+              `<option value="${item.NamHoc}" selected>${item.NamHoc}</option>`
+            );
+          } else {
+            $('#NamHoc').append(
+              `<option value="${item.NamHoc}">${item.NamHoc}</option>`
+            );
+          }
+        });
+
+        if (!$('#NamHoc option:selected').length) {
+          $('#NamHoc').prepend('<option value="">Chọn Năm Học</option>');
+        }
+      } else {
+        console.error("Không lấy được dữ liệu năm học:", response.message);
+      }
+    },
+    error: function(error) {
+      console.error("Lỗi khi lấy dữ liệu năm học:", error);
+    }
+  });
+});
+</script>
+<script>
+  $(document).ready(function() {
+      $('#MaPhongBan option[value=""]').remove();
+    // Gọi AJAX để lấy dữ liệu JSON từ API
+    $.ajax({
+      url: '/getPhongBan', // Đường dẫn tới API getPhongBan
+      method: 'GET',
+      success: function(response) {
+        // Kiểm tra nếu response thành công
+        const MaPhongBan = response.MaPhongBan;
+        if (response.success) {
+          $('#MaPhongBan').prepend('<option value="ALL">ALL</option>');
+          // Lặp qua từng mục trong mảng MaPhongBan
+          response.MaPhongBan.forEach(function(item) {
+            // Nếu item.MaPhongBan bằng boMon.MaPhongBan, hiển thị trước
+            console.log(item);
+              $('#MaPhongBan').append(
+                `<option value="${item.MaPhongBan}">${item.MaPhongBan}</option>`
+              );
+            }
+          );
+
+          // Nếu không có phòng ban nào tương ứng, bạn có thể thêm tùy chọn mặc định ở đây
+          if (!$('#MaPhongBan option:selected').length) {
+            $('#MaPhongBan').prepend('<option value="">Chọn Phòng Ban</option>');
+          }
+        } else {
+          console.error("Không lấy được dữ liệu phongBan:", response.message);
+        }
+      },
+      error: function(error) {
+        console.error("Lỗi khi lấy dữ liệu phongBan:", error);
+      }
+    });
+  });
+</script>
 
 </body>
 
