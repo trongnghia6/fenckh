@@ -130,22 +130,6 @@ const KhoaCheckAll = async (req, Dot, KiHoc, NamHoc) => {
   const connection1 = await createConnection();
   const [results, fields] = await connection1.query(query);
 
-  // Chọn hết phòng ban
-  const queryAll = `SELECT KhoaDuyet FROM quychuan where Dot = ? and KiHoc = ? and NamHoc = ?`;
-  const [khoaAll] = await connection1.query(queryAll, [Dot, KiHoc, NamHoc]);
-
-  let khoaCheckAll = true;
-  for (let j = 0; j < khoaAll.length; j++) {
-    if (khoaAll[j].KhoaDuyet == 0) {
-      khoaCheckAll = false;
-      break;
-    }
-  }
-
-  if (khoaCheckAll == true) {
-    kq += "KHOA,";
-  }
-
   // Chọn theo từng phòng ban
   for (let i = 0; i < results.length; i++) {
     const MaPhongBan = results[i].MaPhongBan;
@@ -171,47 +155,133 @@ const KhoaCheckAll = async (req, Dot, KiHoc, NamHoc) => {
     }
   }
 
+  // Chọn hết phòng ban
+  // const queryAll = `SELECT KhoaDuyet FROM quychuan where Dot = ? and KiHoc = ? and NamHoc = ?`;
+  // const [khoaAll] = await connection1.query(queryAll, [Dot, KiHoc, NamHoc]);
+
+  // let khoaCheckAll = true;
+  // for (let j = 0; j < khoaAll.length; j++) {
+  //   if (khoaAll[j].KhoaDuyet == 0) {
+  //     khoaCheckAll = false;
+  //     break;
+  //   }
+  // }
+
+  // if (khoaCheckAll == true) {
+  //   kq += "KHOA,";
+  // }
+
   // Đào tạo
-  const queryDT = ` SELECT DaoTaoDuyet FROM quychuan where Dot = ? and KiHoc = ? and NamHoc = ?`;
-  const connection2 = await createConnection();
-  const [check2, fields2] = await connection2.query(queryDT, [
-    Dot,
-    KiHoc,
-    NamHoc,
-  ]);
+  // const queryDT = ` SELECT DaoTaoDuyet FROM quychuan where Dot = ? and KiHoc = ? and NamHoc = ?`;
+  // const connection2 = await createConnection();
+  // const [check2, fields2] = await connection2.query(queryDT, [
+  //   Dot,
+  //   KiHoc,
+  //   NamHoc,
+  // ]);
 
-  let checkAll2 = true;
-  for (let j = 0; j < check2.length; j++) {
-    if (check2[j].DaoTaoDuyet == 0) {
-      checkAll2 = false;
-      break;
-    }
-  }
+  // let checkAll2 = true;
+  // for (let j = 0; j < check2.length; j++) {
+  //   if (check2[j].DaoTaoDuyet == 0) {
+  //     checkAll2 = false;
+  //     break;
+  //   }
+  // }
 
-  if (checkAll2 == true) {
-    kq += "DAOTAO,";
-  }
+  // if (checkAll2 == true) {
+  //   kq += "DAOTAO,";
+  // }
 
-  // Tài chính
-  const queryTC = ` SELECT TaiChinhDuyet FROM quychuan where Dot = ? and KiHoc = ? and NamHoc = ?`;
-  const connection3 = await createConnection();
-  const [check3, fields3] = await connection3.query(queryTC, [
-    Dot,
-    KiHoc,
-    NamHoc,
-  ]);
+  // // Tài chính
+  // const queryTC = ` SELECT TaiChinhDuyet FROM quychuan where Dot = ? and KiHoc = ? and NamHoc = ?`;
+  // const connection3 = await createConnection();
+  // const [check3, fields3] = await connection3.query(queryTC, [
+  //   Dot,
+  //   KiHoc,
+  //   NamHoc,
+  // ]);
 
-  let checkAll3 = true;
-  for (let j = 0; j < check3.length; j++) {
-    if (check3[j].TaiChinhDuyet == 0) {
-      checkAll3 = false;
-      break;
-    }
-  }
-  if (checkAll3 == true) {
-    kq += "TAICHINH,";
-  }
+  // let checkAll3 = true;
+  // for (let j = 0; j < check3.length; j++) {
+  //   if (check3[j].TaiChinhDuyet == 0) {
+  //     checkAll3 = false;
+  //     break;
+  //   }
+  // }
+  // if (checkAll3 == true) {
+  //   kq += "TAICHINH,";
+  // }
   // Trả về kết quả
+  return kq;
+};
+
+const DaoTaoCheckAll = async (req, Dot, KiHoc, NamHoc) => {
+  let kq = ""; // Biến để lưu kết quả
+
+  const query = ` SELECT MaPhongBan FROM phongban where isKhoa = 1 `;
+  const connection1 = await createConnection();
+  const [results, fields] = await connection1.query(query);
+
+  // Chọn theo từng phòng ban
+  for (let i = 0; i < results.length; i++) {
+    const MaPhongBan = results[i].MaPhongBan;
+
+    const query = ` SELECT DaoTaoDuyet FROM quychuan where Khoa = ? and Dot = ? and KiHoc = ? and NamHoc = ?`;
+    const connection = await createConnection();
+    const [check, fields] = await connection.query(query, [
+      MaPhongBan,
+      Dot,
+      KiHoc,
+      NamHoc,
+    ]);
+
+    let checkAll = true;
+    for (let j = 0; j < check.length; j++) {
+      if (check[j].DaoTaoDuyet == 0) {
+        checkAll = false;
+        break;
+      }
+    }
+    if (checkAll == true) {
+      kq += MaPhongBan + ",";
+    }
+  }
+
+  return kq;
+};
+
+const TaiChinhCheckAll = async (req, Dot, KiHoc, NamHoc) => {
+  let kq = ""; // Biến để lưu kết quả
+
+  const query = ` SELECT MaPhongBan FROM phongban where isKhoa = 1 `;
+  const connection1 = await createConnection();
+  const [results, fields] = await connection1.query(query);
+
+  // Chọn theo từng phòng ban
+  for (let i = 0; i < results.length; i++) {
+    const MaPhongBan = results[i].MaPhongBan;
+
+    const query = ` SELECT TaiChinhDuyet FROM quychuan where Khoa = ? and Dot = ? and KiHoc = ? and NamHoc = ?`;
+    const connection = await createConnection();
+    const [check, fields] = await connection.query(query, [
+      MaPhongBan,
+      Dot,
+      KiHoc,
+      NamHoc,
+    ]);
+
+    let checkAll = true;
+    for (let j = 0; j < check.length; j++) {
+      if (check[j].TaiChinhDuyet == 0) {
+        checkAll = false;
+        break;
+      }
+    }
+    if (checkAll == true) {
+      kq += MaPhongBan + ",";
+    }
+  }
+
   return kq;
 };
 // Phương
@@ -331,7 +401,9 @@ const renderInfo = async (req, res) => {
 
   // Gọi hàm KhoaCheckAll để kiểm tra
   const check = await KhoaCheckAll(req, Dot, Ki, Nam);
-  //const connection = await createConnection();
+  const DaoTaoCheck = await DaoTaoCheckAll(req, Dot, Ki, Nam);
+  const TaiChinhCheck = await TaiChinhCheckAll(req, Dot, Ki, Nam);
+
   // Thực thi câu truy vấn với các tham số an toàn
   connection.query(
     query,
@@ -349,6 +421,8 @@ const renderInfo = async (req, res) => {
       return res.status(200).json({
         results: results,
         check: check,
+        DaoTaoCheck: DaoTaoCheck,
+        TaiChinhCheck: TaiChinhCheck,
       }); // Trả về kết quả tương ứng với đợt, kì, năm và check
     }
   );

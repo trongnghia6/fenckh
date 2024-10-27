@@ -80,12 +80,18 @@
       overflow: hidden;
     }
 
-        /* Đặt chiều rộng cố định cho cả input[type="date"] và input[type="text"] */
-        input[type="date"], input[type="text"] {
-          width: 120px; /* Điều chỉnh giá trị này theo mong muốn */
-          box-sizing: border-box;
-          padding: 5px; /* Giữ padding như cũ */
-        }
+    /* Đặt chiều rộng cố định cho cả input[type="date"] và input[type="text"] */
+    input[type="date"], input[type="text"] {
+      width: 120px; /* Điều chỉnh giá trị này theo mong muốn */
+      box-sizing: border-box;
+      padding: 5px; /* Giữ padding như cũ */
+    }
+
+    .date-all-container {
+      
+      align-items: center;
+    }
+    
   </style>
 </head>
 
@@ -245,8 +251,21 @@
     
             <button id="infoGvm" class="button text-nowrap">Xem dữ liệu</button>
             <button onclick="submitData()" class="button mx-3" id="update-qc">Cập nhật</button>
-            <button onclick="submitData2()" class="button mx-3" id="save-data-all" style="display: none;">Lưu</button>
+            <!-- <button onclick="submitData2()" class="button mx-3" id="save-data-all" style="display: none;">Lưu</button> -->
         </div>
+    </div>
+
+    <div class="date-all-container" style="display: none;">
+      <div class="input-group m-2" style="width: 350px;" id="batdau">
+        <label for="startDate" class="input-group-text">Ngày bắt đầu</label>
+        <input required type="date" id="startDate" class="form-control" />
+      </div>
+      <div class="input-group m-2" style="width: 350px;" id="ketthuc">
+
+        <label for="endDate" class="input-group-text">Ngày kết thúc</label>
+        <input required type="date" id="endDate" class="form-control" />
+      </div>
+      <button id="fillDay" class="button text-nowrap">Chèn ngày</button>  
     </div>
     
     <!-- Phần tìm kiếm xuống dưới -->
@@ -332,10 +351,9 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
   $(document).ready(function() {
-const isKhoa = localStorage.getItem("isKhoa");
-console.log('Giá trị isKhoa từ localStorage: ', isKhoa);
-hideButton();
-});
+    const isKhoa = localStorage.getItem("isKhoa");
+    hideButton();
+  });
 
   function hideButton() {
       const isKhoa = localStorage.getItem("isKhoa");
@@ -421,17 +439,21 @@ hideButton();
       localStorage.setItem('nameGvm', JSON.stringify(nameGvm));
 
       rs = await teachingResponse.json();
-      console.log('Tổng hợp bảng dữ liệu:', globalData);
 
       // Thêm check
       globalData = rs.results.map(item => ({
           ...item,
           ghiChu: "", // Khởi tạo ghi chú rỗng
         }));
+    
       const check = rs.check; // Dữ liệu check
- 
+      const DaoTaoCheck = rs.DaoTaoCheck;
+      const TaiChinhCheck = rs.TaiChinhCheck;
+
       localStorage.setItem("check", check);
-      
+      localStorage.setItem("DaoTaoCheck", DaoTaoCheck);
+      localStorage.setItem("TaiChinhCheck", TaiChinhCheck);
+       
       renderTable(globalData); // Gọi hàm renderTable sau khi đã có đủ dữ liệu
 
 
@@ -458,24 +480,50 @@ hideButton();
     return `${year}-${month}-${day}`;
   }
 
+  // Fill all startDate and endDate
+  document.getElementById('fillDay').addEventListener('click', function() {
+    const startDateValue = document.getElementById('startDate').value;
+    const endDateValue = document.getElementById('endDate').value;
+
+    // Chỉ tiếp tục nếu người dùng đã chọn cả ngày bắt đầu và ngày kết thúc
+    if (!startDateValue || !endDateValue) {
+        alert("Vui lòng chọn cả ngày bắt đầu và ngày kết thúc.");
+        return;
+    }
+
+    // Chèn ngày bắt đầu, bỏ qua các ô bị disable
+    document.querySelectorAll("input[id^='NgayBatDau_']").forEach(input => {
+        if (!input.disabled) {
+            input.value = startDateValue;
+        }
+    });
+
+    // Chèn ngày kết thúc, bỏ qua các ô bị disable
+    document.querySelectorAll("input[id^='NgayKetThuc_']").forEach(input => {
+        if (!input.disabled) {
+            input.value = endDateValue;
+        }
+    });
+  });
+
+
   // Hàm render bảng
   function renderTable(data) {
+
     const role = localStorage.getItem("userRole");
     const MaPhongBan = localStorage.getItem("MaPhongBan")
     const isKhoa = localStorage.getItem("isKhoa");
-
+   
     const tableBody = document.getElementById('tableBody');
     tableBody.innerHTML = ''; // Xóa nội dung cũ
     let index = -1;
     data.forEach((row, index) => {
     
       const tableRow = document.createElement('tr');
-
+      
       if (row.MoiGiang == 0){
         tableRow.style.display = 'none'; // Ẩn hàng
       }
-      
-      
 
       // Lớp học phần
       const lopHocPhanTd = document.createElement('td');
@@ -505,39 +553,44 @@ hideButton();
       let giaoVienGiangDayTd;
       let giaoVienGiangDayInput;
     
-  
+      giaoVienGiangDayTd = document.createElement('td');
+      giaoVienGiangDayInput = document.createElement('input');
+      giaoVienGiangDayInput.type = 'text';
+      giaoVienGiangDayInput.placeholder = 'Nhập tên giảng viên';
+      giaoVienGiangDayInput.value = row.GiaoVienGiangDay || '';
+
+      giaoVienGiangDayInput.onclick = () => {
+        showSuggestions(giaoVienGiangDayInput);
+      };
+
+      giaoVienGiangDayInput.oninput = () => {
+        showSuggestions(giaoVienGiangDayInput);
+      };
+      
+      // Thêm id để lấy dữ liệu 
+      giaoVienGiangDayInput.id = `giaoVienGiangDay_${index}`;
+
+      giaoVienGiangDayTd.appendChild(giaoVienGiangDayInput);
+      tableRow.appendChild(giaoVienGiangDayTd);
+
       if (isKhoa == 0  || role == "GV"){ // Nếu không phải khoa thì ko nhập thông tin gvm
-        const giaoVienGiangDayTd = document.createElement('td');
-
-        const giaoVienGiangDayView = document.createElement('span');
-        giaoVienGiangDayView.textContent = row.GiaoVienGiangDay || '';
-        giaoVienGiangDayTd.appendChild(giaoVienGiangDayView);
-        tableRow.appendChild(giaoVienGiangDayTd);
-
-      } else {
-        
+        giaoVienGiangDayInput.disabled = true;
+        /*
         giaoVienGiangDayTd = document.createElement('td');
-        giaoVienGiangDayInput = document.createElement('input');
+
+        giaoVienGiangDayInput = document.createElement('span');
         giaoVienGiangDayInput.type = 'text';
-        giaoVienGiangDayInput.placeholder = 'Nhập tên giảng viên';
-        giaoVienGiangDayInput.value = row.GiaoVienGiangDay || '';
 
-        giaoVienGiangDayInput.onclick = () => {
-          showSuggestions(giaoVienGiangDayInput);
-        };
+        giaoVienGiangDayInput.textContent = row.GiaoVienGiangDay || '';
 
-        giaoVienGiangDayInput.oninput = () => {
-          showSuggestions(giaoVienGiangDayInput);
-        };
-        
-        // Thêm id để lấy dữ liệu 
         giaoVienGiangDayInput.id = `giaoVienGiangDay_${index}`;
-
+        
         giaoVienGiangDayTd.appendChild(giaoVienGiangDayInput);
         tableRow.appendChild(giaoVienGiangDayTd);
+        */
 
-      }
-
+      } 
+    
       // Khoa
       const khoaTd = document.createElement('td');
       khoaTd.textContent = row.Khoa || ''; // Lấy giá trị Khoa trực tiếp từ row
@@ -549,6 +602,10 @@ hideButton();
         boMonTd = document.createElement('td'); // Tạo ô Bộ môn
         boMonInput = document.createElement('span'); // Tạo span cho Bộ môn
         boMonInput.textContent = row.BoMon || ''; // Lấy giá trị từ row
+
+        // Thêm id
+        boMonInput.id = `boMon_${index}`;
+
         boMonTd.appendChild(boMonInput); // Thêm span vào ô
         tableRow.appendChild(boMonTd);
       } else{
@@ -584,6 +641,7 @@ hideButton();
       NgayKetThucTd.appendChild(NgayKetThucInput);
       tableRow.appendChild(NgayKetThucTd);
 
+     
       // Nếu không phải khoa -> không có quyền nhập
       if (isKhoa == 0){
         NgayBatDauInput.disabled = true; // Chỉ xem
@@ -597,10 +655,30 @@ hideButton();
       const soTietQCTd = document.createElement('td');
       soTietQCTd.textContent = row.QuyChuan || '';
       tableRow.appendChild(soTietQCTd);
-      
+     
+        // Điều kiện ẩn checkbox Khoa nếu role không phải "CNTT_ALL"
+        if (isKhoa == 1 && role != "Lãnh đạo khoa") {
+          // Thiết lập thuộc tính CSS để thu nhỏ checkbox và ô <td> chứa nó
+          khoaCheckbox.style.width = '10px';    // Đặt chiều rộng nhỏ nhất có thể
+          khoaCheckbox.style.height = '10px';   // Đặt chiều cao nhỏ nhất có thể
+          khoaCheckbox.style.display = 'none';
 
+          // Thu nhỏ <td>
+          khoaCheckboxTd.style.width = '1px';
+          khoaCheckboxTd.style.padding = '0';
+        }
+
+        // Nếu Lãnh đạo khoa đã duyệt, thi hành sẽ không nhập được
+        // Nếu role là giảng viên thường cũng sẽ không nhập được
+        if ((isKhoa == 1 && role == "GV") ||(isKhoa == 1 && row.KhoaDuyet==1)) {
+          giaoVienGiangDayInput.disabled = true;
+          boMonInput.disabled = true;
+          NgayBatDauInput.disabled = true;
+          // Ngăn người dùng thay đổi trạng thái ngày kết thúc
+          NgayKetThucInput.disabled = true;
+        }
+     
       // Điều kiện để ẩn checkbox của "Khoa" nếu role không phải là "CNTT_ALL"
-
       let khoaCheckboxTd, khoaCheckbox;
       let daoTaoCheckboxTd, daoTaoCheckbox;
       let taiChinhCheckboxTd, taiChinhCheckbox;
@@ -664,38 +742,58 @@ hideButton();
       // Phân quyền theo phòng ban
       if (isKhoa == 1){ // Nếu là khoa
         if (check.includes(MaPhongBan)){
-          giaoVienGiangDayInput.disabled = true;
+          //giaoVienGiangDayInput.disabled = true;
           boMonInput.disabled = true;
+
           NgayBatDauInput.disabled = true;
           // Ngăn người dùng thay đổi trạng thái ngày kết thúc
           NgayKetThucInput.disabled = true;
           // Ngăn người dùng thay đổi trạng thái checkbox
-          khoaCheckbox.addEventListener('click', function (e) {
-            e.preventDefault(); // Ngăn người dùng thay đổi trạng thái checkbox
-          });
+          khoaCheckbox.disabled = true;
           // Ngăn checkbox tổng của 'khoa' không cho thay đổi
           disableCheckAll('khoa');
           
         }
       } 
+      const DaoTaoCheck = localStorage.getItem("DaoTaoCheck");
+      const TaiChinhCheck = localStorage.getItem("TaiChinhCheck");
 
-      // Nếu là đào tạo hoặc tài chính
-      if (MaPhongBan == 'DAOTAO'){
-        if (check.includes(MaPhongBan)){
+      if (MaPhongBan == "DAOTAO"){
+        // Nếu khoa đã check thì hiện check bên đào tạo
+       
+        if (!check.includes(row.Khoa)){
           // Ngăn thay đổi trạng thái check box khoa
-          khoaCheckbox.addEventListener('click', function (e) {
-            e.preventDefault(); // Ngăn người dùng thay đổi trạng thái checkbox
-          });
-          disableCheckAll('khoa'); // Ngăn checkbox tổng của 'khoa' không cho thay đổi
+          khoaCheckbox.disabled = true
+          daoTaoCheckbox.disabled = true
 
-          // Ngăn thay đổi trạng thái check box đào tạo
-          daoTaoCheckbox.addEventListener('click', function (e) {
-            e.preventDefault(); // Ngăn người dùng thay đổi trạng thái checkbox
-          });
-          // Ngăn checkbox tổng không cho thay đổi
-          disableCheckAll('daoTao');
+        }
+        
+        // Nếu đào tạo đã check thì disable check đào tạo
+        if (DaoTaoCheck.includes(row.Khoa)){
+          // Ngăn thay đổi trạng thái check box khoa
+          khoaCheckbox.disabled = true
+          daoTaoCheckbox.disabled = true;
         }
       }
+
+      if (MaPhongBan == "TAICHINH"){
+        // Nếu khoa đã check thì hiện check bên đào tạo
+        if (!DaoTaoCheck.includes(row.Khoa)){
+          // Ngăn thay đổi trạng thái check box khoa
+          daoTaoCheckbox.disabled = true
+          taiChinhCheckbox.disabled = true;
+        }
+
+        // Nếu đào tạo đã check thì disable check đào tạo
+        if (TaiChinhCheck.includes(row.Khoa)){
+          // Ngăn thay đổi trạng thái check box khoa
+          daoTaoCheckbox.disabled = true
+          taiChinhCheckbox.disabled = true;
+        }
+      }
+      
+
+
       const ghiChuTd = document.createElement("td");
           if (row.ghiChu) {
             ghiChuTd.innerHTML = `📜 <span style="color: red;">•</span>`; // Hiển thị biểu tượng ghi chú và chấm đỏ
@@ -830,17 +928,18 @@ function hideSuggestions() {
     const MaPhongBan = localStorage.getItem("MaPhongBan");
     const rows = document.querySelectorAll('#tableBody tr'); // Lấy tất cả các hàng trong bảng
 
+  
     rows.forEach((row, index) => {
       // Bỏ qua các hàng đang bị ẩn
-
       if (row.style.display === 'none') {
         return;
       }
+
       // Lấy giá trị nhập vào
       //const giaoVienGiangDayInput = row.querySelector('input[type="text"][placeholder="Nhập tên giảng viên"]');
       const giaoVienGiangDayInput = document.getElementById(`giaoVienGiangDay_${index}`);
       const giaoVienGiangDay = giaoVienGiangDayInput ? giaoVienGiangDayInput.value : '';
-            
+      
       // Lấy giá trị của ô nhập "bộ môn"
       const boMonInput = document.getElementById(`boMon_${index}`);
       const boMon = boMonInput ? boMonInput.value : '';
@@ -1053,13 +1152,19 @@ function hideSuggestions() {
     document.getElementById('totalQC').textContent = totalQC;
   }
 
-
   function checkAll(type) {
-    const checkboxes = document.querySelectorAll(`input[type="checkbox"][name="${type}"]`);
-    const checkAllCheckbox = document.getElementById(`checkAll${type.charAt(0).toUpperCase() + type.slice(1)}`);
+    const checkboxes = document.querySelectorAll(
+      `input[type="checkbox"][name="${type}"]`
+    );
+    const checkAllCheckbox = document.getElementById(
+      `checkAll${type.charAt(0).toUpperCase() + type.slice(1)}`
+    );
 
-    checkboxes.forEach(checkbox => {
-      checkbox.checked = checkAllCheckbox.checked; // Gán trạng thái checkbox "Check All" cho tất cả các checkbox
+    checkboxes.forEach((checkbox) => {
+      if (!checkbox.disabled) { // Kiểm tra xem checkbox có bị vô hiệu hóa không
+        checkbox.checked = checkAllCheckbox.checked;
+      }
+      //checkbox.checked = checkAllCheckbox.checked; // Gán trạng thái checkbox "Check All" cho tất cả các checkbox
     });
   }
 
@@ -1180,6 +1285,13 @@ function hideSuggestions() {
         document.getElementById('save-data-all').style.display = 'inline-block'; // Sử dụng 'inline-block' để hiển thị nút
       }
     }
+
+    // Phân quyền, nếu không có quyền khoa chỉnh sửa sẽ ẩn ngày all đi
+    const dateContainer = document.querySelector(".date-all-container");
+    if (isKhoa == 1 && role != 'GV'){
+      dateContainer.style.display = "flex";
+    }
+    
 
   });
 

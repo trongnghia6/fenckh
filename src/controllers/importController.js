@@ -662,7 +662,6 @@ const updateQC = async (req, res) => {
     let completedIDs = [];
 
     // Duyệt qua từng phần tử trong jsonData
-    console.log("data = ", jsonData);
     for (let item of jsonData) {
       const {
         ID,
@@ -704,16 +703,17 @@ const updateQC = async (req, res) => {
       const approvalQuery = `SELECT KhoaDuyet, DaoTaoDuyet, TaiChinhDuyet FROM ${tableName} WHERE ID = ?`;
       const approvalResult = await queryAsync(approvalQuery, [ID]);
 
-      if (approvalResult.length > 0) {
-        const { KhoaDuyet, DaoTaoDuyet, TaiChinhDuyet } = approvalResult[0];
+      // if (approvalResult.length > 0) {
+      //   const { KhoaDuyet, DaoTaoDuyet, TaiChinhDuyet } = approvalResult[0];
 
-        // Kiểm tra nếu tất cả 3 cột đều được duyệt
-        if (KhoaDuyet === 1 && DaoTaoDuyet === 1 && TaiChinhDuyet === 1) {
-          // Thêm ID vào danh sách hoàn thiện
-          completedIDs.push(ID);
-          continue; // Bỏ qua bản ghi này và tiếp tục với bản ghi tiếp theo
-        }
-      }
+      //   // Kiểm tra nếu tất cả 3 cột đều được duyệt
+      //   if (KhoaDuyet === 0 && DaoTaoDuyet === 0 && TaiChinhDuyet === 0) {
+      //     // Lúc đầu là full === 1
+      //     // Thêm ID vào danh sách hoàn thiện
+      //     completedIDs.push(ID);
+      //     //continue; // Bỏ qua bản ghi này và tiếp tục với bản ghi tiếp theo
+      //   }
+      // }
 
       // Nếu chưa duyệt đầy đủ, tiến hành cập nhật
       const updateQuery = `
@@ -779,11 +779,12 @@ const updateQC = async (req, res) => {
     }
 
     // Trả về thông báo cho các ID đã hoàn thiện
-    if (completedIDs.length > 0) {
-      return res.status(200).json({
-        message: "Dữ liệu đã hoàn thiện, không thể cập nhật",
-      });
-    }
+    // if (completedIDs.length == 0) {
+    //   //completedIDs.length > 0
+    //   return res.status(200).json({
+    //     message: "Dữ liệu đã hoàn thiện, không thể cập nhật",
+    //   });
+    // }
 
     // Nếu tất cả cập nhật thành công
     res.status(200).json({ message: "Cập nhật thành công" });
@@ -912,18 +913,18 @@ const getNhanvienId = async (HoTen) => {
 };
 
 const hocPhanDaTonTai = async (TenHocPhan) => {
-  const query = "SELECT TenHocPhan FROM `hocphan` WHERE TenHocPhan = ?";
+  const query = `SELECT TenHocPhan FROM hocphan WHERE LOWER(REPLACE(TRIM(TenHocPhan), '  ', ' ')) = LOWER(REPLACE(TRIM(?), '  ', ' '))`;
   const [rows] = await connection.promise().query(query, [TenHocPhan]);
 
   return rows.length > 0; // Nếu có ít nhất một kết quả, môn học đã tồn tại
 };
 
-const themHocPhan = async (MaHocPhan, TenHocPhan, DVHT, Khoa) => {
+const themHocPhan = async (TenHocPhan, DVHT, Khoa) => {
   const query = `
-    INSERT INTO hocphan (MaHocPhan, TenHocPhan, DVHT, Khoa)
-    VALUES (?, ?, ?, ?)
+    INSERT INTO hocphan (TenHocPhan, DVHT, Khoa)
+    VALUES (?, ?, ?)
   `;
-  const values = [MaHocPhan, TenHocPhan, DVHT, Khoa];
+  const values = [TenHocPhan, DVHT, Khoa];
 
   await connection.promise().query(query, values);
 };
@@ -937,6 +938,7 @@ const updateAllTeachingInfo = async () => {
     SUBSTRING_INDEX(qc.GiaoVienGiangDay, ' - ', 1) AS TenGiangVien
   FROM quychuan qc
   JOIN gvmoi ON SUBSTRING_INDEX(qc.GiaoVienGiangDay, ' - ', 1) = gvmoi.HoTen
+  WHERE qc.DaLuu = 0
   GROUP BY gvmoi.HoTen;  
 `;
 
@@ -952,72 +954,78 @@ const updateAllTeachingInfo = async () => {
     }
 
     // Chuẩn bị dữ liệu để chèn từng loạt
-    const insertValues = dataJoin.map((item) => {
-      const {
-        id_Gvm,
-        DienThoai,
-        Email,
-        MaSoThue,
-        HoTen,
-        NgaySinh,
-        HSL,
-        CCCD,
-        NoiCapCCCD,
-        DiaChi,
-        STK,
-        NganHang,
-        NgayBatDau,
-        NgayKetThuc,
-        KiHoc,
-        TongSoTiet, // Lấy cột tổng số tiết đã tính từ SQL
-        QuyChuan,
-        Dot,
-        NamHoc,
-        MaPhongBan,
-        KhoaDuyet,
-        DaoTaoDuyet,
-        TaiChinhDuyet,
-        GioiTinh,
-      } = item;
+    //const insertValues = dataJoin.map((item) => {
+    const insertValues = await Promise.all(
+      dataJoin
+        .filter((item) => item.TaiChinhDuyet != 0 && item.DaLuu == 0) // Loại bỏ các mục có TaiChinhDuyet = 0
+        .map(async (item) => {
+          const {
+            ID,
+            id_Gvm,
+            DienThoai,
+            Email,
+            MaSoThue,
+            HoTen,
+            NgaySinh,
+            HSL,
+            CCCD,
+            NoiCapCCCD,
+            DiaChi,
+            STK,
+            NganHang,
+            NgayBatDau,
+            NgayKetThuc,
+            KiHoc,
+            TongSoTiet, // Lấy cột tổng số tiết đã tính từ SQL
+            QuyChuan,
+            Dot,
+            NamHoc,
+            MaPhongBan,
+            KhoaDuyet,
+            DaoTaoDuyet,
+            TaiChinhDuyet,
+            GioiTinh,
+          } = item;
 
-      const DanhXung = getDanhXung(GioiTinh);
-      // const getDanhXung = (GioiTinh) => {
-      //   return GioiTinh === "Nam" ? "Ông" : GioiTinh === "Nữ" ? "Bà" : "";
-      // };
-      let SoTiet = TongSoTiet || 0; // Nếu QuyChuan không có thì để 0
-      let SoTien = (TongSoTiet || 0) * 1000000; // Tính toán số tiền
-      let TruThue = 0; // Giả định không thu thuế
-      let MaBoMon = 0; // Giá trị mặc định là 0
+          const DanhXung = getDanhXung(GioiTinh);
+          // const getDanhXung = (GioiTinh) => {
+          //   return GioiTinh === "Nam" ? "Ông" : GioiTinh === "Nữ" ? "Bà" : "";
+          // };
+          let SoTiet = TongSoTiet || 0; // Nếu QuyChuan không có thì để 0
+          let SoTien = (TongSoTiet || 0) * 1000000; // Tính toán số tiền
+          let TruThue = 0; // Giả định không thu thuế
+          let MaBoMon = 0; // Giá trị mặc định là 0
 
-      return [
-        id_Gvm,
-        DienThoai,
-        Email,
-        MaSoThue,
-        DanhXung,
-        HoTen,
-        NgaySinh,
-        HSL,
-        CCCD,
-        NoiCapCCCD,
-        DiaChi,
-        STK,
-        NganHang,
-        NgayBatDau,
-        NgayKetThuc,
-        KiHoc,
-        SoTiet,
-        SoTien,
-        TruThue,
-        Dot,
-        NamHoc,
-        MaPhongBan,
-        MaBoMon,
-        KhoaDuyet,
-        DaoTaoDuyet,
-        TaiChinhDuyet,
-      ];
-    });
+          return [
+            id_Gvm,
+            DienThoai,
+            Email,
+            MaSoThue,
+            DanhXung,
+            HoTen,
+            NgaySinh,
+            HSL,
+            CCCD,
+            NoiCapCCCD,
+            DiaChi,
+            STK,
+            NganHang,
+            NgayBatDau,
+            NgayKetThuc,
+            KiHoc,
+            SoTiet,
+            SoTien,
+            TruThue,
+            Dot,
+            NamHoc,
+            MaPhongBan,
+            MaBoMon,
+            KhoaDuyet,
+            DaoTaoDuyet,
+            TaiChinhDuyet,
+          ];
+        })
+    );
 
     // Kiểm tra xem insertValues có rỗng không
     if (
@@ -1068,75 +1076,73 @@ const insertGiangDay = async () => {
 
     // Chuẩn bị dữ liệu để chèn từng loạt
     const insertValues = await Promise.all(
-      dataJoin.map(async (item) => {
-        const {
-          Khoa,
-          MoiGiang,
-          SoTinChi,
-          LopHocPhan,
-          GiaoVien,
-          GiaoVienGiangDay,
-          LL,
-          SoTietCTDT,
-          HeSoT7CN,
-          SoSinhVien,
-          HeSoLopDong,
-          QuyChuan,
-          KiHoc,
-          NamHoc,
-          MaHocPhan,
-          TenLop,
-        } = item;
+      dataJoin
+        .filter((item) => item.TaiChinhDuyet != 0 && item.DaLuu == 0) // Bỏ qua các mục có TaiChinhDuyet = 0
+        .map(async (item) => {
+          const {
+            ID,
+            Khoa,
+            MoiGiang,
+            SoTinChi,
+            LopHocPhan,
+            GiaoVien,
+            GiaoVienGiangDay,
+            LL,
+            SoTietCTDT,
+            HeSoT7CN,
+            SoSinhVien,
+            HeSoLopDong,
+            QuyChuan,
+            KiHoc,
+            NamHoc,
+            MaHocPhan,
+            TenLop,
+          } = item;
 
-        const TenHocPhan = LopHocPhan;
+          const TenHocPhan = LopHocPhan;
+          const gv1 = GiaoVienGiangDay ? GiaoVienGiangDay.split(" - ") : [];
+          let gv = gv1[0];
+          let id_Gvm = 1;
+          let id_User = 1;
 
-        const gv1 = GiaoVienGiangDay ? GiaoVienGiangDay.split(" - ") : [];
-        const gv2 = GiaoVien ? GiaoVien.split(" - ") : [];
-        let gv = gv1.length > 0 ? gv1[0] : gv2[0];
-        let id_Gvm = 1;
-        let id_User = 1;
-
-        if (MoiGiang == 1) {
           // Lấy id_Gvm khi giảng viên mới giảng
           id_Gvm = await getGvmId(gv1[0]);
-          gv = gv1[0];
-        } else {
-          if (!GiaoVienGiangDay) {
-            id_User = await getNhanvienId(gv2[0]);
-            gv = gv2[0];
-          } else {
-            id_User = await getNhanvienId(gv1[0]);
-            gv = gv1[0];
+
+          const DaLuu = 1;
+          // Thêm Đã lưu = 1 vào quy chuẩn
+          const updateQuery = `UPDATE QuyChuan SET DaLuu = ? WHERE ID = ?;`;
+          await connection.promise().query(updateQuery, [DaLuu, ID]);
+
+          // Kiểm tra môn học đã tồn tại chưa
+          const exists = await hocPhanDaTonTai(TenHocPhan);
+          console.log("Học phần đã tồn tại:", exists); // In ra giá trị tồn tại
+
+          if (exists === false) {
+            console.log("Ten hoc phan = ", TenHocPhan);
+            console.log("So tin", SoTinChi);
+            console.log("Khoa = ", Khoa);
+            await themHocPhan(TenHocPhan, SoTinChi, Khoa);
           }
-        }
 
-        // Kiểm tra môn học đã tồn tại chưa
-        const exists = await hocPhanDaTonTai(TenHocPhan);
-        console.log("Học phần đã tồn tại:", exists); // In ra giá trị tồn tại
-
-        if (exists === false) {
-          await themHocPhan(MaHocPhan, TenHocPhan, SoTinChi, Khoa);
-        }
-
-        // Trả về mảng các giá trị đã chờ để đưa vào câu INSERT
-        return [
-          gv,
-          SoTinChi,
-          TenHocPhan,
-          id_User,
-          id_Gvm,
-          LL,
-          SoTietCTDT,
-          HeSoT7CN,
-          SoSinhVien,
-          HeSoLopDong,
-          QuyChuan,
-          KiHoc,
-          NamHoc,
-          MaHocPhan,
-          TenLop,
-        ];
-      })
+          // Trả về mảng các giá trị đã chờ để đưa vào câu INSERT
+          return [
+            gv,
+            SoTinChi,
+            TenHocPhan,
+            id_User,
+            id_Gvm,
+            LL,
+            SoTietCTDT,
+            HeSoT7CN,
+            SoSinhVien,
+            HeSoLopDong,
+            QuyChuan,
+            KiHoc,
+            NamHoc,
+            MaHocPhan,
+            TenLop,
+          ];
+        })
     );
 
     // Kiểm tra xem có dữ liệu để chèn không
@@ -1168,8 +1174,8 @@ const insertGiangDay = async () => {
 const insertGiangDay2 = async () => {
   const query2 = `
     SELECT
-      qc.*, 
-      nhanvien.*, 
+      qc.*,
+      nhanvien.*,
       SUBSTRING_INDEX(qc.GiaoVienGiangDay, ' - ', 1) AS TenGiangVien
     FROM quychuan qc
     JOIN nhanvien ON SUBSTRING_INDEX(qc.GiaoVienGiangDay, ' - ', 1) = nhanvien.TenNhanVien
@@ -1180,78 +1186,70 @@ const insertGiangDay2 = async () => {
 
     // Chuẩn bị dữ liệu để chèn từng loạt
     const insertValues = await Promise.all(
-      dataJoin.map(async (item) => {
-        const {
-          Khoa,
-          MoiGiang,
-          SoTinChi,
-          LopHocPhan,
-          GiaoVien,
-          GiaoVienGiangDay,
-          LL,
-          SoTietCTDT,
-          HeSoT7CN,
-          SoSinhVien,
-          HeSoLopDong,
-          QuyChuan,
-          KiHoc,
-          NamHoc,
-          MaHocPhan,
-          TenLop,
-        } = item;
+      dataJoin
+        .filter((item) => item.TaiChinhDuyet != 0 && item.DaLuu == 0) // Bỏ qua các mục có TaiChinhDuyet = 0
+        .map(async (item) => {
+          //dataJoin.map(async (item) => {
+          const {
+            ID,
+            Khoa,
+            MoiGiang,
+            SoTinChi,
+            LopHocPhan,
+            GiaoVien,
+            GiaoVienGiangDay,
+            LL,
+            SoTietCTDT,
+            HeSoT7CN,
+            SoSinhVien,
+            HeSoLopDong,
+            QuyChuan,
+            KiHoc,
+            NamHoc,
+            MaHocPhan,
+            TenLop,
+          } = item;
 
-        const TenHocPhan = LopHocPhan;
+          const TenHocPhan = LopHocPhan;
 
-        const gv1 = GiaoVienGiangDay ? GiaoVienGiangDay.split(" - ") : [];
-        const gv2 = GiaoVien ? GiaoVien.split(" - ") : [];
-        let gv = gv1.length > 0 ? gv1[0] : gv2[0];
-        let id_Gvm = 1;
-        let id_User = 1;
+          const gv1 = GiaoVienGiangDay ? GiaoVienGiangDay.split(" - ") : [];
+          let gv = gv1[0];
+          let id_Gvm = 1;
+          let id_User = 1;
 
-        if (MoiGiang == 1) {
-          // Lấy id_Gvm khi giảng viên mới giảng
-          id_Gvm = await getGvmId(gv1[0]);
-          gv = gv1[0];
-        } else {
-          // Nếu không có giảng viên thì lấy id_User
-          // id_User = !GiaoVienGiangDay
-          //   ? await getNhanvienId(gv2[0])
-          //   : await getNhanvienId(gv1[0]);
-          if (!GiaoVienGiangDay) {
-            id_User = await getNhanvienId(gv2[0]);
-            gv = gv2[0];
-          } else {
-            id_User = await getNhanvienId(gv1[0]);
-            gv = gv1[0];
+          id_User = await getNhanvienId(gv1[0]);
+
+          const DaLuu = 1;
+          // Thêm Đã lưu = 1 vào quy chuẩn
+          const updateQuery = `UPDATE QuyChuan SET DaLuu = ? WHERE ID = ?;`;
+          await connection.promise().query(updateQuery, [DaLuu, ID]);
+
+          const exists = await hocPhanDaTonTai(TenHocPhan);
+          console.log("Học phần đã tồn tại:", exists); // In ra giá trị tồn tại
+
+          if (exists === false) {
+            await themHocPhan(TenHocPhan, SoTinChi, Khoa);
           }
-        }
 
-        const exists = await hocPhanDaTonTai(TenHocPhan);
-        console.log("Học phần đã tồn tại:", exists); // In ra giá trị tồn tại
-
-        if (exists === false) {
-          await themHocPhan(MaHocPhan, TenHocPhan, SoTinChi, Khoa);
-        }
-
-        // Trả về mảng các giá trị đã chờ để đưa vào câu INSERT
-        return [
-          gv,
-          SoTinChi,
-          TenHocPhan,
-          id_User,
-          id_Gvm,
-          LL,
-          SoTietCTDT,
-          HeSoT7CN,
-          SoSinhVien,
-          HeSoLopDong,
-          QuyChuan,
-          KiHoc,
-          NamHoc,
-          MaHocPhan,
-          TenLop,
-        ];
-      })
+          // Trả về mảng các giá trị đã chờ để đưa vào câu INSERT
+          return [
+            gv,
+            SoTinChi,
+            TenHocPhan,
+            id_User,
+            id_Gvm,
+            LL,
+            SoTietCTDT,
+            HeSoT7CN,
+            SoSinhVien,
+            HeSoLopDong,
+            QuyChuan,
+            KiHoc,
+            NamHoc,
+            MaHocPhan,
+            TenLop,
+          ];
+        })
     );
 
     // Kiểm tra xem có dữ liệu để chèn không
@@ -1282,12 +1280,12 @@ const insertGiangDay2 = async () => {
 
 const submitData2 = async (req, res) => {
   try {
-    const updateResult = await updateAllTeachingInfo(); // Gọi hàm mà không cần res
+    const updateResult = await updateAllTeachingInfo(); // Hàm thêm vào hợp đồng giảng viên mời
 
-    const update2 = await insertGiangDay2();
+    const update2 = await insertGiangDay2(); // Hàm thêm vào giảng dạy (nhân viên)
 
     if (updateResult.success) {
-      const insertResult = await insertGiangDay(); // Gọi hàm insertGiangDay cũng tương tự
+      const insertResult = await insertGiangDay(); // Hàm thêm vào giảng dạy (giảng viên mời)
       if (insertResult.success) {
         return res.status(200).json({ message: insertResult.message });
       } else {

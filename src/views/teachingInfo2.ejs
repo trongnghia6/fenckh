@@ -470,19 +470,20 @@
       if (MaPhongBan == "DAOTAO" && role == "Duyệt") {
         // Ẩn cột 'taiChinhColumn'
         document.getElementById("taiChinhColumn").style.display = "none";
-        if (check.includes("KHOA")){
-          document.getElementById("update-qc").style.display = "inline-block"; // Sử dụng 'inline-block' để hiển thị nút
-        }    
+  
+        document.getElementById("update-qc").style.display = "inline-block"; // Sử dụng 'inline-block' để hiển thị nút
+          
 
       } else if (MaPhongBan == "TAICHINH" && role == "Duyệt") {
         // Ẩn cột 'khoaColumn'
         document.getElementById("khoaColumn").style.display = "none";
-        if (check.includes("DAOTAO")){
-          document.getElementById("update-qc").style.display = "inline-block"; // Sử dụng 'inline-block' để hiển thị nút
-          // Hiển thị nút 'Cập nhật'
-          document.getElementById("save-data-all").style.display =
+
+        // Hiển thị nút 'Cập nhật'
+        document.getElementById("update-qc").style.display = "inline-block"; // Sử dụng 'inline-block' để hiển thị nút
+      
+        document.getElementById("save-data-all").style.display =
             "inline-block"; // Sử dụng 'inline-block' để hiển thị nút
-        }
+        
       }
 
       if (role == "Thường") {
@@ -539,10 +540,8 @@
 
         // Lưu dữ liệu giảng viên cùng với mã phòng ban
         nameGv = await gvmResponse.json();
-        console.log("Dữ liệu giảng viên trường :", nameGv); // Kiểm tra dữ liệu
 
         nameGvm = await khoaResponse.json();
-        console.log("Dữ liệu giảng viên mời theo khoa:", nameGvm);
 
         rs = await teachingResponse.json();
 
@@ -553,8 +552,13 @@
           ghiChu: "", // Khởi tạo ghi chú rỗng
         }));
         const check = rs.check; // Dữ liệu check
+        const DaoTaoCheck = rs.DaoTaoCheck;
+        const TaiChinhCheck = rs.TaiChinhCheck;
 
         localStorage.setItem("check", check);
+        localStorage.setItem("DaoTaoCheck", DaoTaoCheck);
+        localStorage.setItem("TaiChinhCheck", TaiChinhCheck);
+
 
         renderTable(globalData); // Gọi hàm renderTable sau khi đã có đủ dữ liệu
 
@@ -667,7 +671,46 @@
         }
 
         const check = localStorage.getItem("check");
+        const DaoTaoCheck = localStorage.getItem("DaoTaoCheck");
+        const TaiChinhCheck = localStorage.getItem("TaiChinhCheck");
+
+        if (MaPhongBan == "DAOTAO"){
+          // Nếu khoa đã check thì hiện check bên đào tạo
+         
+          if (!check.includes(row.Khoa)){
+            // Ngăn thay đổi trạng thái check box khoa
+            khoaCheckbox.disabled = true
+            daoTaoCheckbox.disabled = true
+
+          }
+          
+          // Nếu đào tạo đã check thì disable check đào tạo
+          if (DaoTaoCheck.includes(row.Khoa)){
+            // Ngăn thay đổi trạng thái check box khoa
+            khoaCheckbox.disabled = true
+            daoTaoCheckbox.disabled = true;
+          }
+        }
+
+        if (MaPhongBan == "TAICHINH"){
+          // Nếu khoa đã check thì hiện check bên đào tạo
+          if (!DaoTaoCheck.includes(row.Khoa)){
+            // Ngăn thay đổi trạng thái check box khoa
+            daoTaoCheckbox.disabled = true
+            taiChinhCheckbox.disabled = true;
+          }
+
+          // Nếu đào tạo đã check thì disable check đào tạo
+          if (TaiChinhCheck.includes(row.Khoa)){
+            // Ngăn thay đổi trạng thái check box khoa
+            daoTaoCheckbox.disabled = true
+            taiChinhCheckbox.disabled = true;
+          }
+        }
+        
+        
         // Nếu là đào tạo hoặc tài chính
+        /*
         if (MaPhongBan == "DAOTAO") {
           if (check.includes(MaPhongBan)) {
             // Ngăn thay đổi trạng thái check box khoa
@@ -700,6 +743,7 @@
             disableCheckAll("taiChinh");
           }
         }
+        */
         const ghiChuTd = document.createElement("td");
         if (row.ghiChu) {
           ghiChuTd.innerHTML = `📜 <span style="color: red;">•</span>`; // Hiển thị biểu tượng ghi chú và chấm đỏ
@@ -838,6 +882,7 @@
 
         // Hiển thị thông báo theo message từ server
         alert(data.message); // Sử dụng message từ server để hiển thị thông báo
+        
       } catch (error) {
         console.error("Error sending signal:", error);
         alert("Đã xảy ra lỗi trong quá trình lưu dữ liệu."); // Hiển thị thông báo lỗi
@@ -962,7 +1007,10 @@
       );
 
       checkboxes.forEach((checkbox) => {
-        checkbox.checked = checkAllCheckbox.checked; // Gán trạng thái checkbox "Check All" cho tất cả các checkbox
+        if (!checkbox.disabled) { // Kiểm tra xem checkbox có bị vô hiệu hóa không
+          checkbox.checked = checkAllCheckbox.checked;
+        }
+        //checkbox.checked = checkAllCheckbox.checked; // Gán trạng thái checkbox "Check All" cho tất cả các checkbox
       });
     }
 
