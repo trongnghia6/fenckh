@@ -234,9 +234,6 @@ const AdminController = {
         .json({ message: "Đã xảy ra lỗi khi lấy danh sách nhân viên" });
     }
   },
-  getPhongBan: (req, res) => {
-    res.render("phongBan", { title: "Danh sách phòng ban" });
-  },
 
   getListPhongBan: async (req, res) => {
     try {
@@ -449,11 +446,59 @@ getthemTaiKhoan: async (req, res) => {
       console.error("Lỗi khi cập nhật mật khẩu:", error);
       res.status(500).send("Lỗi hệ thống");
   }
-}
+},
+getBoMon: async (req, res) => {
+  try {
+    // Lấy dữ liệu bộ môn
+    const connection = await createConnection();
+    const query = "SELECT * FROM `bomon`";
+    const [results] = await connection.query(query);
+    // Render trang với 2 biến: boMon
+    res.render("boMon.ejs", {
+      boMon: results
+    });
+  } catch (error) {
+    console.error("Lỗi: ", error);
+    res.status(500).send("Đã có lỗi xảy ra");
+  }
+},
+  
+  getPhongBan: async(req, res) =>{
+    try {
+      const connection = await createConnection();
+      const query = "SELECT MaPhongBan FROM `phongban` WHERE isKhoa = 1";
+      const [result] = await connection.query(query);
+      res.json({
+        success: true,
+        MaPhongBan: result
+      })
+    } catch(error){
+      console.error("Lỗi: ", error);
+      res.status(500).send("Đã có lỗi xảy ra");
+    }
+  },
 
+  themBoMon: async(req, res) =>{
+    const { MaPhongBan, MaBoMon, TenBoMon, TruongBoMon } = req.body;
+    const connection = await createConnection();
+    try {
+      const query = `INSERT INTO bomon (MaPhongBan, MaBoMon, TenBoMon, TruongBoMon) 
+                      VALUES (?, ?, ?, ?)`;
+      await connection.query(query, [MaPhongBan, MaBoMon, TenBoMon, TruongBoMon]);
+
+      res.redirect("/boMon?Success");
+      
+    } catch (error) {
+      console.error("Lỗi khi cập nhật dữ liệu: ", error);
+      res.status(500).send("Lỗi server, không thể cập nhật dữ liệu");
+    } finally {
+      await connection.end(); // Đóng kết nối
+    }
+  },
 
   // Other methods can be added here as needed...
 };
+
 
 
 

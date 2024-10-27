@@ -118,7 +118,7 @@
                 <a class="nav-link" href="/gvmList"
                   >Danh sách giảng viên mời</a
                 >
-                <a class="nav-link" id="actionButton1" href="/importGvmList">Thêm giảng viên mời bằng file</a>
+                <a class="nav-link" id="actionButton1" href="/importGvmList" style="width: 100%;">Thêm giảng viên mời bằng file</a>
               </div>
             </div>
           </div> -->
@@ -131,7 +131,7 @@
               </a>
               <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                 <a class="nav-link" href="/gvmList">Danh sách giảng viên mời</a>
-                <a class="nav-link" id="actionButton1" href="/importGvmList">Thêm giảng viên mời bằng file</a>
+                <a class="nav-link" id="actionButton1" href="/importGvmList" style="width: 100%;">Thêm giảng viên mời bằng file</a>
               </div>
             </div>
           </div>
@@ -246,18 +246,13 @@
         </select>
 
         <!-- Combo box Năm -->
-        <select class="form-select w-100px mx-1 selectop" id="combobox-nam">
-          <option value="2024">2024</option>
-          <option value="2025">2025</option>
-          <option value="2026">2026</option>
-          <option value="2027">2027</option>
+        <select class="form-select w-100px mx-1 selectop" id="NamHoc">
+          <option value="">Chọn năm học</option>
         </select>
 
         <!-- Combo box với các giá trị CNTT, ATTT, DTVT -->
-        <select class="form-select w-100px mx-1 selectop" id="combobox-khoa">
-          <option value="CNTT">CNTT</option>
-          <option value="ATTT">ATTT</option>
-          <option value="DTVT">DTVT</option>
+        <select class="form-select w-100px mx-1 selectop" id="MaPhongBan">
+          <option value="">Chọn khoa</option>
         </select>
 
         <button class="button text-nowrap" id="render">Hiển thị</button>
@@ -349,15 +344,15 @@
         // Biến để lưu trữ giá trị mặc định
         let dotValue = document.getElementById('combobox-dot').value;
         let kiValue = document.getElementById('combobox-ki').value;
-        let namValue = document.getElementById('combobox-nam').value;
-        let khoaValue = document.getElementById('combobox-khoa').value;
+        let namValue = document.getElementById('NamHoc').value;
+        let khoaValue = document.getElementById('MaPhongBan').value;
 
         // Hàm cập nhật giá trị từ comboboxes
         const updateValues = () => {
           dotValue = document.getElementById('combobox-dot').value;
           kiValue = document.getElementById('combobox-ki').value;
-          namValue = document.getElementById('combobox-nam').value;
-          khoaValue = document.getElementById('combobox-khoa').value;
+          namValue = document.getElementById('NamHoc').value;
+          khoaValue = document.getElementById('MaPhongBan').value;
 
           console.log({ dotValue, kiValue, namValue, khoaValue }); // In ra giá trị hiện tại
         };
@@ -403,8 +398,8 @@
         // Thêm trình lắng nghe sự kiện cho từng combobox
         document.getElementById('combobox-dot').addEventListener('change', handleComboboxChange);
         document.getElementById('combobox-ki').addEventListener('change', handleComboboxChange);
-        document.getElementById('combobox-nam').addEventListener('change', handleComboboxChange);
-        document.getElementById('combobox-khoa').addEventListener('change', handleComboboxChange);
+        document.getElementById('NamHoc').addEventListener('change', handleComboboxChange);
+        document.getElementById('MaPhongBan').addEventListener('change', handleComboboxChange);
 
         // Gọi updateValues để lấy giá trị mặc định ngay khi tải trang
         updateValues();
@@ -586,6 +581,79 @@
   }
 });
   </script>
+  <script>
+    $(document).ready(function() {
+  $('#NamHoc option[value=""]').remove();
+
+  $.ajax({
+    url: '/getNamHoc',
+    method: 'GET',
+    success: function(response) {
+      if (response.success) {
+        const NamHoc = response.NamHoc;
+        console.log(NamHoc);
+
+        response.NamHoc.forEach(function(item) {
+          if (item.NamHoc === NamHoc) {
+            $('#NamHoc').prepend(
+              `<option value="${item.NamHoc}" selected>${item.NamHoc}</option>`
+            );
+          } else {
+            $('#NamHoc').append(
+              `<option value="${item.NamHoc}">${item.NamHoc}</option>`
+            );
+          }
+        });
+
+        if (!$('#NamHoc option:selected').length) {
+          $('#NamHoc').prepend('<option value="">Chọn Năm Học</option>');
+        }
+      } else {
+        console.error("Không lấy được dữ liệu năm học:", response.message);
+      }
+    },
+    error: function(error) {
+      console.error("Lỗi khi lấy dữ liệu năm học:", error);
+    }
+  });
+});
+</script>
+<script>
+  $(document).ready(function() {
+      $('#MaPhongBan option[value=""]').remove();
+    // Gọi AJAX để lấy dữ liệu JSON từ API
+    $.ajax({
+      url: '/getPhongBan', // Đường dẫn tới API getPhongBan
+      method: 'GET',
+      success: function(response) {
+        // Kiểm tra nếu response thành công
+        const MaPhongBan = response.MaPhongBan;
+        if (response.success) {
+          $('#MaPhongBan').prepend('<option value="ALL">ALL</option>');
+          // Lặp qua từng mục trong mảng MaPhongBan
+          response.MaPhongBan.forEach(function(item) {
+            // Nếu item.MaPhongBan bằng boMon.MaPhongBan, hiển thị trước
+            console.log(item);
+              $('#MaPhongBan').append(
+                `<option value="${item.MaPhongBan}">${item.MaPhongBan}</option>`
+              );
+            }
+          );
+
+          // Nếu không có phòng ban nào tương ứng, bạn có thể thêm tùy chọn mặc định ở đây
+          if (!$('#MaPhongBan option:selected').length) {
+            $('#MaPhongBan').prepend('<option value="">Chọn Phòng Ban</option>');
+          }
+        } else {
+          console.error("Không lấy được dữ liệu phongBan:", response.message);
+        }
+      },
+      error: function(error) {
+        console.error("Lỗi khi lấy dữ liệu phongBan:", error);
+      }
+    });
+  });
+</script>
 
 </body>
 

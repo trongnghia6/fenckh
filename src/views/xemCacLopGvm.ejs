@@ -128,7 +128,7 @@
               </a>
               <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                 <a class="nav-link" href="/gvmList">Danh sách giảng viên mời</a>
-                <a class="nav-link" id="actionButton1" href="/importGvmList">Thêm giảng viên mời bằng file</a>
+                <a class="nav-link" id="actionButton1" href="/importGvmList" style="width: 100%;">Thêm giảng viên mời bằng file</a>
               </div>
             </div>
           </div>
@@ -241,11 +241,8 @@
             </select>
     
             <!-- Combo box Năm -->
-            <select class="selectop mx-1" id="combobox-nam">
-                <option value="2024">2024</option>
-                <option value="2025">2025</option>
-                <option value="2026">2026</option>
-                <option value="2027">2027</option>
+            <select class="selectop mx-1" id="NamHoc">
+                <option value="">Năm học</option>
             </select>
           </div>
     
@@ -401,7 +398,7 @@
       // Lấy giá trị từ các combobox
       const dotValue = document.getElementById('combobox-dot').value;
       const kiValue = document.getElementById('combobox-ki').value;
-      const namValue = document.getElementById('combobox-nam').value;
+      const namValue = document.getElementById('NamHoc').value;
 
 
       // Tạo đối tượng dữ liệu để gửi
@@ -1414,6 +1411,43 @@ if (event.target === modalBackdrop) {
  closeNoteForm();
 }
 }
+</script>
+<script>
+  $(document).ready(function() {
+$('#NamHoc option[value=""]').remove();
+
+$.ajax({
+  url: '/getNamHoc',
+  method: 'GET',
+  success: function(response) {
+    if (response.success) {
+      const NamHoc = response.NamHoc;
+      console.log(NamHoc);
+
+      response.NamHoc.forEach(function(item) {
+        if (item.NamHoc === NamHoc) {
+          $('#NamHoc').prepend(
+            `<option value="${item.NamHoc}" selected>${item.NamHoc}</option>`
+          );
+        } else {
+          $('#NamHoc').append(
+            `<option value="${item.NamHoc}">${item.NamHoc}</option>`
+          );
+        }
+      });
+
+      if (!$('#NamHoc option:selected').length) {
+        $('#NamHoc').prepend('<option value="">Chọn Năm Học</option>');
+      }
+    } else {
+      console.error("Không lấy được dữ liệu năm học:", response.message);
+    }
+  },
+  error: function(error) {
+    console.error("Lỗi khi lấy dữ liệu năm học:", error);
+  }
+});
+});
 </script>
 </body>
 

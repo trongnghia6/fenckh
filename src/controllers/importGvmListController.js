@@ -47,6 +47,10 @@ const convertExcelToJSON = (req, res) => {
       res.status(500).send("Đã xảy ra lỗi khi đọc file!");
     });
 };
+function formatDateForMySQL(dateString) {
+  // Chuyển đổi từ định dạng ISO với thời gian sang chỉ ngày
+  return dateString.split('T')[0]; // '1985-09-13'
+};
 
 // Xử lý
 const getArrValue = async (req, res) => {
@@ -162,13 +166,13 @@ const getArrValue = async (req, res) => {
 // };
 
 const saveToDB = async (req, res) => {
-  try {
-    const connection = await createConnection(); // Kết nối đến DB
+  try {const connection = await createConnection(); // Kết nối đến DB
     const data = JSON.parse(req.body.data); // Lấy dữ liệu từ request (dữ liệu đã render ra)
 
     // Lấy Mã giảng viên mời = Mã Khoa + _GVM_ + id
 
     const MaPhongBan = req.session.MaPhongBan;
+    console.log(MaPhongBan);
     const TinhTrangGiangDay = 1; // Tình trạng giảng dạy
 
     if (data && data.length > 0) {
@@ -194,9 +198,9 @@ const saveToDB = async (req, res) => {
         //const GioiTinh = row["Giới tính"];
         const HoTen = row["Họ và tên"];
         //const GioiTinh = row["Giới tính"];
-        const NgaySinh = row["Ngày sinh"];
+        // const NgaySinh = row["Ngày sinh"] || " ";
         const CCCD = row["CCCD"];
-        const NgayCapCCCD = row["Ngày cấp"];
+        // const NgayCapCCCD = row["Ngày cấp"];
         const NoiCapCCCD = row["Nơi cấp"];
         const DiaChi = row["Địa chỉ theo CCCD"];
         const Email = row["Email"];
@@ -210,6 +214,10 @@ const saveToDB = async (req, res) => {
         const NoiCongTac = row["Nơi công tác"];
         const MonGiangDayChinh = row["Bộ môn"] || " ";
         const BangTotNghiepLoai = row["Bằng loại"] || " ";
+        const dateSinh = row["Ngày sinh"]; // '1985-09-13T00:00:00.000Z'
+        const NgaySinh = formatDateForMySQL(dateSinh); // Kết quả: '1985-09-13'
+        const dateCap = row["Ngày sinh"]; // '1985-09-13T00:00:00.000Z'
+        const NgayCapCCCD = formatDateForMySQL(dateCap); // Kết quả: '1985-09-13'
 
         //
 
