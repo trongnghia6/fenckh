@@ -82,7 +82,6 @@
     }
 
     /* phần css cho label tổng số tiết  ki*/
-
     .total-label {
       margin-left: auto;
       /* Căn phải cho thẻ total-label */
@@ -115,8 +114,8 @@
       /* Bo góc cho khung */
     }
 
-    .total-label label:hover,
-    .total-label label:hover span {
+    .total-label label,
+    .total-label label span {
       background-color: #007BFF;
       /* Màu nền khi hover */
       color: #fff;
@@ -276,25 +275,25 @@
       <div class="d-flex justify-content-between">
         <div class="d-flex justify-content-center">
           <div class="cbb" style="margin-top: 20px;">
-          <select class="selectop w-100px mx-2 " id="combobox-dot">
-            <option value="1">Đợt 1</option>
-            <option value="2">Đợt 2</option>
-          </select>
+            <select class="selectop w-100px mx-2 " id="combobox-dot">
+              <option value="1">Đợt 1</option>
+              <option value="2">Đợt 2</option>
+            </select>
 
-          <!-- Combo box Đợt -->
-          <select class="selectop w-100px mx-2 " id="combobox-ki">
-            <option value="1">Kỳ 1</option>
-            <option value="2">Kỳ 2</option>
-          </select>
+            <!-- Combo box Đợt -->
+            <select class="selectop w-100px mx-2 " id="combobox-ki">
+              <option value="1">Kỳ 1</option>
+              <option value="2">Kỳ 2</option>
+            </select>
 
-          <!-- Combo box Năm -->
-          <select class="selectop w-100px mx-2 " id="combobox-nam">
-            <option value="2024">2024</option>
-            <option value="2025">2025</option>
-            <option value="2026">2026</option>
-            <option value="2027">2027</option>
-          </select>
-      </div>
+            <!-- Combo box Năm -->
+            <select class="selectop w-100px mx-2 " id="combobox-nam">
+              <option value="2024">2024</option>
+              <option value="2025">2025</option>
+              <option value="2026">2026</option>
+              <option value="2027">2027</option>
+            </select>
+          </div>
           <button id="getData" class="button text-nowrap">Lấy bảng quy chuẩn</button>
           <!-- <button id="infoGvm" class="button text-nowrap">Xem bảng cục bộ</button> -->
           <button id="update-qc" onclick="updateLocalTable()" class="button mx-3 luuTamThoi">Lưu</button>

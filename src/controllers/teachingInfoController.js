@@ -279,7 +279,7 @@ const renderInfoWithValueKhoa = async (req, res) => {
         // Trả về thông báo nếu không tìm thấy dữ liệu
         return res
           .status(404)
-          .json({ message: "Quy chuẩn chưa được ban hành" });
+          .json({ message: "Không có dữ liệu" });
       }
 
       // Trả về kết quả truy vấn dưới dạng JSON

@@ -93,61 +93,108 @@ const importTableQC = async (jsonData) => {
       Lop,
     };
   }
+
+  function tachGiaoVien(giaoVienInput) {
+    const gvmKeyword1 = "( gvm )"; // Từ khóa cho giảng viên mời
+    const gvmKeyword2 = "Giảng viên mời"; // Từ khóa cho giảng viên mời
+
+    // Nếu chuỗi đầu vào rỗng, trả về giá trị mặc định
+    if (!giaoVienInput || giaoVienInput.trim() === "") {
+      return [{ MoiGiang: false, GiaoVienGiangDay: "" }];
+    }
+
+    // Kiểm tra xem có giảng viên mời hay không
+    const isGuestLecturer =
+      giaoVienInput.toLowerCase().includes(gvmKeyword1.toLowerCase()) ||
+      giaoVienInput.toLowerCase().includes(gvmKeyword2.toLowerCase());
+
+    // Nếu có giảng viên mời, trả về giá trị mặc định
+    if (isGuestLecturer) {
+      return [{ MoiGiang: true, GiaoVienGiangDay: "" }];
+    }
+
+    // Tách tên giảng viên từ chuỗi mà không xóa các từ khóa
+    const titleRegex = /(PGS\.?|TS\.?|PGS\.? TS\.?)\s*/gi; // Biểu thức chính quy để loại bỏ danh hiệu
+
+    // Xóa danh hiệu khỏi chuỗi nhưng giữ lại phần còn lại
+    const cleanedInput = giaoVienInput.replace(titleRegex, '').trim();
+
+    // Tách tên giảng viên bằng cả dấu phẩy và dấu chấm phẩy
+    const lecturers = cleanedInput.split(/[,;]\s*/).map(name => name.trim()).filter(name => name.length > 0);
+
+    // Nếu không có giảng viên, trả về giá trị mặc định
+    if (lecturers.length === 0) {
+      return [{ MoiGiang: false, GiaoVienGiangDay: "" }];
+    }
+
+    // Tạo mảng kết quả chứa thông tin giảng viên
+    return [{
+      MoiGiang: false, // Không có giảng viên mời
+      GiaoVienGiangDay: lecturers[0], // Lấy tên giảng viên đầu tiên
+    }];
+  }
+
+  console.log('ok')
   // Tạo câu lệnh INSERT động với các trường đầy đủ
-  const queryInsert = `
-    INSERT INTO ${tableName} (
-      Khoa,
-      Dot,
-      KiHoc,
-      NamHoc,
-      GiaoVien, 
-      GiaoVienGiangDay, 
-      MoiGiang, 
-      SoTinChi, 
-      MaHocPhan, 
-      LopHocPhan,
-      TenLop, 
-      LL, 
-      SoTietCTDT, 
-      HeSoT7CN, 
-      SoSinhVien, 
-      HeSoLopDong, 
-      QuyChuan, 
-      GhiChu
-    ) VALUES (?, ?, ?, ?, ?, NULL, FALSE, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
-  `;
+  const queryInsert = `INSERT INTO ${tableName} (
+    Khoa,
+    Dot,
+    KiHoc,
+    NamHoc,
+    GiaoVien, 
+    GiaoVienGiangDay, 
+    MoiGiang, 
+    SoTinChi, 
+    MaHocPhan, 
+    LopHocPhan,
+    TenLop, 
+    LL, 
+    SoTietCTDT, 
+    HeSoT7CN, 
+    SoSinhVien, 
+    HeSoLopDong, 
+    QuyChuan, 
+    GhiChu
+  ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`;
 
-  const insertPromises = jsonData.map((item) => {
-    return new Promise((resolve, reject) => {
-      // Sử dụng hàm tachChuoi để tách các thông tin từ chuỗi
-      const { TenLop, HocKi, NamHoc, Lop } = tachChuoi(item["LopHocPhan"]);
+  const insertPromises = jsonData.flatMap((item) => {
+    // Sử dụng hàm tachChuoi để tách các thông tin từ chuỗi
+    const { TenLop, HocKi, NamHoc, Lop } = tachChuoi(item["LopHocPhan"]);
 
-      const values = [
-        item["Khoa"], // Khoa
-        item["Dot"], // Đợt
-        item["Ki"], // Đợt
-        item["Nam"], // Đợt
-        item["GiaoVien"], // Tên Giảng viên
-        item["SoTinChi"], // Số tín chỉ
-        item["MaHocPhan"], // Mã học phần
-        TenLop, // Lớp học phần (được tách từ chuỗi)
-        Lop,
-        item["LL"], // LL (Số tiết theo lịch)
-        item["SoTietCTDT"], // Số tiết theo CTĐT
-        item["HeSoT7CN"], // Hệ số T7/CN
-        item["SoSinhVien"], // Số sinh viên
-        item["HeSoLopDong"], // Hệ số lớp đông
-        item["QuyChuan"], // Quy chuẩn
-        item["GhiChu"], // Ghi chú
-      ];
+    // Tách giảng viên và tạo mảng các đối tượng giảng viên
+    const giangVienArray = tachGiaoVien(item["GiaoVien"]);
+    console.log(giangVienArray)
+    return giangVienArray.map(({ MoiGiang, GiaoVienGiangDay }) => {
+      return new Promise((resolve, reject) => {
+        const values = [
+          item["Khoa"], // Khoa
+          item["Dot"], // Đợt
+          item["Ki"], // Đợt
+          item["Nam"], // Đợt
+          item["GiaoVien"], // Tên Giảng viên
+          GiaoVienGiangDay, // Tên giảng viên
+          MoiGiang, // Giảng viên mời hay không
+          item["SoTinChi"], // Số tín chỉ
+          item["MaHocPhan"], // Mã học phần
+          TenLop, // Lớp học phần (được tách từ chuỗi)
+          Lop,
+          item["LL"], // LL (Số tiết theo lịch)
+          item["SoTietCTDT"], // Số tiết theo CTĐT
+          item["HeSoT7CN"], // Hệ số T7/CN
+          item["SoSinhVien"], // Số sinh viên
+          item["HeSoLopDong"], // Hệ số lớp đông
+          item["QuyChuan"], // Quy chuẩn
+          item["GhiChu"], // Ghi chú
+        ];
 
-      connection.query(queryInsert, values, (err, results) => {
-        if (err) {
-          console.error("Error:", err);
-          reject(err);
-          return;
-        }
-        resolve(results);
+        connection.query(queryInsert, values, (err, results) => {
+          if (err) {
+            console.error("Error:", err);
+            reject(err);
+            return;
+          }
+          resolve(results);
+        });
       });
     });
   });
@@ -157,10 +204,7 @@ const importTableQC = async (jsonData) => {
     await Promise.all(insertPromises);
 
     // Chạy câu lệnh UPDATE sau khi INSERT thành công
-    const queryUpdate = `
-      UPDATE ${tableName}
-      SET MaHocPhan = CONCAT(Khoa, id);
-    `;
+    const queryUpdate = `UPDATE ${tableName} SET MaHocPhan = CONCAT(Khoa, id);`;
 
     await new Promise((resolve, reject) => {
       connection.query(queryUpdate, (err, results) => {
@@ -180,6 +224,7 @@ const importTableQC = async (jsonData) => {
 
   return results;
 };
+
 
 // Hàm nhập dữ liệu vào bảng quychuan
 const importTableTam = async (jsonData) => {
