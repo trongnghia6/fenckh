@@ -592,19 +592,17 @@
     const role = localStorage.getItem("userRole");
     const MaPhongBan = localStorage.getItem("MaPhongBan")
     const isKhoa = localStorage.getItem("isKhoa");
-
+   
     const tableBody = document.getElementById('tableBody');
     tableBody.innerHTML = ''; // Xóa nội dung cũ
     let index = -1;
     data.forEach((row, index) => {
-
+    
       const tableRow = document.createElement('tr');
-
-      if (row.MoiGiang == 0) {
+      
+      if (row.MoiGiang == 0){
         tableRow.style.display = 'none'; // Ẩn hàng
       }
-
-
 
       // Lớp học phần
       const lopHocPhanTd = document.createElement('td');
@@ -633,126 +631,101 @@
 
       let giaoVienGiangDayTd;
       let giaoVienGiangDayInput;
+    
+      giaoVienGiangDayTd = document.createElement('td');
+      giaoVienGiangDayInput = document.createElement('input');
+      giaoVienGiangDayInput.type = 'text';
+      giaoVienGiangDayInput.placeholder = 'Nhập tên giảng viên';
+      giaoVienGiangDayInput.value = row.GiaoVienGiangDay || '';
 
+      giaoVienGiangDayInput.onclick = () => {
+        showSuggestions(giaoVienGiangDayInput);
+      };
 
-      if (isKhoa == 0 || role == "GV") { // Nếu không phải khoa thì ko nhập thông tin gvm
-        const giaoVienGiangDayTd = document.createElement('td');
+      giaoVienGiangDayInput.oninput = () => {
+        showSuggestions(giaoVienGiangDayInput);
+      };
+      
+      // Thêm id để lấy dữ liệu 
+      giaoVienGiangDayInput.id = `giaoVienGiangDay_${index}`;
 
-        const giaoVienGiangDayView = document.createElement('span');
-        giaoVienGiangDayView.textContent = row.GiaoVienGiangDay || '';
-        giaoVienGiangDayTd.appendChild(giaoVienGiangDayView);
-        tableRow.appendChild(giaoVienGiangDayTd);
+      giaoVienGiangDayTd.appendChild(giaoVienGiangDayInput);
+      tableRow.appendChild(giaoVienGiangDayTd);
 
-      } else {
+      if (isKhoa == 0  || role == "GV"){ // Nếu không phải khoa thì ko nhập thông tin gvm
+        giaoVienGiangDayInput.disabled = true;
+      } 
+    
+      // Khoa
+      const khoaTd = document.createElement('td');
+      khoaTd.textContent = row.Khoa || ''; // Lấy giá trị Khoa trực tiếp từ row
+      tableRow.appendChild(khoaTd);
 
-        giaoVienGiangDayTd = document.createElement('td');
-        giaoVienGiangDayInput = document.createElement('input');
-        giaoVienGiangDayInput.type = 'text';
-        giaoVienGiangDayInput.placeholder = 'Nhập tên giảng viên';
-        giaoVienGiangDayInput.value = row.GiaoVienGiangDay || '';
+      let boMonTd;
+      let boMonInput;
+      if (isKhoa == 0 ){
+        boMonTd = document.createElement('td'); // Tạo ô Bộ môn
+        boMonInput = document.createElement('span'); // Tạo span cho Bộ môn
+        boMonInput.textContent = row.BoMon || ''; // Lấy giá trị từ row
 
-        giaoVienGiangDayInput.onclick = () => {
-          showSuggestions(giaoVienGiangDayInput);
+        // Thêm id
+        boMonInput.id = `boMon_${index}`;
+
+        boMonTd.appendChild(boMonInput); // Thêm span vào ô
+        tableRow.appendChild(boMonTd);
+      } else{
+        boMonTd = document.createElement('td');
+        boMonInput = document.createElement('input');
+        boMonInput.type = 'text';
+        boMonInput.value = row.BoMon || '';
+        boMonInput.placeholder = 'Nhập tên bộ môn';
+
+        // Thêm id để lấy dữ liệu
+        boMonInput.id = `boMon_${index}`;
+
+        // gợi ý bộ môn
+        boMonInput.onclick = () => {
+          showSuggestionsBoMon(boMonInput);
         };
 
-        giaoVienGiangDayInput.oninput = () => {
-          showSuggestions(giaoVienGiangDayInput);
-        };
-
-        // Thêm id để lấy dữ liệu 
-        giaoVienGiangDayInput.id = `giaoVienGiangDay_${index}`;
-
-        giaoVienGiangDayTd.appendChild(giaoVienGiangDayInput);
-        tableRow.appendChild(giaoVienGiangDayTd);
-
-        if (isKhoa == 0 || role == "GV") { // Nếu không phải khoa thì ko nhập thông tin gvm
-          giaoVienGiangDayInput.disabled = true;
-          /*
-          giaoVienGiangDayTd = document.createElement('td');
-  
-          giaoVienGiangDayInput = document.createElement('span');
-          giaoVienGiangDayInput.type = 'text';
-  
-          giaoVienGiangDayInput.textContent = row.GiaoVienGiangDay || '';
-  
-          giaoVienGiangDayInput.id = `giaoVienGiangDay_${index}`;
-          
-          giaoVienGiangDayTd.appendChild(giaoVienGiangDayInput);
-          tableRow.appendChild(giaoVienGiangDayTd);
-          */
-
-        }
-
-        // Khoa
-        const khoaTd = document.createElement('td');
-        khoaTd.textContent = row.Khoa || ''; // Lấy giá trị Khoa trực tiếp từ row
-        tableRow.appendChild(khoaTd);
-
-        let boMonTd;
-        let boMonInput;
-        if (isKhoa == 0) {
-          boMonTd = document.createElement('td'); // Tạo ô Bộ môn
-          boMonInput = document.createElement('span'); // Tạo span cho Bộ môn
-          boMonInput.textContent = row.BoMon || ''; // Lấy giá trị từ row
-
-          // Thêm id
-          boMonInput.id = `boMon_${index}`;
-
-          boMonTd.appendChild(boMonInput); // Thêm span vào ô
-          tableRow.appendChild(boMonTd);
-        } else {
-          boMonTd = document.createElement('td');
-          boMonInput = document.createElement('input');
-          boMonInput.type = 'text';
-          boMonInput.name = 'bomon';
-          boMonInput.value = row.BoMon || '';
-          boMonInput.placeholder = 'Nhập tên bộ môn';
-
-          // Thêm id để lấy dữ liệu
-          boMonInput.id = `boMon_${index}`;
-
-          // gợi ý bộ môn
-          boMonInput.onclick = () => {
-            showSuggestionsBoMon(boMonInput);
-          };
-          boMonTd.appendChild(boMonInput);
-          tableRow.appendChild(boMonTd);
-        }
+        boMonTd.appendChild(boMonInput);
+        tableRow.appendChild(boMonTd);
+      }
 
         // Ngày Bắt Đầu
+    
+      const NgayBatDauTd = document.createElement('td');
+      const NgayBatDauInput = document.createElement('input');
+      NgayBatDauInput.type = 'date';
+      NgayBatDauInput.id = `NgayBatDau_${index}`; // Thêm id
+      NgayBatDauInput.value = formatDateToInput(row.NgayBatDau);
+      NgayBatDauTd.appendChild(NgayBatDauInput);
+      tableRow.appendChild(NgayBatDauTd);
 
-        const NgayBatDauTd = document.createElement('td');
-        const NgayBatDauInput = document.createElement('input');
-        NgayBatDauInput.type = 'date';
-        NgayBatDauInput.id = `NgayBatDau_${index}`; // Thêm id
-        NgayBatDauInput.value = formatDateToInput(row.NgayBatDau);
-        NgayBatDauTd.appendChild(NgayBatDauInput);
-        tableRow.appendChild(NgayBatDauTd);
+      // Ngày Kết Thúc
+      const NgayKetThucTd = document.createElement('td');
+      const NgayKetThucInput = document.createElement('input');
+      NgayKetThucInput.type = 'date';
+      NgayKetThucInput.id = `NgayKetThuc_${index}`; // Thêm id
+      NgayKetThucInput.value = formatDateToInput(row.NgayKetThuc);
+      NgayKetThucTd.appendChild(NgayKetThucInput);
+      tableRow.appendChild(NgayKetThucTd);
 
-        // Ngày Kết Thúc
-        const NgayKetThucTd = document.createElement('td');
-        const NgayKetThucInput = document.createElement('input');
-        NgayKetThucInput.type = 'date';
-        NgayKetThucInput.id = `NgayKetThuc_${index}`; // Thêm id
-        NgayKetThucInput.value = formatDateToInput(row.NgayKetThuc);
-        NgayKetThucTd.appendChild(NgayKetThucInput);
-        tableRow.appendChild(NgayKetThucTd);
+     
+      // Nếu không phải khoa -> không có quyền nhập
+      if (isKhoa == 0){
+        NgayBatDauInput.disabled = true; // Chỉ xem
+        NgayKetThucInput.disabled = true; // Chỉ xem
+      }
 
+      const soTietLLTd = document.createElement('td');
+      soTietLLTd.textContent = row.LL || '';
+      tableRow.appendChild(soTietLLTd);
 
-        // Nếu không phải khoa -> không có quyền nhập
-        if (isKhoa == 0) {
-          NgayBatDauInput.disabled = true; // Chỉ xem
-          NgayKetThucInput.disabled = true; // Chỉ xem
-        }
-
-        const soTietLLTd = document.createElement('td');
-        soTietLLTd.textContent = row.LL || '';
-        tableRow.appendChild(soTietLLTd);
-
-        const soTietQCTd = document.createElement('td');
-        soTietQCTd.textContent = row.QuyChuan || '';
-        tableRow.appendChild(soTietQCTd);
-
+      const soTietQCTd = document.createElement('td');
+      soTietQCTd.textContent = row.QuyChuan || '';
+      tableRow.appendChild(soTietQCTd);
+     
         // Điều kiện ẩn checkbox Khoa nếu role không phải "CNTT_ALL"
         if (isKhoa == 1 && role != "Lãnh đạo khoa") {
           // Thiết lập thuộc tính CSS để thu nhỏ checkbox và ô <td> chứa nó
@@ -767,142 +740,143 @@
 
         // Nếu Lãnh đạo khoa đã duyệt, thi hành sẽ không nhập được
         // Nếu role là giảng viên thường cũng sẽ không nhập được
-        if ((isKhoa == 1 && role == "GV") || (isKhoa == 1 && row.KhoaDuyet == 1)) {
+        if ((isKhoa == 1 && role == "GV") ||(isKhoa == 1 && row.KhoaDuyet==1)) {
           giaoVienGiangDayInput.disabled = true;
           boMonInput.disabled = true;
           NgayBatDauInput.disabled = true;
           // Ngăn người dùng thay đổi trạng thái ngày kết thúc
           NgayKetThucInput.disabled = true;
         }
+     
+      // Điều kiện để ẩn checkbox của "Khoa" nếu role không phải là "CNTT_ALL"
+      let khoaCheckboxTd, khoaCheckbox;
+      let daoTaoCheckboxTd, daoTaoCheckbox;
+      let taiChinhCheckboxTd, taiChinhCheckbox;
+      // Tạo checkbox
+      if (isKhoa == 1 && role == 'Lãnh đạo khoa'){
+        // Checkbox cho Khoa
+        khoaCheckboxTd = document.createElement('td');
+        khoaCheckbox = document.createElement('input');
+        khoaCheckbox.type = 'checkbox';
+        khoaCheckbox.name = 'khoa'; // Thêm thuộc tính name
+        khoaCheckbox.checked = row.KhoaDuyet || false; // Dùng một trường cho checkbox
+        khoaCheckbox.onchange = () => updateCheckAll('khoa'); // Gọi hàm khi checkbox thay đổi
+        khoaCheckboxTd.appendChild(khoaCheckbox);
+        tableRow.appendChild(khoaCheckboxTd);
+      } else if (isKhoa == 0 && role == 'Duyệt') {
+        if (MaPhongBan == 'DAOTAO'){
+                  // Checkbox cho Khoa
+        khoaCheckboxTd = document.createElement('td');
+        khoaCheckbox = document.createElement('input');
+        khoaCheckbox.type = 'checkbox';
+        khoaCheckbox.name = 'khoa'; // Thêm thuộc tính name
+        khoaCheckbox.checked = row.KhoaDuyet || false; // Dùng một trường cho checkbox
+        khoaCheckbox.onchange = () => updateCheckAll('khoa'); // Gọi hàm khi checkbox thay đổi
+        khoaCheckboxTd.appendChild(khoaCheckbox);
+        tableRow.appendChild(khoaCheckboxTd);
 
-        // Điều kiện để ẩn checkbox của "Khoa" nếu role không phải là "CNTT_ALL"
-        let khoaCheckboxTd, khoaCheckbox;
-        let daoTaoCheckboxTd, daoTaoCheckbox;
-        let taiChinhCheckboxTd, taiChinhCheckbox;
-        // Tạo checkbox
-        if (isKhoa == 1 && role == 'Lãnh đạo khoa') {
-          // Checkbox cho Khoa
-          khoaCheckboxTd = document.createElement('td');
-          khoaCheckbox = document.createElement('input');
-          khoaCheckbox.type = 'checkbox';
-          khoaCheckbox.name = 'khoa'; // Thêm thuộc tính name
-          khoaCheckbox.checked = row.KhoaDuyet || false; // Dùng một trường cho checkbox
-          khoaCheckbox.onchange = () => updateCheckAll('khoa'); // Gọi hàm khi checkbox thay đổi
-          khoaCheckboxTd.appendChild(khoaCheckbox);
-          tableRow.appendChild(khoaCheckboxTd);
-        } else if (isKhoa == 0 && role == 'Duyệt') {
-          if (MaPhongBan == 'DAOTAO') {
-            // Checkbox cho Khoa
-            khoaCheckboxTd = document.createElement('td');
-            khoaCheckbox = document.createElement('input');
-            khoaCheckbox.type = 'checkbox';
-            khoaCheckbox.name = 'khoa'; // Thêm thuộc tính name
-            khoaCheckbox.checked = row.KhoaDuyet || false; // Dùng một trường cho checkbox
-            khoaCheckbox.onchange = () => updateCheckAll('khoa'); // Gọi hàm khi checkbox thay đổi
-            khoaCheckboxTd.appendChild(khoaCheckbox);
-            tableRow.appendChild(khoaCheckboxTd);
+        // Checkbox cho Đào Tạo
+        daoTaoCheckboxTd = document.createElement('td');
+        daoTaoCheckbox = document.createElement('input');
+        daoTaoCheckbox.type = 'checkbox';
+        daoTaoCheckbox.name = 'daoTao'; // Thêm thuộc tính name
+        daoTaoCheckbox.checked = row.DaoTaoDuyet || false; // Dùng một trường cho checkbox
+        daoTaoCheckbox.onchange = () => updateCheckAll('daoTao'); // Gọi hàm khi checkbox thay đổi
+        daoTaoCheckboxTd.appendChild(daoTaoCheckbox);
+        tableRow.appendChild(daoTaoCheckboxTd);
+        } else if (MaPhongBan == 'TAICHINH'){
+          // Checkbox cho Đào Tạo
+        daoTaoCheckboxTd = document.createElement('td');
+        daoTaoCheckbox = document.createElement('input');
+        daoTaoCheckbox.type = 'checkbox';
+        daoTaoCheckbox.name = 'daoTao'; // Thêm thuộc tính name
+        daoTaoCheckbox.checked = row.DaoTaoDuyet || false; // Dùng một trường cho checkbox
+        daoTaoCheckbox.onchange = () => updateCheckAll('daoTao'); // Gọi hàm khi checkbox thay đổi
+        daoTaoCheckboxTd.appendChild(daoTaoCheckbox);
+        tableRow.appendChild(daoTaoCheckboxTd);
 
-            // Checkbox cho Đào Tạo
-            daoTaoCheckboxTd = document.createElement('td');
-            daoTaoCheckbox = document.createElement('input');
-            daoTaoCheckbox.type = 'checkbox';
-            daoTaoCheckbox.name = 'daoTao'; // Thêm thuộc tính name
-            daoTaoCheckbox.checked = row.DaoTaoDuyet || false; // Dùng một trường cho checkbox
-            daoTaoCheckbox.onchange = () => updateCheckAll('daoTao'); // Gọi hàm khi checkbox thay đổi
-            daoTaoCheckboxTd.appendChild(daoTaoCheckbox);
-            tableRow.appendChild(daoTaoCheckboxTd);
-          } else if (MaPhongBan == 'TAICHINH') {
-            // Checkbox cho Đào Tạo
-            daoTaoCheckboxTd = document.createElement('td');
-            daoTaoCheckbox = document.createElement('input');
-            daoTaoCheckbox.type = 'checkbox';
-            daoTaoCheckbox.name = 'daoTao'; // Thêm thuộc tính name
-            daoTaoCheckbox.checked = row.DaoTaoDuyet || false; // Dùng một trường cho checkbox
-            daoTaoCheckbox.onchange = () => updateCheckAll('daoTao'); // Gọi hàm khi checkbox thay đổi
-            daoTaoCheckboxTd.appendChild(daoTaoCheckbox);
-            tableRow.appendChild(daoTaoCheckboxTd);
-
-            // Checkbox cho Tài Chính
-            taiChinhCheckboxTd = document.createElement('td');
-            taiChinhCheckbox = document.createElement('input');
-            taiChinhCheckbox.type = 'checkbox';
-            taiChinhCheckbox.name = 'taiChinh'; // Thêm thuộc tính name
-            taiChinhCheckbox.checked = row.TaiChinhDuyet || false; // Dùng một trường cho checkbox
-            taiChinhCheckbox.onchange = () => updateCheckAll('taiChinh'); // Gọi hàm khi checkbox thay đổi
-            taiChinhCheckboxTd.appendChild(taiChinhCheckbox);
-            tableRow.appendChild(taiChinhCheckboxTd);
-          }
-
+        // Checkbox cho Tài Chính
+        taiChinhCheckboxTd = document.createElement('td');
+        taiChinhCheckbox = document.createElement('input');
+        taiChinhCheckbox.type = 'checkbox';
+        taiChinhCheckbox.name = 'taiChinh'; // Thêm thuộc tính name
+        taiChinhCheckbox.checked = row.TaiChinhDuyet || false; // Dùng một trường cho checkbox
+        taiChinhCheckbox.onchange = () => updateCheckAll('taiChinh'); // Gọi hàm khi checkbox thay đổi
+        taiChinhCheckboxTd.appendChild(taiChinhCheckbox);
+        tableRow.appendChild(taiChinhCheckboxTd);
         }
 
-        const check = localStorage.getItem("check");
-        // Phân quyền theo phòng ban
-        if (isKhoa == 1) { // Nếu là khoa
-          if (check.includes(MaPhongBan)) {
-            //giaoVienGiangDayInput.disabled = true;
-            boMonInput.disabled = true;
+      }
 
-            NgayBatDauInput.disabled = true;
-            // Ngăn người dùng thay đổi trạng thái ngày kết thúc
-            NgayKetThucInput.disabled = true;
-            // Ngăn người dùng thay đổi trạng thái checkbox
-            khoaCheckbox.disabled = true;
-            // Ngăn checkbox tổng của 'khoa' không cho thay đổi
-            disableCheckAll('khoa');
+      const check = localStorage.getItem("check");
+      // Phân quyền theo phòng ban
+      if (isKhoa == 1){ // Nếu là khoa
+        if (check.includes(MaPhongBan)){
+          //giaoVienGiangDayInput.disabled = true;
+          boMonInput.disabled = true;
 
-          }
+          NgayBatDauInput.disabled = true;
+          // Ngăn người dùng thay đổi trạng thái ngày kết thúc
+          NgayKetThucInput.disabled = true;
+          // Ngăn người dùng thay đổi trạng thái checkbox
+          khoaCheckbox.disabled = true;
+          // Ngăn checkbox tổng của 'khoa' không cho thay đổi
+          disableCheckAll('khoa');
+          
         }
-        const DaoTaoCheck = localStorage.getItem("DaoTaoCheck");
-        const TaiChinhCheck = localStorage.getItem("TaiChinhCheck");
+      } 
+      const DaoTaoCheck = localStorage.getItem("DaoTaoCheck");
+      const TaiChinhCheck = localStorage.getItem("TaiChinhCheck");
 
-        if (MaPhongBan == "DAOTAO") {
-          // Nếu khoa đã check thì hiện check bên đào tạo
+      if (MaPhongBan == "DAOTAO"){
+        // Nếu khoa đã check thì hiện check bên đào tạo
+       
+        if (!check.includes(row.Khoa)){
+          // Ngăn thay đổi trạng thái check box khoa
+          khoaCheckbox.disabled = true
+          daoTaoCheckbox.disabled = true
 
-          if (!check.includes(row.Khoa)) {
-            // Ngăn thay đổi trạng thái check box khoa
-            khoaCheckbox.disabled = true
-            daoTaoCheckbox.disabled = true
-
-          }
-
-          // Nếu đào tạo đã check thì disable check đào tạo
-          if (DaoTaoCheck.includes(row.Khoa)) {
-            // Ngăn thay đổi trạng thái check box khoa
-            khoaCheckbox.disabled = true
-            daoTaoCheckbox.disabled = true;
-          }
         }
+        
+        // Nếu đào tạo đã check thì disable check đào tạo
+        if (DaoTaoCheck.includes(row.Khoa)){
+          // Ngăn thay đổi trạng thái check box khoa
+          khoaCheckbox.disabled = true
+          daoTaoCheckbox.disabled = true;
+        }
+      }
 
-        if (MaPhongBan == "TAICHINH") {
-          // Nếu khoa đã check thì hiện check bên đào tạo
-          if (!DaoTaoCheck.includes(row.Khoa)) {
-            // Ngăn thay đổi trạng thái check box khoa
-            daoTaoCheckbox.disabled = true
-            taiChinhCheckbox.disabled = true;
-          }
-
-          // Nếu đào tạo đã check thì disable check đào tạo
-          if (TaiChinhCheck.includes(row.Khoa)) {
-            // Ngăn thay đổi trạng thái check box khoa
-            daoTaoCheckbox.disabled = true
-            taiChinhCheckbox.disabled = true;
-          }
+      if (MaPhongBan == "TAICHINH"){
+        // Nếu khoa đã check thì hiện check bên đào tạo
+        if (!DaoTaoCheck.includes(row.Khoa)){
+          // Ngăn thay đổi trạng thái check box khoa
+          daoTaoCheckbox.disabled = true
+          taiChinhCheckbox.disabled = true;
         }
 
-
-
-        const ghiChuTd = document.createElement("td");
-        if (row.ghiChu) {
-          ghiChuTd.innerHTML = `📜 <span style="color: red;">•</span>`; // Hiển thị biểu tượng ghi chú và chấm đỏ
-        } else {
-          ghiChuTd.innerHTML = "📜"; // Hiển thị biểu tượng ghi chú nếu không có ghi chú
+        // Nếu đào tạo đã check thì disable check đào tạo
+        if (TaiChinhCheck.includes(row.Khoa)){
+          // Ngăn thay đổi trạng thái check box khoa
+          daoTaoCheckbox.disabled = true
+          taiChinhCheckbox.disabled = true;
         }
-        ghiChuTd.style.cursor = "pointer"; // Thay đổi con trỏ chuột khi di chuột qua biểu tượng
-        ghiChuTd.onclick = () => openNoteForm(tableRow); // Gọi hàm mở form khi nhấn vào biểu tượng
-        tableRow.appendChild(ghiChuTd); // Thêm ô ghi chú vào hàng
-        tableBody.appendChild(tableRow);
-      });
+      }
+      
 
+
+      const ghiChuTd = document.createElement("td");
+          if (row.ghiChu) {
+            ghiChuTd.innerHTML = `📜 <span style="color: red;">•</span>`; // Hiển thị biểu tượng ghi chú và chấm đỏ
+          } else {
+            ghiChuTd.innerHTML = "📜"; // Hiển thị biểu tượng ghi chú nếu không có ghi chú
+          }
+          ghiChuTd.style.cursor = "pointer"; // Thay đổi con trỏ chuột khi di chuột qua biểu tượng
+          ghiChuTd.onclick = () => openNoteForm(tableRow); // Gọi hàm mở form khi nhấn vào biểu tượng
+          tableRow.appendChild(ghiChuTd); // Thêm ô ghi chú vào hàng
+      tableBody.appendChild(tableRow);
+    });
+
+    // Thêm để chuyển kiểu dữ liệu ngày thành text khi double click vào
     addDoubleClickEvents();
   }
 
@@ -1040,6 +1014,8 @@
       // Lấy giá trị của ô nhập "bộ môn"
       const boMonInput = document.getElementById(`boMon_${index}`);
       const boMon = boMonInput ? boMonInput.value : '';
+
+      alert("bo mon = " + boMon)
 
       // Lấy giá trị "Ngày Bắt Đầu" cho từng hàng
       const ngayBatDauInput = document.getElementById(`NgayBatDau_${index}`);
