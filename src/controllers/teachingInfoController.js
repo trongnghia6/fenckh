@@ -386,6 +386,7 @@ const renderInfo = async (req, res) => {
   const { Dot, Ki, Nam } = req.body; // Lấy giá trị khoa, dot, ki từ body của yêu cầu
   const tableName = process.env.DB_TABLE_QC;
   let query = "";
+  console.log(Dot, Ki, Nam)
 
   if (isKhoa == 1) {
     query = `SELECT * FROM ${tableName}
