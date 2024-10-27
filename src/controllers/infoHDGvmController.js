@@ -9,7 +9,6 @@ const path = require('path'); // Thêm dòng này
 
 
 
-
 const getGvm = async (req, res) => {
   try {
     const gvmLists = await fetchHDGvmData();
