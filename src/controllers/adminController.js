@@ -42,10 +42,11 @@ const AdminController = {
       ChiNhanh,
       MonGiangDayChinh,
       CacMonLienQuan,
-      TenDangNhap, // Lấy từ form
       MatKhau, // Lấy từ form
       Quyen, // Lấy từ form
     } = req.body;
+    let TenDangNhap = req.body.TenDangNhap; // Lấy từ form
+
 
     try {
       // Đầu tiên, chèn dữ liệu vào CSDL mà không cần MaNhanVien
@@ -93,6 +94,10 @@ const AdminController = {
       // Cập nhật lại MaNhanVien trong CSDL
       const queryUpdate = `UPDATE nhanvien SET MaNhanVien = ? WHERE id_User = ?`;
       await connection.promise().query(queryUpdate, [MaNhanVien, id_User]);
+
+      if(!TenDangNhap){
+        TenDangNhap = `${MaPhongBan}${id_User}`;
+      }
 
       const queryInsertTaiKhoanNguoiDung = `
         INSERT INTO taikhoannguoidung (TenDangNhap, MatKhau, id_User) 
