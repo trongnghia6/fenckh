@@ -16,7 +16,7 @@ const getaccountList = async (req, res) => {
   let connection;
   try {
     query =
-      "SELECT nhanvien.TenNhanVien, taikhoannguoidung.TenDangNhap, taikhoannguoidung.id_User, taikhoannguoidung.matkhau, role.Quyen, nhanvien.MaPhongBan, role.isKhoa FROM taikhoannguoidung INNER JOIN nhanvien ON taikhoannguoidung.id_User = nhanvien.id_User INNER JOIN role ON taikhoannguoidung.TenDangNhap = role.TenDangNhap ORDER BY taikhoannguoidung.id_User ASC"; // Truy vấn lấy tất cả người dùng
+      "SELECT DISTINCT nhanvien.TenNhanVien, taikhoannguoidung.TenDangNhap, taikhoannguoidung.id_User, taikhoannguoidung.matkhau, role.Quyen, nhanvien.MaPhongBan, role.isKhoa FROM taikhoannguoidung INNER JOIN nhanvien ON taikhoannguoidung.id_User = nhanvien.id_User INNER JOIN role ON taikhoannguoidung.TenDangNhap = role.TenDangNhap ORDER BY taikhoannguoidung.id_User ASC"; // Truy vấn lấy tất cả người dùng
     connection = await createPoolConnection(); // Kết nối tới cơ sở dữ liệu
     const [results, fields] = await connection.query(query); // Thực hiện truy vấn
     accountLists = results; // Gán kết quả vào accountLists

@@ -148,7 +148,6 @@
             <select id="Quyen" class="form-control" name="Quyen">
               <option value="GV">Giảng Viên</option>
               <option value="GV_CNBM">Giảng viên-Chủ nhiệm bộ môn</option>
-              <option value="Duyệt">Duyệt</option>
               <option value="Lãnh đạo khoa">Lãnh đạo khoa</option>
             </select>
           </div>
@@ -254,20 +253,12 @@
         quyenSelect.innerHTML = `
           <option value="GV">Giảng Viên</option>
           <option value="GV_CNBM">Giảng viên-Chủ nhiệm bộ môn</option>
-          <option value="Duyệt">Duyệt</option>
           <option value="Lãnh đạo khoa">Lãnh đạo khoa</option>`;
       } else {
-        if (maPhongBan === 'DAOTAO'){
           quyenSelect.innerHTML = `
           <option value="Thường">Thường</option>
-          <option value="DAOTAO_THIHANH">Đào tạo thi hành</option>`;
-        } else {
-          quyenSelect.innerHTML = `
           <option value="Duyệt">Duyệt</option>`;
-          
         }
-        
-      }
     })
     .catch(error => console.error('Error:', error));
     }

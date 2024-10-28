@@ -22,6 +22,10 @@ const getImport = (req, res) => {
 const getDtaoduyet = (req, res) => {
   res.render("daotaoduyet.ejs");
 };
+
+const getlog = (req, res) => {
+  res.render("log.ejs");
+};
 // const getDtaoxemhd = (req, res) => {
 //   res.render("maindt.ejs");
 // };
@@ -49,9 +53,6 @@ const getMainKhoa = (req, res) => {
   res.render("mainkhoa.ejs");
 };
 //log
-const getlog = (req, res) => {
-  res.render("log.ejs");
-};
 
 // Hàm postFile xử lý upload file Excel
 const postFile = (req, res) => {
@@ -82,6 +83,6 @@ module.exports = {
   getXemBangQC,
   // Khoa
   getMainKhoa,
-
+  getlog
   // Lấy role
 };
