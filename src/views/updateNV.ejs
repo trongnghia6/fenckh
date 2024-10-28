@@ -98,7 +98,7 @@
                                 </div>
                                 <div class="col-md-4 input-wrapper">
                                     <label for="NgayCapCCCD" class="form-label">Ngày Cấp CCCD</label>
-                                    <input type="date" class="form-control" id="NgayCapCCCD" name="NgayCapCCCD">
+                                    <input type="date" class="form-control" id="NgayCapCCCD" name="NgayCapCCCD" value="<%= new Date(value.NgayCapCCCD).toISOString().split('T')[0] %>">
                                 </div>
                                 <div class="col-md-4 input-wrapper">
                                     <label for="NoiCapCCCD" class="form-label">Nơi Cấp CCCD</label>
@@ -199,7 +199,7 @@
                             </div>
                             
                             <button type="submit" class="btn" id="btnUpdateNV">Cập nhật</button>
-                            <button class="btn mx-5"><a class="text-black" href="/nhanVien">Trở về</a></button>
+                            <button type="button" class="btn mx-5" onclick="window.location.href='/nhanVien'" >Trở về</button>
                         </form>                          
                    </div>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
@@ -316,7 +316,7 @@ fetch(`/getQuyenByPhongBan?MaPhongBan=${maPhongBan}`)
       }
       
     }
-  })
+  )
   .catch(error => console.error('Error:', error));
   }
   </script>

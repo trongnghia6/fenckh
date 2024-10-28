@@ -141,7 +141,7 @@
         <div class="row mb-3">
           <div class="col-md-4 input-wrapper">
             <label for="TenDangNhap" class="form-label">Tên đăng nhập</label>
-            <input type="text" class="form-control" id="TenDangNhap" name="TenDangNhap"/>
+            <input type="text" class="form-control" id="TenDangNhap" name="TenDangNhap" required/>
           </div>
           <div class="col-md-4 input-wrapper">
             <label for="Quyen" class="form-label">Quyền</label>
@@ -197,7 +197,7 @@
         </div>
         <div class="row mb-3"></div>
         <button type="submit" class="btn" id="btnThemNhanVien">Thêm Nhân Viên</button>
-        <button class="btn mx-5" onclick="window.history.back()">Quay lại</button>
+        <button type="button" class="btn mx-5" onclick="window.location.href='/nhanVien'" >Trở về</button>
       </form>
     </div>
 
