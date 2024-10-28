@@ -134,7 +134,7 @@ const importTableQC = async (jsonData) => {
     }];
   }
 
-  console.log('ok')
+  // console.log('ok')
   // Tạo câu lệnh INSERT động với các trường đầy đủ
   const queryInsert = `INSERT INTO ${tableName} (
     Khoa,
@@ -163,7 +163,7 @@ const importTableQC = async (jsonData) => {
 
     // Tách giảng viên và tạo mảng các đối tượng giảng viên
     const giangVienArray = tachGiaoVien(item["GiaoVien"]);
-    console.log(giangVienArray)
+    console.log('Auto fill :', giangVienArray)
     return giangVienArray.map(({ MoiGiang, GiaoVienGiangDay }) => {
       return new Promise((resolve, reject) => {
         const values = [

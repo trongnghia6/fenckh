@@ -350,7 +350,7 @@ const renderInfoWithValueKhoa = async (req, res) => {
     SELECT * FROM ${tableName} 
     WHERE Khoa = ? AND Dot = ? AND KiHoc = ? AND NamHoc = ?`;
 
-  //console.log({ Khoa, Dot, Ki, Nam }); // Log the incoming request parameters for debugging
+  console.log({ Khoa, Dot, Ki, Nam }); // Log the incoming request parameters for debugging
 
   // Lấy connection từ pool hoặc createConnection
   connection.query(

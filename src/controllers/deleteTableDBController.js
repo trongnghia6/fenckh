@@ -7,7 +7,7 @@ const fs = require('fs');
 // Hàm xóa dữ liệu từ bảng
 const deleteTableTam = async (req, res) => {
   const { Khoa, Dot, Ki, Nam } = req.body; // Lấy Khoa từ body
-  console.log('Xóa khoa : ', Khoa)
+  console.log('Xóa dữ liệu bảng tạm: ', Khoa, Dot, Ki, Nam)
   // Lấy tên bảng từ biến môi trường
   const tableTam = process.env.DB_TABLE_TAM;
 
