@@ -50,8 +50,6 @@ router.get("/maindt/tableQC", getXemBangQC);
 
 // Khoa
 router.get("/mainkhoa", getMainKhoa);
-//log
-// router.get("/log", getlog);
+router.get("/log", getlog);
 
 module.exports = router;
-

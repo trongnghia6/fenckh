@@ -376,22 +376,30 @@
       }
       // Tìm kiếm theo bộ môn
       function searchBoMon() {
-        // Lấy giá trị từ ô input tìm kiếm theo bộ môn
-        const searchValue = document.getElementById("searchBoMon").value.toLowerCase();
-        const table = document.getElementById("classTable");
-        const rows = table.getElementsByTagName("tbody")[0].getElementsByTagName("tr");
-        // Duyệt qua tất cả các hàng trong bảng để lọc
-        for (let i = 0; i < rows.length; i++) {
-          const boMonCell = rows[i].querySelector("#BoMon"); // Lấy ô có ID là BoMon
-          const boMonValue = boMonCell ? boMonCell.textContent.toLowerCase() : "";
-          // Kiểm tra nếu giá trị bộ môn phù hợp với giá trị tìm kiếm
-          if (boMonValue.includes(searchValue)) {
-            rows[i].style.display = ""; // Hiển thị hàng nếu phù hợp
-          } else {
-            rows[i].style.display = "none"; // Ẩn hàng nếu không phù hợp
+        console.log()
+        alert('mé')
+        const input = document.getElementById('searchBoMon');
+        const filter = input.value.trim().toLowerCase(); // Bỏ khoảng trắng và chuyển chữ thường
+        const tableRows = document.querySelectorAll('#tableBody tr');
+
+        tableRows.forEach(row => {
+          const nameInput = row.querySelector('td:nth-child(7) input[name="bomon"]'); // Lấy input có name="bomon" ở cột thứ 7
+          const checkbox = row.querySelector('input[type="checkbox"]');
+
+          if (nameInput) {
+            const name = nameInput.value.toLowerCase(); // Lấy giá trị của input có name="bomon"
+
+            if (filter === '' || name.includes(filter)) {
+              row.style.display = ''; // Hiện hàng nếu khớp hoặc filter trống
+              checkbox.disabled = false; // Kích hoạt checkbox
+            } else {
+              row.style.display = 'none'; // Ẩn hàng nếu không khớp
+              checkbox.disabled = true; // Vô hiệu hóa checkbox
+            }
           }
-        }
+        });
       }
+
 
 
       // Thêm lớp học
