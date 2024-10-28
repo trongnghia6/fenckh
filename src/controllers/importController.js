@@ -30,7 +30,7 @@ const convertExcelToJSON = (filePath) => {
       }, {});
     });
 
-    console.log(jsonObjects);
+    console.log('import thành công : ', jsonObjects);
 
     return jsonObjects;
   } catch (err) {
@@ -163,7 +163,7 @@ const importTableQC = async (jsonData) => {
 
     // Tách giảng viên và tạo mảng các đối tượng giảng viên
     const giangVienArray = tachGiaoVien(item["GiaoVien"]);
-    console.log('Auto fill :', giangVienArray)
+    console.log('Auto fill tên, mời giảng? :', giangVienArray)
     return giangVienArray.map(({ MoiGiang, GiaoVienGiangDay }) => {
       return new Promise((resolve, reject) => {
         const values = [
