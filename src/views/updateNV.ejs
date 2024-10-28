@@ -150,11 +150,14 @@
                               <div class="col-md-4 input-wrapper">
                                 <label for="MaPhongBan" class="form-label">Mã Phòng Ban</label>
                                 <select class="form-control" id="MaPhongBan" name="MaPhongBan" onchange="fetchQuyen()">
+                                  <!-- Option đầu tiên là giá trị hiện tại của role.MaPhongBan -->
                                   <option value="<%= role.MaPhongBan %>"><%= role.MaPhongBan %></option>
-                                  <% departmentLists.forEach(function(departmentLists) { %>
-                                  <option value="<%= departmentLists.MaPhongBan %>">
-                                    <%= departmentLists.MaPhongBan %>
-                                  </option>
+                                  
+                                  <% departmentLists.forEach(function(department) { %>
+                                    <% if (department.MaPhongBan !== role.MaPhongBan) { %>
+                                      <!-- Chỉ thêm các giá trị khác với role.MaPhongBan -->
+                                      <option value="<%= department.MaPhongBan %>"><%= department.MaPhongBan %></option>
+                                    <% } %>
                                   <% }); %>
                                 </select>
                               </div>
@@ -196,7 +199,7 @@
                             </div>
                             
                             <button type="submit" class="btn" id="btnUpdateNV">Cập nhật</button>
-                            <button class="btn mx-5" onclick="window.history.back()">Trở về</button>
+                            <button class="btn mx-5"><a class="text-black" href="/nhanVien">Trở về</a></button>
                         </form>                          
                    </div>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>

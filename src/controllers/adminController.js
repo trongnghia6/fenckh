@@ -323,6 +323,13 @@ const AdminController = {
       const [results5] = await connection.query(query5, [TenDangNhap]);
       let role = results5 && results5.length > 0 ? results5[0] : {};
 
+      //Lấy danh sách quyền theo phòng ban
+      const PhongBan = accountList.MaPhongBan;
+      const query6 = "SELECT *FROM role WHERE MaPhongBan = ?";
+      const [results6] = await connection.query(query6, [PhongBan]);
+      let roleList = results6;
+
+
       // Render trang với 2 biến: value và departmentLists
       res.render("updateTK.ejs", {
         accountList: accountList,
@@ -330,6 +337,7 @@ const AdminController = {
         user: user,
         id: id,
         role: role,
+        roleList: roleList,
       });
     } catch (error) {
       console.error("Lỗi: ", error);
@@ -355,7 +363,7 @@ const AdminController = {
         const MaPhongBan = results1.length > 0 ? results1[0].MaPhongBan : null;
         const isKhoa = results1.length > 0 ? results1[0].isKhoa : null;
         const id_User = results1.length > 0 ? results1[0].id_User : null;
-
+        
         // Trả về dữ liệu JSON
         res.json({ MaPhongBan, isKhoa, id_User });
     } catch (error) {
