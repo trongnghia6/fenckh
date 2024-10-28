@@ -266,33 +266,27 @@
               </tr>
             </thead>
             <tbody>
-              <% const options={ year: 'numeric' , month: '2-digit' , day: '2-digit' }; %>
-                <% for (let i=0; i < gvmLists.length; i++) { %>
-                  <tr>
-                    <td>
-                      <%= i + 1 %>
-                    </td>
-                    <td>
-                      <%= gvmLists[i].MaGvm %>
-                    </td>
-                    <td>
-                      <%= gvmLists[i].HoTen %>
-                    </td>
-                    <td>
-                      <%= new Date(gvmLists[i].NgaySinh).toLocaleDateString('vi-VN', options) %>
-                    </td>
-                    <td style="display: none;">
-                      <%= gvmLists[i].MaPhongBan %>
-                    </td>
-                    <td id="BoMon">
-                      <%= gvmLists[i].MonGiangDayChinh %>
-                    </td>
-                    <td>
-                      <button class="action-button edit" onclick="editClass(this, <%= i %>)">✏️</button>
-                      <button class="action-button view" onclick="viewClass(this, <%= i %>)">👁️</button>
-                    </td>
-                  </tr>
-                  <% } %>
+              <% const options = { year: 'numeric', month: '2-digit', day: '2-digit' }; %>
+              <% for (let i = 0; i < gvmLists.length; i++) { %>
+                <tr>
+                  <td><%= i + 1 %></td>
+                  <td><%= gvmLists[i].MaGvm %></td>
+                  <td><%= gvmLists[i].HoTen %></td>
+                  <td><%= new Date(gvmLists[i].NgaySinh).toLocaleDateString('vi-VN', options) %></td>
+                  <td style="display: none;"><%= gvmLists[i].MaPhongBan %></td>
+                  <td id="BoMon"><%= gvmLists[i].MonGiangDayChinh %></td>
+                  <td>
+                    <button class="action-button edit"
+                    onclick="editClass(this, <%= parseInt(gvmLists[i].id_Gvm)%>)">
+                    ✏️
+                  </button>
+                  <button class="action-button view"
+                    onclick="viewClass(this, <%= parseInt(gvmLists[i].id_Gvm) - 1 %>)">
+                    👁️
+                  </button>
+                  </td>
+                </tr>
+              <% } %>
             </tbody>
 
             <!-- code cũ -->
@@ -415,7 +409,7 @@
 
       // Chỉnh sửa gvm
       function editClass(button, index) {
-        hre = "/updateGvm/" + index;
+        var hre = "/updateGvm/" + index;
         window.location.href = hre;
       }
       function viewClass(button, index) {
