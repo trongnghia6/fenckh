@@ -212,7 +212,8 @@ body {
 button#render,
 button#xoa-qc-du-kien,
 #fillDay,
-#getData {
+#getData,
+#filter {
   --color: #0077ff;
   font-family: inherit;
   display: inline-block;
@@ -233,6 +234,10 @@ button#xoa-qc-du-kien,
 
 #chosseFile {
   margin-top: 0px;
+}
+
+#filter {
+  width: 60px;
 }
 
 #fillDay {
@@ -277,7 +282,8 @@ button#render,
 #quychuandukien::before,
 button#render::before #fillDay::before,
 #getData::before,
-#xoa-qc-du-kien::before {
+#xoa-qc-du-kien::before,
+#filter::before {
   position: absolute;
   content: "";
   background: var(--color);
@@ -299,7 +305,8 @@ button#render::before #fillDay::before,
 button#render:hover,
 #fillDay:hover,
 #getData:hover,
-#xoa-qc-du-kien:hover {
+#xoa-qc-du-kien:hover,
+#filter:hover {
   color: white;
 }
 
@@ -314,7 +321,9 @@ button#render:hover,
 #quychuandukien:before,
 button#render:before,
 #fillDay:before,
-#getData::before #xoa-qc-du-kien::before {
+#getData::before,
+#xoa-qc-du-kien::before,
+#filter::before {
   top: 100%;
   left: 100%;
   transition: 0.3s all;
@@ -332,7 +341,8 @@ button#render:before,
 button#render:hover::before,
 #fillDay:hover::before,
 #getData:hover::before,
-#xoa-qc-du-kien:hover::before {
+#xoa-qc-du-kien:hover::before,
+#filter:hover::before {
   top: -30px;
   left: -30px;
 }
