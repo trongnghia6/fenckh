@@ -703,42 +703,6 @@
           }
         }
         
-        
-        // Nếu là đào tạo hoặc tài chính
-        /*
-        if (MaPhongBan == "DAOTAO") {
-          if (check.includes(MaPhongBan)) {
-            // Ngăn thay đổi trạng thái check box khoa
-            khoaCheckbox.addEventListener("click", function (e) {
-              e.preventDefault(); // Ngăn người dùng thay đổi trạng thái checkbox
-            });
-            disableCheckAll("khoa"); // Ngăn checkbox tổng của 'khoa' không cho thay đổi
-            // Ngăn thay đổi trạng thái check box đào tạo
-            daoTaoCheckbox.addEventListener("click", function (e) {
-              e.preventDefault(); // Ngăn người dùng thay đổi trạng thái checkbox
-            });
-            // Ngăn checkbox tổng không cho thay đổi
-            disableCheckAll("daoTao");
-          }
-        }
-        if (MaPhongBan == "TAICHINH") {
-          if (check.includes(MaPhongBan)) {
-            // Ngăn thay đổi trạng thái check box đào tạo
-            daoTaoCheckbox.addEventListener("click", function (e) {
-              e.preventDefault(); // Ngăn người dùng thay đổi trạng thái checkbox
-            });
-            // Ngăn checkbox tổng không cho thay đổi
-            disableCheckAll("daoTao");
-
-            // Ngăn thay đổi trạng thái check box tài chính
-            taiChinhCheckbox.addEventListener("click", function (e) {
-              e.preventDefault(); // Ngăn người dùng thay đổi trạng thái checkbox
-            });
-            // Ngăn checkbox tổng không cho thay đổi
-            disableCheckAll("taiChinh");
-          }
-        }
-        */
         const ghiChuTd = document.createElement("td");
         if (row.ghiChu) {
           ghiChuTd.innerHTML = `📜 <span style="color: red;">•</span>`; // Hiển thị biểu tượng ghi chú và chấm đỏ
@@ -1297,6 +1261,7 @@
         }
       });
     }
+  
   </script>
   <script>
     $(document).ready(function() {

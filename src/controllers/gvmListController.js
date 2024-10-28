@@ -11,30 +11,65 @@ let gvmLists;
 let query;
 const getGvmList = async (req, res) => {
   const connection = await createConnection();
+  try {
+    // Lấy danh sách bộ môn để lọc
 
-  // Lấy danh sách bộ môn để lọc
+    // Lấy danh sách phòng ban để lọc
+    const qrPhongBan = `select * from phongban where isKhoa = 1`;
+    const [phongBanList] = await connection.query(qrPhongBan);
 
-  // Lấy danh sách phòng ban để lọc
-  const qrPhongBan = `select * from phongban where isKhoa = 1`;
-  const [phongBanList] = await connection.query(qrPhongBan);
+    // Lấy danh sách giảng viên mời
+    const isKhoa = req.session.isKhoa;
+    const MaPhongBan = req.session.MaPhongBan;
+    let query;
 
-  // Lấy danh sách giảng viên mời
-  const isKhoa = req.session.isKhoa;
-  const MaPhongBan = req.session.MaPhongBan;
-  if (!isKhoa) {
-    query = `select * from gvmoi`;
-  } else {
-    // query = `SELECT * FROM gvmoi WHERE MaPhongBan = '${parts[0]}'`;
-    query = `SELECT * FROM gvmoi WHERE MaPhongBan LIKE '%${MaPhongBan}%'`;
+    if (!isKhoa) {
+      query = `select * from gvmoi`;
+    } else {
+      query = `SELECT * FROM gvmoi WHERE MaPhongBan LIKE '%${MaPhongBan}%'`;
+    }
+
+    const [results, fields] = await connection.query(query);
+    const gvmLists = results;
+
+    res.render("gvmList.ejs", {
+      gvmLists: gvmLists,
+      phongBanList: phongBanList,
+    });
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    res.status(500).send("Internal Server Error");
+  } finally {
+    await connection.end(); // Đóng kết nối sau khi hoàn thành hoặc gặp lỗi
   }
-
-  const [results, fields] = await connection.query(query);
-  gvmLists = results;
-
-  // Push thông tin giảng viên vào mảng gvmLists
-
-  res.render("gvmList.ejs", { gvmLists: gvmLists, phongBanList: phongBanList });
 };
+
+// const getGvmList = async (req, res) => {
+//   const connection = await createConnection();
+
+//   // Lấy danh sách bộ môn để lọc
+
+//   // Lấy danh sách phòng ban để lọc
+//   const qrPhongBan = `select * from phongban where isKhoa = 1`;
+//   const [phongBanList] = await connection.query(qrPhongBan);
+
+//   // Lấy danh sách giảng viên mời
+//   const isKhoa = req.session.isKhoa;
+//   const MaPhongBan = req.session.MaPhongBan;
+//   if (!isKhoa) {
+//     query = `select * from gvmoi`;
+//   } else {
+//     // query = `SELECT * FROM gvmoi WHERE MaPhongBan = '${parts[0]}'`;
+//     query = `SELECT * FROM gvmoi WHERE MaPhongBan LIKE '%${MaPhongBan}%'`;
+//   }
+
+//   const [results, fields] = await connection.query(query);
+//   gvmLists = results;
+
+//   // Push thông tin giảng viên vào mảng gvmLists
+
+//   res.render("gvmList.ejs", { gvmLists: gvmLists, phongBanList: phongBanList });
+// };
 
 const getGvm = async (req, res) => {
   try {
@@ -44,17 +79,6 @@ const getGvm = async (req, res) => {
     res.status(500).json({ message: "Internal Server Error" }); // Xử lý lỗi
   }
 };
-
-async function fetchGvmData() {
-  const connection = await mysql.createConnection({
-    host: "localhost",
-    user: "root",
-    database: "csdl_last",
-  });
-
-  const [rows] = await connection.execute("SELECT * FROM gvmoi"); // Thay đổi theo bảng giảng viên mời
-  return rows;
-}
 
 // Hàm xuất dữ liệu ra Excel
 const exportGvmToExcel = async (req, res) => {
@@ -92,32 +116,6 @@ const exportGvmToExcel = async (req, res) => {
     res.status(500).send("Có lỗi xảy ra khi xuất dữ liệu");
   }
 };
-
-// // Khoa công nghệ thông tin
-// const getGvmListCNTT = async (req, res) => {
-//   const query = `select * from gvmoi where MaPhongBan = 'CNTT'`;
-
-//   const connection = await createConnection();
-
-//   const [results, fields] = await connection.query(query);
-//   gvmLists = results;
-//   res.render("KhoaCNTT/KhoaCnttMain.ejs", { gvmLists: results });
-// };
-
-// // const getGvm = (req, res) => {
-// //   res.json(gvmLists);
-// // };
-
-// const getGvmCNTT = async (req, res) => {
-//   try {
-//     res.json(gvmLists); // Trả về danh sách giảng viên mời
-//   } catch (error) {
-//     console.error("Error fetching GVM list:", error);
-//     res.status(500).json({ message: "Internal Server Error" }); // Xử lý lỗi
-//   }
-// };
-
-//
 
 // Xuất các hàm để sử dụng trong router
 module.exports = {
