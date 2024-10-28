@@ -245,8 +245,8 @@ button#import,
 button#viewtam,
 button#ban-hanh,
 #quychuandukien,
-button#render, 
-#xoa-qc-du-kien{
+button#render,
+#xoa-qc-du-kien {
   padding-top: 0;
 }
 
@@ -314,8 +314,7 @@ button#render:hover,
 #quychuandukien:before,
 button#render:before,
 #fillDay:before,
-#getData::before 
-#xoa-qc-du-kien::before{
+#getData::before #xoa-qc-du-kien::before {
   top: 100%;
   left: 100%;
   transition: 0.3s all;
@@ -345,7 +344,7 @@ button#render:hover::before,
 }
 
 .selectop {
-  
+
   height: 45px;
   border: 2px solid #0077ff;
   border-radius: 5px;
@@ -357,7 +356,12 @@ button#render:hover::before,
     stroke: #07f;
   }
 }
-#combobox-dot, #combobox-ki, #NamHoc, #MaPhongBan, #departmentFilter{
+
+#combobox-dot,
+#combobox-ki,
+#NamHoc,
+#MaPhongBan,
+#departmentFilter {
   width: 150px;
   color: #5476f0;
 }
