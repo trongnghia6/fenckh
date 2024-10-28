@@ -18,6 +18,7 @@ const {
 
   // Lấy role
   getRole,
+  getlog,
 } = require("../controllers/homeController");
 
 // const { createGVM } = require("../controllers/DaoTaoController");
@@ -54,3 +55,5 @@ router.get("/mainkhoa", getMainKhoa);
 router.get("/api/getRole", getRole);
 
 module.exports = router;
+//log
+router.get("/log", getlog);

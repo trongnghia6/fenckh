@@ -49,7 +49,10 @@ const getXemBangQC = (req, res) => {
 const getMainKhoa = (req, res) => {
   res.render("mainkhoa.ejs");
 };
-
+//log
+const getlog = (req, res) => {
+  res.render("log.ejs");
+};
 // Lấy role
 const getRole = (req, res) => {
   let role = req.session.role;
@@ -95,4 +98,5 @@ module.exports = {
 
   // Lấy role
   getRole,
+  getlog,
 };

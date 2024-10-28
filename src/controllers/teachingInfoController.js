@@ -250,84 +250,83 @@ const DaoTaoCheckAll = async (req, Dot, KiHoc, NamHoc) => {
   return kq;
 };
 
+// cũ
+// const TaiChinhCheckAll = async (req, Dot, KiHoc, NamHoc) => {
+//   let kq = ""; // Biến để lưu kết quả
+
+//   const query = ` SELECT MaPhongBan FROM phongban where isKhoa = 1 `;
+//   const connection1 = await createConnection();
+//   const [results, fields] = await connection1.query(query);
+
+//   // Chọn theo từng phòng ban
+//   for (let i = 0; i < results.length; i++) {
+//     const MaPhongBan = results[i].MaPhongBan;
+
+//     const query = ` SELECT TaiChinhDuyet FROM quychuan where Khoa = ? and Dot = ? and KiHoc = ? and NamHoc = ?`;
+//     const connection = await createConnection();
+//     const [check, fields] = await connection.query(query, [
+//       MaPhongBan,
+//       Dot,
+//       KiHoc,
+//       NamHoc,
+//     ]);
+
+//     let checkAll = true;
+//     for (let j = 0; j < check.length; j++) {
+//       if (check[j].TaiChinhDuyet == 0) {
+//         checkAll = false;
+//         break;
+//       }
+//     }
+//     if (checkAll == true) {
+//       kq += MaPhongBan + ",";
+//     }
+//   }
+
+//   return kq;
+// };
+
+// Mới
 const TaiChinhCheckAll = async (req, Dot, KiHoc, NamHoc) => {
   let kq = ""; // Biến để lưu kết quả
 
-  const query = ` SELECT MaPhongBan FROM phongban where isKhoa = 1 `;
-  const connection1 = await createConnection();
-  const [results, fields] = await connection1.query(query);
+  const connection = await createConnection();
 
-  // Chọn theo từng phòng ban
-  for (let i = 0; i < results.length; i++) {
-    const MaPhongBan = results[i].MaPhongBan;
+  try {
+    const query = `SELECT MaPhongBan FROM phongban WHERE isKhoa = 1`;
+    const [results, fields] = await connection.query(query);
 
-    const query = ` SELECT TaiChinhDuyet FROM quychuan where Khoa = ? and Dot = ? and KiHoc = ? and NamHoc = ?`;
-    const connection = await createConnection();
-    const [check, fields] = await connection.query(query, [
-      MaPhongBan,
-      Dot,
-      KiHoc,
-      NamHoc,
-    ]);
+    // Chọn theo từng phòng ban
+    for (let i = 0; i < results.length; i++) {
+      const MaPhongBan = results[i].MaPhongBan;
 
-    let checkAll = true;
-    for (let j = 0; j < check.length; j++) {
-      if (check[j].TaiChinhDuyet == 0) {
-        checkAll = false;
-        break;
+      const checkQuery = `
+        SELECT TaiChinhDuyet FROM quychuan 
+        WHERE Khoa = ? AND Dot = ? AND KiHoc = ? AND NamHoc = ?`;
+      const [check, checkFields] = await connection.query(checkQuery, [
+        MaPhongBan,
+        Dot,
+        KiHoc,
+        NamHoc,
+      ]);
+
+      let checkAll = true;
+      for (let j = 0; j < check.length; j++) {
+        if (check[j].TaiChinhDuyet == 0) {
+          checkAll = false;
+          break;
+        }
+      }
+      if (checkAll === true) {
+        kq += MaPhongBan + ",";
       }
     }
-    if (checkAll == true) {
-      kq += MaPhongBan + ",";
-    }
+  } finally {
+    await connection.end(); // Đóng kết nối sau khi hoàn thành tất cả truy vấn
   }
 
   return kq;
 };
-// Phương
-
-// const renderInfo = (req, res) => {
-//   const role = req.session.role;
-//   const isKhoa = req.session.isKhoa;
-//   const MaPhongBan = req.session.MaPhongBan;
-
-//   const { Dot, Ki, Nam } = req.body; // Lấy giá trị khoa, dot, ki từ body của yêu cầu
-//   const tableName = process.env.DB_TABLE_QC;
-//   let query = "";
-
-//   // Xây dựng câu truy vấn SQL sử dụng các tham số
-//   if (isKhoa == 0) {
-//     query = `
-//     SELECT * FROM ${tableName}
-//     WHERE Dot = ? AND KiHoc = ? AND NamHoc = ?;
-//   `;
-//   } else {
-//     query = `
-//     SELECT * FROM ${tableName}
-//     WHERE Dot = ? AND KiHoc = ? AND NamHoc = ? AND Khoa = '${MaPhongBan}';
-//   `;
-//   }
-
-//   const check = KhoaCheckAll(Dot, Ki, Nam);
-
-//   // Thực thi câu truy vấn với các tham số an toàn
-//   connection.query(query, [Dot, Ki, Nam], (error, results) => {
-//     if (error) {
-//       return res.status(500).json({ error: "Internal server error" });
-//     }
-
-//     if (results.length === 0) {
-//       return res.status(404).json({ message: "No data found" });
-//     }
-
-//     return res.status(200).json(results); // Trả về kết quả tương ứng với đợt, kì, năm
-//     return res.status(200).json({
-//       results : results,
-//       check: check,
-//     }); // Trả về kết quả tương ứng với đợt, kì, năm
-
-//   });
-// };
 
 const renderInfoWithValueKhoa = async (req, res) => {
   const { Khoa, Dot, Ki, Nam } = req.body; // Lấy giá trị Khoa, Dot, Ki, Nam từ body của yêu cầu
@@ -364,9 +363,7 @@ const renderInfoWithValueKhoa = async (req, res) => {
 
       if (results.length === 0) {
         // Trả về thông báo nếu không tìm thấy dữ liệu
-        return res
-          .status(404)
-          .json({ message: "Không có dữ liệu" });
+        return res.status(404).json({ message: "Không có dữ liệu" });
       }
 
       // Trả về kết quả truy vấn dưới dạng JSON
@@ -377,59 +374,114 @@ const renderInfoWithValueKhoa = async (req, res) => {
   );
 };
 
+// cũ
+// const renderInfo = async (req, res) => {
+//   const role = req.session.role;
+//   const isKhoa = req.session.isKhoa;
+//   const MaPhongBan = req.session.MaPhongBan;
+//   console.log("Mã phòng ban = ", MaPhongBan);
+
+//   const { Dot, Ki, Nam } = req.body; // Lấy giá trị khoa, dot, ki từ body của yêu cầu
+//   const tableName = process.env.DB_TABLE_QC;
+//   let query = "";
+//   console.log(Dot, Ki, Nam);
+
+//   if (isKhoa == 1) {
+//     query = `SELECT * FROM ${tableName}
+//     WHERE Dot = ? AND KiHoc = ? AND NamHoc = ? AND Khoa = ?;`;
+//   }
+//   // Xây dựng câu truy vấn SQL sử dụng các tham số
+//   if (isKhoa == 0) {
+//     query = `
+//       SELECT * FROM ${tableName}
+//       WHERE Dot = ? AND KiHoc = ? AND NamHoc = ?;
+//     `;
+//   }
+
+//   // Gọi hàm KhoaCheckAll để kiểm tra
+//   const check = await KhoaCheckAll(req, Dot, Ki, Nam);
+//   const DaoTaoCheck = await DaoTaoCheckAll(req, Dot, Ki, Nam);
+//   const TaiChinhCheck = await TaiChinhCheckAll(req, Dot, Ki, Nam);
+
+//   // Thực thi câu truy vấn với các tham số an toàn
+//   connection.query(
+//     query,
+//     isKhoa == 0 ? [Dot, Ki, Nam] : [Dot, Ki, Nam, MaPhongBan],
+//     (error, results) => {
+//       if (error) {
+//         return res.status(500).json({ error: "Internal server error" });
+//       }
+
+//       if (results.length === 0) {
+//         return res.status(404).json({ message: "No data found" });
+//       }
+
+//       // Trả về kết quả tương ứng với đợt, kì, năm và thêm check
+//       return res.status(200).json({
+//         results: results,
+//         check: check,
+//         DaoTaoCheck: DaoTaoCheck,
+//         TaiChinhCheck: TaiChinhCheck,
+//       }); // Trả về kết quả tương ứng với đợt, kì, năm và check
+//     }
+//   );
+// };
+
+// Hàm lấy tất cả tên giảng viên từ cơ sở dữ liệu
+
+// mới
 const renderInfo = async (req, res) => {
   const role = req.session.role;
   const isKhoa = req.session.isKhoa;
   const MaPhongBan = req.session.MaPhongBan;
   console.log("Mã phòng ban = ", MaPhongBan);
 
-  const { Dot, Ki, Nam } = req.body; // Lấy giá trị khoa, dot, ki từ body của yêu cầu
+  const { Dot, Ki, Nam } = req.body; // Lấy giá trị Dot, Ki, Nam từ body của yêu cầu
   const tableName = process.env.DB_TABLE_QC;
   let query = "";
-  console.log(Dot, Ki, Nam)
 
+  console.log(Dot, Ki, Nam);
+
+  // Xác định query SQL dựa trên isKhoa
   if (isKhoa == 1) {
-    query = `SELECT * FROM ${tableName}
-    WHERE Dot = ? AND KiHoc = ? AND NamHoc = ? AND Khoa = ?;`;
-  }
-  // Xây dựng câu truy vấn SQL sử dụng các tham số
-  if (isKhoa == 0) {
-    query = `
-      SELECT * FROM ${tableName}
-      WHERE Dot = ? AND KiHoc = ? AND NamHoc = ?;
-    `;
+    query = `SELECT * FROM ${tableName} WHERE Dot = ? AND KiHoc = ? AND NamHoc = ? AND Khoa = ?;`;
+  } else {
+    query = `SELECT * FROM ${tableName} WHERE Dot = ? AND KiHoc = ? AND NamHoc = ?;`;
   }
 
-  // Gọi hàm KhoaCheckAll để kiểm tra
+  // Gọi các hàm kiểm tra
   const check = await KhoaCheckAll(req, Dot, Ki, Nam);
   const DaoTaoCheck = await DaoTaoCheckAll(req, Dot, Ki, Nam);
   const TaiChinhCheck = await TaiChinhCheckAll(req, Dot, Ki, Nam);
 
-  // Thực thi câu truy vấn với các tham số an toàn
-  connection.query(
-    query,
-    isKhoa == 0 ? [Dot, Ki, Nam] : [Dot, Ki, Nam, MaPhongBan],
-    (error, results) => {
-      if (error) {
-        return res.status(500).json({ error: "Internal server error" });
-      }
+  const connection = await createConnection(); // Tạo kết nối cơ sở dữ liệu
 
-      if (results.length === 0) {
-        return res.status(404).json({ message: "No data found" });
-      }
+  try {
+    // Thực hiện truy vấn với tham số an toàn
+    const [results] = await connection.query(
+      query,
+      isKhoa == 0 ? [Dot, Ki, Nam] : [Dot, Ki, Nam, MaPhongBan]
+    );
 
-      // Trả về kết quả tương ứng với đợt, kì, năm và thêm check
-      return res.status(200).json({
-        results: results,
-        check: check,
-        DaoTaoCheck: DaoTaoCheck,
-        TaiChinhCheck: TaiChinhCheck,
-      }); // Trả về kết quả tương ứng với đợt, kì, năm và check
+    if (results.length === 0) {
+      return res.status(404).json({ message: "No data found" });
     }
-  );
+
+    // Trả về kết quả và các giá trị check
+    return res.status(200).json({
+      results: results,
+      check: check,
+      DaoTaoCheck: DaoTaoCheck,
+      TaiChinhCheck: TaiChinhCheck,
+    });
+  } catch (error) {
+    // Xử lý lỗi trong trường hợp truy vấn thất bại
+    return res.status(500).json({ error: "Internal server error" });
+  } finally {
+    await connection.end(); // Đảm bảo đóng kết nối sau khi hoàn tất
+  }
 };
 
-// Hàm lấy tất cả tên giảng viên từ cơ sở dữ liệu
 const getNameGV = (req, res) => {
   // Truy vấn để lấy danh sách giảng viên mời
   const query = "SELECT DISTINCT TenNhanVien,MaPhongBan FROM nhanvien;";
