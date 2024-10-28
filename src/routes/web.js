@@ -53,4 +53,3 @@ router.get("/mainkhoa", getMainKhoa);
 
 module.exports = router;
 //log
-router.get("/log", getlog);
