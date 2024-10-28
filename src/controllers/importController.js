@@ -31,7 +31,7 @@ const convertExcelToJSON = (filePath) => {
       }, {});
     });
 
-    console.log(jsonObjects);
+    console.log("import thành công : ", jsonObjects);
 
     return jsonObjects;
   } catch (err) {
