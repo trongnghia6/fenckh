@@ -518,7 +518,6 @@
       localStorage.setItem('nameGvm', JSON.stringify(nameGvm));
 
       rs = await teachingResponse.json();
-
       // Thêm check
       globalData = rs.results.map(item => ({
         ...item,
@@ -783,22 +782,6 @@
         }
 
       }
-
-      // Điều kiện ẩn checkbox Khoa nếu role không phải "CNTT_ALL"
-      /*
-      if (isKhoa == 1 && role != "Lãnh đạo khoa" && khoaCheckbox && khoaCheckboxTd) {
-        // Thiết lập thuộc tính CSS để thu nhỏ checkbox và ô <td> chứa nó
-        khoaCheckbox.style.width = '10px';    // Đặt chiều rộng nhỏ nhất có thể
-        alert("2")
-        khoaCheckbox.style.height = '10px';   // Đặt chiều cao nhỏ nhất có thể
-        alert("3")
-        khoaCheckbox.style.display = 'none';
-
-        // Thu nhỏ <td>
-        khoaCheckboxTd.style.width = '1px';
-        khoaCheckboxTd.style.padding = '0';
-      }
-      */
 
       const check = localStorage.getItem("check");
       // Phân quyền theo phòng ban
