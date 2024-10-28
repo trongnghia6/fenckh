@@ -1,6 +1,5 @@
 const express = require("express");
-
-const createConnection = require("../config/databaseAsync");
+const createPoolConnection = require("../config/databasePool");
 const gvmList = require("../services/gvmServices");
 require("dotenv").config();
 const path = require("path");
@@ -47,10 +46,11 @@ const convertExcelToJSON = (req, res) => {
       res.status(500).send("Đã xảy ra lỗi khi đọc file!");
     });
 };
+
 function formatDateForMySQL(dateString) {
   // Chuyển đổi từ định dạng ISO với thời gian sang chỉ ngày
-  return dateString.split('T')[0]; // '1985-09-13'
-};
+  return dateString.split("T")[0]; // '1985-09-13'
+}
 
 // Xử lý
 const getArrValue = async (req, res) => {
@@ -69,104 +69,10 @@ const getArrValue = async (req, res) => {
   });
 };
 
-// const saveToDB = async (req, res) => {
-//   try {
-//     const connection = await createConnection(); // Kết nối đến DB
-//     const data = JSON.parse(req.body.data); // Lấy dữ liệu từ request (dữ liệu đã render ra)
-
-//     // Lấy Mã giảng viên mời = Mã Khoa + _GVM_ + id
-//     const role = req.session.role;
-//     const parts = role.split("_"); // Mã khoa
-
-//     const MaPhongBan = parts[0]; // Mã Phòng ban
-
-//     const TinhTrangGiangDay = 1; // Tình trạng giảng dạy
-
-//     if (data && data.length > 0) {
-//       for (const row of data) {
-//         // const sql = `
-//         //   INSERT INTO your_table_name
-//         //   (ngay_ky_hop_dong, ky, danh_xung, ho_ten, ngay_sinh, cccd, ngay_cap, noi_cap, dia_chi_cccd, email, ma_so_thue, cap_bac, chuc_vu, he_so_luong, dien_thoai, so_tai_khoan, tai_ngan_hang, thoi_gian_thuc_hien, so_tiet, so_tien, tru_thue, thuc_nhan, ngay_nghiem_thu)
-//         //   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-//         // `;
-
-//         const sql = `
-//         INSERT INTO gvmoi
-//         (GioiTinh, MaGvm, HoTen, NgaySinh, CCCD, NgayCapCCCD, NoiCapCCCD, DiaChi, Email, MaSoThue, HocVi, ChucVu, HSL, DienThoai, STK, NganHang, MaPhongBan, TinhTrangGiangDay)
-//         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-//         `;
-
-//         const gvms = await gvmList.getGvmLists(req, res);
-//         length = parseInt(gvms.length) + 1;
-
-//         const MaGvm = MaPhongBan + "_GVM_" + length;
-
-//         // Chuyển đổi dữ liệu để phù hợp với cột trong DB
-//         const GioiTinh = row["Danh xưng"] === "Ông" ? "Nam" : "Nữ";
-//         const HoTen = row["Họ và tên"];
-//         const NgaySinh = row["Ngày sinh"];
-//         const CCCD = row["CCCD"];
-//         const NgayCapCCCD = row["Ngày cấp"];
-//         const NoiCapCCCD = row["Nơi cấp"];
-//         const DiaChi = row["Địa chỉ theo CCCD"];
-//         const Email = row["Email"];
-//         const MaSoThue = row["Mã số thuế"];
-//         const HocVi = row["Cấp bậc"];
-//         const ChucVu = row["Chức vụ"];
-//         const HSL = row["Hệ số lương"];
-//         const DienThoai = row["Điện thoại"];
-//         const STK = row["Số tài khoản"];
-//         const NganHang = row["Tại ngân hàng"];
-
-//         const values = [
-//           GioiTinh,
-//           MaGvm,
-//           HoTen,
-//           NgaySinh,
-//           CCCD,
-//           NgayCapCCCD,
-//           NoiCapCCCD,
-//           DiaChi,
-//           Email,
-//           MaSoThue,
-//           HocVi,
-//           ChucVu,
-//           HSL,
-//           DienThoai,
-//           STK,
-//           NganHang,
-//           MaPhongBan,
-//           TinhTrangGiangDay,
-//         ];
-
-//         gvms.forEach((gvm, index) => {
-//           if (gvm.CCCD == CCCD) {
-//             if (gvm.MaPhongBan == MaPhongBan) {
-//               return res.status(400).json({ message: `CCCD ${CCCD} bị trùng` });
-//             }
-//             gvm.MaPhongBan += `, ${MaPhongBan}`;
-//             return;
-//           }
-//         });
-
-//         await connection.query(sql, values);
-//       }
-//       // Gửi phản hồi thành công
-//       res.json({ message: "Dữ liệu đã được lưu thành công vào database!" });
-//       //res.send("Dữ liệu đã được lưu thành công vào database!");
-//     } else {
-//       // Gửi phản hồi lỗi nếu không có dữ liệu
-//       res.status(400).json({ message: "Không có dữ liệu để lưu." });
-//       //res.status(400).send("Không có dữ liệu để lưu.");
-//     }
-//   } catch (error) {
-//     console.error("Lỗi khi lưu dữ liệu vào database:", error);
-//     res.status(500).send("Đã xảy ra lỗi khi lưu dữ liệu vào database!");
-//   }
-// };
-
 const saveToDB = async (req, res) => {
-  try {const connection = await createConnection(); // Kết nối đến DB
+  let connection;
+  try {
+    connection = await createPoolConnection(); // Kết nối đến DB
     const data = JSON.parse(req.body.data); // Lấy dữ liệu từ request (dữ liệu đã render ra)
 
     // Lấy Mã giảng viên mời = Mã Khoa + _GVM_ + id
@@ -176,21 +82,10 @@ const saveToDB = async (req, res) => {
     const TinhTrangGiangDay = 1; // Tình trạng giảng dạy
 
     if (data && data.length > 0) {
+      const gvms = await gvmList.getGvmLists(req, res);
+      let length = parseInt(gvms.length) + 1;
+
       for (const row of data) {
-        // const sql = `
-        //   INSERT INTO gvmoi
-        //   (GioiTinh, MaGvm, HoTen, NgaySinh, CCCD, NgayCapCCCD, NoiCapCCCD, DiaChi, Email, MaSoThue, HocVi, ChucVu, HSL, DienThoai, STK, NganHang, MaPhongBan, TinhTrangGiangDay)
-        //   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-        // `;
-        const sql = `
-        INSERT INTO gvmoi
-        (GioiTinh, MaGvm, HoTen, NgaySinh, BangTotNghiepLoai, NoiCongTac, MonGiangDayChinh, DiaChi, Email, MaSoThue, HocVi, ChucVu, HSL, DienThoai, STK, NganHang, MaPhongBan, TinhTrangGiangDay, CCCD, NgayCapCCCD, NoiCapCCCD)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-      `;
-
-        const gvms = await gvmList.getGvmLists(req, res);
-        let length = parseInt(gvms.length) + 1;
-
         const MaGvm = MaPhongBan + "_GVM_" + length;
 
         // Chuyển đổi dữ liệu để phù hợp với cột trong DB
@@ -218,12 +113,7 @@ const saveToDB = async (req, res) => {
         const NgaySinh = formatDateForMySQL(dateSinh); // Kết quả: '1985-09-13'
         const dateCap = row["Ngày sinh"]; // '1985-09-13T00:00:00.000Z'
         const NgayCapCCCD = formatDateForMySQL(dateCap); // Kết quả: '1985-09-13'
-
-        //
-
         //const HocVi = row["Cấp bậc"];
-
-        let isDuplicate = false;
 
         // Kiểm tra trùng CCCD
         for (const gvm of gvms) {
@@ -231,30 +121,14 @@ const saveToDB = async (req, res) => {
             return res.status(400).json({
               message: `Giảng viên mời ${HoTen} với CCCD ${CCCD} bị trùng, dữ liệu từ giảng viên này sẽ không được nhập`,
             });
-
-            //MaPhongBan = null;
-            // isDuplicate = true;
-            // break;
           }
         }
-        // for (const gvm of gvms) {
-        //   if (gvm.CCCD === CCCD) {
-        //     if (gvm.MaPhongBan === MaPhongBan) {
-        //       // Nếu CCCD và MaPhongBan trùng
-        //       return res.status(400).json({
-        //         message: `CCCD ${CCCD} bị trùng trong cùng Phòng ban`,
-        //       });
-        //     }
-        //     const query = `UPDATE gvmoi SET MaPhongBan = ? where id_Gvm = ?`;
-        //     // Nối thêm MaPhongBan nếu CCCD trùng nhưng MaPhongBan khác
-        //     const MaPhongBan2 = `${gvm.MaPhongBan},${MaPhongBan}`;
 
-        //     await connection.query(query, [MaPhongBan2, gvm.id_Gvm]);
-        //     //MaPhongBan = null;
-        //     isDuplicate = true;
-        //     break;
-        //   }
-        // }
+        const sql = `
+        INSERT INTO gvmoi
+        (GioiTinh, MaGvm, HoTen, NgaySinh, BangTotNghiepLoai, NoiCongTac, MonGiangDayChinh, DiaChi, Email, MaSoThue, HocVi, ChucVu, HSL, DienThoai, STK, NganHang, MaPhongBan, TinhTrangGiangDay, CCCD, NgayCapCCCD, NoiCapCCCD)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      `;
 
         const values = [
           GioiTinh,
@@ -281,11 +155,7 @@ const saveToDB = async (req, res) => {
         ];
 
         await connection.query(sql, values);
-
-        // if (!isDuplicate) {
-        //   // Thêm mới vào DB
-        //   await connection.query(sql, values);
-        // }
+        length++; // Tăng độ dài sau mỗi lần chèn thành công
       }
 
       // Gửi phản hồi thành công
@@ -299,6 +169,8 @@ const saveToDB = async (req, res) => {
     if (!res.headersSent) {
       res.status(500).send("Đã xảy ra lỗi khi lưu dữ liệu vào database!");
     }
+  } finally {
+    if (connection) connection.release(); // Đảm bảo giải phóng kết nối
   }
 };
 

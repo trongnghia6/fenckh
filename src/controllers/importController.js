@@ -3,6 +3,7 @@ const fs = require("fs");
 require("dotenv").config();
 const path = require("path");
 const connection = require("../controllers/connectDB");
+const createPoolConnection = require("../config/databasePool");
 const { json, query } = require("express");
 const gvms = require("../services/gvmServices");
 const nhanviens = require("../services/nhanvienServices");
@@ -117,10 +118,13 @@ const importTableQC = async (jsonData) => {
     const titleRegex = /(PGS\.?|TS\.?|PGS\.? TS\.?)\s*/gi; // Biểu thức chính quy để loại bỏ danh hiệu
 
     // Xóa danh hiệu khỏi chuỗi nhưng giữ lại phần còn lại
-    const cleanedInput = giaoVienInput.replace(titleRegex, '').trim();
+    const cleanedInput = giaoVienInput.replace(titleRegex, "").trim();
 
     // Tách tên giảng viên bằng cả dấu phẩy và dấu chấm phẩy
-    const lecturers = cleanedInput.split(/[,;]\s*/).map(name => name.trim()).filter(name => name.length > 0);
+    const lecturers = cleanedInput
+      .split(/[,;]\s*/)
+      .map((name) => name.trim())
+      .filter((name) => name.length > 0);
 
     // Nếu không có giảng viên, trả về giá trị mặc định
     if (lecturers.length === 0) {
@@ -128,13 +132,15 @@ const importTableQC = async (jsonData) => {
     }
 
     // Tạo mảng kết quả chứa thông tin giảng viên
-    return [{
-      MoiGiang: false, // Không có giảng viên mời
-      GiaoVienGiangDay: lecturers[0], // Lấy tên giảng viên đầu tiên
-    }];
+    return [
+      {
+        MoiGiang: false, // Không có giảng viên mời
+        GiaoVienGiangDay: lecturers[0], // Lấy tên giảng viên đầu tiên
+      },
+    ];
   }
 
-  console.log('ok')
+  console.log("ok");
   // Tạo câu lệnh INSERT động với các trường đầy đủ
   const queryInsert = `INSERT INTO ${tableName} (
     Khoa,
@@ -163,7 +169,7 @@ const importTableQC = async (jsonData) => {
 
     // Tách giảng viên và tạo mảng các đối tượng giảng viên
     const giangVienArray = tachGiaoVien(item["GiaoVien"]);
-    console.log(giangVienArray)
+    console.log(giangVienArray);
     return giangVienArray.map(({ MoiGiang, GiaoVienGiangDay }) => {
       return new Promise((resolve, reject) => {
         const values = [
@@ -224,7 +230,6 @@ const importTableQC = async (jsonData) => {
 
   return results;
 };
-
 
 // Hàm nhập dữ liệu vào bảng quychuan
 const importTableTam = async (jsonData) => {
