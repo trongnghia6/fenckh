@@ -6,7 +6,7 @@ const gvmListController = require("../controllers/gvmListController"); // Địn
 // Đào tạo
 router.get("/gvmList", gvmListController.getGvmList);
 router.get("/api/gvm", gvmListController.getGvm);
-router.get("/gvm/export-excel", gvmListController.exportGvmToExcel);// router.get("/khoaCNTT", getGvmListCNTT);
+//router.get("/gvm/export-excel", gvmListController.exportGvmToExcel);// router.get("/khoaCNTT", getGvmListCNTT);
 // router.get("/api/gvmKhoaCNTT", getGvmCNTT);
 
 module.exports = router;

@@ -1,6 +1,5 @@
 const express = require("express");
 const multer = require("multer");
-const connection = require("../config/database");
 
 const router = express.Router();
 
@@ -49,18 +48,9 @@ const getXemBangQC = (req, res) => {
 const getMainKhoa = (req, res) => {
   res.render("mainkhoa.ejs");
 };
-
-// Lấy role
-const getRole = (req, res) => {
-  let role = req.session.role;
-
-  console.log("role = ", role);
-  try {
-    res.json(role); // Trả về danh sách giảng viên mời
-  } catch (error) {
-    console.error("Error fetching GVM list:", error);
-    res.status(500).json({ message: "Internal Server Error" }); // Xử lý lỗi
-  }
+//log
+const getlog = (req, res) => {
+  res.render("log.ejs");
 };
 
 // Hàm postFile xử lý upload file Excel
@@ -94,5 +84,4 @@ module.exports = {
   getMainKhoa,
 
   // Lấy role
-  getRole,
 };

@@ -103,22 +103,15 @@ router.post("/viewtam", role.checkDaotaoRoleThiHanh, async (req, res) => {
   }
 });
 
-router.get("/get-table-tam", async (req, res) => {
-  try {
-    const data = await obj2.getTableTam(); // Lấy dữ liệu từ cơ sở dữ liệu
-    res.json(data); // Trả về dữ liệu dưới dạng JSON
-  } catch (error) {
-    console.error("Lỗi khi lấy dữ liệu:", error);
-    res.status(500).json({ message: "Lỗi khi lấy dữ liệu" });
-  }
-});
+router.post("/get-table-tam", (req, res) => obj2.getTableTam(req, res));
+
 
 router.get("/getNamHoc", async (req, res) => {
   try {
     const connection = await createConnection();
     const query = "SELECT NamHoc FROM `namhoc` ORDER BY NamHoc ASC";
     const [result] = await connection.query(query);
-    
+
     // Đóng kết nối sau khi truy vấn hoàn thành
     connection.end();
 

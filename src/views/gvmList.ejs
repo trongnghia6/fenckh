@@ -276,8 +276,14 @@
                   <td style="display: none;"><%= gvmLists[i].MaPhongBan %></td>
                   <td id="BoMon"><%= gvmLists[i].MonGiangDayChinh %></td>
                   <td>
-                    <button class="action-button edit" onclick="editClass(this, <%= i %>)">✏️</button>
-                    <button class="action-button view" onclick="viewClass(this, <%= i %>)">👁️</button>
+                    <button class="action-button edit"
+                    onclick="editClass(this, <%= parseInt(gvmLists[i].id_Gvm)%>)">
+                    ✏️
+                  </button>
+                  <button class="action-button view"
+                    onclick="viewClass(this, <%= parseInt(gvmLists[i].id_Gvm) - 1 %>)">
+                    👁️
+                  </button>
                   </td>
                 </tr>
               <% } %>
@@ -330,24 +336,24 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
       document.addEventListener("DOMContentLoaded", () => {
-          const isKhoa = localStorage.getItem("isKhoa");
-  
-          // Ẩn button ngay khi trang được tải
-          const actionButton = document.getElementById('actionButton');
-              const actionButton1 = document.getElementById('actionButton1');
-      const actionButton2 = document.getElementById('actionButton2');
-  
-      if (isKhoa == 0) {
-              actionButton1.style.display = 'none'; // Ẩn actionButton1 nếu isKhoa = 0
-              actionButton2.style.display = 'inline-block'; // Hiện actionButton2
-              
-          } else {
-              actionButton1.style.display = 'inline-block'; // Hiện actionButton1 nếu isKhoa khác 0
-              actionButton2.style.display = 'none'; // Ẩn actionButton2
-              
-          }
-        });
-  </script>
+        const isKhoa = localStorage.getItem("isKhoa");
+
+        // Ẩn button ngay khi trang được tải
+        const actionButton = document.getElementById('actionButton');
+        const actionButton1 = document.getElementById('actionButton1');
+        const actionButton2 = document.getElementById('actionButton2');
+
+        if (isKhoa == 0) {
+          actionButton1.style.display = 'none'; // Ẩn actionButton1 nếu isKhoa = 0
+          actionButton2.style.display = 'inline-block'; // Hiện actionButton2
+
+        } else {
+          actionButton1.style.display = 'inline-block'; // Hiện actionButton1 nếu isKhoa khác 0
+          actionButton2.style.display = 'none'; // Ẩn actionButton2
+
+        }
+      });
+    </script>
 
     <script>
       // Tìm kiếm giảng viên mời theo tên
@@ -395,7 +401,7 @@
 
       // Chỉnh sửa gvm
       function editClass(button, index) {
-        hre = "/updateGvm/" + index;
+        var hre = "/updateGvm/" + index;
         window.location.href = hre;
       }
       function viewClass(button, index) {
@@ -612,7 +618,7 @@
     <script>
       document.addEventListener('DOMContentLoaded', async function () {
         const MaPhongBan = localStorage.getItem("MaPhongBan");
-        alert(MaPhongBan);
+        // alert(MaPhongBan);
 
         try {
           const response = await fetch('http://localhost:3000/bo-mon', {
