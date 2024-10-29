@@ -70,8 +70,8 @@
       </nav>
                       <!-- Main content -->
                       <div class="container my-5 box">
-                        <h2>Sửa Nhân Viên</h2>
-                        <form  id="updateNV" action="/updateNV/:id" method="POST">
+                        <h2>Xem Thông Tin Nhân Viên</h2>
+                        <form  id="viewNV" action="/viewNV/:id" method="GET">
                             <div class="row mb-3">
                                 <!-- <div class="col-md-4 input-wrapper">
                                     <label for="MaNhanVien" class="form-label">Mã Nhân Viên</label>
@@ -80,60 +80,57 @@
                                 <input type="hidden" name="Id_User" value="<%= value.id_User %> ">
                                 <div class="col-md-4 input-wrapper">
                                     <label for="TenNhanVien" class="form-label">Tên Nhân Viên</label>
-                                    <input type="text" class="form-control" id="TenNhanVien" name="TenNhanVien" value="<%= value.TenNhanVien %> " required>
+                                    <input type="text" class="form-control" id="TenNhanVien" name="TenNhanVien" value="<%= value.TenNhanVien %> " readonly />
                                 </div>
                                 <div class="col-md-4 input-wrapper">
                                     <label for="NgaySinh" class="form-label">Ngày Sinh</label>
-                                    <input type="date" class="form-control" id="NgaySinh" name="NgaySinh" value="<%= new Date(value.NgaySinh).toISOString().split('T')[0] %>" >
+                                    <input type="date" class="form-control" id="NgaySinh" name="NgaySinh" value="<%= new Date(value.NgaySinh).toISOString().split('T')[0] %>" readonly />
                                 </div>
                                 <div class="col-md-4 input-wrapper">
                                     <label for="HocVi" class="form-label">Học Vị</label>
-                                    <input type="text" class="form-control" id="HocVi" name="HocVi" value="<%= value.HocVi %>">
+                                    <input type="text" class="form-control" id="HocVi" name="HocVi" value="<%= value.HocVi %>" readonly />
                                 </div>
                             </div>
                             <div class="row mb-3">
                                 <div class="col-md-4 input-wrapper">
                                     <label for="CCCD" class="form-label">CCCD</label>
-                                    <input type="text" class="form-control" id="CCCD" name="CCCD" value="<%= value.CCCD %>">
+                                    <input type="text" class="form-control" id="CCCD" name="CCCD" value="<%= value.CCCD %>" readonly />
                                 </div>
                                 <div class="col-md-4 input-wrapper">
                                     <label for="NgayCapCCCD" class="form-label">Ngày Cấp CCCD</label>
-                                    <input type="date" class="form-control" id="NgayCapCCCD" name="NgayCapCCCD" value="<%= new Date(value.NgayCapCCCD).toISOString().split('T')[0] %>">
+                                    <input type="date" class="form-control" id="NgayCapCCCD" name="NgayCapCCCD" value="<%= new Date(value.NgayCapCCCD).toISOString().split('T')[0] %>" readonly />
                                 </div>
                                 <div class="col-md-4 input-wrapper">
                                     <label for="NoiCapCCCD" class="form-label">Nơi Cấp CCCD</label>
-                                    <input type="text" class="form-control" id="NoiCapCCCD" name="NoiCapCCCD" value="<%= value.NoiCapCCCD %>">
+                                    <input type="text" class="form-control" id="NoiCapCCCD" name="NoiCapCCCD" value="<%= value.NoiCapCCCD %>" readonly />
                                 </div>
                             </div>
                             <div class="row mb-3">
                                 <div class="col-md-4 input-wrapper">
                                     <label for="gioitinh">Giới tính:</label>
-                                    <select class="form-control" name="GioiTinh" id="gioitinh" >
-                                        <option value="Nam" <%= value.GioiTinh === 'Nam' ? 'selected' : '' %>>Nam</option>
-                                        <option value="Nữ" <%= value.GioiTinh === 'Nữ' ? 'selected' : '' %>>Nữ</option>
-                                    </select>
+                                    <input type="text" class="form-control" value="<%= value.GioiTinh %>" readonly />
                                 </div>
                                 <div class="col-md-4 input-wrapper">
                                     <label for="DienThoai" class="form-label">Điện Thoại</label>
-                                    <input type="tel" class="form-control" id="DienThoai" name="DienThoai" value="<%= value.DienThoai %>">
+                                    <input type="tel" class="form-control" id="DienThoai" name="DienThoai" value="<%= value.DienThoai %>" readonly />
                                 </div>
                                 <div class="col-md-4 input-wrapper">
                                     <label for="DiaChiCCCD" class="form-label">Địa Chỉ Trong CCCD</label>
-                                    <input type="text" class="form-control" id="DiaChiCCCD" name="DiaChiCCCD" value="<%= value.DiaChiCCCD %>" >
+                                    <input type="text" class="form-control" id="DiaChiCCCD" name="DiaChiCCCD" value="<%= value.DiaChiCCCD %>" readonly />
                                 </div>
                             </div>
                             <div class="row mb-3">
                                 <div class="col-md-4 input-wrapper">
                                     <label for="ChucVu" class="form-label">Chức Vụ</label>
-                                    <input type="text" class="form-control" id="ChucVu" name="ChucVu" value="<%= value.ChucVu %>">
+                                    <input type="text" class="form-control" id="ChucVu" name="ChucVu" value="<%= value.ChucVu %>" readonly />
                                 </div>
                                 <div class="col-md-4 input-wrapper">
                                     <label for="NoiCongTac" class="form-label">Nơi Công Tác</label>
-                                    <input type="text" class="form-control" id="NoiCongTac" name="NoiCongTac" value="<%= value.NoiCongTac %>">
+                                    <input type="text" class="form-control" id="NoiCongTac" name="NoiCongTac" value="<%= value.NoiCongTac %>" readonly />
                                 </div>
                                 <div class="col-md-4 input-wrapper">
                                   <label for="DiaChiHienNay" class="form-label">Địa Chỉ Hiện Nay</label>
-                                  <input type="text" class="form-control" id="DiaChiHienNay" name="DiaChiHienNay" value="<%= value.DiaChiHienNay %>" >
+                                  <input type="text" class="form-control" id="DiaChiHienNay" name="DiaChiHienNay" value="<%= value.DiaChiHienNay %>" readonly />
                                 </div>
                             </div>
                             <div class="row mb-3">
@@ -143,68 +140,50 @@
                               </div>
                               <div class="col-md-4 input-wrapper">
                                 <label for="Quyen" class="form-label">Quyền</label>
-                                <select id="Quyen" class="form-control" name="Quyen">
-                                  <option value="<%= role.Quyen %>"><%= role.Quyen %></option>
-                                </select>
+                                <input type="text" class="form-control" value="<%= role.Quyen %>" readonly />
                               </div>
                               <div class="col-md-4 input-wrapper">
                                 <label for="MaPhongBan" class="form-label">Mã Phòng Ban</label>
-                                <select class="form-control" id="MaPhongBan" name="MaPhongBan" onchange="fetchQuyen()">
-                                  <!-- Option đầu tiên là giá trị hiện tại của role.MaPhongBan -->
-                                  <option value="<%= role.MaPhongBan %>"><%= role.MaPhongBan %></option>
-                                  
-                                  <% departmentLists.forEach(function(department) { %>
-                                    <% if (department.MaPhongBan !== role.MaPhongBan) { %>
-                                      <!-- Chỉ thêm các giá trị khác với role.MaPhongBan -->
-                                      <option value="<%= department.MaPhongBan %>"><%= department.MaPhongBan %></option>
-                                    <% } %>
-                                  <% }); %>
-                                </select>
-                              </div>
-                              <div class="col-md-4 input-wrapper" hidden>
-                                <label for="MatKhau" class="form-label">Mật khẩu</label>
-                                <input type="text" class="form-control" id="MatKhau" name="MatKhau"/>
+                                <input type="text" class="form-control" value="<%= role.MaPhongBan %>" readonly />
                               </div>
                             </div>
                             <div class="row mb-3">
                                 <div class="col-md-4 input-wrapper">
                                     <label for="SoTaiKhoan" class="form-label">Số Tài Khoản</label>
-                                    <input type="text" class="form-control" id="SoTaiKhoan" name="SoTaiKhoan" value="<%= value.SoTaiKhoan %>">
+                                    <input type="text" class="form-control" id="SoTaiKhoan" name="SoTaiKhoan" value="<%= value.SoTaiKhoan %>" readonly />
                                 </div>
                                 <div class="col-md-4 input-wrapper">
                                     <label for="NganHang" class="form-label">Ngân Hàng</label>
-                                    <input type="text" class="form-control" id="NganHang" name="NganHang" value="<%= value.NganHang %>">
+                                    <input type="text" class="form-control" id="NganHang" name="NganHang" value="<%= value.NganHang %>" readonly />
                                 </div>
                                 <div class="col-md-4 input-wrapper">
                                     <label for="ChiNhanh" class="form-label">Chi Nhánh</label>
-                                    <input type="text" class="form-control" id="ChiNhanh" name="ChiNhanh" value="<%= value.ChiNhanh %>">
+                                    <input type="text" class="form-control" id="ChiNhanh" name="ChiNhanh" value="<%= value.ChiNhanh %>" readonly />
                                 </div>
                             </div>
                             <div class="row mb-3">
                                 <div class="col-md-4 input-wrapper">
                                     <label for="MaSoThue" class="form-label">Mã Số Thuế</label>
-                                    <input type="text" class="form-control" id="MaSoThue" name="MaSoThue" value="<%= value.MaSoThue %>">
+                                    <input type="text" class="form-control" id="MaSoThue" name="MaSoThue" value="<%= value.MaSoThue %>" readonly />
                                 </div>
                                 
                                 <div class="col-md-4 input-wrapper">
                                     <label for="MonGiangDayChinh" class="form-label">Môn Giảng Dạy Chính</label>
-                                    <input type="text" class="form-control" id="MonGiangDayChinh" name="MonGiangDayChinh" value="<%= value.MonGiangDayChinh %>">
+                                    <input type="text" class="form-control" id="MonGiangDayChinh" name="MonGiangDayChinh" value="<%= value.MonGiangDayChinh %>" readonly />
                                 </div>
                                 <div class="col-md-4 input-wrapper">
                                     <label for="CacMonLienQuan" class="form-label">Các Môn Liên Quan</label>
-                                    <input type="text" class="form-control" id="CacMonLienQuan" name="CacMonLienQuan" value="<%= value.CacMonLienQuan %>">
+                                    <input type="text" class="form-control" id="CacMonLienQuan" name="CacMonLienQuan" value="<%= value.CacMonLienQuan %>" readonly />
                                 </div>
                             </div>
                             <div class="row mb-3">
                             </div>
-                            
-                            <button type="submit" class="btn" id="btnUpdateNV">Cập nhật</button>
                             <button type="button" class="btn mx-5" onclick="window.location.href='/nhanVien'" >Trở về</button>
                         </form>                          
                    </div>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
+<!-- 
   <script>
     // Lấy query string từ URL
     const urlParams = new URLSearchParams(window.location.search);
@@ -225,7 +204,7 @@
         //window.history.replaceState({}, document.title, newUrl);
     }
 
-  </script>
+  </script> -->
 
   <!-- Phần phân quyền -->
   <script>
@@ -292,7 +271,7 @@
       }
     });
   </script>
-  <script>
+  <!-- <script>
     function fetchQuyen() {
 const maPhongBan = document.getElementById('MaPhongBan').value;
 alert(maPhongBan);
@@ -319,7 +298,7 @@ fetch(`/getQuyenByPhongBan?MaPhongBan=${maPhongBan}`)
   )
   .catch(error => console.error('Error:', error));
   }
-  </script>
+  </script> -->
   <script>
     document.getElementById("changePasswordLink").addEventListener("click", function(event) {
   event.preventDefault(); // Ngăn chặn hành vi mặc định của thẻ a

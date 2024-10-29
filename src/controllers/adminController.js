@@ -538,6 +538,44 @@ const AdminController = {
     }
   },
 
+  getViewNV: async (req, res) => {
+    let connection;
+    try {
+      const id_User = parseInt(req.params.id) + 1;
+
+      // Lấy dữ liệu nhân viên
+      connection = await createPoolConnection();
+      const query1 = "SELECT * FROM `nhanvien` WHERE id_User = ?";
+      const [results1] = await connection.query(query1, [id_User]);
+      let user = results1 && results1.length > 0 ? results1[0] : {};
+
+      // Lấy dữ liệu tài khoản
+      connection = await createPoolConnection();
+      const query3 = "SELECT * FROM `taikhoannguoidung` WHERE id_User = ?";
+      const [results3] = await connection.query(query3, [id_User]);
+      let account = results3 && results3.length > 0 ? results3[0] : {};
+      let TenDangNhap = account.TenDangNhap || "";
+
+      // Lấy dữ liệu role
+      connection = await createPoolConnection();
+      const query4 = "SELECT * FROM `role` WHERE TenDangNhap = ?";
+      const [results4] = await connection.query(query4, [TenDangNhap]);
+      let role = results4 && results4.length > 0 ? results4[0] : {};
+
+      // Render trang với 2 biến: value và departmentLists
+      res.render("viewNV.ejs", {
+        value: user,
+        account: account,
+        role: role,
+      });
+    } catch (error) {
+      console.error("Lỗi: ", error);
+      res.status(500).send("Đã có lỗi xảy ra");
+    } finally {
+      if (connection) connection.release(); // Đảm bảo giải phóng kết nối
+    }
+  },
+
   // Other methods can be added here as needed...
 };
 
