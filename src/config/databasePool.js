@@ -7,8 +7,7 @@ const pool = mysql.createPool({
   database: process.env.DB_NAME,
   port: process.env.DB_PORT,
   connectionLimit: 10, // Giới hạn số kết nối tối đa trong pool
-  connectTimeout: 10, // 10 giây
-
+  connectTimeout: 10000, // 10 giây
   queueLimit: 0, // Không giới hạn hàng đợi (hoặc có thể đặt giới hạn cụ thể)
 });
 
