@@ -131,6 +131,7 @@ const postUpdateNV = async (req, res) => {
     Quyen,
   } = req.body;
 
+  const MaNhanVien = `${MaPhongBan}${Id_User}`;
   try {
     connection = await createPoolConnection(); // Lấy kết nối từ pool
 
@@ -154,7 +155,8 @@ const postUpdateNV = async (req, res) => {
       NoiCongTac = ?,
       DiaChiCCCD = ?,
       MonGiangDayChinh = ?,
-      CacMonLienQuan = ?
+      CacMonLienQuan = ?,
+      MaNhanVien = ?
       WHERE id_User = ?`;
 
     const [updateResult] = await connection.query(query, [
@@ -177,6 +179,7 @@ const postUpdateNV = async (req, res) => {
       req.body.DiaChiCCCD, // Lấy từ req.body
       req.body.MonGiangDayChinh, // Lấy từ req.body
       req.body.CacMonLienQuan, // Lấy từ req.body
+      MaNhanVien,
       Id_User,
     ]);
 

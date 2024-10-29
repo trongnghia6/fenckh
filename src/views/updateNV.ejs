@@ -98,7 +98,7 @@
                                 </div>
                                 <div class="col-md-4 input-wrapper">
                                     <label for="NgayCapCCCD" class="form-label">Ngày Cấp CCCD</label>
-                                    <input type="date" class="form-control" id="NgayCapCCCD" name="NgayCapCCCD">
+                                    <input type="date" class="form-control" id="NgayCapCCCD" name="NgayCapCCCD" value="<%= new Date(value.NgayCapCCCD).toISOString().split('T')[0] %>">
                                 </div>
                                 <div class="col-md-4 input-wrapper">
                                     <label for="NoiCapCCCD" class="form-label">Nơi Cấp CCCD</label>
