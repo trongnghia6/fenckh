@@ -70,21 +70,6 @@ const getGvm = async (req, res) => {
   }
 };
 
-// const getGvm = async (req, res) => {
-//   const query2 = `select * from gvmoi`;
-
-//   const connection2 = await createConnection();
-
-//   const [results2, fields2] = await connection2.query(query2);
-
-//   try {
-//     res.json(results2); // Trả về danh sách giảng viên mời
-//   } catch (error) {
-//     console.error("Error fetching GVM list:", error);
-//     res.status(500).json({ message: "Internal Server Error" }); // Xử lý lỗi
-//   }
-// };
-
 // Xuất các hàm để sử dụng trong router
 module.exports = {
   getClassInfoGvm,

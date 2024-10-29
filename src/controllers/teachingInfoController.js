@@ -55,44 +55,6 @@ function handleDuplicateCourses(firstCourse, courses) {
   };
 }
 
-// Phương
-// const KhoaCheckAll = async (req, Dot, KiHoc, NamHoc) => {
-//   const isKhoa = req.session.isKhoa;
-//   let kq = ""; // Biến để lưu kết quả
-//   let connection;
-
-//   const query = ` SELECT MaPhongBan FROM phongban where isKhoa = 1 `;
-//   connection = await createPoolConnection();
-//   const [results, fields] = await connection.query(query);
-
-//   // Chọn theo từng phòng ban
-//   for (let i = 0; i < results.length; i++) {
-//     const MaPhongBan = results[i].MaPhongBan;
-
-//     const query = ` SELECT KhoaDuyet FROM quychuan where Khoa = ? and Dot = ? and KiHoc = ? and NamHoc = ?`;
-//     const [check, fields] = await connection.query(query, [
-//       MaPhongBan,
-//       Dot,
-//       KiHoc,
-//       NamHoc,
-//     ]);
-
-//     let checkAll = true;
-//     for (let j = 0; j < check.length; j++) {
-//       if (check[j].KhoaDuyet == 0) {
-//         checkAll = false;
-//         break;
-//       }
-//     }
-//     if (checkAll == true) {
-//       kq += MaPhongBan + ",";
-//     }
-//   }
-
-//   // Trả về kết quả
-//   return kq;
-// };
-
 const KhoaCheckAll = async (req, Dot, KiHoc, NamHoc) => {
   const isKhoa = req.session.isKhoa;
   let kq = ""; // Biến để lưu kết quả

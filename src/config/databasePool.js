@@ -6,6 +6,10 @@ const pool = mysql.createPool({
   user: process.env.DB_USER,
   database: process.env.DB_NAME,
   port: process.env.DB_PORT,
+  connectionLimit: 10, // Giới hạn số kết nối tối đa trong pool
+  connectTimeout: 10, // 10 giây
+
+  queueLimit: 0, // Không giới hạn hàng đợi (hoặc có thể đặt giới hạn cụ thể)
 });
 
 async function createConnection() {
