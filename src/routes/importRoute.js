@@ -128,9 +128,9 @@ router.get("/getNamHoc", async (req, res) => {
   }
 });
 
-router.post("/check-khoa", role.checkDaotaoRoleThiHanh, obj.checkExistKhoa);
+router.post("/kiem-tra-qcdk", role.checkDaotaoRoleThiHanh, obj.checkQCDK);
 
-router.post("/delete-khoa", role.checkDaotaoRoleThiHanh, obj.deleteRowByKhoa);
+router.post("/xoa-qcdk", role.checkDaotaoRoleThiHanh, obj.deleteQCDK);
 
 router.post("/submitData2", obj.submitData2);
 

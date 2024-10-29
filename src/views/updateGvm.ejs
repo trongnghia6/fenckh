@@ -160,7 +160,7 @@
        <label for="ngaySinh">Ngày sinh:</label>
        <input required class="form-control" type="date" name="NgaySinh" id="ngaySinh" value="<%= new Date(value.NgaySinh).toISOString().split('T')[0] %>" >
    </div>
-                               </div>
+        </div>
                            
                                <div class="row mb-3">
    <div class="col-md-4">
@@ -285,7 +285,7 @@
    </div>
    <div class="col-md-4 d-flex justify-content-between">
       <button class="button-class bt" id="submit">Cập nhật</button>
-      <button class="button-class bt" id="return"><a class="text-white" href="/gvmList">Quay lại</a></button>
+      <button class="button-class bt" id="return" type="button" onclick="window.location.href='/gvmList'">Quay lại</button>
    </div>
                                </div>
                            </fieldset>

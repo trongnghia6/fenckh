@@ -336,7 +336,7 @@
         Ki: Ki,
         Nam: Nam,
       };
-
+      console.log('ok')
       fetch("http://localhost:3000/get-table-tam", {
         method: "POST", // Phương thức HTTP
         headers: {
@@ -580,7 +580,7 @@
         document.querySelector(".fullname").innerText = "Hi, Guest"; // Hiển thị nếu không có tên người dùng
       }
 
-      document.querySelector(".role").innerText = `${Role}`;
+      //document.querySelector(".role").innerText = `${Role}`;
     };
   </script>
   <script>

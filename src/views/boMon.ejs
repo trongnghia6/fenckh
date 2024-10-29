@@ -80,6 +80,152 @@
         <button id="createBM" class="btn">
           <i class="bi bi-plus-circle"></i> Thêm Bộ Môn
       </button>
+      <input
+        type="text"
+        placeholder="Tìm kiếm theo tên bộ môn..."
+        class="search mx-3"
+        id="searchBoMon" style="height: 40px; width: 300px;"
+        onkeyup="searchBoMon()"
+      />
+      <input
+        type="text"
+        placeholder="Tìm kiếm theo mã bộ môn..."
+        class="search mx-3"
+        id="searchMaBoMon" style="height: 40px; width: 300px;"
+        onkeyup="searchMaBoMon()"
+      />
+      <input
+          type="text"
+          placeholder="Tìm kiếm theo mã phòng ban..."
+          class="search mx-3"
+          id="searchPB" style="height: 40px; width: 300px;"
+          onkeyup="searchPB()"
+      />
+    <script>
+      function searchBoMon() {
+        let input = document.getElementById("searchBoMon").value.toLowerCase();
+        let table = document.getElementById("boMonTable");
+        let rows = table.getElementsByTagName("tr");
+    
+        let currentGroup = null;
+        let groupVisible = false;
+    
+        for (let i = 1; i < rows.length; i++) {
+          // Bắt đầu từ 1 để bỏ qua hàng tiêu đề
+          let row = rows[i];
+    
+          if (row.classList.contains("boMon")) {
+            // Đây là hàng đầu tiên của một nhóm giảng viên mới
+            if (currentGroup) {
+              // Ẩn/hiện nhóm trước đó dựa trên kết quả tìm kiếm
+              setGroupVisibility(currentGroup, groupVisible);
+            }
+    
+            currentGroup = [];
+            groupVisible = false;
+          }
+    
+          currentGroup.push(row);
+    
+          let teacherNameCell = row.cells[2]; // Giả sử tên giảng viên ở cột thứ 2
+          if (teacherNameCell) {
+            let teacherName = teacherNameCell.textContent.toLowerCase();
+            if (teacherName.includes(input)) {
+              groupVisible = true;
+            }
+          }
+        }
+    
+        // Xử lý nhóm cuối cùng
+        if (currentGroup) {
+          setGroupVisibility(currentGroup, groupVisible);
+        }
+      }
+      function searchMaBoMon() {
+        let input = document.getElementById("searchMaBoMon").value.toLowerCase();
+        let table = document.getElementById("boMonTable");
+        let rows = table.getElementsByTagName("tr");
+    
+        let currentGroup = null;
+        let groupVisible = false;
+    
+        for (let i = 1; i < rows.length; i++) {
+          // Bắt đầu từ 1 để bỏ qua hàng tiêu đề
+          let row = rows[i];
+    
+          if (row.classList.contains("boMon")) {
+            // Đây là hàng đầu tiên của một nhóm giảng viên mới
+            if (currentGroup) {
+              // Ẩn/hiện nhóm trước đó dựa trên kết quả tìm kiếm
+              setGroupVisibility(currentGroup, groupVisible);
+            }
+    
+            currentGroup = [];
+            groupVisible = false;
+          }
+    
+          currentGroup.push(row);
+    
+          let teacherNameCell = row.cells[1]; // Giả sử tên giảng viên ở cột thứ 2
+          if (teacherNameCell) {
+            let teacherName = teacherNameCell.textContent.toLowerCase();
+            if (teacherName.includes(input)) {
+              groupVisible = true;
+            }
+          }
+        }
+    
+        // Xử lý nhóm cuối cùng
+        if (currentGroup) {
+          setGroupVisibility(currentGroup, groupVisible);
+        }
+      }
+      function searchPB() {
+        let input = document.getElementById("searchPB").value.toLowerCase();
+        let table = document.getElementById("boMonTable");
+        let rows = table.getElementsByTagName("tr");
+    
+        let currentGroup = null;
+        let groupVisible = false;
+    
+        for (let i = 1; i < rows.length; i++) {
+          // Bắt đầu từ 1 để bỏ qua hàng tiêu đề
+          let row = rows[i];
+    
+          if (row.classList.contains("boMon")) {
+            // Đây là hàng đầu tiên của một nhóm giảng viên mới
+            if (currentGroup) {
+              // Ẩn/hiện nhóm trước đó dựa trên kết quả tìm kiếm
+              setGroupVisibility(currentGroup, groupVisible);
+            }
+    
+            currentGroup = [];
+            groupVisible = false;
+          }
+    
+          currentGroup.push(row);
+    
+          let teacherNameCell = row.cells[0]; // Giả sử tên giảng viên ở cột thứ 2
+          if (teacherNameCell) {
+            let teacherName = teacherNameCell.textContent.toLowerCase();
+            if (teacherName.includes(input)) {
+              groupVisible = true;
+            }
+          }
+        }
+    
+        // Xử lý nhóm cuối cùng
+        if (currentGroup) {
+          setGroupVisibility(currentGroup, groupVisible);
+        }
+      }
+    
+      function setGroupVisibility(group, visible) {
+        group.forEach(row => {
+          row.style.display = visible ? "" : "none";
+        });
+      }
+    </script>
       <script>
           document.getElementById('createBM').addEventListener('click', function() {
               window.location.href = '/themBoMon';
@@ -100,7 +246,7 @@
           <tbody id="data-table-body">
             <% if (boMon && boMon.length > 0) { %>
               <% for (var i = 0; i < boMon.length; i++) { %>
-                <tr>
+                <tr class="boMon">
                   <td><%= boMon[i].MaPhongBan %></td>
                   <td><%= boMon[i].MaBoMon %></td>
                   <td><%= boMon[i].TenBoMon %></td>

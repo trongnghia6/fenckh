@@ -330,7 +330,7 @@
           class="form-control m-2 search" style="width: 200px;" />
         <!-- Tìm kiếm theo bộ môn -->
         <input type="text" id="filterBoMon" placeholder="Tìm theo tên bộ môn"
-          oninput="filterBoMon(); showSuggestionsBoMon(this)" onclick="showSuggestionsBoMon(this)"
+          onkeyup="filterBoMon(); showSuggestionsBoMon(this)" onclick="showSuggestionsBoMon(this)"
           class="form-control m-2 search" style="width: 180px;" />
       </div>
 
@@ -518,7 +518,6 @@
       localStorage.setItem('nameGvm', JSON.stringify(nameGvm));
 
       rs = await teachingResponse.json();
-
       // Thêm check
       globalData = rs.results.map(item => ({
         ...item,
@@ -597,10 +596,10 @@
     tableBody.innerHTML = ''; // Xóa nội dung cũ
     //let index = -1;
     data.forEach((row, index) => {
-    
+
       const tableRow = document.createElement('tr');
-      
-      if (row.MoiGiang == 0){
+
+      if (row.MoiGiang == 0) {
         tableRow.style.display = 'none'; // Ẩn hàng
       }
 
@@ -631,7 +630,7 @@
 
       let giaoVienGiangDayTd;
       let giaoVienGiangDayInput;
-    
+
       giaoVienGiangDayTd = document.createElement('td');
       giaoVienGiangDayInput = document.createElement('input');
       giaoVienGiangDayInput.type = 'text';
@@ -645,17 +644,17 @@
       giaoVienGiangDayInput.oninput = () => {
         showSuggestions(giaoVienGiangDayInput);
       };
-      
+
       // Thêm id để lấy dữ liệu 
       giaoVienGiangDayInput.id = `giaoVienGiangDay_${index}`;
 
       giaoVienGiangDayTd.appendChild(giaoVienGiangDayInput);
       tableRow.appendChild(giaoVienGiangDayTd);
 
-      if (isKhoa == 0  || role == "GV"){ // Nếu không phải khoa thì ko nhập thông tin gvm
+      if (isKhoa == 0 || role == "GV") { // Nếu không phải khoa thì ko nhập thông tin gvm
         giaoVienGiangDayInput.disabled = true;
-      } 
-    
+      }
+
       // Khoa
       const khoaTd = document.createElement('td');
       khoaTd.textContent = row.Khoa || ''; // Lấy giá trị Khoa trực tiếp từ row
@@ -663,34 +662,23 @@
 
       let boMonTd;
       let boMonInput;
-      if (isKhoa == 0 ){
-        boMonTd = document.createElement('td'); // Tạo ô Bộ môn
-        boMonInput = document.createElement('span'); // Tạo span cho Bộ môn
-        boMonInput.textContent = row.BoMon || ''; // Lấy giá trị từ row
+      boMonTd = document.createElement('td');
+      boMonInput = document.createElement('input');
+      boMonInput.type = 'text';
+      boMonInput.name = 'bomon';
+      boMonInput.value = row.BoMon || '';
+      boMonInput.placeholder = 'Nhập tên bộ môn';
 
-        // Thêm id
-        boMonInput.id = `boMon_${index}`;
+      // Thêm id để lấy dữ liệu
+      boMonInput.id = `boMon_${index}`;
 
-        boMonTd.appendChild(boMonInput); // Thêm span vào ô
-        tableRow.appendChild(boMonTd);
-      } else{
-        boMonTd = document.createElement('td');
-        boMonInput = document.createElement('input');
-        boMonInput.type = 'text';
-        boMonInput.value = row.BoMon || '';
-        boMonInput.placeholder = 'Nhập tên bộ môn';
+      // gợi ý bộ môn
+      boMonInput.onclick = () => {
+        showSuggestionsBoMon(boMonInput);
+      };
 
-        // Thêm id để lấy dữ liệu
-        boMonInput.id = `boMon_${index}`;
-
-        // gợi ý bộ môn
-        boMonInput.onclick = () => {
-          showSuggestionsBoMon(boMonInput);
-        };
-
-        boMonTd.appendChild(boMonInput);
-        tableRow.appendChild(boMonTd);
-      }
+      boMonTd.appendChild(boMonInput);
+      tableRow.appendChild(boMonTd);
 
       // Ngày Bắt Đầu
       const NgayBatDauTd = document.createElement('td');
@@ -711,9 +699,10 @@
       tableRow.appendChild(NgayKetThucTd);
 
       // Nếu không phải khoa -> không có quyền nhập
-      if (isKhoa == 0){
+      if (isKhoa == 0) {
         NgayBatDauInput.disabled = true; // Chỉ xem
         NgayKetThucInput.disabled = true; // Chỉ xem
+        boMonInput.disabled = true;
       }
 
       const soTietLLTd = document.createElement('td');
@@ -724,22 +713,22 @@
       soTietQCTd.textContent = row.QuyChuan || '';
       tableRow.appendChild(soTietQCTd);
 
-        // Nếu Lãnh đạo khoa đã duyệt, thi hành sẽ không nhập được
-        // Nếu role là giảng viên thường cũng sẽ không nhập được
-        if ((isKhoa == 1 && role == "GV") ||(isKhoa == 1 && row.KhoaDuyet==1)) {
-          giaoVienGiangDayInput.disabled = true;
-          boMonInput.disabled = true;
-          NgayBatDauInput.disabled = true;
-          // Ngăn người dùng thay đổi trạng thái ngày kết thúc
-          NgayKetThucInput.disabled = true;
-        }
-     
+      // Nếu Lãnh đạo khoa đã duyệt, thi hành sẽ không nhập được
+      // Nếu role là giảng viên thường cũng sẽ không nhập được
+      if ((isKhoa == 1 && role == "GV") || (isKhoa == 1 && row.KhoaDuyet == 1)) {
+        giaoVienGiangDayInput.disabled = true;
+        boMonInput.disabled = true;
+        NgayBatDauInput.disabled = true;
+        // Ngăn người dùng thay đổi trạng thái ngày kết thúc
+        NgayKetThucInput.disabled = true;
+      }
+
       // Điều kiện để ẩn checkbox của "Khoa" nếu role không phải là "CNTT_ALL"
       let khoaCheckboxTd, khoaCheckbox;
       let daoTaoCheckboxTd, daoTaoCheckbox;
       let taiChinhCheckboxTd, taiChinhCheckbox;
       // Tạo checkbox
-      if (isKhoa == 1 && role == 'Lãnh đạo khoa'){
+      if (isKhoa == 1 && role == 'Lãnh đạo khoa') {
         // Checkbox cho Khoa
         khoaCheckboxTd = document.createElement('td');
         khoaCheckbox = document.createElement('input');
@@ -750,70 +739,54 @@
         khoaCheckboxTd.appendChild(khoaCheckbox);
         tableRow.appendChild(khoaCheckboxTd);
       } else if (isKhoa == 0 && role == 'Duyệt') {
-        if (MaPhongBan == 'DAOTAO'){
-                  // Checkbox cho Khoa
-        khoaCheckboxTd = document.createElement('td');
-        khoaCheckbox = document.createElement('input');
-        khoaCheckbox.type = 'checkbox';
-        khoaCheckbox.name = 'khoa'; // Thêm thuộc tính name
-        khoaCheckbox.checked = row.KhoaDuyet || false; // Dùng một trường cho checkbox
-        khoaCheckbox.onchange = () => updateCheckAll('khoa'); // Gọi hàm khi checkbox thay đổi
-        khoaCheckboxTd.appendChild(khoaCheckbox);
-        tableRow.appendChild(khoaCheckboxTd);
+        if (MaPhongBan == 'DAOTAO') {
+          // Checkbox cho Khoa
+          khoaCheckboxTd = document.createElement('td');
+          khoaCheckbox = document.createElement('input');
+          khoaCheckbox.type = 'checkbox';
+          khoaCheckbox.name = 'khoa'; // Thêm thuộc tính name
+          khoaCheckbox.checked = row.KhoaDuyet || false; // Dùng một trường cho checkbox
+          khoaCheckbox.onchange = () => updateCheckAll('khoa'); // Gọi hàm khi checkbox thay đổi
+          khoaCheckboxTd.appendChild(khoaCheckbox);
+          tableRow.appendChild(khoaCheckboxTd);
 
-        // Checkbox cho Đào Tạo
-        daoTaoCheckboxTd = document.createElement('td');
-        daoTaoCheckbox = document.createElement('input');
-        daoTaoCheckbox.type = 'checkbox';
-        daoTaoCheckbox.name = 'daoTao'; // Thêm thuộc tính name
-        daoTaoCheckbox.checked = row.DaoTaoDuyet || false; // Dùng một trường cho checkbox
-        daoTaoCheckbox.onchange = () => updateCheckAll('daoTao'); // Gọi hàm khi checkbox thay đổi
-        daoTaoCheckboxTd.appendChild(daoTaoCheckbox);
-        tableRow.appendChild(daoTaoCheckboxTd);
-        } else if (MaPhongBan == 'TAICHINH'){
           // Checkbox cho Đào Tạo
-        daoTaoCheckboxTd = document.createElement('td');
-        daoTaoCheckbox = document.createElement('input');
-        daoTaoCheckbox.type = 'checkbox';
-        daoTaoCheckbox.name = 'daoTao'; // Thêm thuộc tính name
-        daoTaoCheckbox.checked = row.DaoTaoDuyet || false; // Dùng một trường cho checkbox
-        daoTaoCheckbox.onchange = () => updateCheckAll('daoTao'); // Gọi hàm khi checkbox thay đổi
-        daoTaoCheckboxTd.appendChild(daoTaoCheckbox);
-        tableRow.appendChild(daoTaoCheckboxTd);
+          daoTaoCheckboxTd = document.createElement('td');
+          daoTaoCheckbox = document.createElement('input');
+          daoTaoCheckbox.type = 'checkbox';
+          daoTaoCheckbox.name = 'daoTao'; // Thêm thuộc tính name
+          daoTaoCheckbox.checked = row.DaoTaoDuyet || false; // Dùng một trường cho checkbox
+          daoTaoCheckbox.onchange = () => updateCheckAll('daoTao'); // Gọi hàm khi checkbox thay đổi
+          daoTaoCheckboxTd.appendChild(daoTaoCheckbox);
+          tableRow.appendChild(daoTaoCheckboxTd);
+        } else if (MaPhongBan == 'TAICHINH') {
+          // Checkbox cho Đào Tạo
+          daoTaoCheckboxTd = document.createElement('td');
+          daoTaoCheckbox = document.createElement('input');
+          daoTaoCheckbox.type = 'checkbox';
+          daoTaoCheckbox.name = 'daoTao'; // Thêm thuộc tính name
+          daoTaoCheckbox.checked = row.DaoTaoDuyet || false; // Dùng một trường cho checkbox
+          daoTaoCheckbox.onchange = () => updateCheckAll('daoTao'); // Gọi hàm khi checkbox thay đổi
+          daoTaoCheckboxTd.appendChild(daoTaoCheckbox);
+          tableRow.appendChild(daoTaoCheckboxTd);
 
-        // Checkbox cho Tài Chính
-        taiChinhCheckboxTd = document.createElement('td');
-        taiChinhCheckbox = document.createElement('input');
-        taiChinhCheckbox.type = 'checkbox';
-        taiChinhCheckbox.name = 'taiChinh'; // Thêm thuộc tính name
-        taiChinhCheckbox.checked = row.TaiChinhDuyet || false; // Dùng một trường cho checkbox
-        taiChinhCheckbox.onchange = () => updateCheckAll('taiChinh'); // Gọi hàm khi checkbox thay đổi
-        taiChinhCheckboxTd.appendChild(taiChinhCheckbox);
-        tableRow.appendChild(taiChinhCheckboxTd);
+          // Checkbox cho Tài Chính
+          taiChinhCheckboxTd = document.createElement('td');
+          taiChinhCheckbox = document.createElement('input');
+          taiChinhCheckbox.type = 'checkbox';
+          taiChinhCheckbox.name = 'taiChinh'; // Thêm thuộc tính name
+          taiChinhCheckbox.checked = row.TaiChinhDuyet || false; // Dùng một trường cho checkbox
+          taiChinhCheckbox.onchange = () => updateCheckAll('taiChinh'); // Gọi hàm khi checkbox thay đổi
+          taiChinhCheckboxTd.appendChild(taiChinhCheckbox);
+          tableRow.appendChild(taiChinhCheckboxTd);
         }
 
       }
 
-      // Điều kiện ẩn checkbox Khoa nếu role không phải "CNTT_ALL"
-      /*
-      if (isKhoa == 1 && role != "Lãnh đạo khoa" && khoaCheckbox && khoaCheckboxTd) {
-        // Thiết lập thuộc tính CSS để thu nhỏ checkbox và ô <td> chứa nó
-        khoaCheckbox.style.width = '10px';    // Đặt chiều rộng nhỏ nhất có thể
-        alert("2")
-        khoaCheckbox.style.height = '10px';   // Đặt chiều cao nhỏ nhất có thể
-        alert("3")
-        khoaCheckbox.style.display = 'none';
-
-        // Thu nhỏ <td>
-        khoaCheckboxTd.style.width = '1px';
-        khoaCheckboxTd.style.padding = '0';
-      }
-      */
-
       const check = localStorage.getItem("check");
       // Phân quyền theo phòng ban
-      if (isKhoa == 1){ // Nếu là khoa
-        if (check.includes(MaPhongBan)){
+      if (isKhoa == 1) { // Nếu là khoa
+        if (check.includes(MaPhongBan)) {
           //giaoVienGiangDayInput.disabled = true;
           boMonInput.disabled = true;
 
@@ -824,57 +797,57 @@
           khoaCheckbox.disabled = true;
           // Ngăn checkbox tổng của 'khoa' không cho thay đổi
           disableCheckAll('khoa');
-          
+
         }
-      } 
+      }
       const DaoTaoCheck = localStorage.getItem("DaoTaoCheck");
       const TaiChinhCheck = localStorage.getItem("TaiChinhCheck");
 
-      if (MaPhongBan == "DAOTAO"){
+      if (MaPhongBan.toLowerCase() === "daotao" && role.toLowerCase() !== "thường") {
         // Nếu khoa đã check thì hiện check bên đào tạo
-       
-        if (!check.includes(row.Khoa)){
+
+        if (!check.includes(row.Khoa)) {
           // Ngăn thay đổi trạng thái check box khoa
           khoaCheckbox.disabled = true
           daoTaoCheckbox.disabled = true
 
         }
-        
+
         // Nếu đào tạo đã check thì disable check đào tạo
-        if (DaoTaoCheck.includes(row.Khoa)){
+        if (DaoTaoCheck.includes(row.Khoa)) {
           // Ngăn thay đổi trạng thái check box khoa
           khoaCheckbox.disabled = true
           daoTaoCheckbox.disabled = true;
         }
       }
 
-      if (MaPhongBan == "TAICHINH"){
+      if (MaPhongBan.toLowerCase() === "taichinh" && role.toLowerCase() !== "thường") {
         // Nếu khoa đã check thì hiện check bên đào tạo
-        if (!DaoTaoCheck.includes(row.Khoa)){
+        if (!DaoTaoCheck.includes(row.Khoa)) {
           // Ngăn thay đổi trạng thái check box khoa
           daoTaoCheckbox.disabled = true
           taiChinhCheckbox.disabled = true;
         }
 
         // Nếu đào tạo đã check thì disable check đào tạo
-        if (TaiChinhCheck.includes(row.Khoa)){
+        if (TaiChinhCheck.includes(row.Khoa)) {
           // Ngăn thay đổi trạng thái check box khoa
           daoTaoCheckbox.disabled = true
           taiChinhCheckbox.disabled = true;
         }
       }
-      
+
 
 
       const ghiChuTd = document.createElement("td");
-          if (row.ghiChu) {
-            ghiChuTd.innerHTML = `📜 <span style="color: red;">•</span>`; // Hiển thị biểu tượng ghi chú và chấm đỏ
-          } else {
-            ghiChuTd.innerHTML = "📜"; // Hiển thị biểu tượng ghi chú nếu không có ghi chú
-          }
-          ghiChuTd.style.cursor = "pointer"; // Thay đổi con trỏ chuột khi di chuột qua biểu tượng
-          ghiChuTd.onclick = () => openNoteForm(tableRow); // Gọi hàm mở form khi nhấn vào biểu tượng
-          tableRow.appendChild(ghiChuTd); // Thêm ô ghi chú vào hàng
+      if (row.ghiChu) {
+        ghiChuTd.innerHTML = `📜 <span style="color: red;">•</span>`; // Hiển thị biểu tượng ghi chú và chấm đỏ
+      } else {
+        ghiChuTd.innerHTML = "📜"; // Hiển thị biểu tượng ghi chú nếu không có ghi chú
+      }
+      ghiChuTd.style.cursor = "pointer"; // Thay đổi con trỏ chuột khi di chuột qua biểu tượng
+      ghiChuTd.onclick = () => openNoteForm(tableRow); // Gọi hàm mở form khi nhấn vào biểu tượng
+      tableRow.appendChild(ghiChuTd); // Thêm ô ghi chú vào hàng
       tableBody.appendChild(tableRow);
     });
 
@@ -1251,6 +1224,117 @@
     checkAllCheckbox.checked = allChecked; // Cập nhật trạng thái của checkbox "Check All"
   }
 
+  // Hàm gợi ý bộ môn ở ô nhập 
+  function showSuggestionsBoMon(input) {
+    const value = input.value.toLowerCase(); // Lấy giá trị nhập vào và chuyển thành chữ thường
+    hideSuggestionsBoMon(); // Ẩn gợi ý cũ trước khi hiển thị gợi ý mới
+
+    // Tạo thẻ div chứa gợi ý
+    const suggestionsContainer = document.createElement('div');
+    suggestionsContainer.className = 'suggestions'; // Đặt class cho khung gợi ý
+
+    // Đặt vị trí cho suggestionsContainer
+    const { bottom, left, width } = input.getBoundingClientRect(); // Lấy vị trí của input
+    suggestionsContainer.style.position = 'absolute'; // Để đè lên bảng
+    suggestionsContainer.style.top = `${bottom + window.scrollY}px`; // Đặt vị trí ngay dưới input
+    suggestionsContainer.style.left = `${left + window.scrollX}px`; // Căn trái với input
+    suggestionsContainer.style.width = `${width}px`; // Chiều rộng bằng với input
+    suggestionsContainer.style.zIndex = '1000'; // Đảm bảo luôn hiển thị trên các thành phần khác
+    suggestionsContainer.style.maxHeight = '200px'; // Giới hạn chiều cao để không quá lớn
+    suggestionsContainer.style.overflowY = 'auto';  // Cho phép cuộn dọc nếu quá nhiều gợi ý
+
+    // Thêm suggestionsContainer vào DOM
+    document.body.appendChild(suggestionsContainer); // Đặt suggestionsContainer vào body thay vì cha của input
+
+    let suggestions = []; // Khởi tạo mảng gợi ý
+
+    // Lấy dữ liệu từ localStorage
+    const boMon = JSON.parse(localStorage.getItem("boMon")) || []; // Giảng viên mời
+    // console.log(boMon);
+
+    suggestions = boMon.map(item => `${item.TenBoMon} - ${item.MaBoMon}`);
+
+    // Nếu người dùng nhập dữ liệu, lọc kết quả theo tên giảng viên
+    if (value) {
+      suggestions = suggestions.filter(name => name.toLowerCase().includes(value));
+    }
+
+    // Nếu không có gợi ý, ẩn container
+    if (suggestions.length === 0) {
+      suggestionsContainer.remove();
+      return; // Kết thúc hàm nếu không có gợi ý
+    }
+
+    // Tạo gợi ý dưới dạng danh sách (list)
+    suggestions.forEach(name => {
+      const suggestionItem = document.createElement('div'); // Tạo phần tử cho từng gợi ý
+      suggestionItem.className = 'suggestion-item'; // Đặt class để tùy chỉnh giao diện
+      suggestionItem.textContent = name; // Hiển thị tên giảng viên kèm theo khoa
+
+      // Thêm sự kiện click để điền tên vào ô input
+      suggestionItem.onclick = function () {
+        const name = suggestionItem.innerText; // Hoặc có thể là suggestionItem.textContent
+        const dashIndex = name.indexOf("-");
+        let processedName = name;
+
+        if (dashIndex !== -1) {
+          // Lấy phần sau dấu "-" và loại bỏ khoảng trắng
+          processedName = name.slice(dashIndex + 1).trim().replace(/\s+/g, '');
+        }
+
+        // Điền tên gợi ý đã xử lý vào ô input
+        input.value = processedName;
+        filterBoMon();
+        hideSuggestionsBoMon(); // Ẩn gợi ý sau khi chọn
+      };
+
+      suggestionsContainer.appendChild(suggestionItem); // Thêm mục vào danh sách gợi ý
+    });
+
+    // Ẩn gợi ý khi input không còn focus
+    input.onblur = function () {
+      setTimeout(() => {
+        hideSuggestionsBoMon();
+      }, 100); // Thời gian chờ để nhận diện click
+    };
+  }
+
+  // Hàm ẩn gợi ý
+  function hideSuggestionsBoMon() {
+    const existingSuggestions = document.querySelectorAll('.suggestions');
+    existingSuggestions.forEach(suggestion => suggestion.remove());
+  }
+
+  // Hàm xử lý tìm kiếm theo tên bộ môn
+  function filterBoMon() {
+    console.log('ok');
+    const input = document.getElementById('filterBoMon');
+    console.log(input.value)
+    const filter = input.value.trim().toLowerCase(); // Bỏ khoảng trắng và chuyển chữ thường
+    const tableRows = document.querySelectorAll('#tableBody tr');
+
+    tableRows.forEach(row => {
+      const nameInput = row.querySelector('td:nth-child(7) input[name="bomon"]'); // Lấy input có name="bomon" ở cột thứ 7
+      const checkbox = row.querySelector('input[type="checkbox"]');
+      console.log(input.value)
+
+      if (nameInput) {
+        const name = nameInput.value.toLowerCase(); // Lấy giá trị của input có name="bomon"
+        if (filter === '' || name.includes(filter)) {
+          row.style.display = ''; // Hiện hàng nếu khớp hoặc filter trống
+          checkbox.disabled = false; // Kích hoạt checkbox
+        } else {
+          row.style.display = 'none'; // Ẩn hàng nếu không khớp
+          checkbox.disabled = true; // Vô hiệu hóa checkbox
+        }
+      }
+    });
+  }
+
+  // Khởi tạo sự kiện khi nhập vào ô input (hoặc gắn sự kiện vào các input cụ thể)
+  document.getElementById('filterBoMon').addEventListener('input', function () {
+    showSuggestionsBoMon(this);
+  });
 
   // Hàm khởi động ứng dụng
   init();
@@ -1292,120 +1376,121 @@
   };
 </script>
 
+<!-- lọc bộ môn -->
 <script>
+  document.addEventListener('DOMContentLoaded', function () {
 
-  // Hàm gợi ý bộ môn ở ô nhập 
-  function showSuggestionsBoMon(input) {
-    const value = input.value.toLowerCase(); // Lấy giá trị nhập vào và chuyển thành chữ thường
-    hideSuggestionsBoMon(); // Ẩn gợi ý cũ trước khi hiển thị gợi ý mới
+    // Hàm gợi ý bộ môn ở ô nhập 
+    function showSuggestionsBoMon(input) {
+      const value = input.value.toLowerCase(); // Lấy giá trị nhập vào và chuyển thành chữ thường
+      hideSuggestionsBoMon(); // Ẩn gợi ý cũ trước khi hiển thị gợi ý mới
 
-    // Tạo thẻ div chứa gợi ý
-    const suggestionsContainer = document.createElement('div');
-    suggestionsContainer.className = 'suggestions'; // Đặt class cho khung gợi ý
+      // Tạo thẻ div chứa gợi ý
+      const suggestionsContainer = document.createElement('div');
+      suggestionsContainer.className = 'suggestions'; // Đặt class cho khung gợi ý
 
-    // Đặt vị trí cho suggestionsContainer
-    const { bottom, left, width } = input.getBoundingClientRect(); // Lấy vị trí của input
-    suggestionsContainer.style.position = 'absolute'; // Để đè lên bảng
-    suggestionsContainer.style.top = `${bottom + window.scrollY}px`; // Đặt vị trí ngay dưới input
-    suggestionsContainer.style.left = `${left + window.scrollX}px`; // Căn trái với input
-    suggestionsContainer.style.width = `${width}px`; // Chiều rộng bằng với input
-    suggestionsContainer.style.zIndex = '1000'; // Đảm bảo luôn hiển thị trên các thành phần khác
-    suggestionsContainer.style.maxHeight = '200px'; // Giới hạn chiều cao để không quá lớn
-    suggestionsContainer.style.overflowY = 'auto';  // Cho phép cuộn dọc nếu quá nhiều gợi ý
+      // Đặt vị trí cho suggestionsContainer
+      const { bottom, left, width } = input.getBoundingClientRect(); // Lấy vị trí của input
+      suggestionsContainer.style.position = 'absolute'; // Để đè lên bảng
+      suggestionsContainer.style.top = `${bottom + window.scrollY}px`; // Đặt vị trí ngay dưới input
+      suggestionsContainer.style.left = `${left + window.scrollX}px`; // Căn trái với input
+      suggestionsContainer.style.width = `${width}px`; // Chiều rộng bằng với input
+      suggestionsContainer.style.zIndex = '1000'; // Đảm bảo luôn hiển thị trên các thành phần khác
+      suggestionsContainer.style.maxHeight = '200px'; // Giới hạn chiều cao để không quá lớn
+      suggestionsContainer.style.overflowY = 'auto';  // Cho phép cuộn dọc nếu quá nhiều gợi ý
 
-    // Thêm suggestionsContainer vào DOM
-    document.body.appendChild(suggestionsContainer); // Đặt suggestionsContainer vào body thay vì cha của input
+      // Thêm suggestionsContainer vào DOM
+      document.body.appendChild(suggestionsContainer); // Đặt suggestionsContainer vào body thay vì cha của input
 
-    let suggestions = []; // Khởi tạo mảng gợi ý
+      let suggestions = []; // Khởi tạo mảng gợi ý
 
-    // Lấy dữ liệu từ localStorage
-    const boMon = JSON.parse(localStorage.getItem("boMon")) || []; // Giảng viên mời
-    console.log(boMon)
+      // Lấy dữ liệu từ localStorage
+      const boMon = JSON.parse(localStorage.getItem("boMon")) || []; // Giảng viên mời
+      // console.log(boMon);
 
-    suggestions = boMon.map(item => `${item.TenBoMon} - ${item.MaBoMon}`);
+      suggestions = boMon.map(item => `${item.TenBoMon} - ${item.MaBoMon}`);
 
-
-    // Nếu người dùng nhập dữ liệu, lọc kết quả theo tên giảng viên
-    if (value) {
-      suggestions = suggestions.filter(name => name.toLowerCase().includes(value));
-    }
-
-    // Nếu không có gợi ý, ẩn container
-    if (suggestions.length === 0) {
-      suggestionsContainer.remove();
-      return; // Kết thúc hàm nếu không có gợi ý
-    }
-
-    // Tạo gợi ý dưới dạng danh sách (list)
-    suggestions.forEach(name => {
-      const suggestionItem = document.createElement('div'); // Tạo phần tử cho từng gợi ý
-      suggestionItem.className = 'suggestion-item'; // Đặt class để tùy chỉnh giao diện
-      suggestionItem.textContent = name; // Hiển thị tên giảng viên kèm theo khoa
-
-      // Thêm sự kiện click để điền tên vào ô input
-      // Thêm sự kiện click để điền tên vào ô input
-      suggestionItem.onclick = function () {
-        // Giả sử 'name' là giá trị gợi ý bạn nhận được từ suggestionItem
-        const name = suggestionItem.innerText; // Hoặc có thể là suggestionItem.textContent
-
-        // Tìm vị trí của dấu "-" trong chuỗi
-        const dashIndex = name.indexOf("-");
-
-        // Nếu không có dấu "-", sử dụng tên gợi ý gốc
-        let processedName = name;
-
-        if (dashIndex !== -1) {
-          // Lấy phần sau dấu "-" và loại bỏ khoảng trắng
-          processedName = name.slice(dashIndex + 1).trim().replace(/\s+/g, '');
-        }
-
-        // Điền tên gợi ý đã xử lý vào ô input
-        input.value = processedName;
-        filterBoMon();
-        hideSuggestionsBoMon(); // Ẩn gợi ý sau khi chọn
-      };
-
-
-      suggestionsContainer.appendChild(suggestionItem); // Thêm mục vào danh sách gợi ý
-    });
-
-    // Ẩn gợi ý khi input không còn focus
-    input.onblur = function () {
-      setTimeout(() => {
-        hideSuggestionsBoMon();
-      }, 100); // Thời gian chờ để nhận diện click
-    };
-  }
-
-  // Hàm ẩn gợi ý
-  function hideSuggestionsBoMon() {
-    const existingSuggestions = document.querySelectorAll('.suggestions');
-    existingSuggestions.forEach(suggestion => suggestion.remove());
-  }
-
-  // Hàm xử lý tìm kiếm theo tên bộ môn
-  function filterBoMon() {
-    const input = document.getElementById('filterBoMon');
-    const filter = input.value.trim().toLowerCase(); // Bỏ khoảng trắng và chuyển chữ thường
-    const tableRows = document.querySelectorAll('#tableBody tr');
-
-    tableRows.forEach(row => {
-      const nameInput = row.querySelector('td:nth-child(7) input[name="bomon"]'); // Lấy input có name="bomon" ở cột thứ 7
-      const checkbox = row.querySelector('input[type="checkbox"]');
-
-      if (nameInput) {
-        const name = nameInput.value.toLowerCase(); // Lấy giá trị của input có name="bomon"
-
-        if (filter === '' || name.includes(filter)) {
-          row.style.display = ''; // Hiện hàng nếu khớp hoặc filter trống
-          checkbox.disabled = false; // Kích hoạt checkbox
-        } else {
-          row.style.display = 'none'; // Ẩn hàng nếu không khớp
-          checkbox.disabled = true; // Vô hiệu hóa checkbox
-        }
+      // Nếu người dùng nhập dữ liệu, lọc kết quả theo tên giảng viên
+      if (value) {
+        suggestions = suggestions.filter(name => name.toLowerCase().includes(value));
       }
+
+      // Nếu không có gợi ý, ẩn container
+      if (suggestions.length === 0) {
+        suggestionsContainer.remove();
+        return; // Kết thúc hàm nếu không có gợi ý
+      }
+
+      // Tạo gợi ý dưới dạng danh sách (list)
+      suggestions.forEach(name => {
+        const suggestionItem = document.createElement('div'); // Tạo phần tử cho từng gợi ý
+        suggestionItem.className = 'suggestion-item'; // Đặt class để tùy chỉnh giao diện
+        suggestionItem.textContent = name; // Hiển thị tên giảng viên kèm theo khoa
+
+        // Thêm sự kiện click để điền tên vào ô input
+        suggestionItem.onclick = function () {
+          const name = suggestionItem.innerText; // Hoặc có thể là suggestionItem.textContent
+          const dashIndex = name.indexOf("-");
+          let processedName = name;
+
+          if (dashIndex !== -1) {
+            // Lấy phần sau dấu "-" và loại bỏ khoảng trắng
+            processedName = name.slice(dashIndex + 1).trim().replace(/\s+/g, '');
+          }
+
+          // Điền tên gợi ý đã xử lý vào ô input
+          input.value = processedName;
+          filterBoMon();
+          hideSuggestionsBoMon(); // Ẩn gợi ý sau khi chọn
+        };
+
+        suggestionsContainer.appendChild(suggestionItem); // Thêm mục vào danh sách gợi ý
+      });
+
+      // Ẩn gợi ý khi input không còn focus
+      input.onblur = function () {
+        setTimeout(() => {
+          hideSuggestionsBoMon();
+        }, 100); // Thời gian chờ để nhận diện click
+      };
+    }
+
+    // Hàm ẩn gợi ý
+    function hideSuggestionsBoMon() {
+      const existingSuggestions = document.querySelectorAll('.suggestions');
+      existingSuggestions.forEach(suggestion => suggestion.remove());
+    }
+
+    // Hàm xử lý tìm kiếm theo tên bộ môn
+    function filterBoMon() {
+      console.log('ok');
+      const input = document.getElementById('filterBoMon');
+      const filter = input.value.trim().toLowerCase(); // Bỏ khoảng trắng và chuyển chữ thường
+      const tableRows = document.querySelectorAll('#tableBody tr');
+
+      tableRows.forEach(row => {
+        const nameInput = row.querySelector('td:nth-child(7) input[name="bomon"]'); // Lấy input có name="bomon" ở cột thứ 7
+        const checkbox = row.querySelector('input[type="checkbox"]');
+
+        if (nameInput) {
+          const name = nameInput.value.toLowerCase(); // Lấy giá trị của input có name="bomon"
+          if (filter === '' || name.includes(filter)) {
+            row.style.display = ''; // Hiện hàng nếu khớp hoặc filter trống
+            checkbox.disabled = false; // Kích hoạt checkbox
+          } else {
+            row.style.display = 'none'; // Ẩn hàng nếu không khớp
+            checkbox.disabled = true; // Vô hiệu hóa checkbox
+          }
+        }
+      });
+    }
+
+    // Khởi tạo sự kiện khi nhập vào ô input (hoặc gắn sự kiện vào các input cụ thể)
+    document.getElementById('filterBoMon').addEventListener('input', function () {
+      showSuggestionsBoMon(this);
     });
-  }
+
+  });
 </script>
 
 
