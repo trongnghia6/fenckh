@@ -42,10 +42,10 @@ const AdminController = {
       ChiNhanh,
       MonGiangDayChinh,
       CacMonLienQuan,
-      TenDangNhap, // Lấy từ form
       MatKhau, // Lấy từ form
       Quyen, // Lấy từ form
     } = req.body;
+    let TenDangNhap = req.body.TenDangNhap; // Lấy từ form
 
     try {
       // Đầu tiên, chèn dữ liệu vào CSDL mà không cần MaNhanVien
@@ -93,6 +93,10 @@ const AdminController = {
       // Cập nhật lại MaNhanVien trong CSDL
       const queryUpdate = `UPDATE nhanvien SET MaNhanVien = ? WHERE id_User = ?`;
       await connection.promise().query(queryUpdate, [MaNhanVien, id_User]);
+
+      if (!TenDangNhap) {
+        TenDangNhap = `${MaPhongBan}${id_User}`;
+      }
 
       const queryInsertTaiKhoanNguoiDung = `
         INSERT INTO taikhoannguoidung (TenDangNhap, MatKhau, id_User) 
@@ -149,31 +153,7 @@ const AdminController = {
       res.status(500).json({ message: "Đã xảy ra lỗi khi thêm phòng ban" });
     }
   },
-  // getthemTaiKhoan: async (req, res) => {
-  //   try {
-  //     // Kết nối tới cơ sở dữ liệu
-  //     const connection = await createPoolConnection();
 
-  //     // Lấy dữ liệu phòng ban
-  //     const query2 = "SELECT * FROM phongban";
-  //     const [results2] = await connection.query(query2);
-  //     let departmentLists = results2;
-
-  //     // Lấy dữ liệu bảng nhân viên
-  //     const query4 = "SELECT * FROM nhanvien";
-  //     const [results4] = await connection.query(query4);
-  //     let user = results4;
-
-  //     // Render trang với 2 biến: departmentLists và user
-  //     res.render("themTk.ejs", {
-  //       departmentLists: departmentLists,
-  //       user: user,
-  //     });
-  //   } catch (error) {
-  //     console.error("Lỗi: ", error);
-  //     res.status(500).send("Đã có lỗi xảy ra");
-  //   }
-  // },
   postthemTK: async (req, res) => {
     const TenDangNhap = req.body.TenDangNhap;
     const id_User = req.body.id_User;
@@ -253,31 +233,27 @@ const AdminController = {
     }
   },
   getUpdateNV: async (req, res) => {
-    let connection;
+    let connection = await createPoolConnection();
     try {
       const id_User = parseInt(req.params.id) + 1;
 
       // Lấy dữ liệu nhân viên
-      connection = await createPoolConnection();
       const query1 = "SELECT * FROM `nhanvien` WHERE id_User = ?";
       const [results1] = await connection.query(query1, [id_User]);
       let user = results1 && results1.length > 0 ? results1[0] : {};
 
       // Lấy dữ liệu phòng ban
-      connection = await createPoolConnection();
       const query2 = "SELECT * FROM phongban";
       const [results2] = await connection.query(query2);
       let departmentLists = results2; // Gán kết quả vào departmentLists
 
       // Lấy dữ liệu tài khoản
-      connection = await createPoolConnection();
       const query3 = "SELECT * FROM `taikhoannguoidung` WHERE id_User = ?";
       const [results3] = await connection.query(query3, [id_User]);
       let account = results3 && results3.length > 0 ? results3[0] : {};
       let TenDangNhap = account.TenDangNhap || "";
 
       // Lấy dữ liệu role
-      connection = await createPoolConnection();
       const query4 = "SELECT * FROM `role` WHERE TenDangNhap = ?";
       const [results4] = await connection.query(query4, [TenDangNhap]);
       let role = results4 && results4.length > 0 ? results4[0] : {};
@@ -297,12 +273,11 @@ const AdminController = {
     }
   },
   getUpdateTK: async (req, res) => {
-    let connection;
+    let connection = await createPoolConnection();
     try {
       const TenDangNhap = req.params.TenDangNhap;
 
       // Lấy dữ liệu tài khoản
-      connection = await createPoolConnection();
       const query1 = "SELECT * FROM `taikhoannguoidung` WHERE TenDangNhap = ?";
       const [results1] = await connection.query(query1, [TenDangNhap]);
       let accountList = results1 && results1.length > 0 ? results1[0] : {};
@@ -335,7 +310,6 @@ const AdminController = {
       const [results6] = await connection.query(query6, [PhongBan]);
       let roleList = results6;
 
-
       // Render trang với 2 biến: value và departmentLists
       res.render("updateTK.ejs", {
         accountList: accountList,
@@ -352,12 +326,11 @@ const AdminController = {
       if (connection) connection.release(); // Đảm bảo giải phóng kết nối
     }
   },
+
   getTenNhanVien: async (req, res) => {
     const TenNhanVien = req.query.TenNhanVien; // Lấy TenNhanVien từ query string
-    let connection;
+    let connection = await createPoolConnection();
     try {
-      connection = await createPoolConnection();
-
       // Lấy MaPhongBan và isKhoa từ bảng nhanvien và phongban dựa vào TenNhanVien
       const query1 = `
             SELECT nhanvien.MaPhongBan, phongban.isKhoa, nhanvien.id_User 
@@ -383,11 +356,9 @@ const AdminController = {
   },
 
   getthemTaiKhoan: async (req, res) => {
-    let connection;
+    let connection = await createPoolConnection();
     try {
       // Kết nối tới cơ sở dữ liệu
-      connection = await createPoolConnection();
-
       const query2 = "SELECT TenNhanVien FROM nhanvien";
       const [results2] = await connection.query(query2);
       let TenNhanVien = results2;
@@ -406,12 +377,10 @@ const AdminController = {
 
   getQuyenByPhongBan: async (req, res) => {
     const maPhongBan = req.query.MaPhongBan;
-    let connection;
+    let connection = await createPoolConnection();
 
     try {
       // Tạo kết nối đến database
-      connection = await createPoolConnection();
-
       // Thực hiện truy vấn
       const [results] = await connection.execute(
         "SELECT isKhoa FROM phongban WHERE MaPhongBan = ?",
@@ -528,6 +497,44 @@ const AdminController = {
     } catch (error) {
       console.error("Lỗi khi cập nhật dữ liệu: ", error);
       res.status(500).send("Lỗi server, không thể cập nhật dữ liệu");
+    } finally {
+      if (connection) connection.release(); // Đảm bảo giải phóng kết nối
+    }
+  },
+
+  getViewNV: async (req, res) => {
+    let connection;
+    try {
+      const id_User = parseInt(req.params.id) + 1;
+
+      // Lấy dữ liệu nhân viên
+      connection = await createPoolConnection();
+      const query1 = "SELECT * FROM `nhanvien` WHERE id_User = ?";
+      const [results1] = await connection.query(query1, [id_User]);
+      let user = results1 && results1.length > 0 ? results1[0] : {};
+
+      // Lấy dữ liệu tài khoản
+      connection = await createPoolConnection();
+      const query3 = "SELECT * FROM `taikhoannguoidung` WHERE id_User = ?";
+      const [results3] = await connection.query(query3, [id_User]);
+      let account = results3 && results3.length > 0 ? results3[0] : {};
+      let TenDangNhap = account.TenDangNhap || "";
+
+      // Lấy dữ liệu role
+      connection = await createPoolConnection();
+      const query4 = "SELECT * FROM `role` WHERE TenDangNhap = ?";
+      const [results4] = await connection.query(query4, [TenDangNhap]);
+      let role = results4 && results4.length > 0 ? results4[0] : {};
+
+      // Render trang với 2 biến: value và departmentLists
+      res.render("viewNV.ejs", {
+        value: user,
+        account: account,
+        role: role,
+      });
+    } catch (error) {
+      console.error("Lỗi: ", error);
+      res.status(500).send("Đã có lỗi xảy ra");
     } finally {
       if (connection) connection.release(); // Đảm bảo giải phóng kết nối
     }

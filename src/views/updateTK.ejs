@@ -122,7 +122,7 @@
               <div class="col-md-4 input-wrapper">
                 <label for="Quyen" class="form-label">Quyền</label>
                 <select id="Quyen" name="Quyen" class="form-control">
-                  <!-- Options sẽ được cập nhật bởi JavaScript -->
+                  <option value="<%= role.Quyen %>"><%= role.Quyen %></option>
                 </select>
               </div>
             </div>
@@ -133,7 +133,7 @@
               </div>
             </div>
             <button type="submit" class="btn">Cập nhật</button>
-            <button type="return" class="btn mx-5"><a class ="text-black" href="/thongTinTK">Quay lại</a></button>
+            <button type="button" class="btn mx-5" onclick="window.location.href='/thongTinTK'" >Trở về</button>
         </form>
     </div>
 

@@ -162,7 +162,7 @@
           </div>
           </div>
           <button type="submit" class="btn">Thêm Tài Khoản</button>
-          <button class="btn mx-5" onclick="window.history.back()">Quay lại</button>
+          <button type="button" class="btn mx-5" onclick="window.location.href='/thongTinTK'" >Trở về</button>
       </form>
     </div>
 
@@ -190,21 +190,19 @@
             document.getElementById('id_User').value = data.id_User || 'Không có dữ liệu';
 
             const quyenSelect = document.getElementById('Quyen');
-            // quyenSelect.innerHTML = '<option value="">Chọn quyền</option>';
-            document.getElementById('Quyen').innerHTML = '';
-            
-            if (Array.isArray(data.results2)) {
-              // Thêm các tùy chọn mới từ dữ liệu Quyen
-              data.results2.forEach(quyen => {
-                const option = document.createElement('option');
-                option.value = quyen.Quyen;
-                option.textContent = quyen.Quyen;
-                quyenSelect.appendChild(option);
-              });
-            } else {
-              alert("Dữ liệu Quyen không tồn tại hoặc không phải là một mảng");
-            }
+            quyenSelect.innerHTML = ''; // Xóa các option cũ
 
+            // Kiểm tra isKhoa và cập nhật quyền dựa theo giá trị
+            if (data.isKhoa === 1) {
+              quyenSelect.innerHTML = `
+                <option value="GV">Giảng Viên</option>
+                <option value="GV_CNBM">Giảng viên-Chủ nhiệm bộ môn</option>
+                <option value="Lãnh đạo khoa">Lãnh đạo khoa</option>`;
+            } else {
+              quyenSelect.innerHTML = `
+                <option value="Thường">Thường</option>
+                <option value="Duyệt">Duyệt</option>`;
+              }
         })
         .catch(error => {
             alert('Lỗi khi lấy dữ liệu: ' + error.message); // Xử lý lỗi nếu có
@@ -227,40 +225,6 @@ if (tenDangNhap) {
     alert("Không tìm thấy TenDangNhap trong localStorage.");
 }
 });
-</script>
-<script>
-  function fetchQuyen() {
-const maPhongBan = document.getElementById('MaPhongBan').value;
-alert(maPhongBan);
-// Gọi API để lấy thông tin isKhoa
-fetch(`/getQuyenByPhongBan?MaPhongBan=${maPhongBan}`)
-.then(response => response.json())
-.then(data => {
-  const quyenSelect = document.getElementById('Quyen');
-  quyenSelect.innerHTML = ''; // Xóa các option cũ
-
-  // Kiểm tra isKhoa và cập nhật quyền dựa theo giá trị
-  if (data.isKhoa === 1) {
-    quyenSelect.innerHTML = `
-      <option value="GV">Giảng Viên</option>
-      <option value="GV_CNBM">Giảng viên-Chủ nhiệm bộ môn</option>
-      <option value="Duyệt">Duyệt</option>
-      <option value="Lãnh đạo khoa">Lãnh đạo khoa</option>`;
-  } else {
-    if (maPhongBan === 'DAOTAO'){
-      quyenSelect.innerHTML = `
-      <option value="Thường">Thường</option>
-      <option value="DAOTAO_THIHANH">Đào tạo thi hành</option>`;
-    } else {
-      quyenSelect.innerHTML = `
-      <option value="Duyệt">Duyệt</option>`;
-      
-    }
-    
-  }
-})
-.catch(error => console.error('Error:', error));
-}
 </script>
 <script>
   const searchInput = document.getElementById("searchInput");
