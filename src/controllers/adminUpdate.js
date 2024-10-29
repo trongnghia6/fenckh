@@ -221,6 +221,7 @@ const postUpdatePhongBan = async (req, res) => {
     if (connection) connection.release(); // Đảm bảo giải phóng kết nối
   }
 };
+
 const postUpdateTK = async (req, res) => {
   const TenDangNhap = req.params.TenDangNhap;
   let connection;
@@ -254,7 +255,7 @@ const postUpdateTK = async (req, res) => {
       );
   } finally {
     if (connection) {
-      await connection.end(); // Đóng kết nối
+      connection.release(); // Đảm bảo luôn giải phóng kết nối
     }
   }
 };
