@@ -34,6 +34,8 @@ router.get('/api/phongban', AdminController.getListPhongBan);
 //Nhân viên
 router.get('/updateNV/:id',AdminController.getUpdateNV );
 router.post('/updateNV/:id',postUpdateNV);
+router.get('/viewNV/:id',AdminController.getViewNV );
+
 //Phòng ban
 router.get('/updatePhongBan/:MaPhongBan', GetTable.getUpdatePhongBan);
 router.post('/updatePhongBan/:MaPhongBan', postUpdatePhongBan);
