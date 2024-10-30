@@ -52,7 +52,11 @@ const exportHDGvmToExcel = async (req, res) => {
 
     // Truy vấn dữ liệu mà không lấy các cột không cần thiết
     const [rows] = await connection.execute(
-      "SELECT NgayBatDau, NgayKetThuc, KiHoc, DanhXung, HoTen, NgaySinh, CCCD, NoiCapCCCD, Email, MaSoThue, HocVi, ChucVu, HSL, DienThoai, STK, NganHang, SoTiet, NgayNghiemThu FROM hopdonggvmoi WHERE NamHoc = ? AND Dot = ? AND KiHoc = ?",
+      `SELECT NgayBatDau, NgayKetThuc, KiHoc, DanhXung, HoTen, NgaySinh, CCCD, NoiCapCCCD, Email, 
+          MaSoThue, HocVi, ChucVu, HSL, DienThoai, STK, NganHang, SUM(SoTiet) AS SoTiet, NgayNghiemThu 
+       FROM hopdonggvmoi 
+       WHERE NamHoc = ? AND Dot = ? AND KiHoc = ? 
+       GROUP BY HoTen;`,
       [namHoc, dot, ki]
     );
 
@@ -239,7 +243,11 @@ const getHDGvmData = async (req, res) => {
     const ki = req.query.ki;
 
     const [rows] = await connection.execute(
-      "SELECT NgayBatDau, NgayKetThuc, DanhXung, HoTen, NgaySinh, CCCD, HocVi, ChucVu, DienThoai, Email, STK, NganHang, MaSoThue, SoTiet FROM hopdonggvmoi WHERE NamHoc = ? AND Dot = ? AND KiHoc = ?",
+      `SELECT NgayBatDau, NgayKetThuc, KiHoc, DanhXung, HoTen, SUM(SoTiet) AS SoTiet, NgaySinh, CCCD, NoiCapCCCD, Email, 
+          MaSoThue, HocVi, ChucVu, HSL, DienThoai, STK, NganHang, NgayNghiemThu 
+       FROM hopdonggvmoi 
+       WHERE NamHoc = ? AND Dot = ? AND KiHoc = ? 
+       GROUP BY HoTen;`,
       [namHoc, dot, ki]
     );
 
