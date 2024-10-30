@@ -156,7 +156,6 @@ body {
   transform: perspective(500px) translateZ(10px);
   /* Tạo hiệu ứng nổi 3D */
   box-shadow: 0 10px 10px rgba(0, 0, 0, 0.3);
-
 }
 
 .login {
@@ -225,8 +224,6 @@ button#xoa-qc-du-kien,
   font-size: 17px;
 } */
 
-
-
 #filter {
   width: 60px;
 }
@@ -250,7 +247,6 @@ button#render,
 #quychuandukien {
   width: 200px;
 }
-
 
 #ban-hanh {
   width: auto;
@@ -339,7 +335,6 @@ button#render:hover::before,
 }
 
 .selectop {
-
   height: 45px;
   border: 2px solid #0077ff;
   border-radius: 5px;
@@ -406,7 +401,6 @@ td {
 
 .container-fluid {
   width: auto;
-
 }
 
 .box {
@@ -440,7 +434,6 @@ td {
 }
 
 @media (max-width: 768px) {
-
   .w-20,
   .w-30,
   .w-80 {
@@ -549,7 +542,7 @@ td {
 
 /* Thêm mũi tên bằng CSS */
 .custom-select::after {
-  content: '▼';
+  content: "▼";
   /* Biểu tượng mũi tên */
   position: absolute;
   top: 50%;
@@ -561,7 +554,7 @@ td {
 }
 
 .add-taikhoan {
-  background-color: #4CAF50;
+  background-color: #4caf50;
   color: #fff;
   border: none;
   padding: 10px 20px;
@@ -570,7 +563,7 @@ td {
 }
 
 .btn-them-tai-khoan {
-  background-color: #4CAF50;
+  background-color: #4caf50;
   /* Màu xanh lá */
   color: white;
   padding: 10px 20px;
@@ -594,7 +587,7 @@ td {
 }
 
 .btn-hien-thi-tk {
-  background-color: #4CAF50;
+  background-color: #4caf50;
   /* Màu xanh lá */
   color: white;
   padding: 10px 20px;
