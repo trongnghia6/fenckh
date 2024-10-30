@@ -7,7 +7,10 @@ router.get('/exportHD', (req, res) => {
     res.render('exportHD');
 });
 
-// Route để xuất hợp đồng giảng viên
-router.get('/exportHD/download', exportHDController);
+// Route để xuất hợp đồng cho một giảng viên
+router.get('/exportHD/download', exportHDController.exportSingleContract);
+
+// Route để xuất hợp đồng cho nhiều giảng viên
+router.get('/exportHD/downloadAll', exportHDController.exportMultipleContracts);
 
 module.exports = router;
