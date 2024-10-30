@@ -244,12 +244,12 @@ button#render,
   padding-top: 0;
 } */
 
-#viewtam,
+/* #viewtam,
 #infoGvm,
 #getData,
 #quychuandukien {
   width: 200px;
-}
+} */
 
 
 #ban-hanh {
@@ -752,7 +752,7 @@ input[type="date"] {
 .btn {
   padding: 0.5em 1em;
   margin-bottom: 1rem;
-  border: none;
+  /* border: none; */
   border-radius: 5px;
   font-weight: bold;
   letter-spacing: 5px;
@@ -763,7 +763,8 @@ input[type="date"] {
   font-size: 15px;
   position: relative;
   overflow: hidden;
-  outline: 2px solid #2c9caf;
+  border: 2px solid #2c9caf !important;
+  background-color: #FAF7F0;
 }
 
 .btn:hover {
@@ -783,8 +784,11 @@ input[type="date"] {
   transform: skewX(45deg);
   z-index: -1;
   transition: width 1000ms;
+  outline: 2px solid #2c9caf;
+
 }
 
 .btn:hover::before {
   width: 250%;
+
 }

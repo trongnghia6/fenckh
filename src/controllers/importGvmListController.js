@@ -89,12 +89,11 @@ const saveToDB = async (req, res) => {
         const MaGvm = MaPhongBan + "_GVM_" + length;
 
         // Chuyển đổi dữ liệu để phù hợp với cột trong DB
-        const GioiTinh = row["Danh xưng"] === "Ông" ? "Nam" : "Nữ";
-        //const GioiTinh = row["Giới tính"];
+        // const GioiTinh = row["Danh xưng"] === "Ông" ? "Nam" : "Nữ";
+        const GioiTinh = row["Giới tính"];
         const HoTen = row["Họ và tên"];
-        //const GioiTinh = row["Giới tính"];
         // const NgaySinh = row["Ngày sinh"] || " ";
-        const CCCD = row["CCCD"];
+        const CCCD = row["Số CCCD"];
         // const NgayCapCCCD = row["Ngày cấp"];
         const NoiCapCCCD = row["Nơi cấp"];
         const DiaChi = row["Địa chỉ theo CCCD"];
@@ -111,9 +110,8 @@ const saveToDB = async (req, res) => {
         const BangTotNghiepLoai = row["Bằng loại"] || " ";
         const dateSinh = row["Ngày sinh"]; // '1985-09-13T00:00:00.000Z'
         const NgaySinh = formatDateForMySQL(dateSinh); // Kết quả: '1985-09-13'
-        const dateCap = row["Ngày sinh"]; // '1985-09-13T00:00:00.000Z'
+        const dateCap = row["Ngày cấp CCCD"]; // '1985-09-13T00:00:00.000Z'
         const NgayCapCCCD = formatDateForMySQL(dateCap); // Kết quả: '1985-09-13'
-        //const HocVi = row["Cấp bậc"];
 
         // Kiểm tra trùng CCCD
         for (const gvm of gvms) {
