@@ -1192,6 +1192,7 @@
           }
         }
       });
+      calculateTotals();
     }
   </script>
 
@@ -1228,6 +1229,7 @@
           checkbox.disabled = true; // Vô hiệu hóa checkbox
         }
       });
+      calculateTotals();
     }
 
     // xử lí tìm theo lớp
@@ -1260,6 +1262,7 @@
           checkbox.disabled = true; // Vô hiệu hóa checkbox
         }
       });
+      calculateTotals();
     }
 
     // hàm check All
@@ -1273,18 +1276,18 @@
       });
     }
       */
-      function checkAll(type) {
-        const checkboxes = document.querySelectorAll(`input[type="checkbox"][name="${type}"]`);
-        const checkAllCheckbox = document.getElementById(`checkAll${type.charAt(0).toUpperCase() + type.slice(1)}`);
-      
-        checkboxes.forEach(checkbox => {
-          const row = checkbox.closest('tr');
-          if (row.style.display !== 'none') { // Kiểm tra nếu dòng hiện trên màn hình
-            checkbox.checked = checkAllCheckbox.checked; // Gán trạng thái checkbox "Check All" cho checkbox hiển thị
-          }
-        });
-      }
-      
+    function checkAll(type) {
+      const checkboxes = document.querySelectorAll(`input[type="checkbox"][name="${type}"]`);
+      const checkAllCheckbox = document.getElementById(`checkAll${type.charAt(0).toUpperCase() + type.slice(1)}`);
+
+      checkboxes.forEach(checkbox => {
+        const row = checkbox.closest('tr');
+        if (row.style.display !== 'none') { // Kiểm tra nếu dòng hiện trên màn hình
+          checkbox.checked = checkAllCheckbox.checked; // Gán trạng thái checkbox "Check All" cho checkbox hiển thị
+        }
+      });
+    }
+
 
 
     // hàm xử lí check all 

@@ -1,0 +1,22 @@
+# bug 
+- Các thao tác thêm, sửa, xóa dữ liệu cần phải hiển thị ra dữ liệu mới, site import, qc dự kiến, qc chính thức
+
+- Khi input mã bộ môn không được auto reload trang, site các lớp mời ( done )
+
+- Tổng tiết hiển thị theo phần hiển thị của bảng ( done )
+
+- Bỏ localstorage site info
+
+- Nút search bộ môn của ALL site
+
+- Bỏ duyệt mất ngày bắt đầu ngày kết thúc 
+
+
+
+# không phải bug
+- hiện tại ban hành đang là từng khoa
+  comment phần code này và chuyển thành all khoa
+
+- Chèn ngày, auto fill theo năm hiện tại
+
+- Đồng bộ tên gọi của các button trong all site
