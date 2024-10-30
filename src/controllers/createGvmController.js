@@ -435,7 +435,6 @@ let handleUploadFile = async (req, res) => {
     con2 = await createPoolConnection();
 
     const gvms = await gvmList.getGvmLists(req, res, con2); // Truyền kết nối vào
-    console.log("list = ", gvms);
 
     const lengthList = parseInt(gvms.length) + 1; // Đảm bảo biến này được khai báo bằng const
 
@@ -463,11 +462,12 @@ let handleUploadFile = async (req, res) => {
       ? req.body.maPhongBan.join(",")
       : req.body.maPhongBan || "";
 
-    // Kiểm tra trùng lặp CCCD trước khi tiếp tục xử lý
+    // Kiểm tra trùng lặp CCCD
     const checkDuplicateQuery =
       "SELECT COUNT(*) as count FROM gvmoi WHERE CCCD = ?";
     const [duplicateRows] = await con2.query(checkDuplicateQuery, [CCCD]);
     if (duplicateRows[0].count > 0) {
+      con2.release(); // Giải phóng kết nối trước khi trả về
       return res.redirect("/gvmList?message=duplicateCCCD");
     }
 
