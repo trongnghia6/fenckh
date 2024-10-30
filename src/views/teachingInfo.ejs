@@ -33,7 +33,7 @@
       /* Đảm bảo gợi ý nằm bên trên các thành phần khác */
       top: calc(100% + 5px);
       /* Đặt gợi ý phía trên input với một khoảng cách */
-      font-size: 10px;
+      font-size: 12px;
       left: 0;
       background-color: #f0f0f0;
       color: #000;
@@ -307,7 +307,7 @@
           <select class="selectop w-100px mx-1 " id="NamHoc">
             <option value="">Năm học</option>
           </select>
-          <button id="getData" class="btn text-nowrap mx-3" style="width: max-content;">Lấy bảng quy chuẩn</button>
+          <button id="getData" class="btn text-nowrap mx-3" style="width: max-content;" >Lấy bảng quy chuẩn</button>
           <!-- <button id="infoGvm" class="button text-nowrap">Xem bảng cục bộ</button> -->
           <button id="update-qc" onclick="updateLocalTable()" class="btn mx-3 luuTamThoi">Lưu</button>
           <button id="update-qc" onclick="submitData()" class="btn mx-3 luu">Cập nhật</button>
@@ -458,6 +458,8 @@
       const isKhoa = localStorage.getItem("isKhoa");
       console.log('Giá trị isKhoa từ localStorage: ', isKhoa);
       hideButton();
+      const Ban = localStorage.getItem("MaPhongBan");
+      console.log('Giá trị Ban từ localStorage: ', Ban);
     });
 
     function hideButton() {
@@ -579,6 +581,7 @@
     async function loadData() {
 
       const MaPhongBan = localStorage.getItem("MaPhongBan");
+      
       try {
         const response = await fetch('http://localhost:3000/bo-mon', {
           method: 'POST', // Thay đổi thành POST
@@ -1069,6 +1072,7 @@
     }
 
     document.addEventListener('DOMContentLoaded', function () {
+      alert(localStorage.getItem("MaPhongBan"));
       viewData();
       init();
     });
