@@ -33,6 +33,7 @@
       /* Đảm bảo gợi ý nằm bên trên các thành phần khác */
       top: calc(100% + 5px);
       /* Đặt gợi ý phía trên input với một khoảng cách */
+      font-size: 10px;
       left: 0;
       background-color: #f0f0f0;
       color: #000;
@@ -317,26 +318,26 @@
       <div class="d-flex my-3" style="height: 70px;">
         <!-- Tìm kiếm theo giảng viên  -->
         <input type="text" id="filterName" placeholder="Tìm theo giảng viên TKB" oninput="filterByName()"
-          class="form-control m-2 search" style="width: 180px;" />
+          class="form-control my-2 mx-1 search" style="width: 180px;" />
         <!-- Tìm kiếm theo tên học phần -->
         <input type="text" id="filterClass" placeholder="Tìm theo tên học phần" oninput="filterByClass()"
-          class="form-control m-2 search" style="width: 180px;" />
+          class="form-control my-2 mx-1 search" style="width: 180px;" />
         <!-- Tìm kiếm theo bộ môn -->
         <input type="text" id="filterBoMon" placeholder="Tìm theo tên bộ môn"
           oninput="filterBoMon(); showSuggestionsBoMon(this)" onclick="showSuggestionsBoMon(this)"
-          class="form-control m-2 search" style="width: 180px;" />
+          class="form-control my-2 mx-1 search" style="width: 180px;" />
 
 
-        <div class="input-group m-2" style="width: 350px;" id="batdau">
+        <div class="input-group my-2 mx-1" style="width: 350px;" id="batdau">
           <label for="startDate" class="input-group-text">Ngày bắt đầu</label>
           <input required type="date" id="startDate" class="form-control" />
         </div>
-        <div class="input-group m-2" style="width: 350px;" id="ketthuc">
+        <div class="input-group my-2 mx-1" style="width: 350px;" id="ketthuc">
 
           <label for="endDate" class="input-group-text">Ngày kết thúc</label>
           <input required type="date" id="endDate" class="form-control" />
         </div>
-        <button id="fillDay" class="btn text-nowrap" style="height: 54px; margin: 8px;">Chèn ngày</button>
+        <button id="fillDay" class="btn text-nowrap my-2 mx-1" style="height: 54px;">Chèn ngày</button>
 
 
         <!-- <button class="button-action SapXep " id="sortTeachersByName">Sắp Xếp</button> -->
