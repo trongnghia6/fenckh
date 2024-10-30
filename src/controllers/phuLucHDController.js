@@ -3,10 +3,12 @@ const ExcelJS = require("exceljs");
 const router = express.Router();
 const createConnection = require("../config/databaseAsync");
 
+
+
 exports.exportPhuLucGiangVienMoi = async (req, res) => {
   let connection;
   try {
-    connection = await createPoolConnection(); // Kết nối đến database
+    connection = await createConnection(); // Kết nối đến database
 
     // Truy vấn dữ liệu từ database
     const [data] = await connection.execute(`
