@@ -36,7 +36,7 @@ exports.exportPhuLucGiangVienMoi = async (req, res) => {
         const titleRow0 = worksheet.addRow(['Ban Cơ yếu Chính phủ']);
         titleRow0.font = { name: 'Times New Roman', size: 15 };
         titleRow0.alignment = { horizontal: 'center', vertical: 'middle' };
-        worksheet.mergeCells('A1:C1'); // Giả sử bạn có 12 cột (A đến L)
+        worksheet.mergeCells('A1:D1'); // Giả sử bạn có 12 cột (A đến L)
 
         // Cập nhật vị trí tiêu đề "Học Viện Kỹ thuật Mật Mã" và các dòng tiêu đề khác
         const titleRow1 = worksheet.addRow(['Học Viện Kỹ thuật Mật Mã']);
