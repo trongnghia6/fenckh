@@ -120,7 +120,7 @@ const exportHDGvmToExcel = async (req, res) => {
     });
 
     // Ghi file Excel
-    const filePath = path.join(__dirname, 'hopdonggvmList.xlsx');
+    const filePath = path.join(__dirname, '../public/exports/hopdonggvmList.xlsx');
     await workbook.xlsx.writeFile(filePath);
     console.log('Ghi file Excel thành công');
 

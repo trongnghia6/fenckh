@@ -3,7 +3,6 @@ const ExcelJS = require("exceljs");
 const router = express.Router();
 const createConnection = require("../config/databaseAsync");
 
-
 exports.exportPhuLucGiangVienMoi = async (req, res) => {
     let connection;
     try {
@@ -14,7 +13,7 @@ exports.exportPhuLucGiangVienMoi = async (req, res) => {
             SELECT 
                 gd.GiangVien, gd.Lop, hd.SoTiet, gd.TenHocPhan, gd.HocKy,
                 hd.HocVi, hd.ChucVu, hd.HSL,
-                 hd.NgayBatDau, hd.NgayKetThuc
+                hd.NgayBatDau, hd.NgayKetThuc
             FROM giangday gd
             JOIN hopdonggvmoi hd ON gd.GiangVien = hd.HoTen
             ORDER BY gd.GiangVien, gd.Lop, gd.TenHocPhan
@@ -32,133 +31,121 @@ exports.exportPhuLucGiangVienMoi = async (req, res) => {
         // Tạo một sheet cho mỗi giảng viên
         for (const [giangVien, giangVienData] of Object.entries(groupedData)) {
             const worksheet = workbook.addWorksheet(giangVien);
+            
+            // Thêm tiêu đề "Ban Cơ yếu Chính phủ" phía trên
+            const titleRow0 = worksheet.addRow(['Ban Cơ yếu Chính phủ']);
+            titleRow0.font = { name: 'Times New Roman', size: 15 };
+            titleRow0.alignment = { horizontal: 'center', vertical: 'middle' };
+            worksheet.mergeCells('A1:C1'); // Giả sử bạn có 12 cột (A đến L)
 
-            // Thêm tiêu đề cố định
+            // Cập nhật vị trí tiêu đề "Học Viện Kỹ thuật Mật Mã" và các dòng tiêu đề khác
             const titleRow1 = worksheet.addRow(['Học Viện Kỹ thuật Mật Mã']);
-            titleRow1.font = { bold: true, size: 20 };
-            titleRow1.alignment = { horizontal: 'center', vertical: 'middle' }; // Căn giữa
-            worksheet.mergeCells('A1:L1'); // Giả sử bạn có 12 cột (A đến L)
+            titleRow1.font = { name: 'Times New Roman', bold: true, size: 20 };
+            titleRow1.alignment = { vertical: 'middle' };
+            worksheet.mergeCells('A2:F2');
 
-            // Tiêu đề phụ
             const titleRow2 = worksheet.addRow(['Phụ lục']);
-            titleRow2.font = { bold: true, size: 14 };
-            titleRow2.alignment = { horizontal: 'center', vertical: 'middle' }; // Căn giữa
-            worksheet.mergeCells('A2:L2');
-
-            // Hợp đồng số
-            const titleRow3 = worksheet.addRow(['Hợp đồng số:    /HĐ-ĐT ngày   tháng   năm']);
-            titleRow3.font = { bold: true, size: 14 };
-            titleRow3.alignment = { horizontal: 'center', vertical: 'middle' }; // Căn giữa
+            titleRow2.font = { name: 'Times New Roman', bold: true, size: 14 };
+            titleRow2.alignment = { horizontal: 'center', vertical: 'middle' };
             worksheet.mergeCells('A3:L3');
 
-            // Biên bản nghiệm thu
-            const titleRow4 = worksheet.addRow(['Kèm theo biên bản nghiệm thu và thanh lý Hợp đồng số:     /HĐ-ĐT ngày  tháng  năm ']);
-            titleRow4.font = { bold: true, size: 14 };
-            titleRow4.alignment = { horizontal: 'center', vertical: 'middle' }; // Căn giữa
+            const titleRow3 = worksheet.addRow(['Hợp đồng số:    /HĐ-ĐT ngày   tháng   năm']);
+            titleRow3.font = { name: 'Times New Roman', bold: true, size: 14 };
+            titleRow3.alignment = { horizontal: 'center', vertical: 'middle' };
             worksheet.mergeCells('A4:L4');
+
+            const titleRow4 = worksheet.addRow(['Kèm theo biên bản nghiệm thu và thanh lý Hợp đồng số:     /HĐ-ĐT ngày  tháng  năm ']);
+            titleRow4.font = { name: 'Times New Roman', bold: true, size: 14 };
+            titleRow4.alignment = { horizontal: 'center', vertical: 'middle' };
+            worksheet.mergeCells('A5:L5');
 
             // Định nghĩa tiêu đề cột
             const header = [
                 'Họ Tên', 'Chức Vụ', 'Học Vị', 'Lớp', 'Số Tiết', 'Tên Học Phần',
-                'Học Kỳ', 'Ngày Bắt Đầu', 'Ngày Kết Thúc', 'Hệ Số Lương','Mức thanh toán',
+                'Học Kỳ', 'Ngày Bắt Đầu', 'Ngày Kết Thúc', 'Hệ Số Lương', 'Mức thanh toán',
                 'Số Tiền', 'Trừ Thuế', 'Thực Nhận'
             ];
 
             // Thêm tiêu đề cột
             const headerRow = worksheet.addRow(header);
-            headerRow.font = { bold: true }; // Đặt tiêu đề cột đậm
+            headerRow.font = { name: 'Times New Roman', bold: true };
             headerRow.eachCell((cell) => {
                 cell.fill = {
-                    // Tô màu nền cho hàng tiêu đề
                     type: 'pattern',
                     pattern: 'solid',
                     fgColor: { argb: 'FFFF00' }
                 };
                 cell.border = {
-                    top: { style: 'thin', color: { argb: 'FF000000' } },
-                    left: { style: 'thin', color: { argb: 'FF000000' } },
-                    bottom: { style: 'thin', color: { argb: 'FF000000' } },
-                    right: { style: 'thin', color: { argb: 'FF000000' } },
+                    top: { style: 'thin' },
+                    left: { style: 'thin' },
+                    bottom: { style: 'thin' },
+                    right: { style: 'thin' },
                 };
-                cell.alignment = { horizontal: 'center' }; // Căn giữa
+                cell.alignment = { horizontal: 'center' };
             });
 
-            // Biến để theo dõi vị trí hàng hiện tại
-            let currentRowIndex = 5; // Bắt đầu từ hàng thứ 5 (sau tiêu đề cố định và tiêu đề cột)
-            let totalSoTiet = 0; // Tổng Số Tiết
-            let totalSoTien = 0; // Tổng Số Tiền
-            let totalTruThue = 0; // Tổng Trừ Thuế
-            let totalThucNhan = 0; // Tổng Thực Nhận
+            let totalSoTiet = 0;
+            let totalSoTien = 0;
+            let totalTruThue = 0;
+            let totalThucNhan = 0;
 
-            giangVienData.forEach((item, index) => {
-                const mucThanhToan = 100000; // Giá trị cố định cho cột "Mức Thanh Toán"
-                const soTien = item.SoTiet * mucThanhToan; // Tính Số Tiền
-                const truThue = soTien * 0.1; // Trừ Thuế 10%
-                const thucNhan = soTien - truThue; // Thực Nhận
+            giangVienData.forEach((item) => {
+                const mucThanhToan = 100000;
+                const soTien = item.SoTiet * mucThanhToan;
+                const truThue = soTien * 0.1;
+                const thucNhan = soTien - truThue;
 
-
-                // Thêm hàng mới với dữ liệu cho tất cả các cột
                 const row = worksheet.addRow([
-                    item.GiangVien,              // Họ Tên
-                    item.ChucVu,                // Chức Vụ
-                    item.HocVi,                 // Học Vị
-                    item.Lop,                   // Lớp
-                    item.SoTiet,                // Số Tiết
-                    item.TenHocPhan,           // Tên Học Phần
-                    item.HocKy,                 // Học Kỳ
-                    new Date(item.NgayBatDau).toLocaleDateString(), // Ngày Bắt Đầu
-                    new Date(item.NgayKetThuc).toLocaleDateString(), // Ngày Kết Thúc
-                    item.HSL,                    // Hệ Số Lương
-                    mucThanhToan,
-                    soTien,                // Số Tiền
-                    truThue,              // Trừ Thuế
-                    thucNhan               // Thực Nhận
+                    item.GiangVien, item.ChucVu, item.HocVi, item.Lop, item.SoTiet,
+                    item.TenHocPhan, item.HocKy, new Date(item.NgayBatDau).toLocaleDateString(),
+                    new Date(item.NgayKetThuc).toLocaleDateString(), item.HSL,
+                    mucThanhToan, soTien, truThue, thucNhan
                 ]);
+                row.font = { name: 'Times New Roman' }; // Đặt font cho từng hàng dữ liệu
 
-                // Cộng dồn tổng
                 totalSoTiet += item.SoTiet;
-                totalSoTien += item.SoTien;
-                totalTruThue += item.TruThue;
-                totalThucNhan += item.ThucNhan;
-
-                currentRowIndex++;
+                totalSoTien += soTien;
+                totalTruThue += truThue;
+                totalThucNhan += thucNhan;
             });
 
-            // Thêm hàng Tổng cộng với định dạng đẹp
-            const totalRow = worksheet.addRow(['Tổng cộng', '', '', '', totalSoTiet, '', '', '', '','','', totalSoTien, totalTruThue, totalThucNhan]);
-            totalRow.font = { bold: true, color: { argb: 'FF0000FF' } }; // Màu chữ cho tổng cộng
+            const totalRow = worksheet.addRow(['Tổng cộng', '', '', '', totalSoTiet, '', '', '', '', '', '', totalSoTien, totalTruThue, totalThucNhan]);
+            totalRow.font = { name: 'Times New Roman', bold: true };
+
             totalRow.eachCell((cell) => {
-                cell.alignment = { horizontal: 'center' }; // Căn giữa
+                cell.alignment = { horizontal: 'center' };
                 cell.border = {
-                    top: { style: 'thin', color: { argb: 'FF000000' } },
-                    left: { style: 'thin', color: { argb: 'FF000000' } },
-                    bottom: { style: 'thin', color: { argb: 'FF000000' } },
-                    right: { style: 'thin', color: { argb: 'FF000000' } },
+                    top: { style: 'thin' },
+                    left: { style: 'thin' },
+                    bottom: { style: 'thin' },
+                    right: { style: 'thin' },
                 };
             });
 
-            // Định dạng worksheet và thêm viền từ dòng 5 trở đi
-            worksheet.columns.forEach(column => {
-                column.width = 15; // Cài đặt chiều rộng cột
-                column.style = {}; // Đảm bảo không có màu sắc
-            });
+            // Định dạng chiều rộng cột
+            worksheet.getColumn('E').width = 10; // Chiều rộng cột "Số Tiết"
+            worksheet.getColumn('G').width = 10; // Chiều rộng cột "Học Kỳ"
+            worksheet.getColumn('J').width = 10; // Chiều rộng cột "Hệ Số Lương"
+            worksheet.getColumn('K').width = 15; // Chiều rộng cột "Mức thanh toán"
+            worksheet.getColumn('L').width = 15; // Chiều rộng cột "Số Tiền"
+            worksheet.getColumn('M').width = 15; // Chiều rộng cột "Trừ Thuế"
+            worksheet.getColumn('N').width = 15; // Chiều rộng cột "Thực Nhận"
 
-            // Thêm viền cho tất cả các ô từ dòng thứ 5 trở đi
-            const rowCount = worksheet.lastRow.number; // Tổng số hàng đã thêm
-            for (let i = 5; i <= rowCount; i++) {
+            // Định dạng viền cho các hàng từ dòng thứ 6 trở đi
+            const rowCount = worksheet.lastRow.number;
+            for (let i = 6; i <= rowCount; i++) {
                 const row = worksheet.getRow(i);
                 row.eachCell((cell) => {
                     cell.border = {
-                        top: { style: 'thin', color: { argb: 'FF000000' } },
-                        left: { style: 'thin', color: { argb: 'FF000000' } },
-                        bottom: { style: 'thin', color: { argb: 'FF000000' } },
-                        right: { style: 'thin', color: { argb: 'FF000000' } },
+                        top: { style: 'thin' },
+                        left: { style: 'thin' },
+                        bottom: { style: 'thin' },
+                        right: { style: 'thin' },
                     };
                 });
             }
         }
 
-        // Thiết lập tên tệp và gửi tệp cho người dùng
         const fileName = `PhuLucGiangVienMoi_${new Date().toISOString().slice(0, 10)}.xlsx`;
         res.setHeader('Content-Disposition', `attachment; filename="${fileName}"`);
         await workbook.xlsx.write(res);
@@ -168,7 +155,7 @@ exports.exportPhuLucGiangVienMoi = async (req, res) => {
         res.status(500).send("Đã xảy ra lỗi khi xuất file.");
     } finally {
         if (connection) {
-            await connection.end(); // Đóng kết nối database
+            await connection.end();
         }
     }
 };
