@@ -72,7 +72,12 @@
                   <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                     <a class="nav-link" href="/xemCacLopGvm">Xem các lớp mời</a>
                     <a class="nav-link" href="/classInfoGvm">Thông tin lớp giảng viên mời</a>
-                    <a  class="nav-link " href="/infoHDGvm" role="button">Thông tin hợp đồng</a>
+                    <a  class="nav-link " href="/infoHDGvm" role="button">Thông tin hợp đồng</a>   
+                    <li class="nav-item"></li>
+            <a class="nav-link " href="/phuLucHD" >Phụ lục hợp đồng</a>
+            </li>
+            <a class="nav-link " href="/exportHD">Hợp Đồng</a>
+
                   </div>
                 </div>
               </div>
@@ -116,9 +121,18 @@
                     <a class="nav-link" id="ThongTinGD" href="#">COMING SOON</a>
                   </div>
                 </div>
-                <li class="nav-item"></li>
-            <a class="nav-link " href="/phuLucHD" >Phụ lục hợp đồng</a>
-            </li>
+             
+              </div>
+              <div class="navbar-nav">
+                <div class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownUser" data-bs-toggle="dropdown"
+                    aria-expanded="false">
+                     Hệ Thống
+                  </a>
+                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a class="nav-link" id="" href="log">Xem File Log</a>
+                  </div>
+                </div>
               </div>
               <div class="navbar-nav">
                 <div class="nav-item dropdown">
@@ -361,7 +375,6 @@
         // Lấy phần tử div để hiển thị thông báo
         const messageDiv = document.getElementById('message');
 
-       
         // Hiển thị thông báo dựa trên giá trị của message
         if (message === 'insertSuccess') {
           alert("insertSuccess")
@@ -409,7 +422,7 @@
             document.querySelector('.fullname').innerText = 'Hi, Guest'; // Hiển thị nếu không có tên người dùng
           }
       
-          document.querySelector('.role').innerText = `${Role}`;
+          //document.querySelector('.role').innerText = `${Role}`;
       
         };
         </script>

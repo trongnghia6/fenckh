@@ -89,6 +89,8 @@
                 <li class="nav-item"></li>
                 <a class="nav-link active" href="/phulucHD" >Phụ lục hợp đồng</a>
                 </li>
+                <a class="nav-link " href="/exportHD">Hợp Đồng</a>
+
               </div>
             </div>
           </div>
@@ -133,6 +135,17 @@
               </div>
             </div>
           </div>
+          <div class="navbar-nav">
+            <div class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownUser" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                 Hệ Thống
+              </a>
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="nav-link" id="" href="log">Xem File Log</a>
+              </div>
+            </div>
+          </div>
         </ul>
         <div class="navbar-nav">
           <div class="nav-item dropdown">
@@ -150,36 +163,21 @@
       </div>
     </div>
   </nav>
+  <div class="container mt-4">
+    <div class="row">
+        <div class="col-12">
+            <h2 class="text-center mb-4">Phụ Lục Hợp Đồng Giảng Viên</h2>
 
      <div class="container-fluid box m-4"> 
               <div class="d-flex justify-content-center">
                 <!-- Main content  -->
               
-                      <button id="exportButton" class="btn btn-primary">Xuất dữ liệu phụ lục giảng viên mời</button>
+                      <button id="exportButton" class="btn">Xuất dữ liệu phụ lục giảng viên mời</button>
                     </div>
                   </div>
                 </div>
               </div>
-                              <!-- <button class="action-button export" onclick="window.location.href='/hdgvm/export-excel'">
-Xuất dữ liệu 
-                              </button><script>
-                              function exportSelectedData() {
-fetch('/export-excel')
-  .then(response => response.blob())
-  .then(blob => {
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'hdgvmList.xlsx';
-    a.click();
-  });
-                              }</script>
-                              <select class="filter" onchange="filterClasses()">
-<option value="">Công nghệ thông tin</option>
-<option value="">An toàn thông tin</option>
-<option value="">Điện tử viễn thông</option>
-<option value="">Mật mã</option> --> 
-              <!-- Các tùy chọn lọc khác -->
+
 
 
 

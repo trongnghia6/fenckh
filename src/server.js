@@ -26,7 +26,8 @@ const infoHDGvmRoutes = require("./routes/infoHDGvmRoute");
 const adminRoute = require("./routes/adminRoute");
 const xemCacLopGvmRoute = require("./routes/xemCacLopGvmRoute");
 const phuLucHDRoute = require('./routes/phuLucHDRoute');
-
+const exportHDRoute = require('./routes/exportHDRoute');
+const logRoute = require('./routes/logRoute');
 
 const app = express();
 const port = process.env.port || 8888;
@@ -34,7 +35,8 @@ const hostname = process.env.HOST_NAME;
 
 app.use(bodyParser.json({ limit: "500mb" }));
 app.use(bodyParser.urlencoded({ limit: "500mb", extended: true }));
-
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 // config engine template
 configViewEngine(app);
 
@@ -77,7 +79,8 @@ app.use("/", importGvmList);
 app.use("/", infoHDGvmRoutes);
 app.use("/", adminRoute);
 app.use('/', phuLucHDRoute);
-
+app.use('/', exportHDRoute);
+app.use('/', logRoute);
 app.use("/", xemCacLopGvmRoute);
 
 app.listen(port, hostname, () => {
@@ -112,6 +115,7 @@ const importFile = require("./routes/importRoute");
 const infoGvm = require("./routes/infoRoute");
 const tableQc = require("./routes/gvmRoute");
 const xoaQCDK = require("./routes/qcdkRoute");
+const { log } = require("console");
 //const { require } = require("app-root-path");
 
 app.use("/", importFile); // cấu hình import

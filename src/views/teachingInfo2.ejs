@@ -247,6 +247,8 @@
                 <li class="nav-item"></li>
                 <a class="nav-link " href="/phuLucHD">Phụ lục hợp đồng</a>
                 </li>
+                <a class="nav-link " href="/exportHD">Hợp Đồng</a>
+
               </div>
             </div>
           </div>
@@ -295,6 +297,17 @@
             </div>
 
           </div>
+          <div class="navbar-nav">
+            <div class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownUser" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                 Hệ Thống
+              </a>
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="nav-link" id="" href="log">Xem File Log</a>
+              </div>
+            </div>
+          </div>
         </ul>
         <div class="navbar-nav">
           <div class="nav-item dropdown">
@@ -315,7 +328,7 @@
   <div class="container-fluid box m-4">
     <div class="">
       <div class="d-flex justify-content-between">
-        <div class="d-flex justify-content-center">
+        <div class="d-flex align-items-end">
           <select class="form-select w-100px mx-1 selectop custom-select" id="combobox-dot">
             <option value="1">Đợt 1</option>
             <option value="2">Đợt 2</option>
@@ -331,12 +344,12 @@
           <select class="form-select w-100px mx-1 selectop custom-select" id="NamHoc">
             <option value="">Năm học</option>
           </select>
-          <button id="infoGvm" class="button text-nowrap">Xem dữ liệu</button>
-          <button onclick="submitData()" class="button mx-3" id="update-qc" style="display: none">
+          <button id="infoGvm" class="btn text-nowrap" style="height: 45px;">Xem dữ liệu</button>
+          <button onclick="submitData()" class="btn mx-3" id="update-qc" style="display: none; height: 45px;">
             Cập nhật
           </button>
           <!-- <button onclick="submitData2()" class="button mx-3" id="update-qc" display="none">Cập nhật</button> -->
-          <button onclick="submitData2()" class="button mx-3" id="save-data-all" style="display: none">
+          <button onclick="submitData2()" class="btn mx-3" id="save-data-all" style="display: none; height: 45px;">
             Lưu
           </button>
         </div>
