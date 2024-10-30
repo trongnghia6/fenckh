@@ -3,8 +3,30 @@ const Docxtemplater = require('docxtemplater');
 const fs = require('fs');
 const path = require('path');
 const createConnection = require('../config/databaseAsync');
+const archiver = require('archiver');
 
-// Hàm chuyển đổi số thành chữ (ví dụ đơn giản)
+
+
+
+
+function deleteFolderRecursive(folderPath) {
+    if (fs.existsSync(folderPath)) {
+      fs.readdirSync(folderPath).forEach((file) => {
+        const curPath = path.join(folderPath, file);
+        if (fs.lstatSync(curPath).isDirectory()) {
+          // Đệ quy xóa thư mục con
+          deleteFolderRecursive(curPath);
+        } else {
+          // Xóa file
+          fs.unlinkSync(curPath);
+        }
+      });
+      // Xóa thư mục rỗng
+      fs.rmdirSync(folderPath);
+    }
+  }
+
+// Hàm chuyển đổi số thành chữ
 const numberToWords = (num) => {
     if (num === 0) return 'không đồng';
 
@@ -26,7 +48,6 @@ const numberToWords = (num) => {
     let words = '';
     let unitIndex = 0;
 
-    // Chia số thành từng phần 3 chữ số (như triệu, nghìn, đơn vị)
     while (num > 0) {
         const chunk = num % 1000;
         if (chunk) {
@@ -34,13 +55,11 @@ const numberToWords = (num) => {
             const hundreds = Math.floor(chunk / 100);
             const remainder = chunk % 100;
 
-            // Xử lý hàng trăm
             if (hundreds) {
                 chunkWords.push(ones[hundreds]);
                 chunkWords.push('trăm');
             }
 
-            // Xử lý hàng chục
             if (remainder < 10) {
                 chunkWords.push(ones[remainder]);
             } else if (remainder < 20) {
@@ -51,13 +70,12 @@ const numberToWords = (num) => {
 
                 chunkWords.push(tens[tenPlace]);
                 if (onePlace === 1 && tenPlace > 0) {
-                    chunkWords.push('mốt'); // Xử lý đặc biệt cho "một"
+                    chunkWords.push('mốt');
                 } else if (onePlace) {
                     chunkWords.push(ones[onePlace]);
                 }
             }
 
-            // Thêm đơn vị (nghìn, triệu, tỷ)
             chunkWords.push(thousands[unitIndex]);
             words = chunkWords.join(' ') + ' ' + words;
         }
@@ -68,14 +86,12 @@ const numberToWords = (num) => {
     return words.trim() + ' đồng';
 };
 
+// Hàm chuyển đổi số thập phân thành chữ
 const numberWithDecimalToWords = (num) => {
-    // Tách phần nguyên và phần thập phân
     const [integerPart, decimalPart] = num.toString().split('.');
-
     const integerWords = numberToWords(parseInt(integerPart, 10));
     let decimalWords = '';
 
-    // Nếu có phần thập phân
     if (decimalPart) {
         decimalWords = 'phẩy ' + decimalPart.split('').map(digit => ones[parseInt(digit)]).join(' ');
     }
@@ -83,7 +99,7 @@ const numberWithDecimalToWords = (num) => {
     return `${integerWords}${decimalWords ? ' ' + decimalWords : ''}`.trim();
 };
 
-
+// Hàm định dạng ngày tháng
 const formatDate = (date) => {
     try {
         if (!date) return '';
@@ -96,53 +112,50 @@ const formatDate = (date) => {
     }
 };
 
-const exportHDController = async (req, res) => {
+// Controller xuất một hợp đồng
+const exportSingleContract = async (req, res) => {
     let connection;
     try {
-        if (!req.query.teacherName) {
-            return res.status(400).send('Thiếu thông tin giảng viên');
+        const { id } = req.query;
+        if (!id) {
+            return res.status(400).send('ID giảng viên không được để trống');
         }
 
         connection = await createConnection();
-        console.log("Querying for teacher:", req.query.teacherName);
-
-        const [contractData] = await connection.execute(
-            `SELECT * FROM hopdonggvmoi WHERE HoTen = ?`, 
-            [req.query.teacherName]
+        const [teachers] = await connection.execute(
+            'SELECT * FROM hopdonggvmoi WHERE ID = ?',
+            [id]
         );
 
-        if (!contractData || contractData.length === 0) {
-            return res.status(404).send('Không tìm thấy hợp đồng của giảng viên.');
+        if (!teachers || teachers.length === 0) {
+            return res.status(404).send('Không tìm thấy thông tin giảng viên');
         }
 
-        const contract = contractData[0];
-        
-        // Tính toán các giá trị tiền
-        const soTiet = contract.SoTiet || 0;
+        const teacher = teachers[0];
+        const soTiet = teacher.SoTiet || 0;
         const tienText = soTiet * 100000;
-        const tienThueText = Math.round(tienText * 0.1); // Tính thuế 10% của Tiền text
-        const tienThucNhanText = tienText - tienThueText; // Tính Tiền thực nhận
+        const tienThueText = Math.round(tienText * 0.1);
+        const tienThucNhanText = tienText - tienThueText;
 
-        // Chuẩn bị dữ liệu cho mẫu
         const data = {
-            'Ngày_bắt_đầu': formatDate(contract.NgayBatDau),
-            'Ngày_kết_thúc': formatDate(contract.NgayKetThuc),
-            'Danh_xưng': contract.DanhXung,
-            'Họ_và_tên': contract.HoTen,
-            'CCCD': contract.CCCD,
-            'Ngày_cấp': formatDate(contract.NgayCap),
-            'Nơi_cấp': contract.NoiCapCCCD,
-            'Chức_vụ': contract.ChucVu,
-            'Cấp_bậc': contract.HocVi,
-            'Hệ_số_lương': contract.HSL,
-            'Địa_chỉ_theo_CCCD': contract.DiaChi,
-            'Điện_thoại': contract.DienThoai,
-            'Mã_số_thuế': contract.MaSoThue,
-            'Số_tài_khoản': contract.STK,
-            'Email': contract.Email,
-            'Tại_ngân_hàng': contract.NganHang,
-            'Số_tiết': contract.SoTiet,
-            'Ngày_kí_hợp_đồng': formatDate(contract.NgayKi),
+            'Ngày_bắt_đầu': formatDate(teacher.NgayBatDau),
+            'Ngày_kết_thúc': formatDate(teacher.NgayKetThuc),
+            'Danh_xưng': teacher.DanhXung,
+            'Họ_và_tên': teacher.HoTen,
+            'CCCD': teacher.CCCD,
+            'Ngày_cấp': formatDate(teacher.NgayCap),
+            'Nơi_cấp': teacher.NoiCapCCCD,
+            'Chức_vụ': teacher.ChucVu,
+            'Cấp_bậc': teacher.HocVi,
+            'Hệ_số_lương': teacher.HSL,
+            'Địa_chỉ_theo_CCCD': teacher.DiaChi,
+            'Điện_thoại': teacher.DienThoai,
+            'Mã_số_thuế': teacher.MaSoThue,
+            'Số_tài_khoản': teacher.STK,
+            'Email': teacher.Email,
+            'Tại_ngân_hàng': teacher.NganHang,
+            'Số_tiết': teacher.SoTiet,
+            'Ngày_kí_hợp_đồng': formatDate(teacher.NgayKi),
             'Tiền_text': tienText.toLocaleString('vi-VN'),
             'Bằng_chữ_số_tiền': numberToWords(tienText),
             'Tiền_thuế_Text': tienThueText.toLocaleString('vi-VN'),
@@ -150,13 +163,7 @@ const exportHDController = async (req, res) => {
             'Bằng_chữ_của_thực_nhận': numberToWords(tienThucNhanText),
         };
 
-        console.log("Data for template:", data);
-
         const templatePath = path.resolve(__dirname, '../templates/HopDong.docx');
-        if (!fs.existsSync(templatePath)) {
-            throw new Error('Template file not found');
-        }
-
         const content = fs.readFileSync(templatePath, 'binary');
         const zip = new PizZip(content);
 
@@ -169,58 +176,19 @@ const exportHDController = async (req, res) => {
             }
         });
 
-        try {
-            console.log("Attempting to render document with data");
-            doc.render(data);
-        } catch (error) {
-            console.error("Error rendering template:", {
-                message: error.message,
-                name: error.name,
-                stack: error.stack,
-                properties: error.properties
-            });
-
-            if (error.properties && error.properties.errors instanceof Array) {
-                const errorMessages = error.properties.errors.map(function (error) {
-                    return error.properties.explanation;
-                }).join("\n");
-                console.log('Detailed error messages: \n', errorMessages);
-            }
-
-            throw new Error('Lỗi khi tạo file hợp đồng: ' + error.message);
-        }
+        doc.render(data);
 
         const buf = doc.getZip().generate({
             type: 'nodebuffer',
             compression: 'DEFLATE'
         });
 
-        const exportDir = path.join(__dirname, '..', 'public', 'exports');
-        if (!fs.existsSync(exportDir)) {
-            fs.mkdirSync(exportDir, { recursive: true });
-        }
-
-        const fileName = `HopDong_${contract.HoTen}_${Date.now()}.docx`;
-        const outputPath = path.join(exportDir, fileName);
-        
-        fs.writeFileSync(outputPath, buf);
-        console.log(`File saved at: ${outputPath}`);
-
         res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document');
-        res.setHeader('Content-Disposition', `attachment; filename=${encodeURIComponent(fileName)}`);
-
-        res.download(outputPath, fileName, (err) => {
-            if (fs.existsSync(outputPath)) {
-                fs.unlinkSync(outputPath);
-            }
-            
-            if (err) {
-                console.error("Error sending file:", err);
-            }
-        });
+        res.setHeader('Content-Disposition', `attachment; filename=HopDong_${teacher.HoTen}.docx`);
+        res.send(buf);
 
     } catch (error) {
-        console.error("Error in exportHDController:", error);
+        console.error("Error in exportSingleContract:", error);
         res.status(500).send(`Lỗi khi tạo file hợp đồng: ${error.message}`);
     } finally {
         if (connection) {
@@ -233,4 +201,149 @@ const exportHDController = async (req, res) => {
     }
 };
 
-module.exports = exportHDController;
+// Controller xuất nhiều hợp đồng
+const exportMultipleContracts = async (req, res) => {
+    let connection;
+    try {
+        const { dot, ki, namHoc } = req.query;
+        
+        if (!dot || !ki || !namHoc) {
+            return res.status(400).send('Thiếu thông tin đợt, kỳ hoặc năm học');
+        }
+
+        connection = await createConnection();
+        
+        // Lấy danh sách giảng viên theo đợt, kỳ, năm học
+        const [teachers] = await connection.execute(
+            `SELECT * FROM hopdonggvmoi WHERE Dot = ? AND KiHoc = ? AND NamHoc = ?`,
+            [dot, ki, namHoc]
+        );
+
+        if (!teachers || teachers.length === 0) {
+            return res.status(404).send('Không tìm thấy giảng viên nào phù hợp với điều kiện.');
+        }
+
+        // Tạo thư mục tạm để lưu các file hợp đồng
+        const tempDir = path.join(__dirname, '..', 'public', 'temp', Date.now().toString());
+        if (!fs.existsSync(tempDir)) {
+            fs.mkdirSync(tempDir, { recursive: true });
+        }
+
+        // Tạo hợp đồng cho từng giảng viên
+        for (const teacher of teachers) {
+            // Tính toán các giá trị tiền
+            const soTiet = teacher.SoTiet || 0;
+            const tienText = soTiet * 100000;
+            const tienThueText = Math.round(tienText * 0.1);
+            const tienThucNhanText = tienText - tienThueText;
+
+            const data = {
+                'Ngày_bắt_đầu': formatDate(teacher.NgayBatDau),
+                'Ngày_kết_thúc': formatDate(teacher.NgayKetThuc),
+                'Danh_xưng': teacher.DanhXung,
+                'Họ_và_tên': teacher.HoTen,
+                'CCCD': teacher.CCCD,
+                'Ngày_cấp': formatDate(teacher.NgayCap),
+                'Nơi_cấp': teacher.NoiCapCCCD,
+                'Chức_vụ': teacher.ChucVu,
+                'Cấp_bậc': teacher.HocVi,
+                'Hệ_số_lương': teacher.HSL,
+                'Địa_chỉ_theo_CCCD': teacher.DiaChi,
+                'Điện_thoại': teacher.DienThoai,
+                'Mã_số_thuế': teacher.MaSoThue,
+                'Số_tài_khoản': teacher.STK,
+                'Email': teacher.Email,
+                'Tại_ngân_hàng': teacher.NganHang,
+                'Số_tiết': teacher.SoTiet,
+                'Ngày_kí_hợp_đồng': formatDate(teacher.NgayKi),
+                'Tiền_text': tienText.toLocaleString('vi-VN'),
+                'Bằng_chữ_số_tiền': numberToWords(tienText),
+                'Tiền_thuế_Text': tienThueText.toLocaleString('vi-VN'),
+                'Tiền_thực_nhận_Text': tienThucNhanText.toLocaleString('vi-VN'),
+                'Bằng_chữ_của_thực_nhận': numberToWords(tienThucNhanText),
+            };
+
+            const templatePath = path.resolve(__dirname, '../templates/HopDong.docx');
+            const content = fs.readFileSync(templatePath, 'binary');
+            const zip = new PizZip(content);
+
+            const doc = new Docxtemplater(zip, {
+                paragraphLoop: true,
+                linebreaks: true,
+                delimiters: {
+                    start: '«',
+                    end: '»'
+                }
+            });
+
+            doc.render(data);
+
+            const buf = doc.getZip().generate({
+                type: 'nodebuffer',
+                compression: 'DEFLATE'
+            });
+
+            const fileName = `HopDong_${teacher.HoTen}.docx`;
+            fs.writeFileSync(path.join(tempDir, fileName), buf);
+        }
+
+        // Tạo file zip chứa tất cả hợp đồng
+        const archive = archiver('zip', {
+            zlib: { level: 9 }
+        });
+
+        const zipFileName = `HopDong_Dot${dot}_Ki${ki}_${namHoc}.zip`;
+        const zipPath = path.join(tempDir, zipFileName);
+        const output = fs.createWriteStream(zipPath);
+
+        archive.pipe(output);
+        archive.directory(tempDir, false);
+
+        await new Promise((resolve, reject) => {
+            output.on('close', resolve);
+            archive.on('error', reject);
+            archive.finalize();
+        });
+        // Trong hàm exportMultipleContracts, thay đổi phần xử lý xóa thư mục như sau:
+        res.download(zipPath, zipFileName, (err) => {
+            if (err) {
+                console.error("Error sending zip file:", err);
+                return;
+            }
+        
+            // Đợi một khoảng thời gian ngắn trước khi xóa thư mục
+            setTimeout(() => {
+                try {
+                    if (fs.existsSync(tempDir)) {
+                        // Xóa từng file trong thư mục trước
+                        const files = fs.readdirSync(tempDir);
+                        for (const file of files) {
+                            const filePath = path.join(tempDir, file);
+                            fs.unlinkSync(filePath);
+                        }
+                        // Sau đó xóa thư mục
+                        fs.rmdirSync(tempDir);
+                    }
+                } catch (error) {
+                    console.error("Error cleaning up temporary directory:", error);
+                }
+            }, 1000); // Đợi 1 giây
+        });
+    } catch (error) {
+        console.error("Error in exportMultipleContracts:", error);
+        res.status(500).send(`Lỗi khi tạo file hợp đồng: ${error.message}`);
+    } finally {
+        if (connection) {
+            try {
+                await connection.end();
+            } catch (error) {
+                console.error("Error closing database connection:", error);
+            }
+        }
+    }
+};
+
+module.exports = {
+    exportSingleContract,
+    exportMultipleContracts
+};

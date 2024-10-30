@@ -10,7 +10,7 @@
     cursor: pointer; /* Con trỏ chuột thành hình bàn tay */
     text-align: center; /* Căn giữa chữ */
     transition: background-color 0.3s; /* Hiệu ứng chuyển màu */
-    height: 46.5px;
+    height: 40px;
 }
 
 /* Hiệu ứng khi hover */

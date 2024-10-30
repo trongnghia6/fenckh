@@ -200,6 +200,17 @@
               </div>
 
             </div>
+            <div class="navbar-nav">
+              <div class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownUser" data-bs-toggle="dropdown"
+                  aria-expanded="false">
+                   Hệ Thống
+                </a>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                  <a class="nav-link" id="" href="log">Xem File Log</a>
+                </div>
+              </div>
+            </div>
           </ul>
           <div class="navbar-nav">
             <div class="nav-item dropdown">
@@ -238,7 +249,7 @@
               class="file-button mx-3"
               id="fileInput"
             />
-            <button class="btn btn-outline-primary" id="chosseFile">
+            <button class="btn" id="chosseFile">
               Chọn file
             </button>
           </form>
@@ -250,7 +261,7 @@
               name="data"
               value="<%= JSON.stringify(data) %>"
             />
-            <button type="submit" class="btn btn-outline-primary" id="">
+            <button type="submit" class="btn" id="">
               Nhập
             </button>
           </form>

@@ -72,6 +72,10 @@
     .right {
       margin-top: 20px;
     }
+    .btn{
+      height: 45px;
+      margin-left: 5px;
+    }
   </style>
 
   <script>
@@ -205,6 +209,17 @@
             </div>
 
           </div>
+          <div class="navbar-nav">
+            <div class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownUser" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                 Hệ Thống
+              </a>
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="nav-link" id="" href="log">Xem File Log</a>
+              </div>
+            </div>
+          </div>
         </ul>
         <div class="navbar-nav">
           <div class="nav-item dropdown">
@@ -227,10 +242,10 @@
     <div class="mx-5 flex-grow-1">
       <div class="header-actions">
         <div class="left">
-          <button class="btn btn-outline-primary button" id="ban-hanh">
+          <button class="btn" id="ban-hanh">
             Ban Hành
           </button>
-          <button class="btn btn-outline-primary button" id="quychuandukien">
+          <button class="btn text-nowrap" id="quychuandukien" style="width: max-content;">
             Thêm bảng quy chuẩn
           </button>
         </div>
@@ -239,7 +254,7 @@
           <a href="/import">Thêm bảng quy chuẩn</a>
         </button> -->
         <div class="right">
-          <div class="loc" style="margin-top: -15px">
+          <div class="loc d-flex align-items-center" style="margin-top: -15px">
             <select class="selectop " id="combobox-dot">
               <option value="1">Đợt 1</option>
               <option value="2">Đợt 2</option>
@@ -260,13 +275,13 @@
             </select>
             <!-- <button class="export" onclick="exportSelectedData()">Xuất dữ liệu</button> -->
 
-            <button class="button text-nowrap" id="render" style="margin-top: 17px">
+            <button class="btn text-nowrap" id="render" style="margin-top: 17px;">
               Hiển thị
             </button>
             <!-- <button class="button text-nowrap" id="filter" style="margin-top: 17px" onclick="filterTable()">
               Lọc
             </button> -->
-            <button class="button text-nowrap" id="xoa-qc-du-kien" style="margin-top: 17px">
+            <button class="btn text-nowrap" id="xoa-qc-du-kien" style="margin-top: 17px">
               Xóa
             </button>
 
@@ -338,7 +353,8 @@
         Ki: Ki,
         Nam: Nam,
       };
-      console.log('ok')
+
+      console.log(body)
       fetch("http://localhost:3000/get-table-tam", {
         method: "POST", // Phương thức HTTP
         headers: {
@@ -408,14 +424,19 @@
   <script>
     document.addEventListener('DOMContentLoaded', function () {
       document.getElementById('xoa-qc-du-kien').addEventListener('click', async function () {
-
         let Dot = document.getElementById("combobox-dot").value;
         let Ki = document.getElementById("combobox-ki").value;
         let Nam = document.getElementById("NamHoc").value;
         let Khoa = document.getElementById("departmentFilter").value;
 
-        const body = { Khoa, Dot, Ki, Nam };
-        console.log(body);
+        const body = {
+          Khoa: Khoa,
+          Dot: Dot,
+          Ki: Ki,
+          Nam: Nam
+        };
+
+        console.log(body)
 
         // Hiển thị hộp thoại xác nhận
         const confirmation = confirm(`Xóa dữ liệu của Khoa ${Khoa} Đợt ${Dot} Kì ${Ki} Năm ${Nam}`);
@@ -457,10 +478,17 @@
 
     // Hàm fetch lần đầu để lấy dữ liệu từ server
     async function fetchData() {
-      let Dot = document.getElementById("combobox-dot").value;
-      let Ki = document.getElementById("combobox-ki").value;
-      let Nam = document.getElementById("NamHoc").value;
-      let Khoa = document.getElementById("departmentFilter").value;
+      // Lấy giá trị từ các phần tử đầu vào và kiểm tra xem có tồn tại hay không
+      let Dot = document.getElementById("combobox-dot")?.value;
+      let Ki = document.getElementById("combobox-ki")?.value;
+      let Nam = document.getElementById("NamHoc")?.value;
+      let Khoa = document.getElementById("departmentFilter")?.value;
+
+      // Kiểm tra nếu có phần tử nào chưa được chọn
+      if (!Dot || !Ki || !Nam || !Khoa) {
+        alert("Vui lòng điền đầy đủ các thông tin cần thiết.");
+        return;
+      }
 
       const body = {
         Khoa: Khoa,
@@ -468,58 +496,74 @@
         Ki: Ki,
         Nam: Nam
       };
-      console.log(body)
 
       try {
         const response = await fetch("http://localhost:3000/get-table-tam", {
-          method: 'POST', // Phương thức HTTP
+          method: 'POST',
           headers: {
-            'Content-Type': 'application/json', // Định dạng dữ liệu
+            'Content-Type': 'application/json',
           },
-          body: JSON.stringify(body) // Gửi Khoa trong body
+          body: JSON.stringify(body)
         });
+
+        // Kiểm tra phản hồi từ server
         if (!response.ok) {
           throw new Error("Lấy dữ liệu thất bại");
         }
+
         const data = await response.json();
         dataQC = data; // Lưu dữ liệu vào dataQC
         console.log("Dữ liệu lấy được:", dataQC);
       } catch (error) {
         console.error("Error:", error);
-        alert("Lấy dữ liệu thất bại!");
+        alert("Lấy dữ liệu thất bại! Vui lòng kiểm tra lại kết nối.");
       }
     }
 
+    // Hàm xử lý sự kiện khi người dùng nhấn nút "ban-hanh"
     document
       .getElementById("ban-hanh")
       .addEventListener("click", async function () {
-        await fetchData(); // Gọi để lấy dữ liệu trước
+        // Xác nhận lại hành động ban hành
+        const confirmed = confirm("Bạn có chắc chắn muốn ban hành không?");
+        if (!confirmed) {
+          return; // Thoát nếu người dùng không đồng ý
+        }
 
-        // Sau khi lấy dữ liệu, gửi dữ liệu đã cập nhật đến server
+        // Gọi hàm fetchData để lấy dữ liệu từ server
+        await fetchData();
+
+        // Kiểm tra nếu dữ liệu không có gì để gửi
+        if (!dataQC || dataQC.length === 0) {
+          alert("Không có dữ liệu để ban hành.");
+          return;
+        }
+
         console.log("Dữ liệu sẽ được gửi:", dataQC);
 
-        fetch("http://localhost:3000/ban-hanh", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(dataQC), // Gửi dữ liệu đã được cập nhật
-        })
-          .then((response) => response.json()) // Phân tích phản hồi JSON từ server
-          .then((data) => {
-            if (data.success) {
-              alert(data.message || "Ban hành thành công!"); // Hiển thị thông báo từ server
-            } else {
-              alert(data.message || "Ban hành thất bại!");
-            }
-          })
-          .catch((error) => {
-            alert("Gửi dữ liệu thất bại!");
-            console.error("Error:", error);
+        try {
+          const response = await fetch("http://localhost:3000/ban-hanh", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(dataQC),
           });
-      });
 
+          const result = await response.json();
+
+          if (result.success) {
+            alert(result.message || "Ban hành thành công!");
+          } else {
+            alert(result.message || "Ban hành thất bại!");
+          }
+        } catch (error) {
+          console.error("Error:", error);
+          alert("Gửi dữ liệu thất bại! Vui lòng thử lại.");
+        }
+      });
   </script>
+
 
   <!-- Phần phân quyền -->
   <script>
@@ -582,7 +626,7 @@
         document.querySelector(".fullname").innerText = "Hi, Guest"; // Hiển thị nếu không có tên người dùng
       }
 
-      //document.querySelector(".role").innerText = `${Role}`;
+      document.querySelector(".role").innerText = `${Role}`;
     };
   </script>
   <script>

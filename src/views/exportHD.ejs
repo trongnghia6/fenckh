@@ -161,50 +161,42 @@
       </div>
     </div>
   </nav>
-  <div class="container mt-4">
-    <div class="row">
-      <div class="col-12">
-        <h2 class="text-center mb-4">Xuất Hợp Đồng Giảng Viên</h2>
-
-
-        <!-- Form tìm kiếm -->
-        <div class="card mb-4">
-          <div class="card-body">
-            <form id="searchForm">
-              <div class="row mb-3">
-                <div class="controls-container">
-                  <select class="form-select w-100px mx-2 selectop" id="combobox-dot">
-                    <option value="1">Đợt 1</option>
-                    <option value="2">Đợt 2</option>
-                  </select>
-            
-                  <select class="form-select w-100px mx-2 selectop" id="combobox-ki">
-                    <option value="1">Kỳ 1</option>
-                    <option value="2">Kỳ 2</option>
-                  </select>
-            
-                  <select class="form-select w-100px mx-2 selectop" id="NamHoc">
-                    <option value="">Năm học</option>
-                  </select>
-                <div class="col-md-4">
-                  <label for="teacherName" class="form-label">Tên giảng viên:</label>
-                  <input type="text" class="form-control" id="teacherName" name="teacherName" autocomplete="off">
-                </div>
-                <div class="col-md-4 d-flex align-items-end">
-                  <button type="button" class="btn btn-primary" id="exportButton">Xuất Hợp Đồng</button>
-                </div>
-              </div>
+    <div class="d-flex justify-content-center">
+      <!-- Main content -->
+      <div class="gvmList">
+        <div class="m-3">
+          <h1>HỢP ĐỒNG GIẢNG VIÊN MỜI</h1>
+          
+          <div class="controls-container d-flex align-items-center">
+            <select class="form-select w-100px mx-2 selectop" id="combobox-dot">
+              <option value="1">Đợt 1</option>
+              <option value="2">Đợt 2</option>
+            </select>
+          
+            <select class="form-select w-100px mx-2 selectop" id="combobox-ki">
+              <option value="1">Kỳ 1</option>
+              <option value="2">Kỳ 2</option>
+            </select>
+          
+            <select class="form-select w-100px mx-2 selectop" id="NamHoc">
+              <option value="">Năm học</option>
+            </select>
+          
+            <button type="button" class="btn btn-primary mx-2" id="exportButton">Xuất Hợp Đồng</button>
+          </div>
               <script>
                 document.getElementById("exportButton").addEventListener("click", function () {
-                  const teacherName = document.getElementById("teacherName").value;
-                  if (teacherName) {
-                    window.location.href = `/exportHD/download?teacherName=${encodeURIComponent(teacherName)}`;
-                  } else {
-                    alert("Vui lòng nhập tên giảng viên.");
-                  }
+                    const dot = document.getElementById("combobox-dot").value;
+                    const ki = document.getElementById("combobox-ki").value;
+                    const namHoc = document.getElementById("NamHoc").value;
+                    
+                    if (dot && ki && namHoc) {
+                        window.location.href = `/exportHD/downloadAll?dot=${dot}&ki=${ki}&namHoc=${encodeURIComponent(namHoc)}`;
+                    } else {
+                        alert("Vui lòng chọn đầy đủ thông tin đợt, kỳ và năm học.");
+                    }
                 });
-
-              </script>
+                </script>
             </form>
           </div>
         </div>

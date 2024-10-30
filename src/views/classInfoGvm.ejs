@@ -283,6 +283,17 @@
               </div>
 
             </div>
+            <div class="navbar-nav">
+              <div class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownUser" data-bs-toggle="dropdown"
+                  aria-expanded="false">
+                   Hệ Thống
+                </a>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                  <a class="nav-link" id="" href="log">Xem File Log</a>
+                </div>
+              </div>
+            </div>
           </ul>
           <div class="navbar-nav">
             <div class="nav-item dropdown">
@@ -323,7 +334,7 @@
                   onkeyup="searchClass()"
                 />
                 
-              <div class="loc" style="margin-top: -15px;">
+              <div class="loc">
                 <select class="selectop" id="combobox-dot">
                   <option value="1">Đợt 1</option>
                   <option value="2">Đợt 2</option>
@@ -343,9 +354,41 @@
                   <option value="">Chọn khoa</option>
                 </select>
                 
-
-                <button class="button text-nowrap" id="render" 
-                  style="margin-top: 17px;" 
+                <script>
+                  function filterTable() {
+                    // Get selected values
+                    let dot = document.getElementById("combobox-dot").value;
+                    let ki = document.getElementById("combobox-ki").value;
+                    let nam = document.getElementById("NamHoc").value;
+                    let department = document.getElementById("departmentFilter").value.trim();
+                
+                    let tbody = document.getElementById("data-table-body");
+                    let rows = tbody.getElementsByTagName("tr");
+                
+                    for (let i = 0; i < rows.length; i++) {
+                      let row = rows[i];
+                      let rowDepartment = row.getAttribute("data-department");
+                      let rowDot = row.getAttribute("data-dot");
+                      let rowKi = row.getAttribute("data-ki");
+                      let rowNam = row.getAttribute("data-nam");
+                
+                      // Filtering logic
+                      let matchesDepartment = department === "" || rowDepartment === department;
+                      let matchesDot = dot === "" || rowDot === dot;
+                      let matchesKi = ki === "" || rowKi === ki;
+                      let matchesNam = nam === "" || rowNam === nam;
+                
+                      // Show or hide row based on filter results
+                      if (matchesDepartment && matchesDot && matchesKi && matchesNam) {
+                        row.style.display = ""; // Show row
+                      } else {
+                        row.style.display = "none"; // Hide row
+                      }
+                    }
+                  }
+                </script>
+                <button class="btn text-nowrap" id="render" 
+                style="height: 45px;"
                   onclick="filterTable()">Hiển thị
                 </button>
                 </div>
