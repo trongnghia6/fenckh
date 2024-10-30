@@ -72,6 +72,10 @@
     .right {
       margin-top: 20px;
     }
+    .btn{
+      height: 45px;
+      margin-left: 5px;
+    }
   </style>
 
   <script>
@@ -238,10 +242,10 @@
     <div class="mx-5 flex-grow-1">
       <div class="header-actions">
         <div class="left">
-          <button class="btn btn-outline-primary button" id="ban-hanh">
+          <button class="btn" id="ban-hanh">
             Ban Hành
           </button>
-          <button class="btn btn-outline-primary button" id="quychuandukien">
+          <button class="btn text-nowrap" id="quychuandukien" style="width: max-content;">
             Thêm bảng quy chuẩn
           </button>
         </div>
@@ -250,7 +254,7 @@
           <a href="/import">Thêm bảng quy chuẩn</a>
         </button> -->
         <div class="right">
-          <div class="loc" style="margin-top: -15px">
+          <div class="loc d-flex align-items-center" style="margin-top: -15px">
             <select class="selectop " id="combobox-dot">
               <option value="1">Đợt 1</option>
               <option value="2">Đợt 2</option>
@@ -271,13 +275,13 @@
             </select>
             <!-- <button class="export" onclick="exportSelectedData()">Xuất dữ liệu</button> -->
 
-            <button class="button text-nowrap" id="render" style="margin-top: 17px">
+            <button class="btn text-nowrap" id="render" style="margin-top: 17px;">
               Hiển thị
             </button>
             <!-- <button class="button text-nowrap" id="filter" style="margin-top: 17px" onclick="filterTable()">
               Lọc
             </button> -->
-            <button class="button text-nowrap" id="xoa-qc-du-kien" style="margin-top: 17px">
+            <button class="btn text-nowrap" id="xoa-qc-du-kien" style="margin-top: 17px">
               Xóa
             </button>
 
