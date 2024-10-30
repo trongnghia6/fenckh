@@ -33,7 +33,7 @@
       /* Đảm bảo gợi ý nằm bên trên các thành phần khác */
       top: calc(100% + 5px);
       /* Đặt gợi ý phía trên input với một khoảng cách */
-      font-size: 12 px;
+      font-size: 12px;
       left: 0;
       background-color: #f0f0f0;
       color: #000;
@@ -458,6 +458,8 @@
       const isKhoa = localStorage.getItem("isKhoa");
       console.log('Giá trị isKhoa từ localStorage: ', isKhoa);
       hideButton();
+      const Ban = localStorage.getItem("MaPhongBan");
+      console.log('Giá trị Ban từ localStorage: ', Ban);
     });
 
     function hideButton() {
@@ -579,6 +581,7 @@
     async function loadData() {
 
       const MaPhongBan = localStorage.getItem("MaPhongBan");
+
       try {
         const response = await fetch('http://localhost:3000/bo-mon', {
           method: 'POST', // Thay đổi thành POST
@@ -1069,6 +1072,7 @@
     }
 
     document.addEventListener('DOMContentLoaded', function () {
+      alert(localStorage.getItem("MaPhongBan"));
       viewData();
       init();
     });
