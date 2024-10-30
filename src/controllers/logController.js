@@ -13,7 +13,7 @@ const logController = {
 
     try {
       connection = await createConnection();
-      const query = "SELECT * FROM lichsunhaplieu";
+      const query = "SELECT * FROM lichsunhaplieu ORDER BY MaLichSuNhap DESC";
       const [result] = await connection.query(query);
       const lichsunhaplieu = result;
 

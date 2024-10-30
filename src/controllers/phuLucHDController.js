@@ -47,17 +47,17 @@ exports.exportPhuLucGiangVienMoi = async (req, res) => {
             const titleRow2 = worksheet.addRow(['Phụ lục']);
             titleRow2.font = { name: 'Times New Roman', bold: true, size: 14 };
             titleRow2.alignment = { horizontal: 'center', vertical: 'middle' };
-            worksheet.mergeCells(`A${titleRow2.number}:L${titleRow2.number}`);
+            worksheet.mergeCells(`A${titleRow2.number}:K${titleRow2.number}`);
 
             const titleRow3 = worksheet.addRow(['Hợp đồng số:    /HĐ-ĐT ngày   tháng   năm']);
             titleRow3.font = { name: 'Times New Roman', bold: true, size: 14 };
             titleRow3.alignment = { horizontal: 'center', vertical: 'middle' };
-            worksheet.mergeCells(`A${titleRow3.number}:L${titleRow3.number}`);
+            worksheet.mergeCells(`A${titleRow3.number}:K${titleRow3.number}`);
 
             const titleRow4 = worksheet.addRow(['Kèm theo biên bản nghiệm thu và thanh lý Hợp đồng số:     /HĐ-ĐT ngày  tháng  năm ']);
             titleRow4.font = { name: 'Times New Roman', bold: true, size: 14 };
             titleRow4.alignment = { horizontal: 'center', vertical: 'middle' };
-            worksheet.mergeCells(`A${titleRow4.number}:L${titleRow4.number}`);
+            worksheet.mergeCells(`A${titleRow4.number}:K${titleRow4.number}`);
 
             // Đặt vị trí cho tiêu đề "Đơn vị tính: Đồng" vào cột J đến L
             const titleRow5 = worksheet.addRow(['', '', '', '', '', '', '', '', '', 'Đơn vị tính: Đồng', '', '']);
@@ -69,7 +69,7 @@ exports.exportPhuLucGiangVienMoi = async (req, res) => {
             // Định nghĩa tiêu đề cột
             const header = [
                 'Họ Tên', 'Học Vị', 'Lớp', 'Số Tiết', 'Tên Học Phần',
-                'HK', 'Thời Gian Thực Hiện', 'Hệ Số Lương', 'Mức thanh toán',
+                'HK', 'Thời Gian Thực Hiện', 'HSL', 'Mức thanh toán',
                 'Số Tiền', 'Trừ Thuế', 'Thực Nhận'
             ];
 
@@ -78,18 +78,18 @@ exports.exportPhuLucGiangVienMoi = async (req, res) => {
             headerRow.font = { name: 'Times New Roman', bold: true };
 
             // Đặt cỡ chữ riêng cho từng tiêu đề cột
-            headerRow.getCell(1).font = { name: 'Times New Roman', size: 11 }; // Họ Tên
+            headerRow.getCell(1).font = { name: 'Times New Roman', size: 9 }; // Họ Tên
             headerRow.getCell(2).font = { name: 'Times New Roman', size: 8 }; // Học Vị
             headerRow.getCell(3).font = { name: 'Times New Roman', size: 9 }; // Lớp
             headerRow.getCell(4).font = { name: 'Times New Roman', size: 9 }; // Số Tiết
-            headerRow.getCell(5).font = { name: 'Times New Roman', size: 10 }; // Tên Học Phần
+            headerRow.getCell(5).font = { name: 'Times New Roman', size: 9 }; // Tên Học Phần
             headerRow.getCell(6).font = { name: 'Times New Roman', size: 8 }; // Học Kỳ
-            headerRow.getCell(7).font = { name: 'Times New Roman', size: 10 }; // Thời Gian Thực Hiện
+            headerRow.getCell(7).font = { name: 'Times New Roman', size: 9 }; // Thời Gian Thực Hiện
             headerRow.getCell(8).font = { name: 'Times New Roman', size: 9 }; // Hệ Số Lương
             headerRow.getCell(9).font = { name: 'Times New Roman', size: 9 }; // Mức thanh toán
-            headerRow.getCell(10).font = { name: 'Times New Roman', size: 11 }; // Số Tiền
-            headerRow.getCell(11).font = { name: 'Times New Roman', size: 11 }; // Trừ Thuế
-            headerRow.getCell(12).font = { name: 'Times New Roman', size: 11 }; // Thực Nhận
+            headerRow.getCell(10).font = { name: 'Times New Roman', size: 9 }; // Số Tiền
+            headerRow.getCell(11).font = { name: 'Times New Roman', size: 9 }; // Trừ Thuế
+            headerRow.getCell(12).font = { name: 'Times New Roman', size: 9 }; // Thực Nhận
 
             headerRow.eachCell((cell) => {
                 cell.fill = {
@@ -151,13 +151,13 @@ exports.exportPhuLucGiangVienMoi = async (req, res) => {
             worksheet.getColumn('B').width = 9; // Chiều rộng cột "Học vị"
 
 
-            worksheet.getColumn('D').width = 9; // Chiều rộng cột "Số Tiết"
+            worksheet.getColumn('D').width = 7; // Chiều rộng cột "Số Tiết"
             worksheet.getColumn('F').width = 6; // Chiều rộng cột "Học Kỳ"
             worksheet.getColumn('I').width = 8; // Chiều rộng cột "Hệ Số Lương"
             worksheet.getColumn('J').width = 10; // Chiều rộng cột "Mức thanh toán"
-            worksheet.getColumn('K').width = 13; // Chiều rộng cột "Số Tiền"
-            worksheet.getColumn('L').width = 13; // Chiều rộng cột "Trừ Thuế"
-            worksheet.getColumn('M').width = 13; // Chiều rộng cột "Thực Nhận"
+            worksheet.getColumn('K').width = 10; // Chiều rộng cột "Số Tiền"
+            worksheet.getColumn('L').width = 10; // Chiều rộng cột "Trừ Thuế"
+            worksheet.getColumn('M').width = 10; // Chiều rộng cột "Thực Nhận"
 
             // Định dạng viền cho các hàng từ dòng thứ 6 trở đi
             const rowCount = worksheet.lastRow.number;

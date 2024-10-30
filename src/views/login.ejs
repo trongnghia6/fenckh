@@ -111,11 +111,10 @@
               }
             })
             .then((data) => {
-              console.log("Response data:", data); // Kiểm tra dữ liệu trả về
+               // Kiểm tra dữ liệu trả về
               // Nếu đăng nhập thành công, chuyển hướng
 
               const { url, role, MaPhongBan, isKhoa, TenNhanVien, username } = data;
-
               localStorage.setItem("userRole", role);
               localStorage.setItem("MaPhongBan", MaPhongBan);
               localStorage.setItem("isKhoa", isKhoa);

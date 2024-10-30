@@ -336,7 +336,7 @@ button#render:hover::before,
 
 .selectop {
   height: 45px;
-  border: 2px solid #0077ff;
+  border: 2px solid #2c9caf;
   border-radius: 5px;
   font-size: 1.2em;
   font-weight: 550;
@@ -511,7 +511,7 @@ td {
   /* Thu nhỏ font size */
   background-color: #fff;
   /* Màu nền trắng */
-  border: 2px solid #315cfd;
+  /* border: 2px solid #315cfd; */
   /* Đường viền mỏng và tinh tế */
   border-radius: 4px;
   /* Bo góc nhẹ */
@@ -748,7 +748,7 @@ input[type="date"] {
   /* border: none; */
   border-radius: 5px;
   font-weight: bold;
-  letter-spacing: 5px;
+  /* letter-spacing: 5px; */
   text-transform: uppercase;
   cursor: pointer;
   color: #2c9caf;
@@ -782,4 +782,9 @@ input[type="date"] {
 
 .btn:hover::before {
   width: 250%;
+}
+select{
+  background-color: #FAF7F0 !important;
+  text-align: center;
+  color: #2c9caf !important;
 }
