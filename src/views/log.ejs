@@ -11,25 +11,6 @@
   <link rel="stylesheet" href="/css/gvmList.css" />
   <link rel="stylesheet" href="/css/table.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
-  <style>
-    .card-item {
-      width: 30%;
-    }
-    table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        table, th, td {
-            border: 1px solid black;
-        }
-        th, td {
-            padding: 8px;
-            text-align: left;
-        }
-        th {
-            background-color: #f2f2f2;
-        }
-    </style>
 </head>
 
 <body>
@@ -46,11 +27,9 @@
   </nav>
 
   <!-- Phần dưới của navbar chứa các mục nằm ngang -->
-  <div>
-    <button type="return" class="btn m-3" onclick="window.history.back()">Quay Lại</button>
-  </div>
+  
 
-  <table class="table table-bordered" border="1" id="logTable">
+  <table class="table table-bordered my-2" border="1" id="logTable">
     <thead>
         <tr>
             <th>STT</th>
@@ -63,6 +42,9 @@
     </thead>
     <tbody id="logTableBody"></tbody>
 </table>
+<div style="text-align: right;">
+  <button type="return" class="btn m-4" onclick="window.history.back()">Quay Lại</button>
+</div>
 
 
 
