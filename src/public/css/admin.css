@@ -7,47 +7,8 @@
     padding-top: 0 !important;
     /* Xóa padding trên cùng nếu có */
   }
-        .btn {
-          padding: 0.5em 1em;
-          margin-bottom: 1rem;
-          border: none;
-          border-radius: 5px;
-          font-weight: bold;
-          letter-spacing: 5px;
-          text-transform: uppercase;
-          cursor: pointer;
-          color: #2c9caf;
-          transition: all 1000ms;
-          font-size: 15px;
-          position: relative;
-          overflow: hidden;
-          outline: 2px solid #2c9caf;
-        }
-  
-        .btn:hover {
-          color: #ffffff;
-          transform: scale(1.1);
-          outline: 2px solid #70bdca;
-          box-shadow: 4px 5px 17px -4px #268391;
-        }
-        .btn::before {
-          content: "";
-          position: absolute;
-          left: -50px;
-          top: 0;
-          width: 0;
-          height: 100%;
-          background-color: #2c9caf;
-          transform: skewX(45deg);
-          z-index: -1;
-          transition: width 1000ms;
-        }
-  
-        .btn:hover::before {
-          width: 250%;
-        }
         .input-wrapper input {
-          background-color: #eee;
+          background-color: #FAF7F0;
           border: none;
           font-size: 1rem;
           width: 100%;
@@ -57,7 +18,7 @@
           cursor: pointer;
         }
         select {
-          background-color: #eee !important;
+          background-color: #FAF7F0 !important;
           border: none;
           font-size: 1rem;
           width: 100%;
@@ -74,54 +35,6 @@
           outline-color: black;
         }
         
-        .animated-button {
-          position: relative;
-          display: inline-block;
-          padding: 12px 24px;
-          border: none;
-          font-size: 16px;
-          background-color: inherit;
-          border-radius: 100px;
-          font-weight: 600;
-          color: #00000000;
-          box-shadow: 0 0 0 2px #ffffff20;
-          cursor: pointer;
-          overflow: hidden;
-          transition: all 0.6s cubic-bezier(0.23, 1, 0.320, 1);
-        }
-        
-        .animated-button span:last-child {
-          position: absolute;
-          top: 50%;
-          left: 50%;
-          transform: translate(-50%, -50%);
-          width: 20px;
-          height: 20px;
-          background-color: #2196F3;
-          border-radius: 50%;
-          opacity: 0;
-          transition: all 0.8s cubic-bezier(0.23, 1, 0.320, 1);
-        }
-        
-        .animated-button span:first-child {
-          position: relative;
-          z-index: 1;
-        }
-        
-        .animated-button:hover {
-          box-shadow: 0 0 0 5px #2195f360;
-          color: #000000;
-        }
-        
-        .animated-button:active {
-          scale: 0.95;
-        }
-        
-        .animated-button:hover span:last-child {
-          width: 150px;
-          height: 150px;
-          opacity: 1;
-        }
         
         
         

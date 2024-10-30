@@ -39,6 +39,7 @@
       top: calc(100% + 5px);
       /* Đặt gợi ý phía trên input với một khoảng cách */
       left: 0;
+      font-size: 12px;
       background-color: #f0f0f0;
       color: #000;
       border: 1px solid #ccc;
@@ -142,6 +143,10 @@
       /* Giữ chữ trong span cũng in đậm */
       color: #333;
       /* Màu chữ đậm cho giá trị */
+    }
+    .btn{
+      margin-bottom: 0px;
+      height: 45px;
     }
   </style>
 </head>
@@ -293,9 +298,8 @@
 
   <div class="container-fluid box m-4">
     <div class="">
-      <div class="d-flex justify-content-between">
-        <div class="d-flex justify-content-center">
-          <div class="cbb" style="margin-top: 20px;">
+      <div class="d-flex">
+          <div class="cbb d-flex" style="margin-top: 20px;">
             <select class="selectop mx-1" id="combobox-dot">
               <option value="1">Đợt 1</option>
               <option value="2">Đợt 2</option>
@@ -311,11 +315,10 @@
             <select class="selectop mx-1" id="NamHoc">
               <option value="">Năm học</option>
             </select>
-          </div>
 
-          <button id="infoGvm" class="button text-nowrap">Xem dữ liệu</button>
-          <button onclick="submitData()" class="button mx-3" id="update-qc">Cập nhật</button>
-          <button onclick="submitData2()" class="button mx-3" id="save-data-all" style="display: none;">Lưu</button>
+          <button id="infoGvm" class="btn text-nowrap mx-2">Xem dữ liệu</button>
+          <button onclick="submitData()" class="btn mx-2" id="update-qc">Cập nhật</button>
+          <button onclick="submitData2()" class="btn mx-2" id="save-data-all" style="display: none;">Lưu</button>
         </div>
       </div>
 
@@ -329,7 +332,7 @@
           <label for="endDate" class="input-group-text">Ngày kết thúc</label>
           <input required type="date" id="endDate" class="form-control" />
         </div>
-        <button id="fillDay" class="button text-nowrap">Chèn ngày</button>
+        <button id="fillDay" class="btn text-nowrap" style="margin: 8px;">Chèn ngày</button>
       </div>
 
       <!-- Phần tìm kiếm xuống dưới -->

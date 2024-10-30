@@ -33,6 +33,7 @@
       /* Đảm bảo gợi ý nằm bên trên các thành phần khác */
       top: calc(100% + 5px);
       /* Đặt gợi ý phía trên input với một khoảng cách */
+      font-size: 12px;
       left: 0;
       background-color: #f0f0f0;
       color: #000;
@@ -137,6 +138,11 @@
       box-sizing: border-box;
       padding: 5px;
       /* Giữ padding như cũ */
+    }
+
+    .btn {
+      margin-bottom: 0px;
+      height: 45px;
     }
   </style>
 </head>
@@ -256,7 +262,7 @@
             <div class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownUser" data-bs-toggle="dropdown"
                 aria-expanded="false">
-                 Hệ Thống
+                Hệ Thống
               </a>
               <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                 <a class="nav-link" id="" href="log">Xem File Log</a>
@@ -285,28 +291,26 @@
   <div class="container-fluid box m-4">
     <div class="">
       <div class="d-flex justify-content-between">
-        <div class="d-flex justify-content-center">
-          <div class="cbb" style="margin-top: 20px;">
-            <select class="selectop w-100px mx-2 " id="combobox-dot">
-              <option value="1">Đợt 1</option>
-              <option value="2">Đợt 2</option>
-            </select>
+        <div class="cbb d-flex" style="margin-top: 20px;">
+          <select class="selectop w-100px mx-1 " id="combobox-dot">
+            <option value="1">Đợt 1</option>
+            <option value="2">Đợt 2</option>
+          </select>
 
-            <!-- Combo box Đợt -->
-            <select class="selectop w-100px mx-2 " id="combobox-ki">
-              <option value="1">Kỳ 1</option>
-              <option value="2">Kỳ 2</option>
-            </select>
+          <!-- Combo box Đợt -->
+          <select class="selectop w-100px mx-1 " id="combobox-ki">
+            <option value="1">Kỳ 1</option>
+            <option value="2">Kỳ 2</option>
+          </select>
 
-            <!-- Combo box Năm -->
-            <select class="selectop w-100px mx-2 " id="NamHoc">
-              <option value="">Năm học</option>
-            </select>
-          </div>
-          <button id="getData" class="button text-nowrap">Lấy bảng quy chuẩn</button>
+          <!-- Combo box Năm -->
+          <select class="selectop w-100px mx-1 " id="NamHoc">
+            <option value="">Năm học</option>
+          </select>
+          <button id="getData" class="btn text-nowrap mx-3" style="width: max-content;">Lấy bảng quy chuẩn</button>
           <!-- <button id="infoGvm" class="button text-nowrap">Xem bảng cục bộ</button> -->
-          <button id="update-qc" onclick="updateLocalTable()" class="button mx-3 luuTamThoi">Lưu</button>
-          <button id="update-qc" onclick="submitData()" class="button mx-3 luu">Cập nhật</button>
+          <button id="update-qc" onclick="updateLocalTable()" class="btn mx-3 luuTamThoi">Lưu</button>
+          <button id="update-qc" onclick="submitData()" class="btn mx-3 luu">Cập nhật</button>
         </div>
 
       </div>
@@ -315,26 +319,26 @@
       <div class="d-flex my-3" style="height: 70px;">
         <!-- Tìm kiếm theo giảng viên  -->
         <input type="text" id="filterName" placeholder="Tìm theo giảng viên TKB" oninput="filterByName()"
-          class="form-control m-2 search" style="width: 180px;" />
+          class="form-control my-2 mx-1 search" style="width: 180px;" />
         <!-- Tìm kiếm theo tên học phần -->
         <input type="text" id="filterClass" placeholder="Tìm theo tên học phần" oninput="filterByClass()"
-          class="form-control m-2 search" style="width: 180px;" />
+          class="form-control my-2 mx-1 search" style="width: 180px;" />
         <!-- Tìm kiếm theo bộ môn -->
         <input type="text" id="filterBoMon" placeholder="Tìm theo tên bộ môn"
           oninput="filterBoMon(); showSuggestionsBoMon(this)" onclick="showSuggestionsBoMon(this)"
-          class="form-control m-2 search" style="width: 180px;" />
+          class="form-control my-2 mx-1 search" style="width: 180px;" />
 
 
-        <div class="input-group m-2" style="width: 350px;" id="batdau">
+        <div class="input-group my-2 mx-1" style="width: 350px;" id="batdau">
           <label for="startDate" class="input-group-text">Ngày bắt đầu</label>
           <input required type="date" id="startDate" class="form-control" />
         </div>
-        <div class="input-group m-2" style="width: 350px;" id="ketthuc">
+        <div class="input-group my-2 mx-1" style="width: 350px;" id="ketthuc">
 
           <label for="endDate" class="input-group-text">Ngày kết thúc</label>
           <input required type="date" id="endDate" class="form-control" />
         </div>
-        <button id="fillDay" class="button text-nowrap">Chèn ngày</button>
+        <button id="fillDay" class="btn text-nowrap my-2 mx-1" style="height: 54px;">Chèn ngày</button>
 
 
         <!-- <button class="button-action SapXep " id="sortTeachersByName">Sắp Xếp</button> -->
@@ -454,6 +458,8 @@
       const isKhoa = localStorage.getItem("isKhoa");
       console.log('Giá trị isKhoa từ localStorage: ', isKhoa);
       hideButton();
+      const Ban = localStorage.getItem("MaPhongBan");
+      console.log('Giá trị Ban từ localStorage: ', Ban);
     });
 
     function hideButton() {
@@ -575,6 +581,7 @@
     async function loadData() {
 
       const MaPhongBan = localStorage.getItem("MaPhongBan");
+
       try {
         const response = await fetch('http://localhost:3000/bo-mon', {
           method: 'POST', // Thay đổi thành POST
@@ -1065,6 +1072,7 @@
     }
 
     document.addEventListener('DOMContentLoaded', function () {
+      alert(localStorage.getItem("MaPhongBan"));
       viewData();
       init();
     });

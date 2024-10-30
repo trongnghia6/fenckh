@@ -156,7 +156,6 @@ body {
   transform: perspective(500px) translateZ(10px);
   /* Tạo hiệu ứng nổi 3D */
   box-shadow: 0 10px 10px rgba(0, 0, 0, 0.3);
-
 }
 
 .login {
@@ -182,7 +181,7 @@ body {
 }
 
 /* button */
-.button {
+/* .button {
   height: 40px;
   border: 3px solid #315cfd;
   border-radius: 45px;
@@ -197,13 +196,12 @@ body {
   background: #315cfd;
   color: white;
   font-size: 1.5em;
-}
+} */
 
 /*Sửa 1 vài button ở teaching info và import*/
-#infoGvm,
+/* #infoGvm,
 #save-data-all,
 #update-qc,
-#chosseFile,
 #import,
 #viewtam,
 #ban-hanh,
@@ -224,17 +222,7 @@ button#xoa-qc-du-kien,
   cursor: pointer;
   margin: 20px;
   font-size: 17px;
-  /* z-index: 1; */
-  color: var(--color);
-  border: 2px solid var(--color);
-  border-radius: 6px;
-  position: relative;
-  transition: 0.7s;
-}
-
-#chosseFile {
-  margin-top: 0px;
-}
+} */
 
 #filter {
   width: 60px;
@@ -244,24 +232,21 @@ button#xoa-qc-du-kien,
   margin-top: 12px;
 }
 
-button#chosseFile,
-button#chooseFile,
-button#import,
+/* button#import,
 button#viewtam,
 button#ban-hanh,
 #quychuandukien,
 button#render,
 #xoa-qc-du-kien {
   padding-top: 0;
-}
+} */
 
-#viewtam,
+/* #viewtam,
 #infoGvm,
 #getData,
 #quychuandukien {
   width: 200px;
-}
-
+} */
 
 #ban-hanh {
   width: auto;
@@ -271,10 +256,9 @@ button#render,
   width: auto;
 }
 
-#infoGvm::before,
+/* #infoGvm::before,
 #save-data-all::before,
 #update-qc::before,
-#chosseFile::before,
 #import::before,
 #viewtam::before,
 #ban-hanh::before,
@@ -291,12 +275,11 @@ button#render::before #fillDay::before,
   height: 200px;
   z-index: -1;
   border-radius: 50%;
-}
+} */
 
-#infoGvm:hover,
+/* #infoGvm:hover,
 #save-data-all:hover,
 #update-qc:hover,
-#chosseFile:hover,
 #import:hover,
 #viewtam:hover,
 #ban-hanh:hover,
@@ -308,12 +291,11 @@ button#render:hover,
 #xoa-qc-du-kien:hover,
 #filter:hover {
   color: white;
-}
+} */
 
-#infoGvm:before,
+/* #infoGvm:before,
 #save-data-all:before,
 #update-qc:before,
-#chosseFile:before,
 #import:before,
 #viewtam:before,
 #ban-hanh:before,
@@ -327,12 +309,11 @@ button#render:before,
   top: 100%;
   left: 100%;
   transition: 0.3s all;
-}
+} */
 
-#infoGvm:hover::before,
+/* #infoGvm:hover::before,
 #save-data-all:hover::before,
 #update-qc:hover::before,
-#chosseFile:hover::before,
 #import:hover::before,
 #viewtam:hover::before,
 #ban-hanh:hover::before,
@@ -345,7 +326,7 @@ button#render:hover::before,
 #filter:hover::before {
   top: -30px;
   left: -30px;
-}
+} */
 
 .form-select {
   cursor: pointer;
@@ -354,12 +335,12 @@ button#render:hover::before,
 }
 
 .selectop {
-
   height: 45px;
-  border: 2px solid #0077ff;
+  border: 2px solid #2c9caf;
   border-radius: 5px;
   font-size: 1.2em;
   font-weight: 550;
+  margin-right: 5px;
   cursor: pointer;
 
   &:hover {
@@ -420,7 +401,6 @@ td {
 
 .container-fluid {
   width: auto;
-
 }
 
 .box {
@@ -454,7 +434,6 @@ td {
 }
 
 @media (max-width: 768px) {
-
   .w-20,
   .w-30,
   .w-80 {
@@ -532,7 +511,7 @@ td {
   /* Thu nhỏ font size */
   background-color: #fff;
   /* Màu nền trắng */
-  border: 2px solid #315cfd;
+  /* border: 2px solid #315cfd; */
   /* Đường viền mỏng và tinh tế */
   border-radius: 4px;
   /* Bo góc nhẹ */
@@ -563,7 +542,7 @@ td {
 
 /* Thêm mũi tên bằng CSS */
 .custom-select::after {
-  content: '▼';
+  content: "▼";
   /* Biểu tượng mũi tên */
   position: absolute;
   top: 50%;
@@ -575,7 +554,7 @@ td {
 }
 
 .add-taikhoan {
-  background-color: #4CAF50;
+  background-color: #4caf50;
   color: #fff;
   border: none;
   padding: 10px 20px;
@@ -584,7 +563,7 @@ td {
 }
 
 .btn-them-tai-khoan {
-  background-color: #4CAF50;
+  background-color: #4caf50;
   /* Màu xanh lá */
   color: white;
   padding: 10px 20px;
@@ -608,7 +587,7 @@ td {
 }
 
 .btn-hien-thi-tk {
-  background-color: #4CAF50;
+  background-color: #4caf50;
   /* Màu xanh lá */
   color: white;
   padding: 10px 20px;
@@ -762,4 +741,50 @@ input[type="date"] {
   margin-left: 8px;
   cursor: pointer;
   font-size: 18px;
+}
+.btn {
+  padding: 0.5em 1em;
+  margin-bottom: 1rem;
+  /* border: none; */
+  border-radius: 5px;
+  font-weight: bold;
+  /* letter-spacing: 5px; */
+  text-transform: uppercase;
+  cursor: pointer;
+  color: #2c9caf;
+  transition: all 1000ms;
+  font-size: 15px;
+  position: relative;
+  overflow: hidden;
+  border: 2px solid #2c9caf !important;
+  background-color: #faf7f0;
+}
+
+.btn:hover {
+  color: #ffffff;
+  transform: scale(1.1);
+  outline: 2px solid #70bdca;
+  box-shadow: 4px 5px 17px -4px #268391;
+}
+.btn::before {
+  content: "";
+  position: absolute;
+  left: -50px;
+  top: 0;
+  width: 0;
+  height: 100%;
+  background-color: #2c9caf;
+  transform: skewX(45deg);
+  z-index: -1;
+  transition: width 1000ms;
+  outline: 2px solid #2c9caf;
+}
+
+.btn:hover::before {
+  width: 250%;
+}
+select{
+  background-color: #FAF7F0 !important;
+  text-align: center;
+  color: #2c9caf !important;
 }

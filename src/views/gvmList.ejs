@@ -19,6 +19,7 @@
       top: calc(100% + 5px);
       /* Đặt gợi ý phía trên input với một khoảng cách */
       left: 0;
+      font-size: 12px;
       background-color: #f0f0f0;
       color: #000;
       border: 1px solid #ccc;
@@ -204,7 +205,7 @@
             <div class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownUser" data-bs-toggle="dropdown"
                 aria-expanded="false">
-                 Hệ Thống
+                Hệ Thống
               </a>
               <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                 <a class="nav-link" id="" href="log">Xem File Log</a>
@@ -236,8 +237,8 @@
         <div class="">
           <h1>DANH SÁCH GIẢNG VIÊN MỜI</h1>
           <div class="header-actions">
-            <button id="createGvm" class="add-class" onclick="addClass()">
-              + Thêm giảng viên mời
+            <button id="createGvm" class="bi bi-plus btn" onclick="addClass()">
+              Thêm giảng viên mời
             </button>
             <input type="text" placeholder="Tìm kiếm theo Tên..." class="search" id="searchInput"
               onkeyup="searchClass()" />
@@ -279,27 +280,38 @@
               </tr>
             </thead>
             <tbody>
-              <% const options = { year: 'numeric', month: '2-digit', day: '2-digit' }; %>
-              <% for (let i = 0; i < gvmLists.length; i++) { %>
-                <tr>
-                  <td><%= i + 1 %></td>
-                  <td><%= gvmLists[i].MaGvm %></td>
-                  <td><%= gvmLists[i].HoTen %></td>
-                  <td><%= new Date(gvmLists[i].NgaySinh).toLocaleDateString('vi-VN', options) %></td>
-                  <td style="display: none;"><%= gvmLists[i].MaPhongBan %></td>
-                  <td id="BoMon"><%= gvmLists[i].MonGiangDayChinh %></td>
-                  <td>
-                    <button class="action-button edit"
-                    onclick="editClass(this, <%= parseInt(gvmLists[i].id_Gvm)%>)">
-                    ✏️
-                  </button>
-                  <button class="action-button view"
-                    onclick="viewClass(this, <%= parseInt(gvmLists[i].id_Gvm) - 1 %>)">
-                    👁️
-                  </button>
-                  </td>
-                </tr>
-              <% } %>
+              <% const options={ year: 'numeric' , month: '2-digit' , day: '2-digit' }; %>
+                <% for (let i=0; i < gvmLists.length; i++) { %>
+                  <tr>
+                    <td>
+                      <%= i + 1 %>
+                    </td>
+                    <td>
+                      <%= gvmLists[i].MaGvm %>
+                    </td>
+                    <td>
+                      <%= gvmLists[i].HoTen %>
+                    </td>
+                    <td>
+                      <%= new Date(gvmLists[i].NgaySinh).toLocaleDateString('vi-VN', options) %>
+                    </td>
+                    <td style="display: none;">
+                      <%= gvmLists[i].MaPhongBan %>
+                    </td>
+                    <td id="BoMon">
+                      <%= gvmLists[i].MonGiangDayChinh %>
+                    </td>
+                    <td>
+                      <button class="action-button edit" onclick="editClass(this, <%= parseInt(gvmLists[i].id_Gvm)%>)">
+                        ✏️
+                      </button>
+                      <button class="action-button view"
+                        onclick="viewClass(this, <%= parseInt(gvmLists[i].id_Gvm) - 1 %>)">
+                        👁️
+                      </button>
+                    </td>
+                  </tr>
+                  <% } %>
             </tbody>
 
             <!-- code cũ -->
@@ -390,7 +402,7 @@
       // Tìm kiếm theo bộ môn
       function searchBoMon() {
         console.log()
-        alert('mé')
+        // alert('mé')
         const input = document.getElementById('searchBoMon');
         const filter = input.value.trim().toLowerCase(); // Bỏ khoảng trắng và chuyển chữ thường
         const tableRows = document.querySelectorAll('#tableBody tr');
@@ -527,7 +539,7 @@
       // Hiển thị thông báo dựa trên giá trị của message
       if (message === "insertSuccess") {
         alert("Thành công!");
-      } else if (message === "cccd") {
+      } else if (message === "duplicateCCCD") {
         alert("Số CCCD đã tồn tại. Vui lòng kiểm tra lại số CCCD.");
       } else if (message === "insertFalse") {
         alert("Đã xảy ra lỗi trong quá trình thêm giảng viên.");

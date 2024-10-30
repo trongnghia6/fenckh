@@ -295,3 +295,6 @@
 .bg-test {
   background-color: #15172b;
 }
+input{
+  background-color: #FAF7F0 !important;
+}

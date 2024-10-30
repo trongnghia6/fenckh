@@ -87,6 +87,7 @@
       top: calc(100% + 5px);
       /* Đặt gợi ý phía trên input với một khoảng cách */
       left: 0;
+      font-size: 12px;
       background-color: #f0f0f0;
       color: #000;
       border: 1px solid #ccc;
@@ -180,6 +181,10 @@
       /* Giữ chữ trong span cũng in đậm */
       color: #333;
       /* Màu chữ đậm cho giá trị */
+    }
+
+    .btn {
+      margin-bottom: 20px;
     }
   </style>
 </head>
@@ -301,7 +306,7 @@
             <div class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownUser" data-bs-toggle="dropdown"
                 aria-expanded="false">
-                 Hệ Thống
+                Hệ Thống
               </a>
               <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                 <a class="nav-link" id="" href="log">Xem File Log</a>
@@ -328,7 +333,7 @@
   <div class="container-fluid box m-4">
     <div class="">
       <div class="d-flex justify-content-between">
-        <div class="d-flex justify-content-center">
+        <div class="d-flex align-items-end">
           <select class="form-select w-100px mx-1 selectop custom-select" id="combobox-dot">
             <option value="1">Đợt 1</option>
             <option value="2">Đợt 2</option>
@@ -344,12 +349,12 @@
           <select class="form-select w-100px mx-1 selectop custom-select" id="NamHoc">
             <option value="">Năm học</option>
           </select>
-          <button id="infoGvm" class="button text-nowrap">Xem dữ liệu</button>
-          <button onclick="submitData()" class="button mx-3" id="update-qc" style="display: none">
+          <button id="infoGvm" class="btn text-nowrap mx-2" style="height: 45px;">Xem dữ liệu</button>
+          <button onclick="submitData()" class="btn mx-2" id="update-qc" style="display: none; height: 45px;">
             Cập nhật
           </button>
-          <!-- <button onclick="submitData2()" class="button mx-3" id="update-qc" display="none">Cập nhật</button> -->
-          <button onclick="submitData2()" class="button mx-3" id="save-data-all" style="display: none">
+          <!-- <button onclick="submitData2()" class="button mx-2" id="update-qc" display="none">Cập nhật</button> -->
+          <button onclick="submitData2()" class="btn mx-2" id="save-data-all" style="display: none; height: 45px;">
             Lưu
           </button>
         </div>
@@ -379,6 +384,8 @@
               <th style="width: 100px">Bộ môn</th>
               <th style="width: 50px">Số tiết LL</th>
               <th style="width: 50px">Số tiết QC</th>
+              <th style="width: 70px">Ngày bắt đầu</th>
+              <th style="width: 70px">Ngày kết thúc</th>
               <th style="width: 50px" id="khoaColumn">
                 <div class="form-check d-flex">
                   <input class="check" type="checkbox" id="checkAllKhoa" onclick="checkAll('khoa')" />
@@ -478,9 +485,9 @@
       if (MaPhongBan == "DAOTAO" && role == "Duyệt") {
         // Ẩn cột 'taiChinhColumn'
         document.getElementById("taiChinhColumn").style.display = "none";
-  
+
         document.getElementById("update-qc").style.display = "inline-block"; // Sử dụng 'inline-block' để hiển thị nút
-          
+
 
       } else if (MaPhongBan == "TAICHINH" && role == "Duyệt") {
         // Ẩn cột 'khoaColumn'
@@ -488,10 +495,10 @@
 
         // Hiển thị nút 'Cập nhật'
         document.getElementById("update-qc").style.display = "inline-block"; // Sử dụng 'inline-block' để hiển thị nút
-      
+
         document.getElementById("save-data-all").style.display =
-            "inline-block"; // Sử dụng 'inline-block' để hiển thị nút
-        
+          "inline-block"; // Sử dụng 'inline-block' để hiển thị nút
+
       }
 
       if (role == "Thường") {
@@ -578,6 +585,7 @@
 
     // Hàm render bảng
     function renderTable(data) {
+      console.log(data)
       const tableBody = document.getElementById("tableBody");
       tableBody.innerHTML = ""; // Xóa nội dung cũ
 
@@ -628,6 +636,15 @@
         const soTietQCTd = document.createElement("td");
         soTietQCTd.textContent = row.QuyChuan || "";
         tableRow.appendChild(soTietQCTd);
+
+        const ngayBatDauTd = document.createElement("td");
+        // Chuyển đổi ngày từ chuỗi ISO sang định dạng dễ đọc
+        ngayBatDauTd.textContent = row.NgayBatDau ? new Date(row.NgayBatDau).toLocaleDateString("vi-VN") : "";
+        tableRow.appendChild(ngayBatDauTd);
+
+        const ngayKetThucTd = document.createElement("td");
+        ngayKetThucTd.textContent = row.NgayKetThuc ? new Date(row.NgayKetThuc).toLocaleDateString("vi-VN") : "";
+        tableRow.appendChild(ngayKetThucTd);
 
         // Điều kiện để ẩn checkbox của "Khoa" nếu role không phải là "CNTT_ALL"
         const role = localStorage.getItem("userRole");
@@ -684,15 +701,15 @@
 
         if (MaPhongBan.toLowerCase() === "daotao" && role.toLowerCase() !== "thường") {
           // Nếu khoa đã check thì hiện check bên đào tạo
-          if (!check.includes(row.Khoa)){
+          if (!check.includes(row.Khoa)) {
             // Ngăn thay đổi trạng thái check box khoa
             khoaCheckbox.disabled = true
             daoTaoCheckbox.disabled = true
 
           }
-          
+
           // Nếu đào tạo đã check thì disable check đào tạo
-          if (DaoTaoCheck.includes(row.Khoa)){
+          if (DaoTaoCheck.includes(row.Khoa)) {
             // Ngăn thay đổi trạng thái check box khoa
             khoaCheckbox.disabled = true
             daoTaoCheckbox.disabled = true;
@@ -701,20 +718,20 @@
 
         if (MaPhongBan.toLowerCase() === "taichinh" && role.toLowerCase() !== "thường") {
           // Nếu khoa đã check thì hiện check bên đào tạo
-          if (!DaoTaoCheck.includes(row.Khoa)){
+          if (!DaoTaoCheck.includes(row.Khoa)) {
             // Ngăn thay đổi trạng thái check box khoa
             daoTaoCheckbox.disabled = true
             taiChinhCheckbox.disabled = true;
           }
 
           // Nếu đào tạo đã check thì disable check đào tạo
-          if (TaiChinhCheck.includes(row.Khoa)){
+          if (TaiChinhCheck.includes(row.Khoa)) {
             // Ngăn thay đổi trạng thái check box khoa
             daoTaoCheckbox.disabled = true
             taiChinhCheckbox.disabled = true;
           }
         }
-        
+
         const ghiChuTd = document.createElement("td");
         if (row.ghiChu) {
           ghiChuTd.innerHTML = `📜 <span style="color: red;">•</span>`; // Hiển thị biểu tượng ghi chú và chấm đỏ
@@ -853,7 +870,7 @@
 
         // Hiển thị thông báo theo message từ server
         alert(data.message); // Sử dụng message từ server để hiển thị thông báo
-        
+
       } catch (error) {
         console.error("Error sending signal:", error);
         alert("Đã xảy ra lỗi trong quá trình lưu dữ liệu."); // Hiển thị thông báo lỗi
@@ -1273,45 +1290,45 @@
         }
       });
     }
-  
+
   </script>
   <script>
-    $(document).ready(function() {
-  $('#NamHoc option[value=""]').remove();
+    $(document).ready(function () {
+      $('#NamHoc option[value=""]').remove();
 
-  $.ajax({
-    url: '/getNamHoc',
-    method: 'GET',
-    success: function(response) {
-      if (response.success) {
-        const NamHoc = response.NamHoc;
-        console.log(NamHoc);
+      $.ajax({
+        url: '/getNamHoc',
+        method: 'GET',
+        success: function (response) {
+          if (response.success) {
+            const NamHoc = response.NamHoc;
+            console.log(NamHoc);
 
-        response.NamHoc.forEach(function(item) {
-          if (item.NamHoc === NamHoc) {
-            $('#NamHoc').prepend(
-              `<option value="${item.NamHoc}" selected>${item.NamHoc}</option>`
-            );
+            response.NamHoc.forEach(function (item) {
+              if (item.NamHoc === NamHoc) {
+                $('#NamHoc').prepend(
+                  `<option value="${item.NamHoc}" selected>${item.NamHoc}</option>`
+                );
+              } else {
+                $('#NamHoc').append(
+                  `<option value="${item.NamHoc}">${item.NamHoc}</option>`
+                );
+              }
+            });
+
+            if (!$('#NamHoc option:selected').length) {
+              $('#NamHoc').prepend('<option value="">Chọn Năm Học</option>');
+            }
           } else {
-            $('#NamHoc').append(
-              `<option value="${item.NamHoc}">${item.NamHoc}</option>`
-            );
+            console.error("Không lấy được dữ liệu năm học:", response.message);
           }
-        });
-
-        if (!$('#NamHoc option:selected').length) {
-          $('#NamHoc').prepend('<option value="">Chọn Năm Học</option>');
+        },
+        error: function (error) {
+          console.error("Lỗi khi lấy dữ liệu năm học:", error);
         }
-      } else {
-        console.error("Không lấy được dữ liệu năm học:", response.message);
-      }
-    },
-    error: function(error) {
-      console.error("Lỗi khi lấy dữ liệu năm học:", error);
-    }
-  });
-});
-</script>
+      });
+    });
+  </script>
 
 </body>
 

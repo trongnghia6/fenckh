@@ -30,10 +30,12 @@ const connection = require("../config/database");
 
 const router = express.Router();
 const createConnection = require("../config/databaseAsync");
+const createPoolConnection = require("../config/databasePool");
 
 const getGvmLists = async (req, res) => {
+  let connection2;
   try {
-    const connection2 = await createConnection();
+    connection2 = await createPoolConnection();
     const query = "SELECT * FROM `gvmoi`";
     const [results] = await connection2.query(query);
 
@@ -42,6 +44,8 @@ const getGvmLists = async (req, res) => {
   } catch (error) {
     console.error("Error fetching GVM lists: ", error);
     return res.status(500).send("Internal server error"); // Trả về chuỗi thông báo lỗi
+  } finally {
+    if (connection2) connection2.release(); // Đóng kết nối sau khi truy vấn
   }
 };
 
