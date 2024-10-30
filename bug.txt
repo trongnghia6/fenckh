@@ -1,5 +1,6 @@
 # bug 
-- Các thao tác thêm, sửa, xóa dữ liệu cần phải hiển thị ra dữ liệu mới, site import, qc dự kiến, qc chính thức
+
+- Các thao tác thêm, sửa, xóa dữ liệu cần phải hiển thị ra dữ liệu mới, site import, qc dự kiến, qc chính thức ( done )
 
 - Khi input mã bộ môn không được auto reload trang, site các lớp mời ( done )
 
@@ -14,6 +15,7 @@
 
 
 # không phải bug
+
 - hiện tại ban hành đang là từng khoa
   comment phần code này và chuyển thành all khoa
 
