@@ -144,7 +144,8 @@
       color: #333;
       /* Màu chữ đậm cho giá trị */
     }
-    .btn{
+
+    .btn {
       margin-bottom: 0px;
       height: 45px;
     }
@@ -270,7 +271,7 @@
             <div class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownUser" data-bs-toggle="dropdown"
                 aria-expanded="false">
-                 Hệ Thống
+                Hệ Thống
               </a>
               <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                 <a class="nav-link" id="" href="log">Xem File Log</a>
@@ -299,22 +300,22 @@
   <div class="container-fluid box m-4">
     <div class="">
       <div class="d-flex">
-          <div class="cbb d-flex" style="margin-top: 20px;">
-            <select class="selectop mx-1" id="combobox-dot">
-              <option value="1">Đợt 1</option>
-              <option value="2">Đợt 2</option>
-            </select>
+        <div class="cbb d-flex" style="margin-top: 20px;">
+          <select class="selectop mx-1" id="combobox-dot">
+            <option value="1">Đợt 1</option>
+            <option value="2">Đợt 2</option>
+          </select>
 
-            <!-- Combo box Kỳ -->
-            <select class="selectop mx-1" id="combobox-ki">
-              <option value="1">Kỳ 1</option>
-              <option value="2">Kỳ 2</option>
-            </select>
+          <!-- Combo box Kỳ -->
+          <select class="selectop mx-1" id="combobox-ki">
+            <option value="1">Kỳ 1</option>
+            <option value="2">Kỳ 2</option>
+          </select>
 
-            <!-- Combo box Năm -->
-            <select class="selectop mx-1" id="NamHoc">
-              <option value="">Năm học</option>
-            </select>
+          <!-- Combo box Năm -->
+          <select class="selectop mx-1" id="NamHoc">
+            <option value="">Năm học</option>
+          </select>
 
           <button id="infoGvm" class="btn text-nowrap mx-2">Xem dữ liệu</button>
           <button onclick="submitData()" class="btn mx-2" id="update-qc">Cập nhật</button>
@@ -510,7 +511,7 @@
       const [gvmResponse, khoaResponse, teachingResponse] = await Promise.all([
         fetch('http://localhost:3000/index/name-gvm'),
         fetch('http://localhost:3000/index/name-gvm-khoa'),
-        fetch('http://localhost:3000/teaching-info', {
+        fetch('http://localhost:3000/xemCacLopMoi', {
           method: 'POST', // Sử dụng phương thức POST
           headers: {
             'Content-Type': 'application/json', // Đặt Content-Type là application/json
@@ -1131,6 +1132,8 @@
         checkbox.disabled = true; // Vô hiệu hóa checkbox
       }
     });
+    calculateTotals();
+
   }
 
   function filterByClass() {
@@ -1162,6 +1165,7 @@
         checkbox.disabled = true; // Vô hiệu hóa checkbox
       }
     });
+    calculateTotals();
   }
 
 
@@ -1194,18 +1198,33 @@
         checkbox.disabled = true; // Vô hiệu hóa checkbox
       }
     });
+    calculateTotals();
   }
 
 
   // Hàm tính tổng số tiết từ globalData
   function calculateTotals() {
-    totalLL = 0; // Reset tổng số tiết LL
-    totalQC = 0; // Reset tổng số tiết QC
+    let totalLL = 0; // Reset tổng số tiết LL
+    let totalQC = 0; // Reset tổng số tiết QC
 
-    // Duyệt qua từng phần tử trong globalData để cộng dồn số tiết
-    globalData.forEach(item => {
-      totalLL += item.LL; // Cộng dồn số tiết LL
-      totalQC += item.QuyChuan; // Cộng dồn số tiết QC
+    const rows = document.querySelectorAll('#tableBody tr'); // Lấy tất cả các hàng trong bảng
+
+    rows.forEach((row) => {
+      // Bỏ qua các hàng đang bị ẩn
+      if (row.style.display === 'none') {
+        return;
+      }
+
+      // Giả sử cột LL là cột thứ 2 và cột QuyChuan là cột thứ 3
+      const LLCell = row.querySelector('td:nth-child(10)'); // Lấy ô của cột LL
+      const QuyChuanCell = row.querySelector('td:nth-child(11)'); // Lấy ô của cột QuyChuan
+
+      // Chuyển đổi giá trị của các ô thành số và cộng dồn
+      const LL = parseFloat(LLCell.textContent) || 0; // Nếu không phải số, mặc định là 0
+      const QuyChuan = parseFloat(QuyChuanCell.textContent) || 0;
+
+      totalLL += LL; // Cộng dồn số tiết LL
+      totalQC += QuyChuan; // Cộng dồn số tiết QC
     });
 
     // Cập nhật tổng số tiết vào HTML
@@ -1344,6 +1363,7 @@
         }
       }
     });
+    calculateTotals();
   }
 
   // Khởi tạo sự kiện khi nhập vào ô input (hoặc gắn sự kiện vào các input cụ thể)
@@ -1498,6 +1518,7 @@
           }
         }
       });
+      calculateTotals();
     }
 
     // Khởi tạo sự kiện khi nhập vào ô input (hoặc gắn sự kiện vào các input cụ thể)

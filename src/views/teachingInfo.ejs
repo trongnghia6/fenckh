@@ -594,7 +594,7 @@
         if (!response.ok) {
           throw new Error(`Error: ${response.status} - ${response.statusText}`);
         }
-        // alert(MaPhongBan)
+
         const data = await response.json(); // Chuyển đổi dữ liệu JSON
         localStorage.setItem('boMon', JSON.stringify(data));
         // Thêm vào bảng hoặc xử lý dữ liệu theo nhu cầu của bạn
@@ -1072,7 +1072,6 @@
     }
 
     document.addEventListener('DOMContentLoaded', function () {
-      alert(localStorage.getItem("MaPhongBan"));
       viewData();
       init();
     });
@@ -1193,6 +1192,7 @@
           }
         }
       });
+      calculateTotals();
     }
   </script>
 
@@ -1217,7 +1217,7 @@
 
       // Chỉ hiện các dòng có tên giảng viên khớp với giá trị tìm kiếm
       tableRows.forEach(row => {
-        const nameCell = row.querySelector('td:nth-child(3)'); // Giả sử tên giảng viên nằm ở cột thứ 5
+        const nameCell = row.querySelector('td:nth-child(3)'); // Giả sử tên giảng viên nằm ở cột thứ 3
         const name = nameCell.textContent.toLowerCase();
         const checkbox = row.querySelector('input[type="checkbox"]');
 
@@ -1229,6 +1229,7 @@
           checkbox.disabled = true; // Vô hiệu hóa checkbox
         }
       });
+      calculateTotals();
     }
 
     // xử lí tìm theo lớp
@@ -1261,9 +1262,11 @@
           checkbox.disabled = true; // Vô hiệu hóa checkbox
         }
       });
+      calculateTotals();
     }
 
     // hàm check All
+    /*
     function checkAll(type) {
       const checkboxes = document.querySelectorAll(`input[type="checkbox"][name="${type}"]`);
       const checkAllCheckbox = document.getElementById(`checkAll${type.charAt(0).toUpperCase() + type.slice(1)}`);
@@ -1272,6 +1275,19 @@
         checkbox.checked = checkAllCheckbox.checked; // Gán trạng thái checkbox "Check All" cho tất cả các checkbox
       });
     }
+      */
+    function checkAll(type) {
+      const checkboxes = document.querySelectorAll(`input[type="checkbox"][name="${type}"]`);
+      const checkAllCheckbox = document.getElementById(`checkAll${type.charAt(0).toUpperCase() + type.slice(1)}`);
+
+      checkboxes.forEach(checkbox => {
+        const row = checkbox.closest('tr');
+        if (row.style.display !== 'none') { // Kiểm tra nếu dòng hiện trên màn hình
+          checkbox.checked = checkAllCheckbox.checked; // Gán trạng thái checkbox "Check All" cho checkbox hiển thị
+        }
+      });
+    }
+
 
 
     // hàm xử lí check all 
@@ -1414,7 +1430,6 @@
     document.getElementById("changePasswordLink").addEventListener("click", function (event) {
       event.preventDefault(); // Ngăn chặn hành vi mặc định của thẻ a
       const tenDangNhap = localStorage.getItem("TenDangNhap"); // Lấy TenDangNhap từ localStorage
-      alert(tenDangNhap);
 
       if (tenDangNhap) {
         // Chuyển hướng đến trang changePassword và truyền TenDangNhap trong URL

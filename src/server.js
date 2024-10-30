@@ -25,9 +25,10 @@ const importGvmList = require("./routes/importGvmListRoute");
 const infoHDGvmRoutes = require("./routes/infoHDGvmRoute");
 const adminRoute = require("./routes/adminRoute");
 const xemCacLopGvmRoute = require("./routes/xemCacLopGvmRoute");
-const phuLucHDRoute = require('./routes/phuLucHDRoute');
-const exportHDRoute = require('./routes/exportHDRoute');
-const logRoute = require('./routes/logRoute');
+const phuLucHDRoute = require("./routes/phuLucHDRoute");
+const exportHDRoute = require("./routes/exportHDRoute");
+const logRoute = require("./routes/logRoute");
+const xemCacLopMoiRoute = require("./routes/xemCacLopMoiRoute");
 
 const app = express();
 const port = process.env.port || 8888;
@@ -78,10 +79,11 @@ app.use("/", classInfoGvm);
 app.use("/", importGvmList);
 app.use("/", infoHDGvmRoutes);
 app.use("/", adminRoute);
-app.use('/', phuLucHDRoute);
-app.use('/', exportHDRoute);
-app.use('/', logRoute);
+app.use("/", phuLucHDRoute);
+app.use("/", exportHDRoute);
+app.use("/", logRoute);
 app.use("/", xemCacLopGvmRoute);
+app.use("/", xemCacLopMoiRoute);
 
 app.listen(port, hostname, () => {
   console.log(`Server running on http://localhost:${port}`);
@@ -121,5 +123,5 @@ const { log } = require("console");
 app.use("/", importFile); // cấu hình import
 app.use("/", infoGvm); // cấu hình import
 app.use("/", tableQc); // cấu hình import
-app.use("/", xoaQCDK)
+app.use("/", xoaQCDK);
 // Thay đổi giới hạn kích thước payload (ví dụ: 10mb)
