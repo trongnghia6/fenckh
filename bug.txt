@@ -6,11 +6,13 @@
 
 - Tổng tiết hiển thị theo phần hiển thị của bảng ( done )
 
-- Bỏ localstorage site info
+- Tăng trải nghiệm người dùng site info, bỏ đi nút Lưu ( done )
 
-- Nút search bộ môn của ALL site
+- Auto fill thêm cả bộ môn 
 
-- Bỏ duyệt mất ngày bắt đầu ngày kết thúc 
+- Nút search bộ môn của ALL site ( gần done )
+
+- Bỏ duyệt mất ngày bắt đầu ngày kết thúc ( done )
 
 
 
@@ -22,3 +24,5 @@
 - Chèn ngày, auto fill theo năm hiện tại
 
 - Đồng bộ tên gọi của các button trong all site
+
+- Nếu tách script thì phải chuyển hết các button gắn sự kiện gọi hàm thành querySelector
