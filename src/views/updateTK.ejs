@@ -115,15 +115,14 @@
             <div class="row mb-3">
               <div class="col-md-4 input-wrapper">
                 <label for="MaPhongBan" class="form-label">Mã Phòng ban</label>
-                <input type="text" id="MaPhongBan" name="MaPhongBan" value="<%= id.MaPhongBan %>" readonly>
-                <button type="button" class="animated-button text-black mt-4" onclick="fetchQuyen()"><span>Lấy Quyền</span><span></span></button>
+                <input type="text" class="form-control" id="MaPhongBan" name="MaPhongBan" value="<%= id.MaPhongBan %>" readonly>
               </div>
             </div>
             <div class="row mb-3">
               <div class="col-md-4 input-wrapper">
                 <label for="Quyen" class="form-label">Quyền</label>
                 <select id="Quyen" name="Quyen" class="form-control">
-                  <!-- Options sẽ được cập nhật bởi JavaScript -->
+                  <option value="<%= role.Quyen %>"><%= role.Quyen %></option>
                 </select>
               </div>
             </div>
@@ -134,7 +133,7 @@
               </div>
             </div>
             <button type="submit" class="btn">Cập nhật</button>
-            <button type="return" class="btn mx-5"><a class ="text-black" href="/thongTinTK">Quay lại</a></button>
+            <button type="button" class="btn mx-5" onclick="window.location.href='/thongTinTK'" >Trở về</button>
         </form>
     </div>
 
@@ -174,44 +173,25 @@ return response.json();
       document.getElementById('MaPhongBan').value = data.MaPhongBan || 'Không có dữ liệu';
       document.getElementById('isKhoa').value = data.isKhoa ? '1' : '0';
       document.getElementById('id_User').value = data.id_User || 'Không có dữ liệu';
+
+      const quyenSelect = document.getElementById('Quyen');
+      quyenSelect.innerHTML = ''; // Xóa các option cũ
+
+      // Kiểm tra isKhoa và cập nhật quyền dựa theo giá trị
+      if (data.isKhoa === 1) {
+        quyenSelect.innerHTML = `
+          <option value="GV">Giảng Viên</option>
+          <option value="GV_CNBM">Giảng viên-Chủ nhiệm bộ môn</option>
+          <option value="Lãnh đạo khoa">Lãnh đạo khoa</option>`;
+      } else {
+        quyenSelect.innerHTML = `
+          <option value="Duyệt">Duyệt</option>
+          <option value="Thường">Thường</option>`;
+      }
   })
   .catch(error => {
       alert('Lỗi khi lấy dữ liệu: ' + error.message); // Xử lý lỗi nếu có
   });
-}
-</script>
-<script>
-  function fetchQuyen() {
-const maPhongBan = document.getElementById('MaPhongBan').value;
-alert(maPhongBan);
-// Gọi API để lấy thông tin isKhoa
-fetch(`/getQuyenByPhongBan?MaPhongBan=${maPhongBan}`)
-.then(response => response.json())
-.then(data => {
-  const quyenSelect = document.getElementById('Quyen');
-  quyenSelect.innerHTML = ''; // Xóa các option cũ
-
-  // Kiểm tra isKhoa và cập nhật quyền dựa theo giá trị
-  if (data.isKhoa === 1) {
-    quyenSelect.innerHTML = `
-      <option value="GV">Giảng Viên</option>
-      <option value="GV_CNBM">Giảng viên-Chủ nhiệm bộ môn</option>
-      <option value="Duyệt">Duyệt</option>
-      <option value="Lãnh đạo khoa">Lãnh đạo khoa</option>`;
-  } else {
-    if (maPhongBan === 'DAOTAO'){
-      quyenSelect.innerHTML = `
-      <option value="Thường">Thường</option>
-      <option value="DAOTAO_THIHANH">Đào tạo thi hành</option>`;
-    } else {
-      quyenSelect.innerHTML = `
-      <option value="Duyệt">Duyệt</option>`;
-      
-    }
-    
-  }
-})
-.catch(error => console.error('Error:', error));
 }
 </script>
 <script>

@@ -19,9 +19,7 @@ router.get("/info2", obj.getTeachingInfo2);
 // Đổi từ GET sang POST
 router.post('/teaching-info', (req, res) => obj.renderInfo(req, res));
 
-router.post('/quy-chuan-chinh-thuc', (req, res) => obj.renderInfoWithValueKhoa(req, res));
-
-
+router.post('/quy-chuan-chinh-thuc', (req, res) => obj2.getTableQC(req, res));
 
 // gọi hàm lấy dữ liệu tên giảng giảng viên mời
 router.get("/index/name-gvm", (req, res) => obj.getNameGV(req, res));

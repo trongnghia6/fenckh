@@ -2,9 +2,9 @@ const XLSX = require("xlsx");
 const fs = require("fs");
 require("dotenv").config();
 const path = require("path");
-const connection = require("./connectDB");
 const { getEnvironmentData } = require("worker_threads");
 const createConnection = require("../config/databaseAsync");
+const createPoolConnection = require("../config/databasePool");
 
 // Hàm tách chuỗi - giữ nguyên
 function tachChuoi(chuoi) {
@@ -55,163 +55,47 @@ function handleDuplicateCourses(firstCourse, courses) {
   };
 }
 
-// Cập nhật hàm renderInfo để xử lý việc gộp các lớp phân lớp
-// const renderInfo = (req, res) => {
-//   const tableName = process.env.DB_TABLE_QC;
-
-//   const query = `SELECT * FROM ${tableName}`;
-//   connection.query(query, (error, results) => {
-//     if (error) {
-//       return res.status(500).json({ error: 'Internal server error' });
-//     }
-
-//     if (results.length === 0) {
-//       return res.status(404).json({ message: 'No data found' });
-//     }
-
-//     return res.status(200).json(results); // Trả về kết quả sau khi gộp
-
-//     const courseMap = {};
-
-//     results.forEach(row => {
-//       const teacher = row.GiaoVien;
-
-//       const courseData = {
-//         ...tachChuoi(row.LopHocPhan),
-//         LL: row.LL,
-//         SoTietCTDT: row.SoTietCTDT,
-//         QuyChuan: row.QuyChuan,
-//         ...row,
-//       };
-
-//       const { baseClass, suffix } = extractClassSuffix(courseData.Lop); // Tách lớp chính và phân lớp
-
-//       // Khởi tạo courseMap theo Giảng viên nếu chưa có
-//       if (!courseMap[teacher]) {
-//         courseMap[teacher] = {};
-//       }
-
-//       // Kiểm tra lớp học chính trong courseMap của Giảng viên
-//       if (!courseMap[teacher][baseClass]) {
-//         courseMap[teacher][baseClass] = [];
-//       }
-
-//       // Thêm các lớp phân lớp vào cùng một nhóm dựa trên lớp chính (baseClass)
-//       courseMap[teacher][baseClass].push({ ...courseData, suffix });
-//     });
-
-//     const finalResults = [];
-
-//     // Duyệt qua từng Giảng viên và từng lớp học
-//     for (const teacher in courseMap) {
-//       for (const baseClass in courseMap[teacher]) {
-//         const courses = courseMap[teacher][baseClass];
-
-//         // Nếu có nhiều lớp phân lớp (.1, .2,...), gộp lại thành một lớp
-//         if (courses.length > 1) {
-//           const mergedCourse = handleDuplicateCourses(courses[0], courses);
-//           finalResults.push(mergedCourse); // Thêm lớp đã gộp
-//         } else {
-//           finalResults.push(courses[0]); // Thêm lớp duy nhất nếu không có phân lớp
-//         }
-//       }
-//     }
-//     console.log(finalResults);
-//     return res.status(200).json(finalResults); // Trả về kết quả sau khi gộp
-//   });
-// };
-
-// Phương
 const KhoaCheckAll = async (req, Dot, KiHoc, NamHoc) => {
   const isKhoa = req.session.isKhoa;
   let kq = ""; // Biến để lưu kết quả
+  let connection;
 
-  const query = ` SELECT MaPhongBan FROM phongban where isKhoa = 1 `;
-  const connection1 = await createConnection();
-  const [results, fields] = await connection1.query(query);
+  try {
+    const query = `SELECT MaPhongBan FROM phongban where isKhoa = 1`;
+    connection = await createPoolConnection();
+    const [results, fields] = await connection.query(query);
 
-  // Chọn theo từng phòng ban
-  for (let i = 0; i < results.length; i++) {
-    const MaPhongBan = results[i].MaPhongBan;
+    // Chọn theo từng phòng ban
+    for (let i = 0; i < results.length; i++) {
+      const MaPhongBan = results[i].MaPhongBan;
 
-    const query = ` SELECT KhoaDuyet FROM quychuan where Khoa = ? and Dot = ? and KiHoc = ? and NamHoc = ?`;
-    const connection = await createConnection();
-    const [check, fields] = await connection.query(query, [
-      MaPhongBan,
-      Dot,
-      KiHoc,
-      NamHoc,
-    ]);
+      const innerQuery = `SELECT KhoaDuyet FROM quychuan WHERE Khoa = ? AND Dot = ? AND KiHoc = ? AND NamHoc = ?`;
+      const [check, innerFields] = await connection.query(innerQuery, [
+        MaPhongBan,
+        Dot,
+        KiHoc,
+        NamHoc,
+      ]);
 
-    let checkAll = true;
-    for (let j = 0; j < check.length; j++) {
-      if (check[j].KhoaDuyet == 0) {
-        checkAll = false;
-        break;
+      let checkAll = true;
+      for (let j = 0; j < check.length; j++) {
+        if (check[j].KhoaDuyet == 0) {
+          checkAll = false;
+          break;
+        }
+      }
+      if (checkAll) {
+        kq += MaPhongBan + ",";
       }
     }
-    if (checkAll == true) {
-      kq += MaPhongBan + ",";
-    }
+  } catch (error) {
+    console.error("Error in KhoaCheckAll:", error);
+    throw error; // Throw lại lỗi để xử lý ở nơi gọi hàm này
+  } finally {
+    if (connection) connection.release();
   }
 
-  // Chọn hết phòng ban
-  // const queryAll = `SELECT KhoaDuyet FROM quychuan where Dot = ? and KiHoc = ? and NamHoc = ?`;
-  // const [khoaAll] = await connection1.query(queryAll, [Dot, KiHoc, NamHoc]);
-
-  // let khoaCheckAll = true;
-  // for (let j = 0; j < khoaAll.length; j++) {
-  //   if (khoaAll[j].KhoaDuyet == 0) {
-  //     khoaCheckAll = false;
-  //     break;
-  //   }
-  // }
-
-  // if (khoaCheckAll == true) {
-  //   kq += "KHOA,";
-  // }
-
-  // Đào tạo
-  // const queryDT = ` SELECT DaoTaoDuyet FROM quychuan where Dot = ? and KiHoc = ? and NamHoc = ?`;
-  // const connection2 = await createConnection();
-  // const [check2, fields2] = await connection2.query(queryDT, [
-  //   Dot,
-  //   KiHoc,
-  //   NamHoc,
-  // ]);
-
-  // let checkAll2 = true;
-  // for (let j = 0; j < check2.length; j++) {
-  //   if (check2[j].DaoTaoDuyet == 0) {
-  //     checkAll2 = false;
-  //     break;
-  //   }
-  // }
-
-  // if (checkAll2 == true) {
-  //   kq += "DAOTAO,";
-  // }
-
-  // // Tài chính
-  // const queryTC = ` SELECT TaiChinhDuyet FROM quychuan where Dot = ? and KiHoc = ? and NamHoc = ?`;
-  // const connection3 = await createConnection();
-  // const [check3, fields3] = await connection3.query(queryTC, [
-  //   Dot,
-  //   KiHoc,
-  //   NamHoc,
-  // ]);
-
-  // let checkAll3 = true;
-  // for (let j = 0; j < check3.length; j++) {
-  //   if (check3[j].TaiChinhDuyet == 0) {
-  //     checkAll3 = false;
-  //     break;
-  //   }
-  // }
-  // if (checkAll3 == true) {
-  //   kq += "TAICHINH,";
-  // }
-  // Trả về kết quả
+  // Trả về kết quả có dấu phẩy cuối cùng
   return kq;
 };
 
@@ -250,84 +134,83 @@ const DaoTaoCheckAll = async (req, Dot, KiHoc, NamHoc) => {
   return kq;
 };
 
+// cũ
+// const TaiChinhCheckAll = async (req, Dot, KiHoc, NamHoc) => {
+//   let kq = ""; // Biến để lưu kết quả
+
+//   const query = ` SELECT MaPhongBan FROM phongban where isKhoa = 1 `;
+//   const connection1 = await createConnection();
+//   const [results, fields] = await connection1.query(query);
+
+//   // Chọn theo từng phòng ban
+//   for (let i = 0; i < results.length; i++) {
+//     const MaPhongBan = results[i].MaPhongBan;
+
+//     const query = ` SELECT TaiChinhDuyet FROM quychuan where Khoa = ? and Dot = ? and KiHoc = ? and NamHoc = ?`;
+//     const connection = await createConnection();
+//     const [check, fields] = await connection.query(query, [
+//       MaPhongBan,
+//       Dot,
+//       KiHoc,
+//       NamHoc,
+//     ]);
+
+//     let checkAll = true;
+//     for (let j = 0; j < check.length; j++) {
+//       if (check[j].TaiChinhDuyet == 0) {
+//         checkAll = false;
+//         break;
+//       }
+//     }
+//     if (checkAll == true) {
+//       kq += MaPhongBan + ",";
+//     }
+//   }
+
+//   return kq;
+// };
+
+// Mới
 const TaiChinhCheckAll = async (req, Dot, KiHoc, NamHoc) => {
   let kq = ""; // Biến để lưu kết quả
 
-  const query = ` SELECT MaPhongBan FROM phongban where isKhoa = 1 `;
-  const connection1 = await createConnection();
-  const [results, fields] = await connection1.query(query);
+  const connection = await createConnection();
 
-  // Chọn theo từng phòng ban
-  for (let i = 0; i < results.length; i++) {
-    const MaPhongBan = results[i].MaPhongBan;
+  try {
+    const query = `SELECT MaPhongBan FROM phongban WHERE isKhoa = 1`;
+    const [results, fields] = await connection.query(query);
 
-    const query = ` SELECT TaiChinhDuyet FROM quychuan where Khoa = ? and Dot = ? and KiHoc = ? and NamHoc = ?`;
-    const connection = await createConnection();
-    const [check, fields] = await connection.query(query, [
-      MaPhongBan,
-      Dot,
-      KiHoc,
-      NamHoc,
-    ]);
+    // Chọn theo từng phòng ban
+    for (let i = 0; i < results.length; i++) {
+      const MaPhongBan = results[i].MaPhongBan;
 
-    let checkAll = true;
-    for (let j = 0; j < check.length; j++) {
-      if (check[j].TaiChinhDuyet == 0) {
-        checkAll = false;
-        break;
+      const checkQuery = `
+        SELECT TaiChinhDuyet FROM quychuan 
+        WHERE Khoa = ? AND Dot = ? AND KiHoc = ? AND NamHoc = ?`;
+      const [check, checkFields] = await connection.query(checkQuery, [
+        MaPhongBan,
+        Dot,
+        KiHoc,
+        NamHoc,
+      ]);
+
+      let checkAll = true;
+      for (let j = 0; j < check.length; j++) {
+        if (check[j].TaiChinhDuyet == 0) {
+          checkAll = false;
+          break;
+        }
+      }
+      if (checkAll === true) {
+        kq += MaPhongBan + ",";
       }
     }
-    if (checkAll == true) {
-      kq += MaPhongBan + ",";
-    }
+  } finally {
+    await connection.end(); // Đóng kết nối sau khi hoàn thành tất cả truy vấn
   }
 
   return kq;
 };
-// Phương
-
-// const renderInfo = (req, res) => {
-//   const role = req.session.role;
-//   const isKhoa = req.session.isKhoa;
-//   const MaPhongBan = req.session.MaPhongBan;
-
-//   const { Dot, Ki, Nam } = req.body; // Lấy giá trị khoa, dot, ki từ body của yêu cầu
-//   const tableName = process.env.DB_TABLE_QC;
-//   let query = "";
-
-//   // Xây dựng câu truy vấn SQL sử dụng các tham số
-//   if (isKhoa == 0) {
-//     query = `
-//     SELECT * FROM ${tableName}
-//     WHERE Dot = ? AND KiHoc = ? AND NamHoc = ?;
-//   `;
-//   } else {
-//     query = `
-//     SELECT * FROM ${tableName}
-//     WHERE Dot = ? AND KiHoc = ? AND NamHoc = ? AND Khoa = '${MaPhongBan}';
-//   `;
-//   }
-
-//   const check = KhoaCheckAll(Dot, Ki, Nam);
-
-//   // Thực thi câu truy vấn với các tham số an toàn
-//   connection.query(query, [Dot, Ki, Nam], (error, results) => {
-//     if (error) {
-//       return res.status(500).json({ error: "Internal server error" });
-//     }
-
-//     if (results.length === 0) {
-//       return res.status(404).json({ message: "No data found" });
-//     }
-
-//     return res.status(200).json(results); // Trả về kết quả tương ứng với đợt, kì, năm
-//     return res.status(200).json({
-//       results : results,
-//       check: check,
-//     }); // Trả về kết quả tương ứng với đợt, kì, năm
-
-//   });
-// };
 
 const renderInfoWithValueKhoa = async (req, res) => {
   const { Khoa, Dot, Ki, Nam } = req.body; // Lấy giá trị Khoa, Dot, Ki, Nam từ body của yêu cầu
@@ -350,7 +233,7 @@ const renderInfoWithValueKhoa = async (req, res) => {
     SELECT * FROM ${tableName} 
     WHERE Khoa = ? AND Dot = ? AND KiHoc = ? AND NamHoc = ?`;
 
-  //console.log({ Khoa, Dot, Ki, Nam }); // Log the incoming request parameters for debugging
+  console.log({ Khoa, Dot, Ki, Nam }); // Log the incoming request parameters for debugging
 
   // Lấy connection từ pool hoặc createConnection
   connection.query(
@@ -364,9 +247,7 @@ const renderInfoWithValueKhoa = async (req, res) => {
 
       if (results.length === 0) {
         // Trả về thông báo nếu không tìm thấy dữ liệu
-        return res
-          .status(404)
-          .json({ message: "Không có dữ liệu" });
+        return res.status(404).json({ message: "Không có dữ liệu" });
       }
 
       // Trả về kết quả truy vấn dưới dạng JSON
@@ -377,96 +258,202 @@ const renderInfoWithValueKhoa = async (req, res) => {
   );
 };
 
+// cũ
+// const renderInfo = async (req, res) => {
+//   const role = req.session.role;
+//   const isKhoa = req.session.isKhoa;
+//   const MaPhongBan = req.session.MaPhongBan;
+//   console.log("Mã phòng ban = ", MaPhongBan);
+
+//   const { Dot, Ki, Nam } = req.body; // Lấy giá trị khoa, dot, ki từ body của yêu cầu
+//   const tableName = process.env.DB_TABLE_QC;
+//   let query = "";
+//   console.log(Dot, Ki, Nam);
+
+//   if (isKhoa == 1) {
+//     query = `SELECT * FROM ${tableName}
+//     WHERE Dot = ? AND KiHoc = ? AND NamHoc = ? AND Khoa = ?;`;
+//   }
+//   // Xây dựng câu truy vấn SQL sử dụng các tham số
+//   if (isKhoa == 0) {
+//     query = `
+//       SELECT * FROM ${tableName}
+//       WHERE Dot = ? AND KiHoc = ? AND NamHoc = ?;
+//     `;
+//   }
+
+//   // Gọi hàm KhoaCheckAll để kiểm tra
+//   const check = await KhoaCheckAll(req, Dot, Ki, Nam);
+//   const DaoTaoCheck = await DaoTaoCheckAll(req, Dot, Ki, Nam);
+//   const TaiChinhCheck = await TaiChinhCheckAll(req, Dot, Ki, Nam);
+
+//   // Thực thi câu truy vấn với các tham số an toàn
+//   connection.query(
+//     query,
+//     isKhoa == 0 ? [Dot, Ki, Nam] : [Dot, Ki, Nam, MaPhongBan],
+//     (error, results) => {
+//       if (error) {
+//         return res.status(500).json({ error: "Internal server error" });
+//       }
+
+//       if (results.length === 0) {
+//         return res.status(404).json({ message: "No data found" });
+//       }
+
+//       // Trả về kết quả tương ứng với đợt, kì, năm và thêm check
+//       return res.status(200).json({
+//         results: results,
+//         check: check,
+//         DaoTaoCheck: DaoTaoCheck,
+//         TaiChinhCheck: TaiChinhCheck,
+//       }); // Trả về kết quả tương ứng với đợt, kì, năm và check
+//     }
+//   );
+// };
+
+// Hàm lấy tất cả tên giảng viên từ cơ sở dữ liệu
+
+// mới
 const renderInfo = async (req, res) => {
   const role = req.session.role;
   const isKhoa = req.session.isKhoa;
   const MaPhongBan = req.session.MaPhongBan;
   console.log("Mã phòng ban = ", MaPhongBan);
 
-  const { Dot, Ki, Nam } = req.body; // Lấy giá trị khoa, dot, ki từ body của yêu cầu
+  const { Dot, Ki, Nam } = req.body; // Lấy giá trị Dot, Ki, Nam từ body của yêu cầu
   const tableName = process.env.DB_TABLE_QC;
   let query = "";
-  console.log(Dot, Ki, Nam)
 
+  console.log(Dot, Ki, Nam);
+
+  // Xác định query SQL dựa trên isKhoa
   if (isKhoa == 1) {
-    query = `SELECT * FROM ${tableName}
-    WHERE Dot = ? AND KiHoc = ? AND NamHoc = ? AND Khoa = ?;`;
-  }
-  // Xây dựng câu truy vấn SQL sử dụng các tham số
-  if (isKhoa == 0) {
-    query = `
-      SELECT * FROM ${tableName}
-      WHERE Dot = ? AND KiHoc = ? AND NamHoc = ?;
-    `;
+    query = `SELECT * FROM ${tableName} WHERE Dot = ? AND KiHoc = ? AND NamHoc = ? AND Khoa = ?;`;
+  } else {
+    query = `SELECT * FROM ${tableName} WHERE Dot = ? AND KiHoc = ? AND NamHoc = ?;`;
   }
 
-  // Gọi hàm KhoaCheckAll để kiểm tra
+  // Gọi các hàm kiểm tra
   const check = await KhoaCheckAll(req, Dot, Ki, Nam);
   const DaoTaoCheck = await DaoTaoCheckAll(req, Dot, Ki, Nam);
   const TaiChinhCheck = await TaiChinhCheckAll(req, Dot, Ki, Nam);
 
-  // Thực thi câu truy vấn với các tham số an toàn
-  connection.query(
-    query,
-    isKhoa == 0 ? [Dot, Ki, Nam] : [Dot, Ki, Nam, MaPhongBan],
-    (error, results) => {
-      if (error) {
-        return res.status(500).json({ error: "Internal server error" });
-      }
+  const connection = await createConnection(); // Tạo kết nối cơ sở dữ liệu
 
-      if (results.length === 0) {
-        return res.status(404).json({ message: "No data found" });
-      }
+  try {
+    // Thực hiện truy vấn với tham số an toàn
+    const [results] = await connection.query(
+      query,
+      isKhoa == 0 ? [Dot, Ki, Nam] : [Dot, Ki, Nam, MaPhongBan]
+    );
 
-      // Trả về kết quả tương ứng với đợt, kì, năm và thêm check
-      return res.status(200).json({
-        results: results,
-        check: check,
-        DaoTaoCheck: DaoTaoCheck,
-        TaiChinhCheck: TaiChinhCheck,
-      }); // Trả về kết quả tương ứng với đợt, kì, năm và check
+    if (results.length === 0) {
+      return res.status(404).json({ message: "No data found" });
     }
-  );
+
+    // Trả về kết quả và các giá trị check
+    return res.status(200).json({
+      results: results,
+      check: check,
+      DaoTaoCheck: DaoTaoCheck,
+      TaiChinhCheck: TaiChinhCheck,
+    });
+  } catch (error) {
+    // Xử lý lỗi trong trường hợp truy vấn thất bại
+    return res.status(500).json({ error: "Internal server error" });
+  } finally {
+    await connection.end(); // Đảm bảo đóng kết nối sau khi hoàn tất
+  }
 };
 
-// Hàm lấy tất cả tên giảng viên từ cơ sở dữ liệu
-const getNameGV = (req, res) => {
-  // Truy vấn để lấy danh sách giảng viên mời
-  const query = "SELECT DISTINCT TenNhanVien,MaPhongBan FROM nhanvien;";
+// const getNameGV = (req, res) => {
+//   let connection = createPoolConnection();
 
-  connection.query(query, (error, results) => {
-    if (error) {
-      return res.status(500).json({ error: "Internal server error" });
-    }
+//   // Truy vấn để lấy danh sách giảng viên mời
+//   const query = "SELECT DISTINCT TenNhanVien,MaPhongBan FROM nhanvien;";
+
+//   connection.query(query, (error, results) => {
+//     if (error) {
+//       return res.status(500).json({ error: "Internal server error" });
+//     }
+
+//     if (results.length === 0) {
+//       return res.status(404).json({ message: "No teachers found" });
+//     }
+
+//     // Lấy đầy đủ tên giảng viên từ cột HoTen và trả về kết quả
+//     return res.status(200).json(results);
+//   });
+// };
+
+const getNameGV = async (req, res) => {
+  let connection;
+
+  try {
+    connection = await createPoolConnection();
+
+    // Truy vấn để lấy danh sách giảng viên mời
+    const query = "SELECT DISTINCT TenNhanVien, MaPhongBan FROM nhanvien;";
+    const [results] = await connection.query(query);
 
     if (results.length === 0) {
       return res.status(404).json({ message: "No teachers found" });
     }
 
-    // Lấy đầy đủ tên giảng viên từ cột HoTen và trả về kết quả
+    // Trả về kết quả
     return res.status(200).json(results);
-  });
+  } catch (error) {
+    console.error("Lỗi khi truy vấn danh sách giảng viên:", error);
+    return res.status(500).json({ error: "Internal server error" });
+  } finally {
+    if (connection) connection.release(); // Giải phóng kết nối
+  }
 };
 
-const getKhoaAndNameGvmOfKhoa = async (req, res) => {
-  try {
-    // Truy vấn để lấy tất cả các trường HoTen và MaPhongBan từ bảng gvmoi
-    const gvmResults = await new Promise((resolve, reject) => {
-      const queryGVM = `
-        SELECT gvmoi.HoTen, gvmoi.MaPhongBan
-        FROM gvmoi;
-      `;
+// const getKhoaAndNameGvmOfKhoa = async (req, res) => {
+//   let connection = createPoolConnection();
+//   try {
+//     // Truy vấn để lấy tất cả các trường HoTen và MaPhongBan từ bảng gvmoi
+//     const gvmResults = await new Promise((resolve, reject) => {
+//       const queryGVM = `
+//         SELECT gvmoi.HoTen, gvmoi.MaPhongBan
+//         FROM gvmoi;
+//       `;
 
-      connection.query(queryGVM, (error, results) => {
-        if (error) {
-          console.error("Lỗi truy vấn cơ sở dữ liệu:", error);
-          return reject(
-            new Error("Không thể truy xuất dữ liệu từ cơ sở dữ liệu.")
-          );
-        }
-        resolve(results); // Trả về kết quả truy vấn
-      });
-    });
+//       connection.query(queryGVM, (error, results) => {
+//         if (error) {
+//           console.error("Lỗi truy vấn cơ sở dữ liệu:", error);
+//           return reject(
+//             new Error("Không thể truy xuất dữ liệu từ cơ sở dữ liệu.")
+//           );
+//         }
+//         resolve(results); // Trả về kết quả truy vấn
+//       });
+//     });
+
+//     // Trả về dữ liệu lấy từ bảng gvmoi
+//     return res.status(200).json(gvmResults);
+//   } catch (error) {
+//     console.error("Lỗi trong hàm getKhoaAndNameGvmOfKhoa:", error);
+//     return res
+//       .status(500)
+//       .json({ error: "Đã xảy ra lỗi trong quá trình xử lý dữ liệu." });
+//   }
+// };
+
+const getKhoaAndNameGvmOfKhoa = async (req, res) => {
+  let connection;
+
+  try {
+    // Khởi tạo kết nối từ pool
+    connection = await createPoolConnection();
+
+    // Truy vấn lấy các trường HoTen và MaPhongBan từ bảng gvmoi
+    const queryGVM = `
+      SELECT gvmoi.HoTen, gvmoi.MaPhongBan
+      FROM gvmoi;
+    `;
+    const [gvmResults] = await connection.query(queryGVM);
 
     // Trả về dữ liệu lấy từ bảng gvmoi
     return res.status(200).json(gvmResults);
@@ -475,6 +462,8 @@ const getKhoaAndNameGvmOfKhoa = async (req, res) => {
     return res
       .status(500)
       .json({ error: "Đã xảy ra lỗi trong quá trình xử lý dữ liệu." });
+  } finally {
+    if (connection) connection.release(); // Giải phóng kết nối khi hoàn tất
   }
 };
 
@@ -486,15 +475,87 @@ const getTeachingInfo2 = (req, res) => {
   res.render("teachingInfo2.ejs");
 };
 
-const getBoMon = async (req, res) => {
-  const MaPhongBan = req.body.MaPhongBan; // Thay vì req.body
-  console.log(MaPhongBan);
+// const getBoMon = async (req, res) => {
+//   const MaPhongBan = req.body.MaPhongBan; // Thay vì req.body
+//   let connection;
 
-  if (MaPhongBan != "DAOTAO" && MaPhongBan != "TAICHINH") {
-    try {
-      // Truy vấn để lấy MaPhongBan, MaBoMon, TenBoMon
-      const results = await new Promise((resolve, reject) => {
-        const query = `
+//   if (MaPhongBan != "DAOTAO" && MaPhongBan != "TAICHINH") {
+//     try {
+//       // Truy vấn để lấy MaPhongBan, MaBoMon, TenBoMon
+//       const results = await new Promise((resolve, reject) => {
+//         const query = `
+//         SELECT
+//           bomon.MaPhongBan,
+//           bomon.MaBoMon,
+//           bomon.TenBoMon
+//         FROM
+//           bomon
+//         WHERE
+//           MaPhongBan = '${MaPhongBan}';
+//       `;
+
+//         connection.query(query, (error, results) => {
+//           if (error) {
+//             console.error("Lỗi truy vấn cơ sở dữ liệu:", error);
+//             return reject(
+//               new Error("Không thể truy xuất dữ liệu từ cơ sở dữ liệu.")
+//             );
+//           }
+//           resolve(results); // Trả về kết quả truy vấn
+//         });
+//       });
+
+//       // Trả về dữ liệu lấy từ bảng gvmoi
+//       return res.status(200).json(results);
+//     } catch (error) {
+//       console.error("Lỗi trong hàm getBoMon:", error);
+//       return res
+//         .status(500)
+//         .json({ error: "Đã xảy ra lỗi trong quá trình xử lý dữ liệu." });
+//     }
+//   } else {
+//     try {
+//       // Truy vấn để lấy MaPhongBan, MaBoMon, TenBoMon
+//       const results = await new Promise((resolve, reject) => {
+//         const query = `
+//         SELECT bomon.MaPhongBan, bomon.MaBoMon, bomon.TenBoMon
+//         FROM bomon;
+//       `;
+
+//         connection.query(query, (error, results) => {
+//           if (error) {
+//             console.error("Lỗi truy vấn cơ sở dữ liệu:", error);
+//             return reject(
+//               new Error("Không thể truy xuất dữ liệu từ cơ sở dữ liệu.")
+//             );
+//           }
+//           resolve(results); // Trả về kết quả truy vấn
+//         });
+//       });
+
+//       // Trả về dữ liệu lấy từ bảng gvmoi
+//       return res.status(200).json(results);
+//     } catch (error) {
+//       console.error("Lỗi trong hàm getBoMon:", error);
+//       return res
+//         .status(500)
+//         .json({ error: "Đã xảy ra lỗi trong quá trình xử lý dữ liệu." });
+//     }
+//   }
+// };
+
+const getBoMon = async (req, res) => {
+  const MaPhongBan = req.body.MaPhongBan;
+  let connection;
+
+  try {
+    // Tạo kết nối từ pool
+    connection = await createPoolConnection();
+
+    // Xác định truy vấn dựa vào MaPhongBan
+    let query;
+    if (MaPhongBan !== "DAOTAO" && MaPhongBan !== "TAICHINH") {
+      query = `
         SELECT 
           bomon.MaPhongBan, 
           bomon.MaBoMon, 
@@ -502,56 +563,34 @@ const getBoMon = async (req, res) => {
         FROM 
           bomon
         WHERE 
-          MaPhongBan = '${MaPhongBan}';
+          MaPhongBan = ?;
       `;
-
-        connection.query(query, (error, results) => {
-          if (error) {
-            console.error("Lỗi truy vấn cơ sở dữ liệu:", error);
-            return reject(
-              new Error("Không thể truy xuất dữ liệu từ cơ sở dữ liệu.")
-            );
-          }
-          resolve(results); // Trả về kết quả truy vấn
-        });
-      });
-
-      // Trả về dữ liệu lấy từ bảng gvmoi
-      return res.status(200).json(results);
-    } catch (error) {
-      console.error("Lỗi trong hàm getBoMon:", error);
-      return res
-        .status(500)
-        .json({ error: "Đã xảy ra lỗi trong quá trình xử lý dữ liệu." });
-    }
-  } else {
-    try {
-      // Truy vấn để lấy MaPhongBan, MaBoMon, TenBoMon
-      const results = await new Promise((resolve, reject) => {
-        const query = `
-        SELECT bomon.MaPhongBan, bomon.MaBoMon, bomon.TenBoMon
-        FROM bomon;
+    } else {
+      query = `
+        SELECT 
+          bomon.MaPhongBan, 
+          bomon.MaBoMon, 
+          bomon.TenBoMon
+        FROM 
+          bomon;
       `;
-
-        connection.query(query, (error, results) => {
-          if (error) {
-            console.error("Lỗi truy vấn cơ sở dữ liệu:", error);
-            return reject(
-              new Error("Không thể truy xuất dữ liệu từ cơ sở dữ liệu.")
-            );
-          }
-          resolve(results); // Trả về kết quả truy vấn
-        });
-      });
-
-      // Trả về dữ liệu lấy từ bảng gvmoi
-      return res.status(200).json(results);
-    } catch (error) {
-      console.error("Lỗi trong hàm getBoMon:", error);
-      return res
-        .status(500)
-        .json({ error: "Đã xảy ra lỗi trong quá trình xử lý dữ liệu." });
     }
+
+    // Thực hiện truy vấn với kết nối
+    const [results] = await connection.query(
+      query,
+      MaPhongBan !== "DAOTAO" && MaPhongBan !== "TAICHINH" ? [MaPhongBan] : []
+    );
+
+    // Trả về kết quả truy vấn
+    return res.status(200).json(results);
+  } catch (error) {
+    console.error("Lỗi trong hàm getBoMon:", error);
+    return res
+      .status(500)
+      .json({ error: "Đã xảy ra lỗi trong quá trình xử lý dữ liệu." });
+  } finally {
+    if (connection) connection.release(); // Giải phóng kết nối khi hoàn thành
   }
 };
 

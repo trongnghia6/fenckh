@@ -671,9 +671,8 @@
         const DaoTaoCheck = localStorage.getItem("DaoTaoCheck");
         const TaiChinhCheck = localStorage.getItem("TaiChinhCheck");
 
-        if (MaPhongBan == "DAOTAO"){
+        if (MaPhongBan.toLowerCase() === "daotao" && role.toLowerCase() !== "thường") {
           // Nếu khoa đã check thì hiện check bên đào tạo
-         
           if (!check.includes(row.Khoa)){
             // Ngăn thay đổi trạng thái check box khoa
             khoaCheckbox.disabled = true
@@ -689,7 +688,7 @@
           }
         }
 
-        if (MaPhongBan == "TAICHINH"){
+        if (MaPhongBan.toLowerCase() === "taichinh" && role.toLowerCase() !== "thường") {
           // Nếu khoa đã check thì hiện check bên đào tạo
           if (!DaoTaoCheck.includes(row.Khoa)){
             // Ngăn thay đổi trạng thái check box khoa

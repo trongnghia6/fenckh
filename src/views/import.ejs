@@ -195,6 +195,7 @@
               left: 0;
               width: 100%;
               height: 100%;
+              /* transform: translateX(-50%) translateY(-50%); */
               background: rgba(0, 0, 0, 0.5);
               display: flex;
               justify-content: center;
@@ -209,12 +210,11 @@
                 text-align: center;
               ">
             <p>
-              Tồn tại dữ liệu cũ của! Bạn muốn xóa dữ liệu cũ hay chèn thêm dữ
-              liệu mới?
+              Đã tồn tại file quy chuẩn cũ! Bạn muốn XÓA file quy chuẩn cũ hay CHÈN thêm file quy chuẩn mới?
             </p>
-            <button id="btn-delete" style="margin-right: 10px">Xóa</button>
-            <button id="btn-append">Chèn</button>
-            <button id="btn-cancel">Hủy</button>
+            <button id="btn-delete" style="margin: 10px">Xóa</button>
+            <button id="btn-append" style="margin: 10px">Chèn</button>
+            <button id="btn-cancel" style="margin: 10px">Hủy</button>
           </div>
         </div>
       </div>
@@ -392,8 +392,47 @@
       });
 
     document.getElementById("import").addEventListener("click", function () {
-      let updatedData = [];
 
+      // const khoaValue = document.getElementById("MaPhongBan").value;
+      // const dotValue = document.getElementById("combobox-dot").value;
+      // const kiValue = document.getElementById("combobox-ki").value;
+      // const namValue = document.getElementById("NamHoc").value;
+
+      // let updatedData = [];
+
+      // // Cập nhật dữ liệu với các giá trị từ combobox
+      // updatedData = dataTam.map((item) => ({
+      //   ...item,
+      //   Khoa: khoaValue,
+      //   Dot: dotValue,
+      //   Ki: kiValue,
+      //   Nam: namValue,
+      // }));
+      // // Gửi dữ liệu đã được cập nhật để lưu
+      // fetch("http://localhost:3000/save-data", {
+      //   method: "POST",
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //   },
+      //   body: JSON.stringify(updatedData),
+      // })
+      //   .then((response) => {
+      //     if (!response.ok) {
+      //       throw new Error("Gửi dữ liệu thất bại");
+      //     }
+      //     return response.json();
+      //   })
+      //   .then((data) => {
+      //     if (data.success) {
+      //       alert("Import thành công!");
+      //     } else {
+      //       alert("Import thất bại!");
+      //     }
+      //   })
+      //   .catch((error) => {
+      //     alert("Gửi dữ liệu thất bại!");
+      //     console.error("Error:", error);
+      //   });
       if (dataTam.length !== 0) {
         // Lấy giá trị hiện tại từ combo box "Khoa", "Đợt", "Kì", "Năm"
         const khoaValue = document.getElementById("MaPhongBan").value;
@@ -402,16 +441,16 @@
         const namValue = document.getElementById("NamHoc").value;
 
         // Gửi giá trị để kiểm tra sự tồn tại của dữ liệu khoa
-        fetch("http://localhost:3000/check-khoa", {
+        fetch("http://localhost:3000/kiem-tra-qcdk", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            khoa: khoaValue,
-            dot: dotValue,
-            ki: kiValue,
-            nam: namValue,
+            Khoa: khoaValue,
+            Dot: dotValue,
+            Ki: kiValue,
+            Nam: namValue,
           }),
         })
           .then((response) => {
@@ -454,12 +493,14 @@
               //         console.error("Error:", error);
               //       });
               //   });
+
+
               // Hàm xử lý logic xóa dữ liệu
               function handleDeleteClick() {
                 modal.style.display = "none"; // Ẩn modal
 
                 // Gửi yêu cầu xóa dữ liệu đến API
-                fetch("http://localhost:3000/delete-khoa", {
+                fetch("http://localhost:3000/xoa-qcdk", {
                   method: "POST",
                   headers: {
                     "Content-Type": "application/json",
@@ -578,7 +619,7 @@
             }
           })
           .catch((error) => {
-            alert("Kiểm tra khoa thất bại!");
+            alert("Kiểm tra dữ liệu file quy chuẩn thất bại!");
             console.error("Error:", error);
           });
       } else {

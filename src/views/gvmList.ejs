@@ -278,8 +278,14 @@
                   <td style="display: none;"><%= gvmLists[i].MaPhongBan %></td>
                   <td id="BoMon"><%= gvmLists[i].MonGiangDayChinh %></td>
                   <td>
-                    <button class="action-button edit" onclick="editClass(this, <%= i %>)">✏️</button>
-                    <button class="action-button view" onclick="viewClass(this, <%= i %>)">👁️</button>
+                    <button class="action-button edit"
+                    onclick="editClass(this, <%= parseInt(gvmLists[i].id_Gvm)%>)">
+                    ✏️
+                  </button>
+                  <button class="action-button view"
+                    onclick="viewClass(this, <%= parseInt(gvmLists[i].id_Gvm) - 1 %>)">
+                    👁️
+                  </button>
                   </td>
                 </tr>
               <% } %>
@@ -332,24 +338,24 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
       document.addEventListener("DOMContentLoaded", () => {
-          const isKhoa = localStorage.getItem("isKhoa");
-  
-          // Ẩn button ngay khi trang được tải
-          const actionButton = document.getElementById('actionButton');
-              const actionButton1 = document.getElementById('actionButton1');
-      const actionButton2 = document.getElementById('actionButton2');
-  
-      if (isKhoa == 0) {
-              actionButton1.style.display = 'none'; // Ẩn actionButton1 nếu isKhoa = 0
-              actionButton2.style.display = 'inline-block'; // Hiện actionButton2
-              
-          } else {
-              actionButton1.style.display = 'inline-block'; // Hiện actionButton1 nếu isKhoa khác 0
-              actionButton2.style.display = 'none'; // Ẩn actionButton2
-              
-          }
-        });
-  </script>
+        const isKhoa = localStorage.getItem("isKhoa");
+
+        // Ẩn button ngay khi trang được tải
+        const actionButton = document.getElementById('actionButton');
+        const actionButton1 = document.getElementById('actionButton1');
+        const actionButton2 = document.getElementById('actionButton2');
+
+        if (isKhoa == 0) {
+          actionButton1.style.display = 'none'; // Ẩn actionButton1 nếu isKhoa = 0
+          actionButton2.style.display = 'inline-block'; // Hiện actionButton2
+
+        } else {
+          actionButton1.style.display = 'inline-block'; // Hiện actionButton1 nếu isKhoa khác 0
+          actionButton2.style.display = 'none'; // Ẩn actionButton2
+
+        }
+      });
+    </script>
 
     <script>
       // Tìm kiếm giảng viên mời theo tên
@@ -372,22 +378,30 @@
       }
       // Tìm kiếm theo bộ môn
       function searchBoMon() {
-        // Lấy giá trị từ ô input tìm kiếm theo bộ môn
-        const searchValue = document.getElementById("searchBoMon").value.toLowerCase();
-        const table = document.getElementById("classTable");
-        const rows = table.getElementsByTagName("tbody")[0].getElementsByTagName("tr");
-        // Duyệt qua tất cả các hàng trong bảng để lọc
-        for (let i = 0; i < rows.length; i++) {
-          const boMonCell = rows[i].querySelector("#BoMon"); // Lấy ô có ID là BoMon
-          const boMonValue = boMonCell ? boMonCell.textContent.toLowerCase() : "";
-          // Kiểm tra nếu giá trị bộ môn phù hợp với giá trị tìm kiếm
-          if (boMonValue.includes(searchValue)) {
-            rows[i].style.display = ""; // Hiển thị hàng nếu phù hợp
-          } else {
-            rows[i].style.display = "none"; // Ẩn hàng nếu không phù hợp
+        console.log()
+        alert('mé')
+        const input = document.getElementById('searchBoMon');
+        const filter = input.value.trim().toLowerCase(); // Bỏ khoảng trắng và chuyển chữ thường
+        const tableRows = document.querySelectorAll('#tableBody tr');
+
+        tableRows.forEach(row => {
+          const nameInput = row.querySelector('td:nth-child(7) input[name="bomon"]'); // Lấy input có name="bomon" ở cột thứ 7
+          const checkbox = row.querySelector('input[type="checkbox"]');
+
+          if (nameInput) {
+            const name = nameInput.value.toLowerCase(); // Lấy giá trị của input có name="bomon"
+
+            if (filter === '' || name.includes(filter)) {
+              row.style.display = ''; // Hiện hàng nếu khớp hoặc filter trống
+              checkbox.disabled = false; // Kích hoạt checkbox
+            } else {
+              row.style.display = 'none'; // Ẩn hàng nếu không khớp
+              checkbox.disabled = true; // Vô hiệu hóa checkbox
+            }
           }
-        }
+        });
       }
+
 
 
       // Thêm lớp học
@@ -397,7 +411,7 @@
 
       // Chỉnh sửa gvm
       function editClass(button, index) {
-        hre = "/updateGvm/" + index;
+        var hre = "/updateGvm/" + index;
         window.location.href = hre;
       }
       function viewClass(button, index) {
@@ -614,7 +628,7 @@
     <script>
       document.addEventListener('DOMContentLoaded', async function () {
         const MaPhongBan = localStorage.getItem("MaPhongBan");
-        alert(MaPhongBan);
+        // alert(MaPhongBan);
 
         try {
           const response = await fetch('http://localhost:3000/bo-mon', {

@@ -233,14 +233,6 @@
           <button class="btn btn-outline-primary button" id="quychuandukien">
             Thêm bảng quy chuẩn
           </button>
-          <!-- <select class="selectop" id="xoa-qc-du-kien">
-            <option style="display: none;">Xóa</option>
-            <option value="ALL">Xóa tất cả</option>
-            <option value="CNTT">Xóa dữ liệu khoa CNTT</option>
-            <option value="ATTT">Xóa dữ liệu khoa ATTT</option>
-            <option value="DTVT">Xóa dữ liệu khoa DTVT</option>
-            <option value="MM">Xóa dữ liệu khoa MM</option>
-          </select> -->
         </div>
 
         <!-- <button class="btn btn-outline-primary button">
@@ -268,10 +260,12 @@
             </select>
             <!-- <button class="export" onclick="exportSelectedData()">Xuất dữ liệu</button> -->
 
-            <button class="button text-nowrap" id="render" style="margin-top: 17px" onclick="filterTable()">
-              Lọc
+            <button class="button text-nowrap" id="render" style="margin-top: 17px">
+              Hiển thị
             </button>
-
+            <!-- <button class="button text-nowrap" id="filter" style="margin-top: 17px" onclick="filterTable()">
+              Lọc
+            </button> -->
             <button class="button text-nowrap" id="xoa-qc-du-kien" style="margin-top: 17px">
               Xóa
             </button>
@@ -330,29 +324,42 @@
     }
   </script>
 
+  <!-- render ra bảng k cần ấn gì cả -->
   <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      const loadingSpinner = document.createElement("div"); // Tạo spinner
-      loadingSpinner.className = "spinner-border"; // Thêm lớp spinner
-      loadingSpinner.role = "status"; // Đặt vai trò
-      loadingSpinner.innerHTML =
-        '<span class="visually-hidden">Loading...</span>'; // Thêm thông báo ẩn
-      document.body.appendChild(loadingSpinner); // Thêm spinner vào body
+    document.getElementById("render").addEventListener("click", function () {
+      let Dot = document.getElementById("combobox-dot").value;
+      let Ki = document.getElementById("combobox-ki").value;
+      let Nam = document.getElementById("NamHoc").value;
+      let Khoa = document.getElementById("departmentFilter").value;
 
-      fetch("http://localhost:3000/bang-tam")
+      const body = {
+        Khoa: Khoa,
+        Dot: Dot,
+        Ki: Ki,
+        Nam: Nam,
+      };
+      console.log('ok')
+      fetch("http://localhost:3000/get-table-tam", {
+        method: "POST", // Phương thức HTTP
+        headers: {
+          "Content-Type": "application/json", // Định dạng dữ liệu
+        },
+        body: JSON.stringify(body), // Gửi Khoa trong body
+      })
         .then((response) => {
           if (!response.ok) {
-            throw new Error(
-              "Network response was not ok: " + response.statusText
-            );
+            throw new Error("Network response was not ok: " + response.statusText);
           }
           return response.json();
         })
         .then((data) => {
+          // Xóa dữ liệu cũ khỏi bảng trước khi thêm dữ liệu mới
+          document.getElementById("data-table-body").innerHTML = "";
+
           if (data.length === 0) {
-            document.getElementById("no-data-message").style.display =
-              "block"; // Hiển thị thông báo nếu không có dữ liệu
+            document.getElementById("no-data-message").style.display = "block"; // Hiển thị thông báo nếu không có dữ liệu
           } else {
+            document.getElementById("no-data-message").style.display = "none"; // Ẩn thông báo nếu có dữ liệu
             let tableHtml = "";
             const headersMap = {
               Khoa: "Khoa",
@@ -383,36 +390,16 @@
 
             data.forEach((item) => {
               const row = headers
-                .map(
-                  (key) => `<td>${item[key] !== null ? item[key] : ""}</td>`
-                )
+                .map((key) => `<td>${item[key] !== null ? item[key] : ""}</td>`)
                 .join("");
-              document.getElementById(
-                "data-table-body"
-              ).innerHTML += `<tr>${row}</tr>`;
+              document.getElementById("data-table-body").innerHTML += `<tr>${row}</tr>`;
             });
           }
-          loadingSpinner.remove(); // Xóa spinner sau khi hoàn thành
         })
         .catch((error) => {
           console.error("Error fetching data:", error);
           alert("Có lỗi xảy ra khi gọi API: " + error.message);
-          loadingSpinner.remove(); // Xóa spinner nếu có lỗi
         });
-    });
-
-    // Thêm sự kiện cho nút lọc
-    document.getElementById("filter").addEventListener("click", function () {
-      const rows = document.querySelectorAll("#data-table-body tr");
-      rows.forEach((row) => {
-        const cells = row.getElementsByTagName("td");
-        const moiGiang = cells[2].textContent; // Giả sử "Mời giảng" là cột thứ 3 (index 2)
-        if (moiGiang !== "1") {
-          row.style.display = "none"; // Ẩn hàng nếu "Mời giảng" không bằng 1
-        } else {
-          row.style.display = ""; // Hiện hàng nếu "Mời giảng" bằng 1
-        }
-      });
     });
   </script>
 
@@ -464,13 +451,33 @@
     });
   </script>
 
+  <!-- phần ban hành -->
   <script>
     let dataQC = [];
 
     // Hàm fetch lần đầu để lấy dữ liệu từ server
     async function fetchData() {
+      let Dot = document.getElementById("combobox-dot").value;
+      let Ki = document.getElementById("combobox-ki").value;
+      let Nam = document.getElementById("NamHoc").value;
+      let Khoa = document.getElementById("departmentFilter").value;
+
+      const body = {
+        Khoa: Khoa,
+        Dot: Dot,
+        Ki: Ki,
+        Nam: Nam
+      };
+      console.log(body)
+
       try {
-        const response = await fetch("http://localhost:3000/get-table-tam");
+        const response = await fetch("http://localhost:3000/get-table-tam", {
+          method: 'POST', // Phương thức HTTP
+          headers: {
+            'Content-Type': 'application/json', // Định dạng dữ liệu
+          },
+          body: JSON.stringify(body) // Gửi Khoa trong body
+        });
         if (!response.ok) {
           throw new Error("Lấy dữ liệu thất bại");
         }
@@ -511,6 +518,7 @@
             console.error("Error:", error);
           });
       });
+
   </script>
 
   <!-- Phần phân quyền -->
@@ -574,7 +582,7 @@
         document.querySelector(".fullname").innerText = "Hi, Guest"; // Hiển thị nếu không có tên người dùng
       }
 
-      document.querySelector(".role").innerText = `${Role}`;
+      //document.querySelector(".role").innerText = `${Role}`;
     };
   </script>
   <script>
@@ -630,6 +638,7 @@
       }
     });
   </script>
+
   <script>
     $(document).ready(function () {
       $('#NamHoc option[value=""]').remove();

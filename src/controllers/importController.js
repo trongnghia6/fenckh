@@ -3,9 +3,11 @@ const fs = require("fs");
 require("dotenv").config();
 const path = require("path");
 const connection = require("../controllers/connectDB");
+const createPoolConnection = require("../config/databasePool");
 const { json, query } = require("express");
 const gvms = require("../services/gvmServices");
 const nhanviens = require("../services/nhanvienServices");
+const { isNull } = require("util");
 
 // Hàm chuyển đổi tệp Excel sang JSON
 const convertExcelToJSON = (filePath) => {
@@ -30,7 +32,7 @@ const convertExcelToJSON = (filePath) => {
       }, {});
     });
 
-    console.log(jsonObjects);
+    console.log("import thành công");
 
     return jsonObjects;
   } catch (err) {
@@ -95,46 +97,97 @@ const importTableQC = async (jsonData) => {
   }
 
   function tachGiaoVien(giaoVienInput) {
-    const gvmKeyword1 = "( gvm )"; // Từ khóa cho giảng viên mời
-    const gvmKeyword2 = "Giảng viên mời"; // Từ khóa cho giảng viên mời
-
-    // Nếu chuỗi đầu vào rỗng, trả về giá trị mặc định
-    if (!giaoVienInput || giaoVienInput.trim() === "") {
+    // null 
+    if (!giaoVienInput) {
       return [{ MoiGiang: false, GiaoVienGiangDay: "" }];
     }
+    // trường hợp có không có ( gvm ) 
+    else if (!giaoVienInput.includes("gvm")) {
+      const gvmKeyword1 = "( gvm )"; // Từ khóa cho giảng viên mời
+      const gvmKeyword2 = "Giảng viên mời"; // Từ khóa cho giảng viên mời
 
-    // Kiểm tra xem có giảng viên mời hay không
-    const isGuestLecturer =
-      giaoVienInput.toLowerCase().includes(gvmKeyword1.toLowerCase()) ||
-      giaoVienInput.toLowerCase().includes(gvmKeyword2.toLowerCase());
+      // Nếu chuỗi đầu vào rỗng, trả về giá trị mặc định
+      if (!giaoVienInput || giaoVienInput.trim() === "") {
+        return [{ MoiGiang: false, GiaoVienGiangDay: "" }];
+      }
 
-    // Nếu có giảng viên mời, trả về giá trị mặc định
-    if (isGuestLecturer) {
-      return [{ MoiGiang: true, GiaoVienGiangDay: "" }];
+      // Kiểm tra xem có giảng viên mời hay không
+      const isGuestLecturer =
+        giaoVienInput.toLowerCase().includes(gvmKeyword1.toLowerCase()) ||
+        giaoVienInput.toLowerCase().includes(gvmKeyword2.toLowerCase());
+
+      // Nếu có giảng viên mời, trả về giá trị mặc định
+      if (isGuestLecturer) {
+        return [{ MoiGiang: true, GiaoVienGiangDay: "" }];
+      }
+
+      // Tách tên giảng viên từ chuỗi
+      const titleRegex = /(PGS\.?|( gvm )\.?|TS\.?|PGS\.? TS\.?)\s*/gi; // Biểu thức chính quy để loại bỏ danh hiệu gồm PGS. TS. PGS. TS. ( gvm )
+
+      // Xóa danh hiệu khỏi chuỗi nhưng giữ lại phần còn lại
+      const cleanedInput = giaoVienInput.replace(titleRegex, "").trim();
+
+      // Tách tên giảng viên bằng cả dấu phẩy và dấu chấm phẩy
+      const lecturers = cleanedInput
+        .split(/[,;(]\s*/)
+        .map((name) => name.trim())
+        .filter((name) => name.length > 0);
+
+      // Nếu không có giảng viên, trả về giá trị mặc định
+      if (lecturers.length === 0) {
+        return [{ MoiGiang: false, GiaoVienGiangDay: "" }];
+      }
+
+      // Tạo mảng kết quả chứa thông tin giảng viên
+      return [
+        {
+          MoiGiang: false, // Không có giảng viên mời
+          GiaoVienGiangDay: lecturers[0], // Lấy tên giảng viên đầu tiên
+        },
+      ];
+
+    } else {
+      // const gvmKeyword1 = "( gvm )"; // Từ khóa cho giảng viên mời
+      // const gvmKeyword2 = "Giảng viên mời"; // Từ khóa cho giảng viên mời
+
+      // // Nếu chuỗi đầu vào rỗng, trả về giá trị mặc định
+      // if (!giaoVienInput || giaoVienInput.trim() === "") {
+      //   return [{ MoiGiang: false, GiaoVienGiangDay: "" }];
+      // }
+
+      // // Kiểm tra xem có giảng viên mời hay không
+      // const isGuestLecturer =
+      //   giaoVienInput.toLowerCase().includes(gvmKeyword1.toLowerCase()) ||
+      //   giaoVienInput.toLowerCase().includes(gvmKeyword2.toLowerCase());
+
+      // Tách tên giảng viên từ chuỗi
+      const titleRegex = /(PGS\.?|( gvm )\.?|TS\.?|PGS\.? TS\.?)\s*/gi; // Biểu thức chính quy để loại bỏ danh hiệu gồm PGS. TS. PGS. TS. ( gvm )
+
+      // Xóa danh hiệu khỏi chuỗi nhưng giữ lại phần còn lại
+      const cleanedInput = giaoVienInput.replace(titleRegex, "").trim();
+
+      // Tách tên giảng viên bằng cả dấu phẩy và dấu chấm phẩy
+      const lecturers = cleanedInput
+        .split(/[,;(]\s*/)
+        .map((name) => name.trim())
+        .filter((name) => name.length > 0);
+
+      // Nếu không có giảng viên, trả về giá trị mặc định
+      if (lecturers.length === 0) {
+        return [{ MoiGiang: false, GiaoVienGiangDay: "" }];
+      }
+
+      // Tạo mảng kết quả chứa thông tin giảng viên
+      return [
+        {
+          MoiGiang: true, // Không có giảng viên mời
+          GiaoVienGiangDay: lecturers[0], // Lấy tên giảng viên đầu tiên
+        },
+      ];
     }
-
-    // Tách tên giảng viên từ chuỗi mà không xóa các từ khóa
-    const titleRegex = /(PGS\.?|TS\.?|PGS\.? TS\.?)\s*/gi; // Biểu thức chính quy để loại bỏ danh hiệu
-
-    // Xóa danh hiệu khỏi chuỗi nhưng giữ lại phần còn lại
-    const cleanedInput = giaoVienInput.replace(titleRegex, '').trim();
-
-    // Tách tên giảng viên bằng cả dấu phẩy và dấu chấm phẩy
-    const lecturers = cleanedInput.split(/[,;]\s*/).map(name => name.trim()).filter(name => name.length > 0);
-
-    // Nếu không có giảng viên, trả về giá trị mặc định
-    if (lecturers.length === 0) {
-      return [{ MoiGiang: false, GiaoVienGiangDay: "" }];
-    }
-
-    // Tạo mảng kết quả chứa thông tin giảng viên
-    return [{
-      MoiGiang: false, // Không có giảng viên mời
-      GiaoVienGiangDay: lecturers[0], // Lấy tên giảng viên đầu tiên
-    }];
   }
 
-  console.log('ok')
+  // console.log("ok");
   // Tạo câu lệnh INSERT động với các trường đầy đủ
   const queryInsert = `INSERT INTO ${tableName} (
     Khoa,
@@ -163,7 +216,7 @@ const importTableQC = async (jsonData) => {
 
     // Tách giảng viên và tạo mảng các đối tượng giảng viên
     const giangVienArray = tachGiaoVien(item["GiaoVien"]);
-    console.log(giangVienArray)
+    console.log(giangVienArray);
     return giangVienArray.map(({ MoiGiang, GiaoVienGiangDay }) => {
       return new Promise((resolve, reject) => {
         const values = [
@@ -224,7 +277,6 @@ const importTableQC = async (jsonData) => {
 
   return results;
 };
-
 
 // Hàm nhập dữ liệu vào bảng quychuan
 const importTableTam = async (jsonData) => {
@@ -485,16 +537,16 @@ const handleUploadAndRender = async (req, res) => {
   res.send(jsonResult);
 };
 
-const checkExistKhoa = async (req, res) => {
-  const { khoa } = req.body; // Lấy giá trị Khoa từ yêu cầu client
+const checkQCDK = async (req, res) => {
+  const { Khoa, Dot, Ki, Nam } = req.body; // Lấy giá trị Khoa từ yêu cầu client
   const tableName = process.env.DB_TABLE_TAM; // Lấy tên bảng từ biến môi trường
 
   // Câu truy vấn kiểm tra sự tồn tại của giá trị Khoa trong bảng
-  const queryCheck = `SELECT EXISTS(SELECT 1 FROM ${tableName} WHERE Khoa = ?) AS exist;`;
+  const queryCheck = `SELECT EXISTS(SELECT 1 FROM ${tableName} WHERE Khoa = ? AND Dot = ? AND Ki = ? AND Nam = ?) AS exist;`;
 
   // Sử dụng Promise để kiểm tra sự tồn tại
   return new Promise((resolve, reject) => {
-    connection.query(queryCheck, [khoa], (err, results) => {
+    connection.query(queryCheck, [Khoa, Dot, Ki, Nam], (err, results) => {
       if (err) {
         console.error("Lỗi khi kiểm tra Khoa:", err);
         return reject(
@@ -508,14 +560,14 @@ const checkExistKhoa = async (req, res) => {
       if (exist) {
         return resolve(
           res.status(200).json({
-            message: "Khoa đã tồn tại trong cơ sở dữ liệu",
+            message: "Dữ liệu đã tồn tại trong cơ sở dữ liệu",
             exists: true,
           })
         );
       } else {
         return resolve(
           res.status(200).json({
-            message: "Khoa không tồn tại trong cơ sở dữ liệu",
+            message: "Dữ liệu không tồn tại trong cơ sở dữ liệu",
             exists: false,
           })
         );
@@ -525,7 +577,7 @@ const checkExistKhoa = async (req, res) => {
 };
 
 // Hàm xóa row theo trường 'Khoa'
-const deleteRowByKhoa = (req, res) => {
+const deleteQCDK = (req, res) => {
   const { khoa } = req.body; // Nhận giá trị từ client thông qua body
   const tableName = process.env.DB_TABLE_TAM; // Lấy tên bảng từ biến môi trường
   if (!khoa) {
@@ -1355,8 +1407,8 @@ module.exports = {
   importJSONToDB,
   importTableQC,
   importTableTam,
-  checkExistKhoa,
-  deleteRowByKhoa,
+  checkQCDK,
+  deleteQCDK,
   updateChecked,
   updateAllTeachingInfo,
   submitData2,

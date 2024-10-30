@@ -4,12 +4,12 @@ const router = express.Router();
 const createConnection = require("../config/databaseAsync");
 
 exports.exportPhuLucGiangVienMoi = async (req, res) => {
-    let connection;
-    try {
-        connection = await createConnection(); // Kết nối đến database
+  let connection;
+  try {
+    connection = await createPoolConnection(); // Kết nối đến database
 
-        // Truy vấn dữ liệu từ database
-        const [data] = await connection.execute(`
+    // Truy vấn dữ liệu từ database
+    const [data] = await connection.execute(`
             SELECT 
                 gd.GiangVien, gd.Lop, hd.SoTiet, gd.TenHocPhan, gd.HocKy,
                 hd.HocVi, hd.ChucVu, hd.HSL,
@@ -19,14 +19,14 @@ exports.exportPhuLucGiangVienMoi = async (req, res) => {
             ORDER BY gd.GiangVien, gd.Lop, gd.TenHocPhan
         `);
 
-        // Tạo workbook mới
-        const workbook = new ExcelJS.Workbook();
+    // Tạo workbook mới
+    const workbook = new ExcelJS.Workbook();
 
-        // Nhóm dữ liệu theo giảng viên
-        const groupedData = data.reduce((acc, cur) => {
-            (acc[cur.GiangVien] = acc[cur.GiangVien] || []).push(cur);
-            return acc;
-        }, {});
+    // Nhóm dữ liệu theo giảng viên
+    const groupedData = data.reduce((acc, cur) => {
+      (acc[cur.GiangVien] = acc[cur.GiangVien] || []).push(cur);
+      return acc;
+    }, {});
 
         // Tạo một sheet cho mỗi giảng viên
         for (const [giangVien, giangVienData] of Object.entries(groupedData)) {

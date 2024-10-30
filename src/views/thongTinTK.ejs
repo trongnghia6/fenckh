@@ -77,7 +77,153 @@
       <div class="d-flex justify-content-start mb-3">
         <button id="createTk" class="btn">
           <i class="bi bi-plus-circle"></i> Thêm tài khoản
-      </button>        
+      </button>
+      <input
+        type="text"
+        placeholder="Tìm kiếm theo tên nhân viên..."
+        class="search mx-3"
+        id="searchInput" style="height: 40px; width: 300px;"
+        onkeyup="searchClass()"
+      />
+      <input
+          type="text"
+          placeholder="Tìm kiếm theo mã phòng ban..."
+          class="search mx-3"
+          id="searchPB" style="height: 40px; width: 300px;"
+          onkeyup="searchPB()"
+      />
+      <input
+          type="text"
+          placeholder="Tìm kiếm theo tên đăng nhập..."
+          class="search mx-3"
+          id="searchTK" style="height: 40px; width: 300px;"
+          onkeyup="searchTK()"
+      />
+    <script>
+      function searchClass() {
+        let input = document.getElementById("searchInput").value.toLowerCase();
+        let table = document.getElementById("taiKhoanTable");
+        let rows = table.getElementsByTagName("tr");
+    
+        let currentGroup = null;
+        let groupVisible = false;
+    
+        for (let i = 1; i < rows.length; i++) {
+          // Bắt đầu từ 1 để bỏ qua hàng tiêu đề
+          let row = rows[i];
+    
+          if (row.classList.contains("taiKhoan")) {
+            // Đây là hàng đầu tiên của một nhóm giảng viên mới
+            if (currentGroup) {
+              // Ẩn/hiện nhóm trước đó dựa trên kết quả tìm kiếm
+              setGroupVisibility(currentGroup, groupVisible);
+            }
+    
+            currentGroup = [];
+            groupVisible = false;
+          }
+    
+          currentGroup.push(row);
+    
+          let teacherNameCell = row.cells[2]; // Giả sử tên giảng viên ở cột thứ 2
+          if (teacherNameCell) {
+            let teacherName = teacherNameCell.textContent.toLowerCase();
+            if (teacherName.includes(input)) {
+              groupVisible = true;
+            }
+          }
+        }
+    
+        // Xử lý nhóm cuối cùng
+        if (currentGroup) {
+          setGroupVisibility(currentGroup, groupVisible);
+        }
+      }
+      function searchPB() {
+        let input = document.getElementById("searchPB").value.toLowerCase();
+        let table = document.getElementById("taiKhoanTable");
+        let rows = table.getElementsByTagName("tr");
+    
+        let currentGroup = null;
+        let groupVisible = false;
+    
+        for (let i = 1; i < rows.length; i++) {
+          // Bắt đầu từ 1 để bỏ qua hàng tiêu đề
+          let row = rows[i];
+    
+          if (row.classList.contains("taiKhoan")) {
+            // Đây là hàng đầu tiên của một nhóm giảng viên mới
+            if (currentGroup) {
+              // Ẩn/hiện nhóm trước đó dựa trên kết quả tìm kiếm
+              setGroupVisibility(currentGroup, groupVisible);
+            }
+    
+            currentGroup = [];
+            groupVisible = false;
+          }
+    
+          currentGroup.push(row);
+    
+          let teacherNameCell = row.cells[5]; // Giả sử tên giảng viên ở cột thứ 2
+          if (teacherNameCell) {
+            let teacherName = teacherNameCell.textContent.toLowerCase();
+            if (teacherName.includes(input)) {
+              groupVisible = true;
+            }
+          }
+        }
+    
+        // Xử lý nhóm cuối cùng
+        if (currentGroup) {
+          setGroupVisibility(currentGroup, groupVisible);
+        }
+      }
+      function searchTK() {
+        let input = document.getElementById("searchTK").value.toLowerCase();
+        let table = document.getElementById("taiKhoanTable");
+        let rows = table.getElementsByTagName("tr");
+    
+        let currentGroup = null;
+        let groupVisible = false;
+    
+        for (let i = 1; i < rows.length; i++) {
+          // Bắt đầu từ 1 để bỏ qua hàng tiêu đề
+          let row = rows[i];
+    
+          if (row.classList.contains("taiKhoan")) {
+            // Đây là hàng đầu tiên của một nhóm giảng viên mới
+            if (currentGroup) {
+              // Ẩn/hiện nhóm trước đó dựa trên kết quả tìm kiếm
+              setGroupVisibility(currentGroup, groupVisible);
+            }
+    
+            currentGroup = [];
+            groupVisible = false;
+          }
+    
+          currentGroup.push(row);
+    
+          let teacherNameCell = row.cells[3]; // Giả sử tên giảng viên ở cột thứ 2
+          if (teacherNameCell) {
+            let teacherName = teacherNameCell.textContent.toLowerCase();
+            if (teacherName.includes(input)) {
+              groupVisible = true;
+            }
+          }
+        }
+    
+        // Xử lý nhóm cuối cùng
+        if (currentGroup) {
+          setGroupVisibility(currentGroup, groupVisible);
+        }
+      }
+    
+      function setGroupVisibility(group, visible) {
+        group.forEach(row => {
+          row.style.display = visible ? "" : "none";
+        });
+      }
+    </script>        
       <script>
           document.getElementById('createTk').addEventListener('click', function () {
             window.location.href = '/themTK';
@@ -85,7 +231,7 @@
         </script>
       </div>
       <div class="pb-3">
-        <table class="table table-bordered">
+        <table class="table table-bordered" id="taiKhoanTable">
           <thead>
             <tr>
               <th>STT</th>
@@ -103,7 +249,7 @@
           <tbody>
             <% if (accountLists && accountLists.length > 0) { %>
               <% for (var i = 0; i < accountLists.length; i++) { %>
-                <tr>
+                <tr class="taiKhoan">
                   <td><%= i+1 %></td> <!-- Số thứ tự -->
                   <td><%= accountLists[i].id_User %></td> <!-- Hiển thị tên tài khoản -->
                   <td><%= accountLists[i].TenNhanVien %></td>
