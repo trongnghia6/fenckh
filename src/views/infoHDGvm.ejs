@@ -9,6 +9,7 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
   <link rel="stylesheet" href="/css/styles.css">
   <link rel="stylesheet" href="/css/gvmList.css">
+  <link rel="stylesheet" href="/css/table.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
   <style>
     .teacher-group {
@@ -26,7 +27,8 @@
       /* Viền đen xung quanh nhóm giảng viên */
 
     }
-    .btn{
+
+    .btn {
       height: 45px !important;
     }
   </style>
@@ -65,7 +67,8 @@
               </a>
               <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                 <a class="nav-link" href="/gvmList">Danh sách giảng viên mời</a>
-                <a class="nav-link" id="actionButton1" href="/importGvmList" style="width: 100%;">Thêm giảng viên mời bằng file</a>
+                <a class="nav-link" id="actionButton1" href="/importGvmList" style="width: 100%;">Thêm giảng viên mời
+                  bằng file</a>
               </div>
             </div>
           </div>
@@ -94,7 +97,7 @@
                 <a class="nav-link" href="/classInfoGvm">Thông tin lớp giảng viên mời</a>
                 <a class="nav-link active" href="/infoHDGvm" role="button">Thông tin hợp đồng</a>
                 <li class="nav-item"></li>
-                <a class="nav-link " href="/phuLucHD" >Phụ lục hợp đồng</a>
+                <a class="nav-link " href="/phuLucHD">Phụ lục hợp đồng</a>
                 </li>
                 <a class="nav-link " href="/exportHD">Hợp Đồng</a>
 
@@ -150,7 +153,7 @@
             <div class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownUser" data-bs-toggle="dropdown"
                 aria-expanded="false">
-                 Hệ Thống
+                Hệ Thống
               </a>
               <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                 <a class="nav-link" id="" href="log">Xem File Log</a>
@@ -166,8 +169,8 @@
             </a>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
               <a class="dropdown-item" href="#">Thông tin cá nhân</a>
-                <a class="dropdown-item" id="changePasswordLink">Đổi mật khẩu</a>
-                <a class="dropdown-item" href="/">Đăng xuất</a>
+              <a class="dropdown-item" id="changePasswordLink">Đổi mật khẩu</a>
+              <a class="dropdown-item" href="/">Đăng xuất</a>
             </div>
           </div>
         </div>
@@ -182,29 +185,29 @@
       <div class="gvmList">
         <div class="m-3">
           <h1>THÔNG TIN HỢP ĐỒNG GIẢNG VIÊN MỜI</h1>
-          
+
           <div class="controls-container">
             <select class="form-select w-100px mx-2 selectop" id="combobox-dot">
               <option value="1">Đợt 1</option>
               <option value="2">Đợt 2</option>
             </select>
-      
+
             <select class="form-select w-100px mx-2 selectop" id="combobox-ki">
               <option value="1">Kỳ 1</option>
               <option value="2">Kỳ 2</option>
             </select>
-      
+
             <select class="form-select w-100px mx-2 selectop" id="NamHoc">
               <option value="">Năm học</option>
             </select>
-      
+
             <button id="viewDataBtn" class="btn view">Xem dữ liệu</button>
             <button class="btn export" onclick="exportData()">Xuất dữ liệu</button>
           </div>
-      
+
           <div id="tableContainer" style="display: none;">
             <div class="table-responsive">
-              <table id="dataTable" class="table table-striped table-hover table-bordered">
+              <table class="table table-bordered" id="dataTable" class="table table-striped table-hover table-bordered">
                 <thead class="table-dark">
                   <tr>
                     <th>Ngày bắt đầu</th>
@@ -234,296 +237,296 @@
       <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
       <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
       <script>
-        $(document).ready(function() {
-    const isKhoa = localStorage.getItem("isKhoa");
-    console.log('Giá trị isKhoa từ localStorage: ', isKhoa);
-    hideButton();
-});
+        $(document).ready(function () {
+          const isKhoa = localStorage.getItem("isKhoa");
+          console.log('Giá trị isKhoa từ localStorage: ', isKhoa);
+          hideButton();
+        });
 
         function hideButton() {
-            const isKhoa = localStorage.getItem("isKhoa");
-            if (isKhoa === null) {
-                console.log('Không tìm thấy giá trị isKhoa trong localStorage');
-            } else {
-                console.log('Giá trị isKhoa: ', isKhoa);
-                
-                const actionButton = document.getElementById('actionButton');
-                const actionButton1 = document.getElementById('actionButton1');
-        const actionButton2 = document.getElementById('actionButton2');
-        
-        if (actionButton1 && actionButton2) {
-            if (isKhoa === "0") {
+          const isKhoa = localStorage.getItem("isKhoa");
+          if (isKhoa === null) {
+            console.log('Không tìm thấy giá trị isKhoa trong localStorage');
+          } else {
+            console.log('Giá trị isKhoa: ', isKhoa);
+
+            const actionButton = document.getElementById('actionButton');
+            const actionButton1 = document.getElementById('actionButton1');
+            const actionButton2 = document.getElementById('actionButton2');
+
+            if (actionButton1 && actionButton2) {
+              if (isKhoa === "0") {
                 actionButton1.style.display = 'none'; // Ẩn actionButton1 nếu isKhoa = 0
                 actionButton2.style.display = 'inline-block'; // Hiện actionButton2
                 console.log('Nút actionButton1 đã được ẩn, actionButton2 đã được hiển thị');
-            } else {
+              } else {
                 actionButton1.style.display = 'inline-block'; // Hiện actionButton1 nếu isKhoa khác 0
                 actionButton2.style.display = 'none'; // Ẩn actionButton2
                 console.log('Nút actionButton1 đã được hiển thị, actionButton2 đã được ẩn');
+              }
+            } else {
+              console.log('Không tìm thấy các nút actionButton1 hoặc actionButton2');
             }
-        } else {
-            console.log('Không tìm thấy các nút actionButton1 hoặc actionButton2');
+          }
         }
-            }
+      </script>
+      <script>
+        function exportData() {
+          const namHoc = document.getElementById('NamHoc').value;
+          const dot = document.getElementById('combobox-dot').value;
+          const ki = document.getElementById('combobox-ki').value;
+
+          window.location.href = '/hdgvm/export-excel?namHoc=' + namHoc + '&dot=' + dot + '&ki=' + ki;
         }
-  </script>
-          <script>
-            function exportData() {
+      </script>
+
+
+      <!-- phần dữ liệu để hiển thị trên bảng -->
+      <script>
+        document.addEventListener('DOMContentLoaded', function () {
+          const viewDataBtn = document.getElementById('viewDataBtn');
+          const tableContainer = document.getElementById('tableContainer');
+          const dataTable = document.getElementById('dataTable');
+
+          viewDataBtn.addEventListener('click', async function () {
+            try {
               const namHoc = document.getElementById('NamHoc').value;
               const dot = document.getElementById('combobox-dot').value;
               const ki = document.getElementById('combobox-ki').value;
 
-              window.location.href = '/hdgvm/export-excel?namHoc=' + namHoc + '&dot=' + dot + '&ki=' + ki;
-            }
-          </script>
-
-
-          <!-- phần dữ liệu để hiển thị trên bảng -->
-          <script>
-            document.addEventListener('DOMContentLoaded', function () {
-              const viewDataBtn = document.getElementById('viewDataBtn');
-              const tableContainer = document.getElementById('tableContainer');
-              const dataTable = document.getElementById('dataTable');
-
-              viewDataBtn.addEventListener('click', async function () {
-                try {
-                  const namHoc = document.getElementById('NamHoc').value;
-                  const dot = document.getElementById('combobox-dot').value;
-                  const ki = document.getElementById('combobox-ki').value;
-
-                  const response = await fetch(`/api/hdgvm?namHoc=${namHoc}&dot=${dot}&ki=${ki}`);
-                  if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                  }
-                  const data = await response.json();
-
-                  // Xóa dữ liệu cũ trong bảng
-                  const tbody = dataTable.querySelector('tbody');
-                  tbody.innerHTML = '';
-
-                  // Thêm dữ liệu mới vào bảng
-                  data.forEach(item => {
-                    const row = tbody.insertRow();
-                    row.insertCell(0).textContent = new Date(item.NgayBatDau).toLocaleDateString('vi-VN');
-                    row.insertCell(1).textContent = new Date(item.NgayKetThuc).toLocaleDateString('vi-VN');
-                    row.insertCell(2).textContent = item.DanhXung;
-                    row.insertCell(3).textContent = item.HoTen;
-                    row.insertCell(4).textContent = new Date(item.NgaySinh).toLocaleDateString('vi-VN');
-                    row.insertCell(5).textContent = item.CCCD;
-                    row.insertCell(6).textContent = item.HocVi;
-                    row.insertCell(7).textContent = item.ChucVu;
-                    row.insertCell(8).textContent = item.DienThoai;
-                    row.insertCell(9).textContent = item.Email;
-                    row.insertCell(10).textContent = item.STK;
-                    row.insertCell(11).textContent = item.NganHang;
-                    row.insertCell(12).textContent = item.MaSoThue;
-                    row.insertCell(13).textContent = item.SoTiet;
-                  });
-
-                  // Hiển thị bảng
-                  tableContainer.style.display = 'block';
-                } catch (error) {
-                  console.error('Error:', error);
-                  alert('Đã xảy ra lỗi khi tải dữ liệu');
-                }
-              });
-            });
-          </script>
-
-
-          <script src="/bootstrap/dist/js/jquery-3.7.1.min.js"></script>
-          <script src="/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-
-          <script>
-            // Tìm kiếm giảng viên mời theo tên
-            function searchClass() {
-              let input = document.getElementById("searchInput").value.toLowerCase();
-              let table = document.getElementById("classTable");
-              let tr = table.getElementsByTagName("tr");
-
-              for (let i = 1; i < tr.length; i++) {
-                let td = tr[i].getElementsByTagName("td")[1];
-                if (td) {
-                  let textValue = td.textContent || td.innerText;
-                  if (textValue.toLowerCase().indexOf(input) > -1) {
-                    tr[i].style.display = "";
-                  } else {
-                    tr[i].style.display = "none";
-                  }
-                }
+              const response = await fetch(`/api/hdgvm?namHoc=${namHoc}&dot=${dot}&ki=${ki}`);
+              if (!response.ok) {
+                throw new Error('Network response was not ok');
               }
-            }
+              const data = await response.json();
 
+              // Xóa dữ liệu cũ trong bảng
+              const tbody = dataTable.querySelector('tbody');
+              tbody.innerHTML = '';
 
-
-            async function fetchGVMLists() {
-              try {
-                const response = await fetch('/api/classInfoGvm');
-                if (!response.ok) {
-                  throw new Error('Network response was not ok');
-                }
-                const gvmLists = await response.json();
-                return gvmLists;
-              } catch (error) {
-                console.error('Error fetching data:', error);
-              }
-            }
-
-
-            async function viewClass(index) {
-
-              gvmLists = await fetchGVMLists();
-
-              index = parseInt(index);
-
-              var gvm = gvmLists[index];
-
-
-              // Hiển thị thông tin vào modal
-              document.getElementById('modal-ma-gv').innerText = gvm.MaGvm;
-              document.getElementById('modal-ho-ten').innerText = gvm.HoTen;
-              document.getElementById('modal-ngay-sinh').innerText = new Date(gvm.NgaySinh).toLocaleDateString('vi-VN');
-              document.getElementById('modal-cccd').innerText = gvm.CCCD;
-              document.getElementById('modal-ngay-cap').innerText = new Date(gvm.NgayCapCCCD).toLocaleDateString('vi-VN');
-              document.getElementById('modal-noi-cap').innerText = gvm.NoiCapCCCD;
-              document.getElementById('modal-dia-chi-cccd').innerText = gvm.DiaChi;
-              document.getElementById('modal-so-tk').innerText = gvm.STK;
-              document.getElementById('modal-ngan-hang').innerText = gvm.NganHang;
-              document.getElementById('modal-email').innerText = gvm.Email;
-              document.getElementById('modal-heso-luong').innerText = gvm.HSL;//
-              document.getElementById('modal-noi-cong-tac').innerText = gvm.NoiCongTac;
-              document.getElementById('modal-chuc-vu').innerText = gvm.ChucVu;
-              document.getElementById('modal-ma-so-thue').innerText = gvm.MaSoThue;
-              document.getElementById('modal-tot-nghiep-loai').innerText = gvm.TotNghiepLoai;
-
-              // Hiển thị modal
-              document.getElementById('modal').style.display = 'flex';
-            }
-
-
-
-            // Đóng modal
-            function closeModal() {
-              document.getElementById("modal").style.display = "none";
-            }
-
-            // Thêm sự kiện khi nhấn ra ngoài modal để đóng modal
-            window.onclick = function (event) {
-              let modal = document.getElementById("modal");
-              if (event.target == modal) {
-                modal.style.display = "none";
-              }
-            };
-
-          </script>
-
-          <script>
-            // Lấy query string từ URL
-            const urlParams = new URLSearchParams(window.location.search);
-            const message = urlParams.get('message');
-
-            // Lấy phần tử div để hiển thị thông báo
-            const messageDiv = document.getElementById('message');
-
-            // console.log(message)
-            // Hiển thị thông báo dựa trên giá trị của message
-            if (message === 'insertSuccess') {
-              alert("Update Success")
-            } else if (message === 'insertFalse') {
-              alert("Update False")
-            }
-
-            // Sau khi hiển thị thông báo, xóa query string để tránh hiển thị lại khi refresh
-            if (message) {
-              // Sử dụng window.history để xóa query string mà không refresh lại trang
-              const newUrl = window.location.origin + window.location.pathname;
-              window.history.replaceState({}, document.title, newUrl);
-            }
-
-          </script>
-
-
-          <!-- Phần phân quyền -->
-          <script>
-            document.addEventListener('DOMContentLoaded', () => {
-
-              // Thêm sự kiện click cho phần tử có id="ThongTinGD"
-              const ThongTinGD = document.getElementById("ThongTinGD");
-
-              ThongTinGD.addEventListener("click", function (event) {
-                event.preventDefault(); // Ngăn chặn hành vi mặc định của liên kết
-
-                const isKhoa = localStorage.getItem("isKhoa"); // Lấy role từ localStorage
-
-                if (isKhoa == 0) { // Nếu là đào tạo hoặc tài chính
-                  window.location.href = "/info2";
-                } else {
-                  window.location.href = "/info";
-                }
+              // Thêm dữ liệu mới vào bảng
+              data.forEach(item => {
+                const row = tbody.insertRow();
+                row.insertCell(0).textContent = new Date(item.NgayBatDau).toLocaleDateString('vi-VN');
+                row.insertCell(1).textContent = new Date(item.NgayKetThuc).toLocaleDateString('vi-VN');
+                row.insertCell(2).textContent = item.DanhXung;
+                row.insertCell(3).textContent = item.HoTen;
+                row.insertCell(4).textContent = new Date(item.NgaySinh).toLocaleDateString('vi-VN');
+                row.insertCell(5).textContent = item.CCCD;
+                row.insertCell(6).textContent = item.HocVi;
+                row.insertCell(7).textContent = item.ChucVu;
+                row.insertCell(8).textContent = item.DienThoai;
+                row.insertCell(9).textContent = item.Email;
+                row.insertCell(10).textContent = item.STK;
+                row.insertCell(11).textContent = item.NganHang;
+                row.insertCell(12).textContent = item.MaSoThue;
+                row.insertCell(13).textContent = item.SoTiet;
               });
 
-              // Thêm sự kiện click cho phần tử có id="Home"
+              // Hiển thị bảng
+              tableContainer.style.display = 'block';
+            } catch (error) {
+              console.error('Error:', error);
+              alert('Đã xảy ra lỗi khi tải dữ liệu');
+            }
+          });
+        });
+      </script>
 
-              const Home = document.getElementById("Home");
 
-              Home.addEventListener("click", function (event) {
-                event.preventDefault(); // Ngăn chặn hành vi mặc định của liên kết
+      <script src="/bootstrap/dist/js/jquery-3.7.1.min.js"></script>
+      <script src="/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 
-                const isKhoa = localStorage.getItem("isKhoa")
+      <script>
+        // Tìm kiếm giảng viên mời theo tên
+        function searchClass() {
+          let input = document.getElementById("searchInput").value.toLowerCase();
+          let table = document.getElementById("classTable");
+          let tr = table.getElementsByTagName("tr");
 
-                if (isKhoa == 0) { // Nếu là đào tạo hoặc tài chính
-                  window.location.href = "/maindt";
-                } else {
-                  window.location.href = "/mainkhoa";
-                }
-              });
-            });
-
-          </script>
-
-          <script>
-            window.onload = function () {
-              const TenNhanVien = localStorage.getItem("TenNhanVien"); // Lấy tên người dùng từ localStorage
-              const Role = localStorage.getItem("userRole");
-
-              if (TenNhanVien) {
-                // Hiển thị tên người dùng trên phần tử HTML
-                document.querySelector('.fullname').innerText = `${TenNhanVien} - ${Role}`;
+          for (let i = 1; i < tr.length; i++) {
+            let td = tr[i].getElementsByTagName("td")[1];
+            if (td) {
+              let textValue = td.textContent || td.innerText;
+              if (textValue.toLowerCase().indexOf(input) > -1) {
+                tr[i].style.display = "";
               } else {
-                document.querySelector('.fullname').innerText = 'Hi, Guest'; // Hiển thị nếu không có tên người dùng
+                tr[i].style.display = "none";
               }
+            }
+          }
+        }
 
-              document.querySelector('.role').innerText = `${Role}`;
 
-            };
-          </script>
-          <script>
-            document.getElementById("changePasswordLink").addEventListener("click", function(event) {
+
+        async function fetchGVMLists() {
+          try {
+            const response = await fetch('/api/classInfoGvm');
+            if (!response.ok) {
+              throw new Error('Network response was not ok');
+            }
+            const gvmLists = await response.json();
+            return gvmLists;
+          } catch (error) {
+            console.error('Error fetching data:', error);
+          }
+        }
+
+
+        async function viewClass(index) {
+
+          gvmLists = await fetchGVMLists();
+
+          index = parseInt(index);
+
+          var gvm = gvmLists[index];
+
+
+          // Hiển thị thông tin vào modal
+          document.getElementById('modal-ma-gv').innerText = gvm.MaGvm;
+          document.getElementById('modal-ho-ten').innerText = gvm.HoTen;
+          document.getElementById('modal-ngay-sinh').innerText = new Date(gvm.NgaySinh).toLocaleDateString('vi-VN');
+          document.getElementById('modal-cccd').innerText = gvm.CCCD;
+          document.getElementById('modal-ngay-cap').innerText = new Date(gvm.NgayCapCCCD).toLocaleDateString('vi-VN');
+          document.getElementById('modal-noi-cap').innerText = gvm.NoiCapCCCD;
+          document.getElementById('modal-dia-chi-cccd').innerText = gvm.DiaChi;
+          document.getElementById('modal-so-tk').innerText = gvm.STK;
+          document.getElementById('modal-ngan-hang').innerText = gvm.NganHang;
+          document.getElementById('modal-email').innerText = gvm.Email;
+          document.getElementById('modal-heso-luong').innerText = gvm.HSL;//
+          document.getElementById('modal-noi-cong-tac').innerText = gvm.NoiCongTac;
+          document.getElementById('modal-chuc-vu').innerText = gvm.ChucVu;
+          document.getElementById('modal-ma-so-thue').innerText = gvm.MaSoThue;
+          document.getElementById('modal-tot-nghiep-loai').innerText = gvm.TotNghiepLoai;
+
+          // Hiển thị modal
+          document.getElementById('modal').style.display = 'flex';
+        }
+
+
+
+        // Đóng modal
+        function closeModal() {
+          document.getElementById("modal").style.display = "none";
+        }
+
+        // Thêm sự kiện khi nhấn ra ngoài modal để đóng modal
+        window.onclick = function (event) {
+          let modal = document.getElementById("modal");
+          if (event.target == modal) {
+            modal.style.display = "none";
+          }
+        };
+
+      </script>
+
+      <script>
+        // Lấy query string từ URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const message = urlParams.get('message');
+
+        // Lấy phần tử div để hiển thị thông báo
+        const messageDiv = document.getElementById('message');
+
+        // console.log(message)
+        // Hiển thị thông báo dựa trên giá trị của message
+        if (message === 'insertSuccess') {
+          alert("Update Success")
+        } else if (message === 'insertFalse') {
+          alert("Update False")
+        }
+
+        // Sau khi hiển thị thông báo, xóa query string để tránh hiển thị lại khi refresh
+        if (message) {
+          // Sử dụng window.history để xóa query string mà không refresh lại trang
+          const newUrl = window.location.origin + window.location.pathname;
+          window.history.replaceState({}, document.title, newUrl);
+        }
+
+      </script>
+
+
+      <!-- Phần phân quyền -->
+      <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+          // Thêm sự kiện click cho phần tử có id="ThongTinGD"
+          const ThongTinGD = document.getElementById("ThongTinGD");
+
+          ThongTinGD.addEventListener("click", function (event) {
+            event.preventDefault(); // Ngăn chặn hành vi mặc định của liên kết
+
+            const isKhoa = localStorage.getItem("isKhoa"); // Lấy role từ localStorage
+
+            if (isKhoa == 0) { // Nếu là đào tạo hoặc tài chính
+              window.location.href = "/info2";
+            } else {
+              window.location.href = "/info";
+            }
+          });
+
+          // Thêm sự kiện click cho phần tử có id="Home"
+
+          const Home = document.getElementById("Home");
+
+          Home.addEventListener("click", function (event) {
+            event.preventDefault(); // Ngăn chặn hành vi mặc định của liên kết
+
+            const isKhoa = localStorage.getItem("isKhoa")
+
+            if (isKhoa == 0) { // Nếu là đào tạo hoặc tài chính
+              window.location.href = "/maindt";
+            } else {
+              window.location.href = "/mainkhoa";
+            }
+          });
+        });
+
+      </script>
+
+      <script>
+        window.onload = function () {
+          const TenNhanVien = localStorage.getItem("TenNhanVien"); // Lấy tên người dùng từ localStorage
+          const Role = localStorage.getItem("userRole");
+
+          if (TenNhanVien) {
+            // Hiển thị tên người dùng trên phần tử HTML
+            document.querySelector('.fullname').innerText = `${TenNhanVien} - ${Role}`;
+          } else {
+            document.querySelector('.fullname').innerText = 'Hi, Guest'; // Hiển thị nếu không có tên người dùng
+          }
+
+          document.querySelector('.role').innerText = `${Role}`;
+
+        };
+      </script>
+      <script>
+        document.getElementById("changePasswordLink").addEventListener("click", function (event) {
           event.preventDefault(); // Ngăn chặn hành vi mặc định của thẻ a
           const tenDangNhap = localStorage.getItem("TenDangNhap"); // Lấy TenDangNhap từ localStorage
           alert(tenDangNhap);
-      
+
           if (tenDangNhap) {
-              // Chuyển hướng đến trang changePassword và truyền TenDangNhap trong URL
-              window.location.href = `/changePassword?tenDangNhap=${encodeURIComponent(tenDangNhap)}`;
+            // Chuyển hướng đến trang changePassword và truyền TenDangNhap trong URL
+            window.location.href = `/changePassword?tenDangNhap=${encodeURIComponent(tenDangNhap)}`;
           } else {
-              alert("Không tìm thấy TenDangNhap trong localStorage.");
+            alert("Không tìm thấy TenDangNhap trong localStorage.");
           }
-      });
-          </script>
-          <script>
-            $(document).ready(function() {
+        });
+      </script>
+      <script>
+        $(document).ready(function () {
           $('#NamHoc option[value=""]').remove();
-        
+
           $.ajax({
             url: '/getNamHoc',
             method: 'GET',
-            success: function(response) {
+            success: function (response) {
               if (response.success) {
                 const NamHoc = response.NamHoc;
                 console.log(NamHoc);
-        
-                response.NamHoc.forEach(function(item) {
+
+                response.NamHoc.forEach(function (item) {
                   if (item.NamHoc === NamHoc) {
                     $('#NamHoc').prepend(
                       `<option value="${item.NamHoc}" selected>${item.NamHoc}</option>`
@@ -534,7 +537,7 @@
                     );
                   }
                 });
-        
+
                 if (!$('#NamHoc option:selected').length) {
                   $('#NamHoc').prepend('<option value="">Chọn Năm Học</option>');
                 }
@@ -542,12 +545,12 @@
                 console.error("Không lấy được dữ liệu năm học:", response.message);
               }
             },
-            error: function(error) {
+            error: function (error) {
               console.error("Lỗi khi lấy dữ liệu năm học:", error);
             }
           });
         });
-        </script>
+      </script>
 </body>
 
 </html>
