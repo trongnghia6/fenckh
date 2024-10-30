@@ -142,8 +142,8 @@ BEGIN
   IF change_message != '' THEN
       INSERT INTO lichsunhaplieu (id_User, TenNhanVien, LoaiThongTin, NoiDungThayDoi, ThoiGianThayDoi)
       VALUES (
-         13,  
-        'Nguyễn Văn Cường',
+        ${userId},  
+          '${tenNhanVien}',
           loai_thong_tin,  -- Loại thông tin
           change_message,  -- Nội dung mới với thông báo thay đổi
           NOW()  -- Thời gian thay đổi

@@ -28,7 +28,9 @@
 
   <!-- Phần dưới của navbar chứa các mục nằm ngang -->
   
-
+  <div style="text-align: left;">
+    <button type="return" class="btn m-3" onclick="window.history.back()">Quay Lại</button>
+  </div>
   <table class="table table-bordered my-2" border="1" id="logTable">
     <thead>
         <tr>
@@ -42,9 +44,7 @@
     </thead>
     <tbody id="logTableBody"></tbody>
 </table>
-<div style="text-align: right;">
-  <button type="return" class="btn m-4" onclick="window.history.back()">Quay Lại</button>
-</div>
+
 
 
 
@@ -61,7 +61,7 @@
                 data.forEach((item, index) => {
                     const row = document.createElement('tr');
                     row.innerHTML = `
-                        <td>${index + 1}</td>
+                        <td>${item.MaLichSuNhap}</td>
                         <td>${item.id_User}</td>
                         <td>${item.TenNhanVien}</td>
                         <td>${item.LoaiThongTin}</td>
