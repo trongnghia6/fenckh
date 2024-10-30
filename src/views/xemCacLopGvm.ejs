@@ -511,7 +511,7 @@
       const [gvmResponse, khoaResponse, teachingResponse] = await Promise.all([
         fetch('http://localhost:3000/index/name-gvm'),
         fetch('http://localhost:3000/index/name-gvm-khoa'),
-        fetch('http://localhost:3000/teaching-info', {
+        fetch('http://localhost:3000/xemCacLopMoi', {
           method: 'POST', // Sử dụng phương thức POST
           headers: {
             'Content-Type': 'application/json', // Đặt Content-Type là application/json

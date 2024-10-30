@@ -99,43 +99,7 @@ const KhoaCheckAll = async (req, Dot, KiHoc, NamHoc) => {
   return kq;
 };
 
-const DaoTaoCheckAll = async (req, Dot, KiHoc, NamHoc) => {
-  let kq = ""; // Biến để lưu kết quả
-
-  const query = ` SELECT MaPhongBan FROM phongban where isKhoa = 1 `;
-  const connection1 = await createConnection();
-  const [results, fields] = await connection1.query(query);
-
-  // Chọn theo từng phòng ban
-  for (let i = 0; i < results.length; i++) {
-    const MaPhongBan = results[i].MaPhongBan;
-
-    const query = ` SELECT DaoTaoDuyet FROM quychuan where Khoa = ? and Dot = ? and KiHoc = ? and NamHoc = ?`;
-    const connection = await createConnection();
-    const [check, fields] = await connection.query(query, [
-      MaPhongBan,
-      Dot,
-      KiHoc,
-      NamHoc,
-    ]);
-
-    let checkAll = true;
-    for (let j = 0; j < check.length; j++) {
-      if (check[j].DaoTaoDuyet == 0) {
-        checkAll = false;
-        break;
-      }
-    }
-    if (checkAll == true) {
-      kq += MaPhongBan + ",";
-    }
-  }
-
-  return kq;
-};
-
-// cũ
-// const TaiChinhCheckAll = async (req, Dot, KiHoc, NamHoc) => {
+// const DaoTaoCheckAll = async (req, Dot, KiHoc, NamHoc) => {
 //   let kq = ""; // Biến để lưu kết quả
 
 //   const query = ` SELECT MaPhongBan FROM phongban where isKhoa = 1 `;
@@ -146,7 +110,7 @@ const DaoTaoCheckAll = async (req, Dot, KiHoc, NamHoc) => {
 //   for (let i = 0; i < results.length; i++) {
 //     const MaPhongBan = results[i].MaPhongBan;
 
-//     const query = ` SELECT TaiChinhDuyet FROM quychuan where Khoa = ? and Dot = ? and KiHoc = ? and NamHoc = ?`;
+//     const query = ` SELECT DaoTaoDuyet FROM quychuan where Khoa = ? and Dot = ? and KiHoc = ? and NamHoc = ?`;
 //     const connection = await createConnection();
 //     const [check, fields] = await connection.query(query, [
 //       MaPhongBan,
@@ -157,7 +121,7 @@ const DaoTaoCheckAll = async (req, Dot, KiHoc, NamHoc) => {
 
 //     let checkAll = true;
 //     for (let j = 0; j < check.length; j++) {
-//       if (check[j].TaiChinhDuyet == 0) {
+//       if (check[j].DaoTaoDuyet == 0) {
 //         checkAll = false;
 //         break;
 //       }
@@ -170,11 +134,60 @@ const DaoTaoCheckAll = async (req, Dot, KiHoc, NamHoc) => {
 //   return kq;
 // };
 
+const DaoTaoCheckAll = async (req, Dot, KiHoc, NamHoc) => {
+  let kq = ""; // Biến để lưu kết quả
+
+  const queryPhongBan = `SELECT MaPhongBan FROM phongban WHERE isKhoa = 1`;
+  const connection1 = await createPoolConnection();
+
+  try {
+    const [results] = await connection1.query(queryPhongBan);
+
+    // Chọn theo từng phòng ban
+    for (let i = 0; i < results.length; i++) {
+      const MaPhongBan = results[i].MaPhongBan;
+
+      const queryDuyet = `
+        SELECT DaoTaoDuyet 
+        FROM quychuan 
+        WHERE Khoa = ? AND Dot = ? AND KiHoc = ? AND NamHoc = ?
+      `;
+      const connection = await createPoolConnection();
+
+      try {
+        const [check] = await connection.query(queryDuyet, [
+          MaPhongBan,
+          Dot,
+          KiHoc,
+          NamHoc,
+        ]);
+
+        let checkAll = true;
+        for (let j = 0; j < check.length; j++) {
+          if (check[j].DaoTaoDuyet == 0) {
+            checkAll = false;
+            break;
+          }
+        }
+        if (checkAll) {
+          kq += MaPhongBan + ",";
+        }
+      } finally {
+        connection.release(); // Giải phóng kết nối sau khi truy vấn xong
+      }
+    }
+  } finally {
+    connection1.release(); // Giải phóng kết nối sau khi lấy danh sách phòng ban
+  }
+
+  return kq;
+};
+
 // Mới
 const TaiChinhCheckAll = async (req, Dot, KiHoc, NamHoc) => {
   let kq = ""; // Biến để lưu kết quả
 
-  const connection = await createConnection();
+  const connection = await createPoolConnection();
 
   try {
     const query = `SELECT MaPhongBan FROM phongban WHERE isKhoa = 1`;
@@ -206,7 +219,7 @@ const TaiChinhCheckAll = async (req, Dot, KiHoc, NamHoc) => {
       }
     }
   } finally {
-    await connection.end(); // Đóng kết nối sau khi hoàn thành tất cả truy vấn
+    if (connection) connection.release();
   }
 
   return kq;
