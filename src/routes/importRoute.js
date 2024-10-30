@@ -56,6 +56,9 @@ router.post("/save-data", role.checkDaotaoRoleThiHanh, async (req, res) => {
 });
 
 // Định tuyến cho POST request tới /index / save - data
+// router.post("/ban-hanh", (req, res) => obj.importTableQC(req.body, res));
+
+// Định tuyến cho POST request tới /index / save - data
 router.post("/ban-hanh", role.checkDaotaoRoleThiHanh, async (req, res) => {
   try {
     // Gọi hàm xử lý dữ liệu import
@@ -76,6 +79,10 @@ router.post("/ban-hanh", role.checkDaotaoRoleThiHanh, async (req, res) => {
     });
   }
 });
+
+// kiểm tra tồn tại dữ liệu ban hành
+// router.post("/kiem-tra", (req, res) => obj2.getTableTam(req, res));
+
 
 // Định tuyến cho POST request tới /index / save - data
 router.post("/viewtam", role.checkDaotaoRoleThiHanh, async (req, res) => {
@@ -128,9 +135,9 @@ router.get("/getNamHoc", async (req, res) => {
   }
 });
 
-router.post("/kiem-tra-qcdk", role.checkDaotaoRoleThiHanh, obj.checkQCDK);
+router.post("/kiem-tra-file", role.checkDaotaoRoleThiHanh, obj.checkFile);
 
-router.post("/xoa-qcdk", role.checkDaotaoRoleThiHanh, obj.deleteQCDK);
+router.post("/xoa-file", role.checkDaotaoRoleThiHanh, obj.deleteFile);
 
 router.post("/submitData2", obj.submitData2);
 

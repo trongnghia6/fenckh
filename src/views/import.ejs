@@ -194,7 +194,7 @@
 
         <!-- Combo box với các giá trị CNTT, ATTT, DTVT -->
         <select class=" selectop" id="MaPhongBan">
-          <option value="">Tất cả các khoa</option>
+          <option value="">Khoa</option>
         </select>
         <button class="btn mx-2" id="import">
           Thêm
@@ -227,8 +227,8 @@
                 max-width: 300px;
                 text-align: center;
               ">
-            <p>
-              Đã tồn tại file quy chuẩn cũ! Bạn muốn XÓA file quy chuẩn cũ hay CHÈN thêm file quy chuẩn mới?
+            <p id="modal-message">
+              <!-- Đã tồn tại file quy chuẩn cũ! Bạn muốn XÓA file quy chuẩn cũ hay CHÈN thêm file quy chuẩn mới? -->
             </p>
             <button id="btn-delete" style="margin: 10px">Xóa</button>
             <button id="btn-append" style="margin: 10px">Chèn</button>
@@ -331,8 +331,6 @@
       window.location.href = "http://localhost:3000/tableTam"; // Thay URL bằng trang bạn muốn chuyển hướng đến
     };
   </script>
-
-
   <!-- phần chọn file -->
   <script>
     let dataTam = [];
@@ -410,66 +408,25 @@
       });
 
     document.getElementById("import").addEventListener("click", function () {
-
-      // const khoaValue = document.getElementById("MaPhongBan").value;
-      // const dotValue = document.getElementById("combobox-dot").value;
-      // const kiValue = document.getElementById("combobox-ki").value;
-      // const namValue = document.getElementById("NamHoc").value;
-
-      // let updatedData = [];
-
-      // // Cập nhật dữ liệu với các giá trị từ combobox
-      // updatedData = dataTam.map((item) => ({
-      //   ...item,
-      //   Khoa: khoaValue,
-      //   Dot: dotValue,
-      //   Ki: kiValue,
-      //   Nam: namValue,
-      // }));
-      // // Gửi dữ liệu đã được cập nhật để lưu
-      // fetch("http://localhost:3000/save-data", {
-      //   method: "POST",
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //   },
-      //   body: JSON.stringify(updatedData),
-      // })
-      //   .then((response) => {
-      //     if (!response.ok) {
-      //       throw new Error("Gửi dữ liệu thất bại");
-      //     }
-      //     return response.json();
-      //   })
-      //   .then((data) => {
-      //     if (data.success) {
-      //       alert("Import thành công!");
-      //     } else {
-      //       alert("Import thất bại!");
-      //     }
-      //   })
-      //   .catch((error) => {
-      //     alert("Gửi dữ liệu thất bại!");
-      //     console.error("Error:", error);
-      //   });
       if (dataTam.length !== 0) {
-        // Lấy giá trị hiện tại từ combo box "Khoa", "Đợt", "Kì", "Năm"
         const khoaValue = document.getElementById("MaPhongBan").value;
         const dotValue = document.getElementById("combobox-dot").value;
         const kiValue = document.getElementById("combobox-ki").value;
         const namValue = document.getElementById("NamHoc").value;
 
-        // Gửi giá trị để kiểm tra sự tồn tại của dữ liệu khoa
-        fetch("http://localhost:3000/kiem-tra-qcdk", {
+        const body = {
+          Khoa: khoaValue,
+          Dot: dotValue,
+          Ki: kiValue,
+          Nam: namValue
+        };
+
+        fetch("http://localhost:3000/kiem-tra-file", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({
-            Khoa: khoaValue,
-            Dot: dotValue,
-            Ki: kiValue,
-            Nam: namValue,
-          }),
+          body: JSON.stringify(body),
         })
           .then((response) => {
             if (!response.ok) {
@@ -479,55 +436,26 @@
           })
           .then((data) => {
             if (data.exists) {
-              // Hiển thị modal để người dùng chọn giữa Xóa hoặc Chèn
               const modal = document.getElementById("action-modal");
+              message = `Đã tồn tại dữ liệu của Khoa : ${body.Khoa} Đợt : ${body.Dot} Kì : ${body.Ki} Năm : ${body.Nam}. Bạn muốn XÓA file cũ hay CHÈN file mới?`
+              document.getElementById("modal-message").innerText = message;
               modal.style.display = "block";
 
-              // // Xử lý sự kiện khi người dùng chọn "Xóa"
-              // document
-              //   .getElementById("btn-delete")
-              //   .addEventListener("click", function () {
-              //     modal.style.display = "none"; // Ẩn modal
-              //     fetch("http://localhost:3000/delete-khoa", {
-              //       method: "POST",
-              //       headers: {
-              //         "Content-Type": "application/json",
-              //       },
-              //       body: JSON.stringify({
-              //         khoa: khoaValue,
-              //         dot: dotValue,
-              //         ki: kiValue,
-              //         nam: namValue,
-              //       }),
-              //     })
-              //       .then((response) => {
-              //         if (!response.ok) {
-              //           throw new Error("Xóa dữ liệu thất bại");
-              //         }
-              //         alert("Xóa thành công!");
-              //       })
-              //       .catch((error) => {
-              //         alert("Xóa dữ liệu thất bại!");
-              //         console.error("Error:", error);
-              //       });
-              //   });
-
-
-              // Hàm xử lý logic xóa dữ liệu
-              function handleDeleteClick() {
-                modal.style.display = "none"; // Ẩn modal
-
-                // Gửi yêu cầu xóa dữ liệu đến API
-                fetch("http://localhost:3000/xoa-qcdk", {
+              // Xử lý sự kiện "Xóa"
+              const deleteButton = document.getElementById("btn-delete");
+              deleteButton.onclick = null; // Xóa sự kiện cũ nếu có
+              deleteButton.onclick = function handleDeleteClick() {
+                modal.style.display = "none";
+                fetch("http://localhost:3000/xoa-file", {
                   method: "POST",
                   headers: {
                     "Content-Type": "application/json",
                   },
                   body: JSON.stringify({
-                    khoa: khoaValue,
-                    dot: dotValue,
-                    ki: kiValue,
-                    nam: namValue,
+                    Khoa: khoaValue,
+                    Dot: dotValue,
+                    Ki: kiValue,
+                    Nam: namValue,
                   }),
                 })
                   .then((response) => {
@@ -540,19 +468,13 @@
                     alert("Xóa dữ liệu thất bại!");
                     console.error("Error:", error);
                   });
-              }
+              };
 
-              // Kiểm tra xem đã gán sự kiện xóa hay chưa và chỉ gán một lần
-              const deleteButton = document.getElementById("btn-delete");
-              deleteButton.removeEventListener("click", handleDeleteClick); // Xóa sự kiện cũ nếu có
-              deleteButton.addEventListener("click", handleDeleteClick); // Gán sự kiện mới
-
-
-              // Hàm xử lý logic chèn thêm dữ liệu
-              function handleAppendClick() {
-                modal.style.display = "none"; // Ẩn modal
-
-                // Cập nhật dữ liệu với các giá trị từ combobox
+              // Xử lý sự kiện "Chèn"
+              const appendButton = document.getElementById("btn-append");
+              appendButton.onclick = null; // Xóa sự kiện cũ nếu có
+              appendButton.onclick = function handleAppendClick() {
+                modal.style.display = "none";
                 updatedData = dataTam.map((item) => ({
                   ...item,
                   Khoa: khoaValue,
@@ -561,7 +483,6 @@
                   Nam: namValue,
                 }));
 
-                // Gửi dữ liệu đã được cập nhật đến API save-data
                 fetch("http://localhost:3000/save-data", {
                   method: "POST",
                   headers: {
@@ -584,23 +505,16 @@
                     }
                   })
                   .catch((error) => {
-                    // alert("Chèn thêm dữ liệu thất bại!");
                     console.error("Error:", error);
                   });
-              }
-              // Kiểm tra xem đã gán sự kiện chưa và chỉ gán một lần
-              const appendButton = document.getElementById("btn-append");
-              appendButton.removeEventListener("click", handleAppendClick); // Xóa sự kiện cũ nếu có
-              appendButton.addEventListener("click", handleAppendClick); // Gán sự kiện mới
+              };
 
-              // Xử lý sự kiện khi người dùng chọn "Hủy"
               document
                 .getElementById("btn-cancel")
-                .addEventListener("click", function () {
-                  modal.style.display = "none"; // Ẩn modal
-                });
+                .onclick = function () {
+                  modal.style.display = "none";
+                };
             } else {
-              // Nếu Khoa không tồn tại, tiếp tục thêm và gửi dữ liệu
               updatedData = dataTam.map((item) => ({
                 ...item,
                 Khoa: khoaValue,
@@ -609,7 +523,6 @@
                 Nam: namValue,
               }));
 
-              // Gửi dữ liệu đã được cập nhật để lưu
               fetch("http://localhost:3000/save-data", {
                 method: "POST",
                 headers: {
@@ -645,30 +558,13 @@
         return;
       }
     });
+
+
   </script>
-
-
-
-
+  <!-- link  -->
   <script>
 
     document.addEventListener("DOMContentLoaded", () => {
-      // Thêm sự kiện click cho phần tử có id "import"
-      // const importLink = document.getElementById("Import");
-
-      // importLink.addEventListener("click", function (event) {
-      //   event.preventDefault(); // Ngăn chặn hành vi mặc định của liên kết
-
-      //   const isKhoa = localStorage.getItem("isKhoa"); // Lấy role từ localStorage
-
-      //   if (isKhoa == 0) {
-      //     // Nếu là đào tạo hoặc tài chính
-      //     window.location.href = "/import";
-      //   } else {
-      //     // Nếu là khoa
-      //     window.location.href = "/importGvmList";
-      //   }
-      // });
 
       // Thêm sự kiện click cho phần tử có id="ThongTinGD"
       const ThongTinGD = document.getElementById("ThongTinGD");
@@ -784,7 +680,7 @@
           // Kiểm tra nếu response thành công
           const MaPhongBan = response.MaPhongBan;
           if (response.success) {
-            $('#MaPhongBan').prepend('<option value="ALL">Tất cả khoa</option>');
+            // $('#MaPhongBan').prepend('<option value="ALL">Tất cả khoa</option>');
             // Lặp qua từng mục trong mảng MaPhongBan
             response.MaPhongBan.forEach(function (item) {
               // Nếu item.MaPhongBan bằng boMon.MaPhongBan, hiển thị trước

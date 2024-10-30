@@ -40,6 +40,32 @@ const convertExcelToJSON = (filePath) => {
   }
 };
 
+const checkDataQC = async (req, res) => {
+  const tableName = process.env.DB_TABLE_QC; // Lấy tên bảng từ biến môi trường
+  const { Dot, Ki, Nam } = req.body; // Lấy các giá trị từ body request
+
+  // Câu truy vấn kiểm tra sự tồn tại của giá trị Khoa trong bảng
+  const queryCheck = `SELECT EXISTS(SELECT 1 FROM ${tableName} WHERE Dot = ? AND Ki = ? AND Nam = ?) AS exist;`;
+
+  // Kiểm tra sự tồn tại
+  connection.query(queryCheck, [Dot, Ki, Nam], (err, results) => {
+    if (err) {
+      console.error("Lỗi khi kiểm tra file import:", err);
+      return res.status(500).json({ error: "Lỗi kiểm tra cơ sở dữ liệu" });
+    }
+
+    // Kết quả trả về từ cơ sở dữ liệu
+    const exist = results[0].exist === 1;
+
+    if (exist) {
+      return res.status(200).json({ message: "Dữ liệu đã tồn tại trong hệ thống." });
+    } else {
+      return res.status(404).json({ message: "Dữ liệu không tồn tại trong hệ thống." });
+    }
+  });
+};
+
+
 const importTableQC = async (jsonData) => {
   const tableName = process.env.DB_TABLE_QC; // Giả sử biến này có giá trị là "quychuan"
 
@@ -253,6 +279,7 @@ const importTableQC = async (jsonData) => {
   });
 
   let results = false;
+
   try {
     await Promise.all(insertPromises);
 
@@ -277,6 +304,8 @@ const importTableQC = async (jsonData) => {
 
   return results;
 };
+
+
 
 // Hàm nhập dữ liệu vào bảng quychuan
 const importTableTam = async (jsonData) => {
@@ -537,10 +566,9 @@ const handleUploadAndRender = async (req, res) => {
   res.send(jsonResult);
 };
 
-const checkQCDK = async (req, res) => {
-  const { Khoa, Dot, Ki, Nam } = req.body; // Lấy giá trị Khoa từ yêu cầu client
+const checkFile = async (req, res) => {
   const tableName = process.env.DB_TABLE_TAM; // Lấy tên bảng từ biến môi trường
-
+  const { Khoa, Dot, Ki, Nam } = req.body;
   // Câu truy vấn kiểm tra sự tồn tại của giá trị Khoa trong bảng
   const queryCheck = `SELECT EXISTS(SELECT 1 FROM ${tableName} WHERE Khoa = ? AND Dot = ? AND Ki = ? AND Nam = ?) AS exist;`;
 
@@ -548,7 +576,7 @@ const checkQCDK = async (req, res) => {
   return new Promise((resolve, reject) => {
     connection.query(queryCheck, [Khoa, Dot, Ki, Nam], (err, results) => {
       if (err) {
-        console.error("Lỗi khi kiểm tra Khoa:", err);
+        console.error("Lỗi khi kiểm tra file import:", err);
         return reject(
           res.status(500).json({ error: "Lỗi kiểm tra cơ sở dữ liệu" })
         );
@@ -577,31 +605,29 @@ const checkQCDK = async (req, res) => {
 };
 
 // Hàm xóa row theo trường 'Khoa'
-const deleteQCDK = (req, res) => {
-  const { khoa } = req.body; // Nhận giá trị từ client thông qua body
+const deleteFile = (req, res) => {
   const tableName = process.env.DB_TABLE_TAM; // Lấy tên bảng từ biến môi trường
-  if (!khoa) {
-    return res.status(400).json({ message: "Missing required field: Khoa" });
-  }
+
+  const { Khoa, Dot, Ki, Nam } = req.body;
 
   // Query SQL để xóa row
-  const sql = `DELETE FROM ${tableName} WHERE Khoa = ?`;
+  const sql = `DELETE FROM ${tableName} WHERE Khoa = ? AND Dot = ? AND Ki = ? AND Nam = ?`;
 
-  connection.query(sql, [khoa], (err, results) => {
+  connection.query(sql, [Khoa, Dot, Ki, Nam], (err, results) => {
     if (err) {
       console.error(err);
       return res
         .status(500)
-        .json({ message: "Error executing query", error: err });
+        .json({ message: "Lỗi truy vấn", error: err });
     }
 
     if (results.affectedRows === 0) {
       return res
         .status(404)
-        .json({ message: "No row found with the given Khoa" });
+        .json({ message: "Không tìm thấy dữ liệu" });
     }
 
-    return res.status(200).json({ message: "Row deleted successfully" });
+    return res.status(200).json({ message: "Xóa thành công" });
   });
 };
 
@@ -1407,10 +1433,11 @@ module.exports = {
   importJSONToDB,
   importTableQC,
   importTableTam,
-  checkQCDK,
-  deleteQCDK,
+  checkFile,
+  deleteFile,
   updateChecked,
   updateAllTeachingInfo,
   submitData2,
   updateQC,
+  checkDataQC,
 };
