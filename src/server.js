@@ -26,6 +26,7 @@ const infoHDGvmRoutes = require("./routes/infoHDGvmRoute");
 const adminRoute = require("./routes/adminRoute");
 const xemCacLopGvmRoute = require("./routes/xemCacLopGvmRoute");
 const phuLucHDRoute = require('./routes/phuLucHDRoute');
+const exportHDRoute = require('./routes/exportHDRoute');
 
 
 const app = express();
@@ -77,6 +78,7 @@ app.use("/", importGvmList);
 app.use("/", infoHDGvmRoutes);
 app.use("/", adminRoute);
 app.use('/', phuLucHDRoute);
+app.use('/', exportHDRoute);
 
 app.use("/", xemCacLopGvmRoute);
 
