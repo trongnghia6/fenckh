@@ -532,6 +532,7 @@
                       throw new Error("Xóa dữ liệu thất bại");
                     }
                     alert("Xóa thành công!");
+                    location.reload();
                   })
                   .catch((error) => {
                     alert("Xóa dữ liệu thất bại!");
@@ -569,6 +570,7 @@
                     if (data.success) {
                       console.log(updatedData);
                       alert("Chèn thành công!");
+                      location.reload();
                     } else {
                       alert("Chèn thêm thất bại!");
                     }
@@ -607,9 +609,9 @@
                 })
                 .then((data) => {
                   if (data.success) {
-                    alert("Import thành công!");
+                    alert("Thêm file thành công!");
                   } else {
-                    alert("Import thất bại!");
+                    alert("Thêm file thất bại!");
                   }
                 })
                 .catch((error) => {
