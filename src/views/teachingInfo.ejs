@@ -1072,7 +1072,7 @@
     }
 
     document.addEventListener('DOMContentLoaded', function () {
-      alert(localStorage.getItem("MaPhongBan"));
+      // alert(localStorage.getItem("MaPhongBan"));
       viewData();
       init();
     });
@@ -1193,6 +1193,7 @@
           }
         }
       });
+      calculateTotals();
     }
   </script>
 
@@ -1229,6 +1230,7 @@
           checkbox.disabled = true; // Vô hiệu hóa checkbox
         }
       });
+      calculateTotals();
     }
 
     // xử lí tìm theo lớp
@@ -1261,6 +1263,7 @@
           checkbox.disabled = true; // Vô hiệu hóa checkbox
         }
       });
+      calculateTotals();
     }
 
     // hàm check All
