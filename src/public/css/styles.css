@@ -156,7 +156,6 @@ body {
   transform: perspective(500px) translateZ(10px);
   /* Tạo hiệu ứng nổi 3D */
   box-shadow: 0 10px 10px rgba(0, 0, 0, 0.3);
-
 }
 
 .login {
@@ -225,8 +224,6 @@ button#xoa-qc-du-kien,
   font-size: 17px;
 } */
 
-
-
 #filter {
   width: 60px;
 }
@@ -250,7 +247,6 @@ button#render,
 #quychuandukien {
   width: 200px;
 } */
-
 
 #ban-hanh {
   width: auto;
@@ -339,9 +335,8 @@ button#render:hover::before,
 }
 
 .selectop {
-
   height: 45px;
-  border: 2px solid #0077ff;
+  border: 2px solid #2c9caf;
   border-radius: 5px;
   font-size: 1.2em;
   font-weight: 550;
@@ -406,7 +401,6 @@ td {
 
 .container-fluid {
   width: auto;
-
 }
 
 .box {
@@ -440,7 +434,6 @@ td {
 }
 
 @media (max-width: 768px) {
-
   .w-20,
   .w-30,
   .w-80 {
@@ -518,7 +511,7 @@ td {
   /* Thu nhỏ font size */
   background-color: #fff;
   /* Màu nền trắng */
-  border: 2px solid #315cfd;
+  /* border: 2px solid #315cfd; */
   /* Đường viền mỏng và tinh tế */
   border-radius: 4px;
   /* Bo góc nhẹ */
@@ -549,7 +542,7 @@ td {
 
 /* Thêm mũi tên bằng CSS */
 .custom-select::after {
-  content: '▼';
+  content: "▼";
   /* Biểu tượng mũi tên */
   position: absolute;
   top: 50%;
@@ -561,7 +554,7 @@ td {
 }
 
 .add-taikhoan {
-  background-color: #4CAF50;
+  background-color: #4caf50;
   color: #fff;
   border: none;
   padding: 10px 20px;
@@ -570,7 +563,7 @@ td {
 }
 
 .btn-them-tai-khoan {
-  background-color: #4CAF50;
+  background-color: #4caf50;
   /* Màu xanh lá */
   color: white;
   padding: 10px 20px;
@@ -594,7 +587,7 @@ td {
 }
 
 .btn-hien-thi-tk {
-  background-color: #4CAF50;
+  background-color: #4caf50;
   /* Màu xanh lá */
   color: white;
   padding: 10px 20px;
@@ -755,7 +748,7 @@ input[type="date"] {
   /* border: none; */
   border-radius: 5px;
   font-weight: bold;
-  letter-spacing: 5px;
+  /* letter-spacing: 5px; */
   text-transform: uppercase;
   cursor: pointer;
   color: #2c9caf;
@@ -764,6 +757,7 @@ input[type="date"] {
   position: relative;
   overflow: hidden;
   border: 2px solid #2c9caf !important;
+  background-color: #faf7f0;
 }
 
 .btn:hover {
@@ -784,10 +778,13 @@ input[type="date"] {
   z-index: -1;
   transition: width 1000ms;
   outline: 2px solid #2c9caf;
-
 }
 
 .btn:hover::before {
   width: 250%;
-
+}
+select{
+  background-color: #FAF7F0 !important;
+  text-align: center;
+  color: #2c9caf !important;
 }

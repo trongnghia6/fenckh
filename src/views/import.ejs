@@ -13,7 +13,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
 </head>
 <style>
-  .btn{
+  .btn {
     height: 45px;
     margin-bottom: 0px;
     text-wrap: nowrap;
@@ -143,7 +143,7 @@
             <div class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownUser" data-bs-toggle="dropdown"
                 aria-expanded="false">
-                 Hệ Thống
+                Hệ Thống
               </a>
               <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                 <a class="nav-link" id="" href="log">Xem File Log</a>
@@ -203,9 +203,8 @@
           Bảng qc dự kiến
         </button>
 
-        <!-- <button class="btn btn-outline-primary" id="importFile">Import</button> -->
       </div>
-      <!-- Modal -->
+      <!-- Modal
       <div id="action-modal" style="display: none">
         <div style="
               position: fixed;
@@ -213,7 +212,6 @@
               left: 0;
               width: 100%;
               height: 100%;
-              /* transform: translateX(-50%) translateY(-50%); */
               background: rgba(0, 0, 0, 0.5);
               display: flex;
               justify-content: center;
@@ -228,14 +226,85 @@
                 text-align: center;
               ">
             <p id="modal-message">
-              <!-- Đã tồn tại file quy chuẩn cũ! Bạn muốn XÓA file quy chuẩn cũ hay CHÈN thêm file quy chuẩn mới? -->
             </p>
             <button id="btn-delete" style="margin: 10px">Xóa</button>
             <button id="btn-append" style="margin: 10px">Chèn</button>
             <button id="btn-cancel" style="margin: 10px">Hủy</button>
           </div>
         </div>
+      </div> -->
+      <div id="action-modal" style="display: none;">
+        <div style="
+              position: fixed;
+              top: 0;
+              left: 0;
+              width: 100%;
+              height: 100%;
+              background: rgba(0, 0, 0, 0.6);
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              z-index: 10000000000;
+            ">
+          <div style="
+                background: #ffffff;
+                padding: 25px;
+                border-radius: 12px;
+                max-width: 350px;
+                width: 90%;
+                text-align: center;
+                box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2);
+              ">
+            <p id="modal-message" style="
+                  font-size: 16px;
+                  color: #333;
+                  margin-bottom: 20px;
+                ">
+              Đây là nội dung của modal.
+            </p>
+            <button id="btn-delete" style="
+                  background-color: #e74c3c;
+                  color: white;
+                  border: none;
+                  padding: 10px 20px;
+                  margin: 5px;
+                  border-radius: 6px;
+                  cursor: pointer;
+                  font-size: 14px;
+                  transition: background-color 0.3s;
+                " onmouseover="this.style.backgroundColor='#c0392b'" onmouseout="this.style.backgroundColor='#e74c3c'">
+              Xóa
+            </button>
+            <button id="btn-append" style="
+                  background-color: #3498db;
+                  color: white;
+                  border: none;
+                  padding: 10px 20px;
+                  margin: 5px;
+                  border-radius: 6px;
+                  cursor: pointer;
+                  font-size: 14px;
+                  transition: background-color 0.3s;
+                " onmouseover="this.style.backgroundColor='#2980b9'" onmouseout="this.style.backgroundColor='#3498db'">
+              Chèn
+            </button>
+            <button id="btn-cancel" style="
+                  background-color: #95a5a6;
+                  color: white;
+                  border: none;
+                  padding: 10px 20px;
+                  margin: 5px;
+                  border-radius: 6px;
+                  cursor: pointer;
+                  font-size: 14px;
+                  transition: background-color 0.3s;
+                " onmouseover="this.style.backgroundColor='#7f8c8d'" onmouseout="this.style.backgroundColor='#95a5a6'">
+              Hủy
+            </button>
+          </div>
+        </div>
       </div>
+
 
       <div id="dataTableContainer" class="h-75"></div>
     </div>

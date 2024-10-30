@@ -52,7 +52,7 @@
 
 .gvmList .filter {
   padding: 8px;
-  border: 1px solid #ccc;
+  border: 2px solid #2c9caf;
   border-radius: 4px;
   width: fit-content;
   cursor: pointer;
@@ -270,4 +270,9 @@
 
 #tableContainer {
   margin-top: 20
+}
+input{
+  border: 2px solid #2c9caf;
+  border-radius: 5px;
+  background-color: #FAF7F0;
 }
