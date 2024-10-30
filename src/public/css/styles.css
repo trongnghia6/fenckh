@@ -764,6 +764,7 @@ input[type="date"] {
   position: relative;
   overflow: hidden;
   border: 2px solid #2c9caf !important;
+  background-color: #FAF7F0;
 }
 
 .btn:hover {
