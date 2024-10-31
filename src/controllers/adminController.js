@@ -549,10 +549,10 @@ const AdminController = {
       const [result2] = await connection.query(query2);
       const query3 = "SELECT *FROM `dot` ORDER BY trangthai DESC";
       const [result3] = await connection.query(query3);
-  
+
       // Đóng kết nối sau khi truy vấn hoàn thành
-      connection.end();
-  
+      //connection.end();
+
       res.json({
         success: true,
         NamHoc: result1,
@@ -563,9 +563,9 @@ const AdminController = {
       console.error("Lỗi: ", error);
       res.status(500).json({
         success: false,
-        message: "Đã có lỗi xảy ra khi lấy dữ liệu năm học"
+        message: "Đã có lỗi xảy ra khi lấy dữ liệu năm học",
       });
-    }finally {
+    } finally {
       if (connection) connection.release(); // Đảm bảo giải phóng kết nối
     }
   },

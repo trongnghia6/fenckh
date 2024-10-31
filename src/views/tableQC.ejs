@@ -566,8 +566,10 @@
   <script>
     window.onload = function () {
       const TenNhanVien = localStorage.getItem("TenNhanVien"); // Lấy tên người dùng từ localStorage
-      const Role = localStorage.getItem("userRole");
-
+      let Role = localStorage.getItem("userRole");
+      if (Role.toUpperCase() == 'LÃNH ĐẠO KHOA'){
+        Role = 'LĐK';
+      }
       if (TenNhanVien) {
         // Hiển thị tên người dùng trên phần tử HTML
         document.querySelector('.fullname').innerText = `${TenNhanVien} - ${Role}`;
