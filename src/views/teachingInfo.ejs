@@ -514,7 +514,7 @@
   </script>
 
   <!-- phần chèn ngày bd kt cho tất cả các dòng khi nhấn Chèn -->
-  <script>
+  <!-- <script>
     document.getElementById('fillDay').addEventListener('click', function () {
       // Lấy giá trị của ngày bắt đầu và ngày kết thúc
       const globalStartDate = document.getElementById('startDate').value;
@@ -543,6 +543,7 @@
 
       // Lấy dữ liệu từ localStorage (giả sử dữ liệu đã có id)
       let data = JSON.parse(localStorage.getItem('tableData'));
+
       console.log(data);
 
       // Lấy tất cả các dòng đang hiển thị trong bảng (có chứa id của đối tượng)
@@ -576,6 +577,7 @@
         }
       });
 
+      alert("data = " + JSON.stringify(data));
       // Lưu lại dữ liệu đã cập nhật vào localStorage
       localStorage.setItem('tableData', JSON.stringify(data));
 
@@ -604,7 +606,104 @@
           alert('Có lỗi xảy ra khi cập nhật dữ liệu.');
         });
     });
+  </script> -->
+
+  <script>
+    document.getElementById('fillDay').addEventListener('click', function () {
+      // Lấy giá trị của ngày bắt đầu và ngày kết thúc
+      const globalStartDate = document.getElementById('startDate').value;
+      const globalEndDate = document.getElementById('endDate').value;
+  
+      // Kiểm tra nếu người dùng chưa nhập ngày
+      if (!globalStartDate || !globalEndDate) {
+        alert('Vui lòng nhập ngày bắt đầu và ngày kết thúc.');
+        return;
+      }
+  
+      // Chèn ngày bắt đầu, bỏ qua các ô bị disable
+      document.querySelectorAll("input[id^='NgayBatDau_']").forEach(input => {
+        if (!input.disabled && input.offsetParent !== null) {
+          input.value = globalStartDate;
+        }
+      });
+  
+      // Chèn ngày kết thúc, bỏ qua các ô bị disable
+      document.querySelectorAll("input[id^='NgayKetThuc_']").forEach(input => {
+        if (!input.disabled && input.offsetParent !== null) {
+          input.value = globalEndDate;
+        }
+      });
+  
+      // Lấy dữ liệu từ localStorage
+      let data = JSON.parse(localStorage.getItem('tableData')) || [];
+      alert('Dữ liệu trước khi cập nhật: ', JSON.stringify(data));
+  
+      // Lấy tất cả các dòng đang hiển thị trong bảng
+      const rows = document.querySelectorAll('#tableBody tr');
+  
+      rows.forEach(row => {
+        // Lấy id của hàng từ thuộc tính data-id
+        const rowId = row.getAttribute('data-id');
+        let item = data.find(d => parseInt(d.id) === parseInt(rowId));
+  
+        // Nếu tìm thấy đối tượng và KhoaDuyet == 0
+        if (item && item.KhoaDuyet == 0) {
+          // Cập nhật giá trị vào localStorage
+          item.NgayBatDau = globalStartDate;
+          item.NgayKetThuc = globalEndDate;
+  
+          // Cập nhật ngày bắt đầu và kết thúc trong hàng của bảng
+          const ngayBatDauCell = row.querySelector('.ngay-bat-dau');
+          const ngayKetThucCell = row.querySelector('.ngay-ket-thuc');
+  
+          // Cập nhật giá trị trong bảng
+          if (ngayBatDauCell) ngayBatDauCell.textContent = globalStartDate;
+          if (ngayKetThucCell) ngayKetThucCell.textContent = globalEndDate;
+  
+          // Lấy giá trị từ các ô input bị ẩn và cập nhật vào localStorage
+          const ngayBatDauInput = document.getElementById(`NgayBatDau_${rowId}`);
+          const ngayKetThucInput = document.getElementById(`NgayKetThuc_${rowId}`);
+  
+          if (ngayBatDauInput) {
+            item.NgayBatDau = ngayBatDauInput.value || item.NgayBatDau; // Lấy giá trị ô input
+          }
+          if (ngayKetThucInput) {
+            item.NgayKetThuc = ngayKetThucInput.value || item.NgayKetThuc; // Lấy giá trị ô input
+          }
+        }
+      });
+  
+      // Lưu lại dữ liệu đã cập nhật vào localStorage
+      localStorage.setItem('tableData', JSON.stringify(data));
+      alert('Dữ liệu sau khi cập nhật: ', JSON.stringify(data));
+  
+      // Gửi dữ liệu đã cập nhật lên server
+      fetch('http://localhost:3000/check-teaching', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Lỗi khi gửi dữ liệu');
+          }
+          return response.json();
+        })
+        .then(data => {
+          alert(data.message);
+          console.log(data.message);
+        })
+        .catch(error => {
+          console.error('Có lỗi xảy ra:', error);
+          alert('Có lỗi xảy ra khi cập nhật dữ liệu.');
+        });
+    });
   </script>
+  
+  
+  
 
 
   <!-- phần render bảng dùng localStorage -->
