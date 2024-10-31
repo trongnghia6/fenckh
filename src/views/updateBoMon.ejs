@@ -73,7 +73,7 @@
   </nav>
   <div class="container my-5 box">
     <h2>Sửa Bộ Môn </h2>
-    <form id="updateBoMon" action="/updateBoMon/<%= boMon.MaBoMon%>" method="POST">
+    <form id="updateBoMon" action="/updateBoMon/<%= boMon.id_BoMon %>" method="POST">
       <div class="row mb-3">
         <div class="col-md-4 input-wrapper">
           <label for="MaPhongBan" class="form-label">Mã Phòng Ban</label>
@@ -90,7 +90,7 @@
             class="form-control"
             id="MaBoMon"
             name="MaBoMon" value="<%= boMon.MaBoMon %>"
-            readonly required
+             required
           />
         </div>
       </div>

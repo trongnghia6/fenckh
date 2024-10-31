@@ -112,34 +112,13 @@ router.post("/viewtam", role.checkDaotaoRoleThiHanh, async (req, res) => {
 
 router.post("/get-table-tam", (req, res) => obj2.getTableTam(req, res));
 
-
-router.get("/getNamHoc", async (req, res) => {
-  try {
-    const connection = await createConnection();
-    const query = "SELECT NamHoc FROM `namhoc` ORDER BY NamHoc ASC";
-    const [result] = await connection.query(query);
-
-    // Đóng kết nối sau khi truy vấn hoàn thành
-    connection.end();
-
-    res.json({
-      success: true,
-      NamHoc: result
-    });
-  } catch (error) {
-    console.error("Lỗi: ", error);
-    res.status(500).json({
-      success: false,
-      message: "Đã có lỗi xảy ra khi lấy dữ liệu năm học"
-    });
-  }
-});
-
 router.post("/kiem-tra-file", role.checkDaotaoRoleThiHanh, obj.checkFile);
 
 router.post("/xoa-file", role.checkDaotaoRoleThiHanh, obj.deleteFile);
 
 router.post("/submitData2", obj.submitData2);
+
+router.post('/update/:NamHoc/:Ki/:Dot', obj.updateBanHanh);
 
 
 module.exports = router;
