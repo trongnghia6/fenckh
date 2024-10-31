@@ -72,6 +72,7 @@ const checkDataQC = async (req, res) => {
 const importTableQC = async (jsonData) => {
   const tableName = process.env.DB_TABLE_QC; // Giả sử biến này có giá trị là "quychuan"
 
+  // console.log(jsonData);
   function tachChuoi(chuoi) {
     // Kiểm tra đầu vào
     if (typeof chuoi !== "string" || chuoi.trim() === "") {
@@ -175,19 +176,6 @@ const importTableQC = async (jsonData) => {
         },
       ];
     } else {
-      // const gvmKeyword1 = "( gvm )"; // Từ khóa cho giảng viên mời
-      // const gvmKeyword2 = "Giảng viên mời"; // Từ khóa cho giảng viên mời
-
-      // // Nếu chuỗi đầu vào rỗng, trả về giá trị mặc định
-      // if (!giaoVienInput || giaoVienInput.trim() === "") {
-      //   return [{ MoiGiang: false, GiaoVienGiangDay: "" }];
-      // }
-
-      // // Kiểm tra xem có giảng viên mời hay không
-      // const isGuestLecturer =
-      //   giaoVienInput.toLowerCase().includes(gvmKeyword1.toLowerCase()) ||
-      //   giaoVienInput.toLowerCase().includes(gvmKeyword2.toLowerCase());
-
       // Tách tên giảng viên từ chuỗi
       const titleRegex = /(PGS\.?|( gvm )\.?|TS\.?|PGS\.? TS\.?)\s*/gi; // Biểu thức chính quy để loại bỏ danh hiệu gồm PGS. TS. PGS. TS. ( gvm )
 
@@ -208,14 +196,95 @@ const importTableQC = async (jsonData) => {
       // Tạo mảng kết quả chứa thông tin giảng viên
       return [
         {
-          MoiGiang: true, // Không có giảng viên mời
+          MoiGiang: true, // Có giảng viên mời
           GiaoVienGiangDay: lecturers[0], // Lấy tên giảng viên đầu tiên
         },
       ];
     }
   }
 
-  // console.log("ok");
+  const getBoMon = async (lecturers) => {
+    // console.log(lecturers);
+
+    // Câu truy vấn SQL
+    const query = "SELECT HoTen, MonGiangDayChinh FROM `gvmoi` WHERE HoTen = ?";
+
+    // Tạo mảng các Promise để thực hiện truy vấn với từng tên giảng viên
+    const lecturerPromises = lecturers.map(async (lecturerName) => {
+      // console.log(lecturerName);
+      if (!lecturerName) return null; // Kiểm tra nếu tên giảng viên không hợp lệ
+
+      try {
+        const results = await new Promise((resolve, reject) => {
+          connection.query(query, [lecturerName], (err, results) => {
+            if (err) {
+              console.error("Error:", err);
+              return reject(err);
+            }
+            resolve(results);
+          });
+        });
+
+        // Nếu có kết quả, trả về đối tượng chứa thông tin giảng viên
+        return results[0] || null; // trả về thông tin giảng viên hoặc null nếu không có kết quả
+      } catch (error) {
+        console.error("Error fetching lecturer info:", error);
+        return null; // Trả về null nếu có lỗi xảy ra
+      }
+    });
+
+    try {
+      // Đợi tất cả các truy vấn hoàn thành và lọc bỏ kết quả null
+      const results = await Promise.all(lecturerPromises);
+      return results.filter(Boolean); // Trả về mảng các đối tượng chứa thông tin giảng viên
+    } catch (error) {
+      console.error("Error during processing lecturer promises:", error);
+      return []; // Trả về mảng rỗng nếu có lỗi
+    }
+  };
+
+  // Hàm này để kết nối hai hàm tachGiaoVien và getBoMon với nhau
+  // Hàm để lấy thông tin giảng viên từ cơ sở dữ liệu
+  const dataBoMon = async (jsonData) => {
+    const allResults = []; // Mảng để chứa tất cả kết quả
+
+    for (const item of jsonData) {
+      const giaoVienInput = item.GiaoVien; // Lấy giá trị GiaoVien từ từng đối tượng
+      const lecturerInfo = tachGiaoVien(giaoVienInput); // Tách thông tin giảng viên
+
+      // Lấy tên giảng viên từ kết quả
+      const lecturers = lecturerInfo.map(info => info.GiaoVienGiangDay).filter(Boolean);
+
+      // Nếu không có giảng viên nào, bỏ qua vòng lặp
+      if (lecturers.length === 0) {
+        continue;
+      }
+
+      // Gọi hàm getBoMon để lấy thông tin chi tiết giảng viên từ cơ sở dữ liệu
+      const boMonResults = await getBoMon(lecturers);
+
+      // Ánh xạ kết quả từ cơ sở dữ liệu thành các đối tượng và thêm vào mảng allResults
+      boMonResults.forEach(item => {
+        allResults.push({
+          HoTen: item.HoTen, // Tên giảng viên
+          MonGiangDayChinh: item.MonGiangDayChinh, // Môn giảng dạy chính
+        });
+      });
+    }
+
+    return allResults; // Trả về mảng chứa tất cả thông tin giảng viên
+  };
+
+  // Hàm thực thi ví dụ cho việc gọi dataBoMon với dữ liệu từ jsonData
+  const executeDataBoMonFromJsonData = async (jsonData) => {
+    const results = await dataBoMon(jsonData); // Gọi hàm và chờ kết quả
+    // console.log("Thông tin giảng viên trả về:", results); // Xuất kết quả ra console
+    return results;
+  };
+
+  const boMonData = await executeDataBoMonFromJsonData(jsonData);
+  // console.log(boMonData);
+
   // Tạo câu lệnh INSERT động với các trường đầy đủ
   const queryInsert = `INSERT INTO ${tableName} (
     Khoa,
@@ -229,6 +298,7 @@ const importTableQC = async (jsonData) => {
     MaHocPhan, 
     LopHocPhan,
     TenLop, 
+    BoMon,
     LL, 
     SoTietCTDT, 
     HeSoT7CN, 
@@ -236,7 +306,7 @@ const importTableQC = async (jsonData) => {
     HeSoLopDong, 
     QuyChuan, 
     GhiChu
-  ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`;
+  ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`;
 
   const insertPromises = jsonData.flatMap((item) => {
     // Sử dụng hàm tachChuoi để tách các thông tin từ chuỗi
@@ -244,9 +314,18 @@ const importTableQC = async (jsonData) => {
 
     // Tách giảng viên và tạo mảng các đối tượng giảng viên
     const giangVienArray = tachGiaoVien(item["GiaoVien"]);
-    console.log(giangVienArray);
+    // const boMondata = executeDataBoMonFromJsonData(jsonData);
+
+    // Giả sử boMon là mảng các đối tượng đã được lấy từ jsonData
+    // const boMondata = executeDataBoMonFromJsonData(jsonData);
+
     return giangVienArray.map(({ MoiGiang, GiaoVienGiangDay }) => {
       return new Promise((resolve, reject) => {
+        // Tìm MonGiangDayChinh tương ứng với GiaoVienGiangDay
+        const boMonFound = boMonData.find(boMon => boMon.HoTen === GiaoVienGiangDay);
+        const monGiangDayChinh = boMonFound ? boMonFound.MonGiangDayChinh : "";
+
+        // Tạo mảng giá trị
         const values = [
           item["Khoa"], // Khoa
           item["Dot"], // Đợt
@@ -259,6 +338,7 @@ const importTableQC = async (jsonData) => {
           item["MaHocPhan"], // Mã học phần
           TenLop, // Lớp học phần (được tách từ chuỗi)
           Lop,
+          monGiangDayChinh, // Thêm MonGiangDayChinh nếu có
           item["LL"], // LL (Số tiết theo lịch)
           item["SoTietCTDT"], // Số tiết theo CTĐT
           item["HeSoT7CN"], // Hệ số T7/CN
@@ -279,6 +359,7 @@ const importTableQC = async (jsonData) => {
       });
     });
   });
+
 
   let results = false;
 
@@ -306,6 +387,7 @@ const importTableQC = async (jsonData) => {
 
   return results;
 };
+
 
 // Hàm nhập dữ liệu vào bảng quychuan
 const importTableTam = async (jsonData) => {
