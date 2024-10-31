@@ -343,7 +343,7 @@
         <input type="text" id="filterClass" placeholder="Tìm theo tên học phần" oninput="filterByClass()"
           class="form-control m-2 search" style="width: 200px;" />
         <input type="text" id="filterKhoa" placeholder="Tìm theo khoa" oninput="filterByKhoa()"
-          class="form-control m-2 search" style="width: 200px;" />
+          class="form-control m-2 search" style="width: 200px; display: none;" />
         <!-- Tìm kiếm theo bộ môn -->
         <input type="text" id="filterBoMon" placeholder="Tìm theo tên bộ môn"
           onkeyup="filterBoMon(); showSuggestionsBoMon(this)" onclick="showSuggestionsBoMon(this)"
@@ -587,14 +587,14 @@
 
     // Chèn ngày bắt đầu, bỏ qua các ô bị disable
     document.querySelectorAll("input[id^='NgayBatDau_']").forEach(input => {
-      if (!input.disabled) {
+      if (!input.disabled && input.offsetParent !== null) {
         input.value = startDateValue;
       }
     });
 
     // Chèn ngày kết thúc, bỏ qua các ô bị disable
     document.querySelectorAll("input[id^='NgayKetThuc_']").forEach(input => {
-      if (!input.disabled) {
+      if (!input.disabled && input.offsetParent !== null) {
         input.value = endDateValue;
       }
     });
@@ -1102,7 +1102,7 @@
       });
   }
   // Phương
-
+/*
   function filterByName() {
     const input = document.getElementById('filterName');
     const filter = input.value.toLowerCase();
@@ -1112,8 +1112,6 @@
     if (!filter) {
       tableRows.forEach(row => {
         row.style.display = ''; // Hiện tất cả các dòng
-        const checkbox = row.querySelector('input[type="checkbox"]');
-        checkbox.disabled = false; // Kích hoạt checkbox
       });
       return;
     }
@@ -1126,10 +1124,10 @@
 
       if (name.includes(filter)) {
         row.style.display = ''; // Hiện hàng nếu khớp
-        checkbox.disabled = false; // Kích hoạt checkbox
+        //checkbox.disabled = false; // Kích hoạt checkbox
       } else {
         row.style.display = 'none'; // Ẩn hàng nếu không khớp
-        checkbox.disabled = true; // Vô hiệu hóa checkbox
+        //checkbox.disabled = true; // Vô hiệu hóa checkbox
       }
     });
     calculateTotals();
@@ -1146,7 +1144,6 @@
       tableRows.forEach(row => {
         row.style.display = ''; // Hiện tất cả các dòng
         const checkbox = row.querySelector('input[type="checkbox"]');
-        checkbox.disabled = false; // Kích hoạt checkbox
       });
       return;
     }
@@ -1159,10 +1156,8 @@
 
       if (name.includes(filter)) {
         row.style.display = ''; // Hiện hàng nếu khớp
-        checkbox.disabled = false; // Kích hoạt checkbox
       } else {
         row.style.display = 'none'; // Ẩn hàng nếu không khớp
-        checkbox.disabled = true; // Vô hiệu hóa checkbox
       }
     });
     calculateTotals();
@@ -1179,7 +1174,6 @@
       tableRows.forEach(row => {
         row.style.display = ''; // Hiện tất cả các dòng
         const checkbox = row.querySelector('input[type="checkbox"]');
-        checkbox.disabled = false; // Kích hoạt checkbox
       });
       return;
     }
@@ -1190,72 +1184,13 @@
       const name = nameCell.textContent.toLowerCase();
       const checkbox = row.querySelector('input[type="checkbox"]');
 
-      if (name.includes(filter)) {
+      if ( name.includes(filter)) {
         row.style.display = ''; // Hiện hàng nếu khớp
-        checkbox.disabled = false; // Kích hoạt checkbox
       } else {
         row.style.display = 'none'; // Ẩn hàng nếu không khớp
-        checkbox.disabled = true; // Vô hiệu hóa checkbox
       }
     });
     calculateTotals();
-  }
-
-
-  // Hàm tính tổng số tiết từ globalData
-  function calculateTotals() {
-    let totalLL = 0; // Reset tổng số tiết LL
-    let totalQC = 0; // Reset tổng số tiết QC
-
-    const rows = document.querySelectorAll('#tableBody tr'); // Lấy tất cả các hàng trong bảng
-
-    rows.forEach((row) => {
-      // Bỏ qua các hàng đang bị ẩn
-      if (row.style.display === 'none') {
-        return;
-      }
-
-      // Giả sử cột LL là cột thứ 2 và cột QuyChuan là cột thứ 3
-      const LLCell = row.querySelector('td:nth-child(10)'); // Lấy ô của cột LL
-      const QuyChuanCell = row.querySelector('td:nth-child(11)'); // Lấy ô của cột QuyChuan
-
-      // Chuyển đổi giá trị của các ô thành số và cộng dồn
-      const LL = parseFloat(LLCell.textContent) || 0; // Nếu không phải số, mặc định là 0
-      const QuyChuan = parseFloat(QuyChuanCell.textContent) || 0;
-
-      totalLL += LL; // Cộng dồn số tiết LL
-      totalQC += QuyChuan; // Cộng dồn số tiết QC
-    });
-
-    // Cập nhật tổng số tiết vào HTML
-    document.getElementById('totalLL').textContent = totalLL;
-    document.getElementById('totalQC').textContent = totalQC;
-  }
-
-  function checkAll(type) {
-    const checkboxes = document.querySelectorAll(
-      `input[type="checkbox"][name="${type}"]`
-    );
-    const checkAllCheckbox = document.getElementById(
-      `checkAll${type.charAt(0).toUpperCase() + type.slice(1)}`
-    );
-
-    checkboxes.forEach((checkbox) => {
-      if (!checkbox.disabled) { // Kiểm tra xem checkbox có bị vô hiệu hóa không
-        checkbox.checked = checkAllCheckbox.checked;
-      }
-      //checkbox.checked = checkAllCheckbox.checked; // Gán trạng thái checkbox "Check All" cho tất cả các checkbox
-    });
-  }
-
-  // Hàm để cập nhật trạng thái của checkbox "Check All" khi checkbox cá nhân được chọn
-  function updateCheckAll(type) {
-    const checkboxes = document.querySelectorAll(`input[type="checkbox"][name="${type}"]`);
-    const checkAllCheckbox = document.getElementById(`checkAll${type.charAt(0).toUpperCase() + type.slice(1)}`);
-
-    // Kiểm tra nếu tất cả checkbox cá nhân đều được chọn
-    const allChecked = Array.from(checkboxes).every(checkbox => checkbox.checked);
-    checkAllCheckbox.checked = allChecked; // Cập nhật trạng thái của checkbox "Check All"
   }
 
   // Hàm gợi ý bộ môn ở ô nhập 
@@ -1333,10 +1268,190 @@
     };
   }
 
-  // Hàm ẩn gợi ý
-  function hideSuggestionsBoMon() {
-    const existingSuggestions = document.querySelectorAll('.suggestions');
-    existingSuggestions.forEach(suggestion => suggestion.remove());
+  */
+
+// Hàm applyFilters sẽ được gọi mỗi khi có thay đổi ở các ô lọc
+// Hàm applyFilters sẽ được gọi mỗi khi có thay đổi ở các ô lọc
+// Hàm applyFilters để đồng nhất cả ba bộ lọc
+function applyFilters() {
+  const nameFilter = document.getElementById('filterName').value.toLowerCase();
+  const classFilter = document.getElementById('filterClass').value.toLowerCase();
+  const khoaFilter = document.getElementById('filterBoMon').value.toLowerCase();
+  const tableRows = document.querySelectorAll('#tableBody tr');
+
+  tableRows.forEach(row => {
+    const nameCell = row.querySelector('td:nth-child(3)'); // Cột tên giảng viên
+    const classCell = row.querySelector('td:nth-child(1)'); // Cột học phần
+    const khoaCell = row.querySelector('td:nth-child(6)'); // Cột bộ môn
+
+    // Kiểm tra khớp với từng bộ lọc, áp dụng với tất cả các ô lọc cùng lúc
+    const nameMatch = !nameFilter || (nameCell && nameCell.textContent.toLowerCase().includes(nameFilter));
+    const classMatch = !classFilter || (classCell && classCell.textContent.toLowerCase().includes(classFilter));
+    const khoaMatch = !khoaFilter || (khoaCell && khoaCell.textContent.toLowerCase().includes(khoaFilter));
+
+    // Chỉ hiển thị hàng nếu tất cả bộ lọc đều khớp
+    row.style.display = (nameMatch && classMatch && khoaMatch) ? '' : 'none';
+  });
+
+  calculateTotals();
+}
+
+// Gọi applyFilters trong các hàm lọc riêng để đồng bộ
+function filterByName() {
+  applyFilters();
+}
+
+function filterByClass() {
+  applyFilters();
+}
+
+function filterBoMon() {
+  applyFilters();
+}
+
+// Hàm gợi ý bộ môn với cải tiến cho việc điền giá trị vào input
+function showSuggestionsBoMon(input) {
+  const value = input.value.toLowerCase(); 
+  hideSuggestionsBoMon(); 
+
+  const suggestionsContainer = document.createElement('div');
+  suggestionsContainer.className = 'suggestions'; 
+
+  const { bottom, left, width } = input.getBoundingClientRect();
+  suggestionsContainer.style.position = 'absolute';
+  suggestionsContainer.style.top = `${bottom + window.scrollY}px`;
+  suggestionsContainer.style.left = `${left + window.scrollX}px`;
+  suggestionsContainer.style.width = `${width}px`;
+  suggestionsContainer.style.zIndex = '1000';
+  suggestionsContainer.style.maxHeight = '200px';
+  suggestionsContainer.style.overflowY = 'auto';
+
+  document.body.appendChild(suggestionsContainer);
+
+  let suggestions = []; 
+  const boMon = JSON.parse(localStorage.getItem("boMon")) || []; 
+
+  suggestions = boMon.map(item => `${item.TenBoMon} - ${item.MaBoMon}`);
+
+  if (value) {
+    suggestions = suggestions.filter(name => name.toLowerCase().includes(value));
+  }
+
+  if (suggestions.length === 0) {
+    suggestionsContainer.remove();
+    return;
+  }
+
+  suggestions.forEach(name => {
+    const suggestionItem = document.createElement('div');
+    suggestionItem.className = 'suggestion-item';
+    suggestionItem.textContent = name;
+
+    suggestionItem.onclick = function () {
+      const dashIndex = name.indexOf("-");
+      let processedName = name;
+
+      if (dashIndex !== -1) {
+        processedName = name.slice(dashIndex + 1).trim().replace(/\s+/g, '');
+      }
+
+      input.value = processedName;
+      filterBoMon(); // Áp dụng bộ lọc sau khi chọn gợi ý
+      hideSuggestionsBoMon();
+    };
+
+    suggestionsContainer.appendChild(suggestionItem);
+  });
+
+  input.onblur = function () {
+    setTimeout(() => {
+      hideSuggestionsBoMon();
+    }, 100);
+  };
+}
+
+// Hàm ẩn gợi ý
+function hideSuggestionsBoMon() {
+  const suggestions = document.querySelectorAll('.suggestions');
+  suggestions.forEach(suggestion => suggestion.remove());
+}
+
+
+  // Hàm tính tổng số tiết từ globalData
+  function calculateTotals() {
+    let totalLL = 0; // Reset tổng số tiết LL
+    let totalQC = 0; // Reset tổng số tiết QC
+
+    const rows = document.querySelectorAll('#tableBody tr'); // Lấy tất cả các hàng trong bảng
+
+    rows.forEach((row) => {
+      // Bỏ qua các hàng đang bị ẩn
+      if (row.style.display === 'none') {
+        return;
+      }
+
+      // Giả sử cột LL là cột thứ 2 và cột QuyChuan là cột thứ 3
+      const LLCell = row.querySelector('td:nth-child(10)'); // Lấy ô của cột LL
+      const QuyChuanCell = row.querySelector('td:nth-child(11)'); // Lấy ô của cột QuyChuan
+
+      // Chuyển đổi giá trị của các ô thành số và cộng dồn
+      const LL = parseFloat(LLCell.textContent) || 0; // Nếu không phải số, mặc định là 0
+      const QuyChuan = parseFloat(QuyChuanCell.textContent) || 0;
+
+      totalLL += LL; // Cộng dồn số tiết LL
+      totalQC += QuyChuan; // Cộng dồn số tiết QC
+    });
+
+    // Cập nhật tổng số tiết vào HTML
+    document.getElementById('totalLL').textContent = totalLL;
+    document.getElementById('totalQC').textContent = totalQC;
+  }
+/*
+  function checkAll(type) {
+    const checkboxes = document.querySelectorAll(
+      `input[type="checkbox"][name="${type}"]`
+    );
+    const checkAllCheckbox = document.getElementById(
+      `checkAll${type.charAt(0).toUpperCase() + type.slice(1)}`
+    );
+
+    checkboxes.forEach((checkbox) => {
+      if (!checkbox.disabled) { // Kiểm tra xem checkbox có bị vô hiệu hóa không
+        checkbox.checked = checkAllCheckbox.checked;
+      }
+    });
+  }
+*/
+function checkAll(type) {
+  const checkboxes = document.querySelectorAll(
+    `input[type="checkbox"][name="${type}"]`
+  );
+  const checkAllCheckbox = document.getElementById(
+    `checkAll${type.charAt(0).toUpperCase() + type.slice(1)}`
+  );
+
+  for (const checkbox of checkboxes) {
+    if (checkbox.disabled) {
+      continue; // Bỏ qua checkbox bị vô hiệu hóa
+    }
+
+    const row = checkbox.closest('tr');
+    if (row.style.display == 'none') { // Kiểm tra nếu dòng hiện trên màn hình
+      continue; // Gán trạng thái checkbox "Check All" cho checkbox hiển thị
+    }
+    checkbox.checked = checkAllCheckbox.checked; // Gán giá trị checked cho checkbox không bị vô hiệu hóa
+  }
+}
+
+
+  // Hàm để cập nhật trạng thái của checkbox "Check All" khi checkbox cá nhân được chọn
+  function updateCheckAll(type) {
+    const checkboxes = document.querySelectorAll(`input[type="checkbox"][name="${type}"]`);
+    const checkAllCheckbox = document.getElementById(`checkAll${type.charAt(0).toUpperCase() + type.slice(1)}`);
+
+    // Kiểm tra nếu tất cả checkbox cá nhân đều được chọn
+    const allChecked = Array.from(checkboxes).every(checkbox => checkbox.checked);
+    checkAllCheckbox.checked = allChecked; // Cập nhật trạng thái của checkbox "Check All"
   }
 
   // Hàm xử lý tìm kiếm theo tên bộ môn
@@ -1356,10 +1471,10 @@
         const name = nameInput.value.toLowerCase(); // Lấy giá trị của input có name="bomon"
         if (filter === '' || name.includes(filter)) {
           row.style.display = ''; // Hiện hàng nếu khớp hoặc filter trống
-          checkbox.disabled = false; // Kích hoạt checkbox
+          //checkbox.disabled = false; // Kích hoạt checkbox
         } else {
           row.style.display = 'none'; // Ẩn hàng nếu không khớp
-          checkbox.disabled = true; // Vô hiệu hóa checkbox
+          //checkbox.disabled = true; // Vô hiệu hóa checkbox
         }
       }
     });
@@ -1375,8 +1490,9 @@
   init();
 </script>
 
-<script>
+<!-- <script>
   window.onload = function () {
+    alert("gà")
     const role = localStorage.getItem("userRole")
     const MaPhongBan = localStorage.getItem("MaPhongBan")
     const isKhoa = localStorage.getItem("isKhoa");
@@ -1385,6 +1501,8 @@
       document.getElementById('daoTaoColumn').style.display = 'none';
       document.getElementById('taiChinhColumn').style.display = 'none';
       document.getElementById('khoaColumn').style.display = 'none';
+
+    
       if (role == 'Lãnh đạo khoa') {
         document.getElementById('khoaColumn').style.display = 'inline-block';
       }
@@ -1409,7 +1527,7 @@
       document.getElementById('taiChinhColumn').style.display = 'none';
     }
   };
-</script>
+</script> -->
 
 <!-- lọc bộ môn -->
 <script>
@@ -1511,10 +1629,10 @@
           const name = nameInput.value.toLowerCase(); // Lấy giá trị của input có name="bomon"
           if (filter === '' || name.includes(filter)) {
             row.style.display = ''; // Hiện hàng nếu khớp hoặc filter trống
-            checkbox.disabled = false; // Kích hoạt checkbox
+            //checkbox.disabled = false; // Kích hoạt checkbox
           } else {
             row.style.display = 'none'; // Ẩn hàng nếu không khớp
-            checkbox.disabled = true; // Vô hiệu hóa checkbox
+            //checkbox.disabled = true; // Vô hiệu hóa checkbox
           }
         }
       });
@@ -1569,6 +1687,11 @@
     const role = localStorage.getItem("userRole")
     const MaPhongBan = localStorage.getItem("MaPhongBan")
     const isKhoa = localStorage.getItem("isKhoa");
+
+    // Nếu là phòng ban thì hiện lọc theo khoa
+    if (isKhoa == 0){
+      document.getElementById('filterKhoa').style.display = 'block';
+    }
 
     if (role == 'Thường' || role.includes('GV')) {
       // Ẩn tất cả các cột
@@ -1629,7 +1752,6 @@
   document.getElementById("changePasswordLink").addEventListener("click", function (event) {
     event.preventDefault(); // Ngăn chặn hành vi mặc định của thẻ a
     const tenDangNhap = localStorage.getItem("TenDangNhap"); // Lấy TenDangNhap từ localStorage
-    alert(tenDangNhap);
 
     if (tenDangNhap) {
       // Chuyển hướng đến trang changePassword và truyền TenDangNhap trong URL

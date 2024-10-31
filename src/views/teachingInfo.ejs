@@ -1236,10 +1236,10 @@
 
           if (filter === '' || name.includes(filter)) {
             row.style.display = ''; // Hiện hàng nếu khớp hoặc filter trống
-            checkbox.disabled = false; // Kích hoạt checkbox
+            //checkbox.disabled = false; // Kích hoạt checkbox
           } else {
             row.style.display = 'none'; // Ẩn hàng nếu không khớp
-            checkbox.disabled = true; // Vô hiệu hóa checkbox
+            //checkbox.disabled = true; // Vô hiệu hóa checkbox
           }
         }
       });
@@ -1261,7 +1261,7 @@
         tableRows.forEach(row => {
           row.style.display = ''; // Hiện tất cả các dòng
           const checkbox = row.querySelector('input[type="checkbox"]');
-          checkbox.disabled = false; // Kích hoạt checkbox
+          //checkbox.disabled = false; // Kích hoạt checkbox
         });
         return;
       }
@@ -1274,10 +1274,10 @@
 
         if (name.includes(filter)) {
           row.style.display = ''; // Hiện hàng nếu khớp
-          checkbox.disabled = false; // Kích hoạt checkbox
+          //checkbox.disabled = false; // Kích hoạt checkbox
         } else {
           row.style.display = 'none'; // Ẩn hàng nếu không khớp
-          checkbox.disabled = true; // Vô hiệu hóa checkbox
+          //checkbox.disabled = true; // Vô hiệu hóa checkbox
         }
       });
       calculateTotals();
@@ -1294,7 +1294,7 @@
         tableRows.forEach(row => {
           row.style.display = ''; // Hiện tất cả các dòng
           const checkbox = row.querySelector('input[type="checkbox"]');
-          checkbox.disabled = false; // Kích hoạt checkbox
+          //checkbox.disabled = false; // Kích hoạt checkbox
         });
         return;
       }
@@ -1307,10 +1307,10 @@
 
         if (name.includes(filter)) {
           row.style.display = ''; // Hiện hàng nếu khớp
-          checkbox.disabled = false; // Kích hoạt checkbox
+          //checkbox.disabled = false; // Kích hoạt checkbox
         } else {
           row.style.display = 'none'; // Ẩn hàng nếu không khớp
-          checkbox.disabled = true; // Vô hiệu hóa checkbox
+          //checkbox.disabled = true; // Vô hiệu hóa checkbox
         }
       });
       calculateTotals();

@@ -16,6 +16,9 @@
 
 - Cập nhật ngày bắt đầu ngày kết khi lọc ( done )
 
+- Khi lọc sẽ bị mất duyệt Khoa bên teachinginfo2 và mời giảng
+
+- Khi lọc bên khoa sẽ bị mất disable cột mời giảng
 
 
 # không phải bug
