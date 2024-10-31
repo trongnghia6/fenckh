@@ -220,8 +220,8 @@ const exportMultipleContracts = async (req, res) => {
         );
 
         if (!teachers || teachers.length === 0) {
-            return res.status(404).send('Không tìm thấy giảng viên nào phù hợp với điều kiện.');
-        }
+            console.log("Không có dữ liệu để xuất ");
+            res.send("<script>alert('Không tìm thấy giảng viên phù hợp điều kiện'); window.location.href='/exportHD';</script>");        }
 
         // Tạo thư mục tạm để lưu các file hợp đồng
         const tempDir = path.join(__dirname, '..', 'public', 'temp', Date.now().toString());

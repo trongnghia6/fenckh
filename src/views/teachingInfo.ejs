@@ -491,7 +491,6 @@
 
   <!-- phần hiển thị phân theo role -->
   <script>
-    // dùng window onclick đéo được
     document.addEventListener("DOMContentLoaded", function () {
       const role = localStorage.getItem("userRole");
 
@@ -527,31 +526,51 @@
         return;
       }
 
-      // Lấy dữ liệu từ localStorage (giả sử dữ liệu được lưu dưới dạng JSON)
+      // Lấy dữ liệu từ localStorage (giả sử dữ liệu đã có id)
       let data = JSON.parse(localStorage.getItem('tableData'));
-      // Cập nhật từng đối tượng trong dữ liệu
-      data.forEach(item => {
-        // Nếu khoa chưa duyệt thì mới chèn
-        if (item.KhoaDuyet == 0) {
-          item.NgayBatDau = globalStartDate; // Cập nhật ngày bắt đầu
-          item.NgayKetThuc = globalEndDate; // Cập nhật ngày kết thúc
+      console.log(data);
+
+      // Lấy tất cả các dòng đang hiển thị trong bảng (có chứa id của đối tượng)
+      const rows = document.querySelectorAll('#tableBody tr');
+
+      rows.forEach(row => {
+        // Bỏ qua các hàng bị ẩn (display: none)
+        if (row.style.display === 'none') {
+          return;
+        }
+
+        // Lấy id của hàng từ thuộc tính data-id
+        const rowId = row.getAttribute('data-id');
+        console.log('id trong bảng : ', rowId);
+
+        // Tìm đối tượng trong localStorage dựa vào id
+        let item = data.find(d => parseInt(d.id) === parseInt(rowId));
+        console.log(item);
+
+        // Nếu tìm thấy đối tượng và KhoaDuyet == 0
+        if (item && item.KhoaDuyet == 0) {
+          // Cập nhật ngày bắt đầu và ngày kết thúc cho đối tượng trong localStorage
+          item.NgayBatDau = globalStartDate;
+          item.NgayKetThuc = globalEndDate;
+
+          // Cập nhật ngày bắt đầu và kết thúc trong hàng của bảng
+          const ngayBatDauCell = row.querySelector('.ngay-bat-dau');
+          const ngayKetThucCell = row.querySelector('.ngay-ket-thuc');
+          if (ngayBatDauCell) ngayBatDauCell.textContent = globalStartDate;
+          if (ngayKetThucCell) ngayKetThucCell.textContent = globalEndDate;
         }
       });
 
       // Lưu lại dữ liệu đã cập nhật vào localStorage
       localStorage.setItem('tableData', JSON.stringify(data));
 
-      let data2 = JSON.parse(localStorage.getItem('tableData'));
-
-      console.log('sau khi cập nhật ngày :', data2);
-
-      // Gửi dữ liệu lên server
+      // Gửi dữ liệu đã cập nhật lên server
       fetch('http://localhost:3000/check-teaching', {
         method: 'POST', // Phương thức POST
         headers: {
           'Content-Type': 'application/json' // Định dạng gửi là JSON
         },
-        body: JSON.stringify(data2) // Chuyển đổi globalData thành chuỗi JSON
+        body: JSON.stringify(data) // Chuyển đổi data đã cập nhật thành chuỗi JSON
       })
         .then(response => {
           if (!response.ok) {
@@ -563,13 +582,15 @@
           // Hiển thị thông báo từ server
           alert(data.message);
           console.log(data.message);
-          window.location.reload();
+          // window.location.reload();
         })
         .catch(error => {
           console.error('Có lỗi xảy ra:', error);
           alert('Có lỗi xảy ra khi cập nhật dữ liệu.');
         });
     });
+  </script>
+
 
 
   </script>
@@ -690,8 +711,16 @@
         }
 
         // Nếu có sự thay đổi, cập nhật localStorage
+        console.log('thay đổi')
         localStorage.setItem('nameGv', JSON.stringify(nameGvNew));
         localStorage.setItem('nameGvm', JSON.stringify(nameGvmNew));
+
+        // thêm id vào bảng local
+        globalDataNew = globalDataNew.map((item, index) => ({
+          ...item,
+          id: index // hoặc một ID khác tùy theo logic bạn muốn
+        }));
+        // đẩy vào bảng local
         localStorage.setItem('tableData', JSON.stringify(globalDataNew));
 
         console.log('Bảng : ', globalDataNew);
@@ -716,6 +745,9 @@
 
       data.forEach((row) => {
         const tableRow = document.createElement('tr');
+
+        // Gán id vào thuộc tính data-id của hàng
+        tableRow.setAttribute('data-id', row.id);
 
         const lopHocPhanTd = document.createElement('td');
         lopHocPhanTd.textContent = `${row.LopHocPhan} (${row.TenLop})` || '';
@@ -1165,7 +1197,9 @@
 
           // Điền tên gợi ý đã xử lý vào ô input
           input.value = processedName;
-          filterBoMon();
+          if (input.id == 'filterBoMon') {
+            filterBoMon();
+          }
           hideSuggestionsBoMon(); // Ẩn gợi ý sau khi chọn
         };
 
@@ -1202,10 +1236,10 @@
 
           if (filter === '' || name.includes(filter)) {
             row.style.display = ''; // Hiện hàng nếu khớp hoặc filter trống
-            checkbox.disabled = false; // Kích hoạt checkbox
+            //checkbox.disabled = false; // Kích hoạt checkbox
           } else {
             row.style.display = 'none'; // Ẩn hàng nếu không khớp
-            checkbox.disabled = true; // Vô hiệu hóa checkbox
+            //checkbox.disabled = true; // Vô hiệu hóa checkbox
           }
         }
       });
@@ -1227,7 +1261,7 @@
         tableRows.forEach(row => {
           row.style.display = ''; // Hiện tất cả các dòng
           const checkbox = row.querySelector('input[type="checkbox"]');
-          checkbox.disabled = false; // Kích hoạt checkbox
+          //checkbox.disabled = false; // Kích hoạt checkbox
         });
         return;
       }
@@ -1240,10 +1274,10 @@
 
         if (name.includes(filter)) {
           row.style.display = ''; // Hiện hàng nếu khớp
-          checkbox.disabled = false; // Kích hoạt checkbox
+          //checkbox.disabled = false; // Kích hoạt checkbox
         } else {
           row.style.display = 'none'; // Ẩn hàng nếu không khớp
-          checkbox.disabled = true; // Vô hiệu hóa checkbox
+          //checkbox.disabled = true; // Vô hiệu hóa checkbox
         }
       });
       calculateTotals();
@@ -1260,7 +1294,7 @@
         tableRows.forEach(row => {
           row.style.display = ''; // Hiện tất cả các dòng
           const checkbox = row.querySelector('input[type="checkbox"]');
-          checkbox.disabled = false; // Kích hoạt checkbox
+          //checkbox.disabled = false; // Kích hoạt checkbox
         });
         return;
       }
@@ -1273,10 +1307,10 @@
 
         if (name.includes(filter)) {
           row.style.display = ''; // Hiện hàng nếu khớp
-          checkbox.disabled = false; // Kích hoạt checkbox
+          //checkbox.disabled = false; // Kích hoạt checkbox
         } else {
           row.style.display = 'none'; // Ẩn hàng nếu không khớp
-          checkbox.disabled = true; // Vô hiệu hóa checkbox
+          //checkbox.disabled = true; // Vô hiệu hóa checkbox
         }
       });
       calculateTotals();

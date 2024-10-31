@@ -8,12 +8,17 @@
 
 - Tăng trải nghiệm người dùng site info, bỏ đi nút Lưu ( done )
 
-- Auto fill thêm cả bộ môn 
+- Auto fill thêm cả bộ môn, nếu auto fill được bộ môn là giảng viên đó đã có trong db, nếu chưa auto fill đồng nghĩa là chưa có trong db ( done )
 
 - Nút search bộ môn của ALL site ( gần done )
 
 - Bỏ duyệt mất ngày bắt đầu ngày kết thúc ( done )
 
+- Cập nhật ngày bắt đầu ngày kết khi lọc ( done )
+
+- Khi lọc sẽ bị mất duyệt Khoa bên teachinginfo2 và mời giảng
+
+- Khi lọc bên khoa sẽ bị mất disable cột mời giảng
 
 
 # không phải bug
