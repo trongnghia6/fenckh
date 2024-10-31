@@ -454,6 +454,83 @@
   }
 </script>
 
+  <!-- phần chèn ngày bd kt cho tất cả các dòng khi nhấn Chèn -->
+  <script>
+    document.getElementById('fillDay').addEventListener('click', function () {
+      // Lấy giá trị của ngày bắt đầu và ngày kết thúc
+      const globalStartDate = document.getElementById('startDate').value;
+      const globalEndDate = document.getElementById('endDate').value;
+
+      // Kiểm tra nếu người dùng chưa nhập ngày
+      if (!globalStartDate || !globalEndDate) {
+        alert('Vui lòng nhập ngày bắt đầu và ngày kết thúc.');
+        return;
+      }
+
+      // Lấy dữ liệu từ localStorage (giả sử dữ liệu đã có id)
+      let data = JSON.parse(localStorage.getItem('tableData'));
+      console.log(data);
+
+      // Lấy tất cả các dòng đang hiển thị trong bảng (có chứa id của đối tượng)
+      const rows = document.querySelectorAll('#tableBody tr');
+
+      rows.forEach(row => {
+        // Bỏ qua các hàng bị ẩn (display: none)
+        if (row.style.display === 'none') {
+          return;
+        }
+
+        // Lấy id của hàng từ thuộc tính data-id
+        const rowId = row.getAttribute('data-id');
+        console.log('id trong bảng : ', rowId);
+
+        // Tìm đối tượng trong localStorage dựa vào id
+        let item = data.find(d => parseInt(d.id) === parseInt(rowId));
+        console.log(item);
+
+        // Nếu tìm thấy đối tượng và KhoaDuyet == 0
+        if (item && item.KhoaDuyet == 0) {
+          // Cập nhật ngày bắt đầu và ngày kết thúc cho đối tượng trong localStorage
+          item.NgayBatDau = globalStartDate;
+          item.NgayKetThuc = globalEndDate;
+
+          // Cập nhật ngày bắt đầu và kết thúc trong hàng của bảng
+          const ngayBatDauCell = row.querySelector('.ngay-bat-dau');
+          const ngayKetThucCell = row.querySelector('.ngay-ket-thuc');
+          if (ngayBatDauCell) ngayBatDauCell.textContent = globalStartDate;
+          if (ngayKetThucCell) ngayKetThucCell.textContent = globalEndDate;
+        }
+      });
+
+      // Lưu lại dữ liệu đã cập nhật vào localStorage
+      localStorage.setItem('tableData', JSON.stringify(data));
+
+      // Gửi dữ liệu đã cập nhật lên server
+      fetch('http://localhost:3000/check-teaching', {
+        method: 'POST', // Phương thức POST
+        headers: {
+          'Content-Type': 'application/json' // Định dạng gửi là JSON
+        },
+        body: JSON.stringify(data) // Chuyển đổi data đã cập nhật thành chuỗi JSON
+      })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Lỗi khi gửi dữ liệu');
+          }
+          return response.json(); // Chuyển đổi phản hồi thành JSON
+        })
+        .then(data => {
+          // Hiển thị thông báo từ server
+          alert(data.message);
+          console.log(data.message);
+          // window.location.reload();
+        })
+        .catch(error => {
+          console.error('Có lỗi xảy ra:', error);
+          alert('Có lỗi xảy ra khi cập nhật dữ liệu.');
+        });
+    });
+  </script>
 
 
 <script>
@@ -572,7 +649,9 @@
     return `${year}-${month}-${day}`;
   }
 
+
   // Fill all startDate and endDate
+  /*
   document.getElementById('fillDay').addEventListener('click', function () {
     const startDateValue = document.getElementById('startDate').value;
     const endDateValue = document.getElementById('endDate').value;
@@ -600,6 +679,7 @@
     alert("Chèn thành công")
   });
 
+  */
 
   // Hàm render bảng
   function renderTable(data) {
@@ -618,6 +698,9 @@
       if (row.MoiGiang == 0) {
         tableRow.style.display = 'none'; // Ẩn hàng
       }
+
+      // Gán id vào thuộc tính data-id của hàng
+      tableRow.setAttribute('data-id', row.id);
 
       // Lớp học phần
       const lopHocPhanTd = document.createElement('td');
@@ -1102,281 +1185,279 @@
       });
   }
   // Phương
-  /*
-    function filterByName() {
-      const input = document.getElementById('filterName');
-      const filter = input.value.toLowerCase();
-      const tableRows = document.querySelectorAll('#tableBody tr');
-  
-      // Nếu ô tìm kiếm trống, hiển thị tất cả các dòng
-      if (!filter) {
-        tableRows.forEach(row => {
-          row.style.display = ''; // Hiện tất cả các dòng
-        });
-        return;
-      }
-  
-      // Chỉ hiện các dòng có tên giảng viên khớp với giá trị tìm kiếm
-      tableRows.forEach(row => {
-        const nameCell = row.querySelector('td:nth-child(3)'); // Giả sử tên giảng viên nằm ở cột thứ 5
-        const name = nameCell.textContent.toLowerCase();
-        const checkbox = row.querySelector('input[type="checkbox"]');
-  
-        if (name.includes(filter)) {
-          row.style.display = ''; // Hiện hàng nếu khớp
-          //checkbox.disabled = false; // Kích hoạt checkbox
-        } else {
-          row.style.display = 'none'; // Ẩn hàng nếu không khớp
-          //checkbox.disabled = true; // Vô hiệu hóa checkbox
-        }
-      });
-      calculateTotals();
-  
-    }
-  
-    function filterByClass() {
-      const input = document.getElementById('filterClass');
-      const filter = input.value.toLowerCase();
-      const tableRows = document.querySelectorAll('#tableBody tr');
-  
-      // Nếu ô tìm kiếm trống, hiển thị tất cả các dòng
-      if (!filter) {
-        tableRows.forEach(row => {
-          row.style.display = ''; // Hiện tất cả các dòng
-          const checkbox = row.querySelector('input[type="checkbox"]');
-        });
-        return;
-      }
-  
-      // Chỉ hiện các dòng có tên giảng viên khớp với giá trị tìm kiếm
-      tableRows.forEach(row => {
-        const nameCell = row.querySelector('td:nth-child(1)'); // Giả sử tên giảng viên nằm ở cột thứ 5
-        const name = nameCell.textContent.toLowerCase();
-        const checkbox = row.querySelector('input[type="checkbox"]');
-  
-        if (name.includes(filter)) {
-          row.style.display = ''; // Hiện hàng nếu khớp
-        } else {
-          row.style.display = 'none'; // Ẩn hàng nếu không khớp
-        }
-      });
-      calculateTotals();
-    }
-  
-  
-    function filterByKhoa() {
-      const input = document.getElementById('filterKhoa');
-      const filter = input.value.toLowerCase();
-      const tableRows = document.querySelectorAll('#tableBody tr');
-  
-      // Nếu ô tìm kiếm trống, hiển thị tất cả các dòng
-      if (!filter) {
-        tableRows.forEach(row => {
-          row.style.display = ''; // Hiện tất cả các dòng
-          const checkbox = row.querySelector('input[type="checkbox"]');
-        });
-        return;
-      }
-  
-      // Chỉ hiện các dòng có tên giảng viên khớp với giá trị tìm kiếm
-      tableRows.forEach(row => {
-        const nameCell = row.querySelector('td:nth-child(6)'); // Giả sử tên giảng viên nằm ở cột thứ 5
-        const name = nameCell.textContent.toLowerCase();
-        const checkbox = row.querySelector('input[type="checkbox"]');
-  
-        if ( name.includes(filter)) {
-          row.style.display = ''; // Hiện hàng nếu khớp
-        } else {
-          row.style.display = 'none'; // Ẩn hàng nếu không khớp
-        }
-      });
-      calculateTotals();
-    }
-  
-    // Hàm gợi ý bộ môn ở ô nhập 
-    function showSuggestionsBoMon(input) {
-      const value = input.value.toLowerCase(); // Lấy giá trị nhập vào và chuyển thành chữ thường
-      hideSuggestionsBoMon(); // Ẩn gợi ý cũ trước khi hiển thị gợi ý mới
-  
-      // Tạo thẻ div chứa gợi ý
-      const suggestionsContainer = document.createElement('div');
-      suggestionsContainer.className = 'suggestions'; // Đặt class cho khung gợi ý
-  
-      // Đặt vị trí cho suggestionsContainer
-      const { bottom, left, width } = input.getBoundingClientRect(); // Lấy vị trí của input
-      suggestionsContainer.style.position = 'absolute'; // Để đè lên bảng
-      suggestionsContainer.style.top = `${bottom + window.scrollY}px`; // Đặt vị trí ngay dưới input
-      suggestionsContainer.style.left = `${left + window.scrollX}px`; // Căn trái với input
-      suggestionsContainer.style.width = `${width}px`; // Chiều rộng bằng với input
-      suggestionsContainer.style.zIndex = '1000'; // Đảm bảo luôn hiển thị trên các thành phần khác
-      suggestionsContainer.style.maxHeight = '200px'; // Giới hạn chiều cao để không quá lớn
-      suggestionsContainer.style.overflowY = 'auto';  // Cho phép cuộn dọc nếu quá nhiều gợi ý
-  
-      // Thêm suggestionsContainer vào DOM
-      document.body.appendChild(suggestionsContainer); // Đặt suggestionsContainer vào body thay vì cha của input
-  
-      let suggestions = []; // Khởi tạo mảng gợi ý
-  
-      // Lấy dữ liệu từ localStorage
-      const boMon = JSON.parse(localStorage.getItem("boMon")) || []; // Giảng viên mời
-      // console.log(boMon);
-  
-      suggestions = boMon.map(item => `${item.TenBoMon} - ${item.MaBoMon}`);
-  
-      // Nếu người dùng nhập dữ liệu, lọc kết quả theo tên giảng viên
-      if (value) {
-        suggestions = suggestions.filter(name => name.toLowerCase().includes(value));
-      }
-  
-      // Nếu không có gợi ý, ẩn container
-      if (suggestions.length === 0) {
-        suggestionsContainer.remove();
-        return; // Kết thúc hàm nếu không có gợi ý
-      }
-  
-      // Tạo gợi ý dưới dạng danh sách (list)
-      suggestions.forEach(name => {
-        const suggestionItem = document.createElement('div'); // Tạo phần tử cho từng gợi ý
-        suggestionItem.className = 'suggestion-item'; // Đặt class để tùy chỉnh giao diện
-        suggestionItem.textContent = name; // Hiển thị tên giảng viên kèm theo khoa
-  
-        // Thêm sự kiện click để điền tên vào ô input
-        suggestionItem.onclick = function () {
-          const name = suggestionItem.innerText; // Hoặc có thể là suggestionItem.textContent
-          const dashIndex = name.indexOf("-");
-          let processedName = name;
-  
-          if (dashIndex !== -1) {
-            // Lấy phần sau dấu "-" và loại bỏ khoảng trắng
-            processedName = name.slice(dashIndex + 1).trim().replace(/\s+/g, '');
-          }
-  
-          // Điền tên gợi ý đã xử lý vào ô input
-          input.value = processedName;
-          filterBoMon();
-          hideSuggestionsBoMon(); // Ẩn gợi ý sau khi chọn
-        };
-  
-        suggestionsContainer.appendChild(suggestionItem); // Thêm mục vào danh sách gợi ý
-      });
-  
-      // Ẩn gợi ý khi input không còn focus
-      input.onblur = function () {
-        setTimeout(() => {
-          hideSuggestionsBoMon();
-        }, 100); // Thời gian chờ để nhận diện click
-      };
-    }
-  
-    */
-
-  // Hàm applyFilters sẽ được gọi mỗi khi có thay đổi ở các ô lọc
-  // Hàm applyFilters sẽ được gọi mỗi khi có thay đổi ở các ô lọc
-  // Hàm applyFilters để đồng nhất cả ba bộ lọc
-  function applyFilters() {
-    const nameFilter = document.getElementById('filterName').value.toLowerCase();
-    const classFilter = document.getElementById('filterClass').value.toLowerCase();
-    const khoaFilter = document.getElementById('filterBoMon').value.toLowerCase();
+/*
+  function filterByName() {
+    const input = document.getElementById('filterName');
+    const filter = input.value.toLowerCase();
     const tableRows = document.querySelectorAll('#tableBody tr');
 
+    // Nếu ô tìm kiếm trống, hiển thị tất cả các dòng
+    if (!filter) {
+      tableRows.forEach(row => {
+        row.style.display = ''; // Hiện tất cả các dòng
+      });
+      return;
+    }
+
+    // Chỉ hiện các dòng có tên giảng viên khớp với giá trị tìm kiếm
     tableRows.forEach(row => {
-      const nameCell = row.querySelector('td:nth-child(3)'); // Cột tên giảng viên
-      const classCell = row.querySelector('td:nth-child(1)'); // Cột học phần
-      const khoaCell = row.querySelector('td:nth-child(6)'); // Cột bộ môn
+      const nameCell = row.querySelector('td:nth-child(3)'); // Giả sử tên giảng viên nằm ở cột thứ 5
+      const name = nameCell.textContent.toLowerCase();
+      const checkbox = row.querySelector('input[type="checkbox"]');
 
-      // Kiểm tra khớp với từng bộ lọc, áp dụng với tất cả các ô lọc cùng lúc
-      const nameMatch = !nameFilter || (nameCell && nameCell.textContent.toLowerCase().includes(nameFilter));
-      const classMatch = !classFilter || (classCell && classCell.textContent.toLowerCase().includes(classFilter));
-      const khoaMatch = !khoaFilter || (khoaCell && khoaCell.textContent.toLowerCase().includes(khoaFilter));
-
-      // Chỉ hiển thị hàng nếu tất cả bộ lọc đều khớp
-      row.style.display = (nameMatch && classMatch && khoaMatch) ? '' : 'none';
+      if (name.includes(filter)) {
+        row.style.display = ''; // Hiện hàng nếu khớp
+        //checkbox.disabled = false; // Kích hoạt checkbox
+      } else {
+        row.style.display = 'none'; // Ẩn hàng nếu không khớp
+        //checkbox.disabled = true; // Vô hiệu hóa checkbox
+      }
     });
-
     calculateTotals();
-  }
 
-  // Gọi applyFilters trong các hàm lọc riêng để đồng bộ
-  function filterByName() {
-    applyFilters();
   }
 
   function filterByClass() {
-    applyFilters();
+    const input = document.getElementById('filterClass');
+    const filter = input.value.toLowerCase();
+    const tableRows = document.querySelectorAll('#tableBody tr');
+
+    // Nếu ô tìm kiếm trống, hiển thị tất cả các dòng
+    if (!filter) {
+      tableRows.forEach(row => {
+        row.style.display = ''; // Hiện tất cả các dòng
+        const checkbox = row.querySelector('input[type="checkbox"]');
+      });
+      return;
+    }
+
+    // Chỉ hiện các dòng có tên giảng viên khớp với giá trị tìm kiếm
+    tableRows.forEach(row => {
+      const nameCell = row.querySelector('td:nth-child(1)'); // Giả sử tên giảng viên nằm ở cột thứ 5
+      const name = nameCell.textContent.toLowerCase();
+      const checkbox = row.querySelector('input[type="checkbox"]');
+
+      if (name.includes(filter)) {
+        row.style.display = ''; // Hiện hàng nếu khớp
+      } else {
+        row.style.display = 'none'; // Ẩn hàng nếu không khớp
+      }
+    });
+    calculateTotals();
   }
 
-  function filterBoMon() {
-    applyFilters();
+
+  function filterByKhoa() {
+    const input = document.getElementById('filterKhoa');
+    const filter = input.value.toLowerCase();
+    const tableRows = document.querySelectorAll('#tableBody tr');
+
+    // Nếu ô tìm kiếm trống, hiển thị tất cả các dòng
+    if (!filter) {
+      tableRows.forEach(row => {
+        row.style.display = ''; // Hiện tất cả các dòng
+        const checkbox = row.querySelector('input[type="checkbox"]');
+      });
+      return;
+    }
+
+    // Chỉ hiện các dòng có tên giảng viên khớp với giá trị tìm kiếm
+    tableRows.forEach(row => {
+      const nameCell = row.querySelector('td:nth-child(6)'); // Giả sử tên giảng viên nằm ở cột thứ 5
+      const name = nameCell.textContent.toLowerCase();
+      const checkbox = row.querySelector('input[type="checkbox"]');
+
+      if ( name.includes(filter)) {
+        row.style.display = ''; // Hiện hàng nếu khớp
+      } else {
+        row.style.display = 'none'; // Ẩn hàng nếu không khớp
+      }
+    });
+    calculateTotals();
   }
 
-  // Hàm gợi ý bộ môn với cải tiến cho việc điền giá trị vào input
+  // Hàm gợi ý bộ môn ở ô nhập 
   function showSuggestionsBoMon(input) {
-    const value = input.value.toLowerCase();
-    hideSuggestionsBoMon();
+    const value = input.value.toLowerCase(); // Lấy giá trị nhập vào và chuyển thành chữ thường
+    hideSuggestionsBoMon(); // Ẩn gợi ý cũ trước khi hiển thị gợi ý mới
 
+    // Tạo thẻ div chứa gợi ý
     const suggestionsContainer = document.createElement('div');
-    suggestionsContainer.className = 'suggestions';
+    suggestionsContainer.className = 'suggestions'; // Đặt class cho khung gợi ý
 
-    const { bottom, left, width } = input.getBoundingClientRect();
-    suggestionsContainer.style.position = 'absolute';
-    suggestionsContainer.style.top = `${bottom + window.scrollY}px`;
-    suggestionsContainer.style.left = `${left + window.scrollX}px`;
-    suggestionsContainer.style.width = `${width}px`;
-    suggestionsContainer.style.zIndex = '1000';
-    suggestionsContainer.style.maxHeight = '200px';
-    suggestionsContainer.style.overflowY = 'auto';
+    // Đặt vị trí cho suggestionsContainer
+    const { bottom, left, width } = input.getBoundingClientRect(); // Lấy vị trí của input
+    suggestionsContainer.style.position = 'absolute'; // Để đè lên bảng
+    suggestionsContainer.style.top = `${bottom + window.scrollY}px`; // Đặt vị trí ngay dưới input
+    suggestionsContainer.style.left = `${left + window.scrollX}px`; // Căn trái với input
+    suggestionsContainer.style.width = `${width}px`; // Chiều rộng bằng với input
+    suggestionsContainer.style.zIndex = '1000'; // Đảm bảo luôn hiển thị trên các thành phần khác
+    suggestionsContainer.style.maxHeight = '200px'; // Giới hạn chiều cao để không quá lớn
+    suggestionsContainer.style.overflowY = 'auto';  // Cho phép cuộn dọc nếu quá nhiều gợi ý
 
-    document.body.appendChild(suggestionsContainer);
+    // Thêm suggestionsContainer vào DOM
+    document.body.appendChild(suggestionsContainer); // Đặt suggestionsContainer vào body thay vì cha của input
 
-    let suggestions = [];
-    const boMon = JSON.parse(localStorage.getItem("boMon")) || [];
+    let suggestions = []; // Khởi tạo mảng gợi ý
+
+    // Lấy dữ liệu từ localStorage
+    const boMon = JSON.parse(localStorage.getItem("boMon")) || []; // Giảng viên mời
+    // console.log(boMon);
 
     suggestions = boMon.map(item => `${item.TenBoMon} - ${item.MaBoMon}`);
 
+    // Nếu người dùng nhập dữ liệu, lọc kết quả theo tên giảng viên
     if (value) {
       suggestions = suggestions.filter(name => name.toLowerCase().includes(value));
     }
 
+    // Nếu không có gợi ý, ẩn container
     if (suggestions.length === 0) {
       suggestionsContainer.remove();
-      return;
+      return; // Kết thúc hàm nếu không có gợi ý
     }
 
+    // Tạo gợi ý dưới dạng danh sách (list)
     suggestions.forEach(name => {
-      const suggestionItem = document.createElement('div');
-      suggestionItem.className = 'suggestion-item';
-      suggestionItem.textContent = name;
+      const suggestionItem = document.createElement('div'); // Tạo phần tử cho từng gợi ý
+      suggestionItem.className = 'suggestion-item'; // Đặt class để tùy chỉnh giao diện
+      suggestionItem.textContent = name; // Hiển thị tên giảng viên kèm theo khoa
 
+      // Thêm sự kiện click để điền tên vào ô input
       suggestionItem.onclick = function () {
+        const name = suggestionItem.innerText; // Hoặc có thể là suggestionItem.textContent
         const dashIndex = name.indexOf("-");
         let processedName = name;
 
         if (dashIndex !== -1) {
+          // Lấy phần sau dấu "-" và loại bỏ khoảng trắng
           processedName = name.slice(dashIndex + 1).trim().replace(/\s+/g, '');
         }
 
+        // Điền tên gợi ý đã xử lý vào ô input
         input.value = processedName;
-        if (input.id == 'filterBoMon') {
-          filterBoMon(); // Áp dụng bộ lọc sau khi chọn gợi ý
-        }
-        hideSuggestionsBoMon();
+        filterBoMon();
+        hideSuggestionsBoMon(); // Ẩn gợi ý sau khi chọn
       };
 
-      suggestionsContainer.appendChild(suggestionItem);
+      suggestionsContainer.appendChild(suggestionItem); // Thêm mục vào danh sách gợi ý
     });
 
+    // Ẩn gợi ý khi input không còn focus
     input.onblur = function () {
       setTimeout(() => {
         hideSuggestionsBoMon();
-      }, 100);
+      }, 100); // Thời gian chờ để nhận diện click
     };
   }
 
-  // Hàm ẩn gợi ý
-  function hideSuggestionsBoMon() {
-    const suggestions = document.querySelectorAll('.suggestions');
-    suggestions.forEach(suggestion => suggestion.remove());
+  */
+
+// Hàm applyFilters sẽ được gọi mỗi khi có thay đổi ở các ô lọc
+// Hàm applyFilters sẽ được gọi mỗi khi có thay đổi ở các ô lọc
+// Hàm applyFilters để đồng nhất cả ba bộ lọc
+function applyFilters() {
+  const nameFilter = document.getElementById('filterName').value.toLowerCase();
+  const classFilter = document.getElementById('filterClass').value.toLowerCase();
+  const khoaFilter = document.getElementById('filterBoMon').value.toLowerCase();
+  const tableRows = document.querySelectorAll('#tableBody tr');
+
+  tableRows.forEach(row => {
+    const nameCell = row.querySelector('td:nth-child(3)'); // Cột tên giảng viên
+    const classCell = row.querySelector('td:nth-child(1)'); // Cột học phần
+    const khoaCell = row.querySelector('td:nth-child(6)'); // Cột bộ môn
+
+    // Kiểm tra khớp với từng bộ lọc, áp dụng với tất cả các ô lọc cùng lúc
+    const nameMatch = !nameFilter || (nameCell && nameCell.textContent.toLowerCase().includes(nameFilter));
+    const classMatch = !classFilter || (classCell && classCell.textContent.toLowerCase().includes(classFilter));
+    const khoaMatch = !khoaFilter || (khoaCell && khoaCell.textContent.toLowerCase().includes(khoaFilter));
+
+    // Chỉ hiển thị hàng nếu tất cả bộ lọc đều khớp
+    row.style.display = (nameMatch && classMatch && khoaMatch) ? '' : 'none';
+  });
+
+  calculateTotals();
+}
+
+// Gọi applyFilters trong các hàm lọc riêng để đồng bộ
+function filterByName() {
+  applyFilters();
+}
+
+function filterByClass() {
+  applyFilters();
+}
+
+function filterBoMon() {
+  applyFilters();
+}
+
+// Hàm gợi ý bộ môn với cải tiến cho việc điền giá trị vào input
+function showSuggestionsBoMon(input) {
+  const value = input.value.toLowerCase(); 
+  hideSuggestionsBoMon(); 
+
+  const suggestionsContainer = document.createElement('div');
+  suggestionsContainer.className = 'suggestions'; 
+
+  const { bottom, left, width } = input.getBoundingClientRect();
+  suggestionsContainer.style.position = 'absolute';
+  suggestionsContainer.style.top = `${bottom + window.scrollY}px`;
+  suggestionsContainer.style.left = `${left + window.scrollX}px`;
+  suggestionsContainer.style.width = `${width}px`;
+  suggestionsContainer.style.zIndex = '1000';
+  suggestionsContainer.style.maxHeight = '200px';
+  suggestionsContainer.style.overflowY = 'auto';
+
+  document.body.appendChild(suggestionsContainer);
+
+  let suggestions = []; 
+  const boMon = JSON.parse(localStorage.getItem("boMon")) || []; 
+
+  suggestions = boMon.map(item => `${item.TenBoMon} - ${item.MaBoMon}`);
+
+  if (value) {
+    suggestions = suggestions.filter(name => name.toLowerCase().includes(value));
   }
+
+  if (suggestions.length === 0) {
+    suggestionsContainer.remove();
+    return;
+  }
+
+  suggestions.forEach(name => {
+    const suggestionItem = document.createElement('div');
+    suggestionItem.className = 'suggestion-item';
+    suggestionItem.textContent = name;
+
+    suggestionItem.onclick = function () {
+      const dashIndex = name.indexOf("-");
+      let processedName = name;
+
+      if (dashIndex !== -1) {
+        processedName = name.slice(dashIndex + 1).trim().replace(/\s+/g, '');
+      }
+
+      input.value = processedName;
+      filterBoMon(); // Áp dụng bộ lọc sau khi chọn gợi ý
+      hideSuggestionsBoMon();
+    };
+
+    suggestionsContainer.appendChild(suggestionItem);
+  });
+
+  input.onblur = function () {
+    setTimeout(() => {
+      hideSuggestionsBoMon();
+    }, 100);
+  };
+}
+
+// Hàm ẩn gợi ý
+function hideSuggestionsBoMon() {
+  const suggestions = document.querySelectorAll('.suggestions');
+  suggestions.forEach(suggestion => suggestion.remove());
+}
 
 
   // Hàm tính tổng số tiết từ globalData
@@ -1408,22 +1489,7 @@
     document.getElementById('totalLL').textContent = totalLL;
     document.getElementById('totalQC').textContent = totalQC;
   }
-  /*
-    function checkAll(type) {
-      const checkboxes = document.querySelectorAll(
-        `input[type="checkbox"][name="${type}"]`
-      );
-      const checkAllCheckbox = document.getElementById(
-        `checkAll${type.charAt(0).toUpperCase() + type.slice(1)}`
-      );
-  
-      checkboxes.forEach((checkbox) => {
-        if (!checkbox.disabled) { // Kiểm tra xem checkbox có bị vô hiệu hóa không
-          checkbox.checked = checkAllCheckbox.checked;
-        }
-      });
-    }
-  */
+/*
   function checkAll(type) {
     const checkboxes = document.querySelectorAll(
       `input[type="checkbox"][name="${type}"]`
@@ -1432,18 +1498,33 @@
       `checkAll${type.charAt(0).toUpperCase() + type.slice(1)}`
     );
 
-    for (const checkbox of checkboxes) {
-      if (checkbox.disabled) {
-        continue; // Bỏ qua checkbox bị vô hiệu hóa
+    checkboxes.forEach((checkbox) => {
+      if (!checkbox.disabled) { // Kiểm tra xem checkbox có bị vô hiệu hóa không
+        checkbox.checked = checkAllCheckbox.checked;
       }
-
-      const row = checkbox.closest('tr');
-      if (row.style.display == 'none') { // Kiểm tra nếu dòng hiện trên màn hình
-        continue; // Gán trạng thái checkbox "Check All" cho checkbox hiển thị
-      }
-      checkbox.checked = checkAllCheckbox.checked; // Gán giá trị checked cho checkbox không bị vô hiệu hóa
-    }
+    });
   }
+*/
+function checkAll(type) {
+  const checkboxes = document.querySelectorAll(
+    `input[type="checkbox"][name="${type}"]`
+  );
+  const checkAllCheckbox = document.getElementById(
+    `checkAll${type.charAt(0).toUpperCase() + type.slice(1)}`
+  );
+
+  for (const checkbox of checkboxes) {
+    if (checkbox.disabled) {
+      continue; // Bỏ qua checkbox bị vô hiệu hóa
+    }
+
+    const row = checkbox.closest('tr');
+    if (row.style.display == 'none') { // Kiểm tra nếu dòng hiện trên màn hình
+      continue; // Gán trạng thái checkbox "Check All" cho checkbox hiển thị
+    }
+    checkbox.checked = checkAllCheckbox.checked; // Gán giá trị checked cho checkbox không bị vô hiệu hóa
+  }
+}
 
 
   // Hàm để cập nhật trạng thái của checkbox "Check All" khi checkbox cá nhân được chọn
@@ -1691,7 +1772,7 @@
     const isKhoa = localStorage.getItem("isKhoa");
 
     // Nếu là phòng ban thì hiện lọc theo khoa
-    if (isKhoa == 0) {
+    if (isKhoa == 0){
       document.getElementById('filterKhoa').style.display = 'block';
     }
 

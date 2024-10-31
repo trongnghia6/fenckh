@@ -524,6 +524,21 @@
         return;
       }
 
+
+    // Chèn ngày bắt đầu, bỏ qua các ô bị disable
+    document.querySelectorAll("input[id^='NgayBatDau_']").forEach(input => {
+      if (!input.disabled && input.offsetParent !== null) {
+        input.value = globalStartDate;
+      }
+    });
+
+    // Chèn ngày kết thúc, bỏ qua các ô bị disable
+    document.querySelectorAll("input[id^='NgayKetThuc_']").forEach(input => {
+      if (!input.disabled && input.offsetParent !== null) {
+        input.value = globalEndDate;
+      }
+    });
+
       // Lấy dữ liệu từ localStorage (giả sử dữ liệu đã có id)
       let data = JSON.parse(localStorage.getItem('tableData'));
       console.log(data);
@@ -589,9 +604,6 @@
     });
   </script>
 
-
-
-  </script>
 
   <!-- phần render bảng dùng localStorage -->
   <script>
@@ -741,7 +753,7 @@
       const isKhoa = parseInt(localStorage.getItem("isKhoa"), 10); // Chuyển đổi isKhoa thành số
       const MaPhongBan = localStorage.getItem("MaPhongBan")
 
-      data.forEach((row) => {
+      data.forEach((row, index) => {
         const tableRow = document.createElement('tr');
 
         // Gán id vào thuộc tính data-id của hàng
@@ -830,6 +842,8 @@
         const ngayBatDauInput = document.createElement('input');
         ngayBatDauInput.type = 'date';
         ngayBatDauInput.name = 'startDate';
+        ngayBatDauInput.id = `NgayBatDau_${index}`; // Thêm id
+
         ngayBatDauInput.value = formatDate(row.NgayBatDau); // Định dạng ngày
 
         // Thêm sự kiện paste cho input ngày bắt đầu
@@ -845,6 +859,8 @@
         const ngayKetThucInput = document.createElement('input');
         ngayKetThucInput.type = 'date';
         ngayKetThucInput.name = 'endDate';
+        ngayKetThucInput.id = `NgayKetThuc_${index}`; // Thêm id
+
         ngayKetThucInput.value = formatDate(row.NgayKetThuc); // Định dạng ngày
 
         // Thêm sự kiện paste cho input ngày kết thúc

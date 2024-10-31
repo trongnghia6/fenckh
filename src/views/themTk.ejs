@@ -206,7 +206,6 @@
       function fetchPhongBan() {
         const TenNhanVien = document.getElementById("TenNhanVien").value;
         console.log("Giá trị TenNhanVien:", TenNhanVien); // Kiểm tra giá trị TenNhanVien
-        alert(TenNhanVien);
 
         // Gửi yêu cầu tới server để lấy MaPhongBan và isKhoa
         fetch(`http://localhost:3000/getTenNhanVien?TenNhanVien=${TenNhanVien}`)
@@ -218,7 +217,7 @@
             return response.json();
           })
           .then((data) => {
-            alert("Dữ liệu trả về từ server: " + JSON.stringify(data)); // Kiểm tra dữ liệu trả về từ server
+            //alert("Dữ liệu trả về từ server: " + JSON.stringify(data)); // Kiểm tra dữ liệu trả về từ server
             // Cập nhật giá trị vào các thẻ input
             document.getElementById("MaPhongBan").value =
               data.MaPhongBan || "Không có dữ liệu";
