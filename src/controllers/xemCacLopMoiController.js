@@ -195,4 +195,5 @@ const renderInfo = async (req, res) => {
 
 module.exports = {
   renderInfo,
+  //chenNgay,
 };
