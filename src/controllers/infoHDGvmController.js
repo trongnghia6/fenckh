@@ -63,8 +63,8 @@ const exportHDGvmToExcel = async (req, res) => {
     console.log("Lấy dữ liệu từ bảng hopdonggvmoi thành công");
 
     if (rows.length === 0) {
-      console.log("Không có dữ liệu để xuất khẩu");
-      res.status(404).send("Không có dữ liệu để xuất khẩu");
+      console.log("Không có dữ liệu để xuất ");
+      res.send("<script>alert('Không có dữ liệu để xuất '); window.location.href='/infoHDGvm';</script>");
       return;
     }
 
