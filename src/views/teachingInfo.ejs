@@ -424,7 +424,7 @@
               </th>
             </tr>
           </thead>
-          <tbody id="tableBody">
+          <tbody id="tableBody" class="fixed-section">
             <tr>
               <td></td>
               <td></td>
@@ -589,10 +589,6 @@
           alert('Có lỗi xảy ra khi cập nhật dữ liệu.');
         });
     });
-  </script>
-
-
-
   </script>
 
   <!-- phần render bảng dùng localStorage -->
@@ -1230,11 +1226,10 @@
       tableRows.forEach(row => {
         const nameInput = row.querySelector('td:nth-child(7) input[name="bomon"]'); // Lấy input có name="bomon" ở cột thứ 7
         const checkbox = row.querySelector('input[type="checkbox"]');
-
         if (nameInput) {
           const name = nameInput.value.toLowerCase(); // Lấy giá trị của input có name="bomon"
 
-          if (filter === '' || name.includes(filter)) {
+          if (!row.style.display == 'none' || name.includes(filter)) {
             row.style.display = ''; // Hiện hàng nếu khớp hoặc filter trống
             //checkbox.disabled = false; // Kích hoạt checkbox
           } else {
@@ -1256,11 +1251,11 @@
       const filter = input.value.toLowerCase();
       const tableRows = document.querySelectorAll('#tableBody tr');
 
-      // Nếu ô tìm kiếm trống, hiển thị tất cả các dòng
+      // // Nếu ô tìm kiếm trống, hiển thị tất cả các dòng
       if (!filter) {
         tableRows.forEach(row => {
           row.style.display = ''; // Hiện tất cả các dòng
-          const checkbox = row.querySelector('input[type="checkbox"]');
+          // const checkbox = row.querySelector('input[type="checkbox"]');
           //checkbox.disabled = false; // Kích hoạt checkbox
         });
         return;
@@ -1293,7 +1288,7 @@
       if (!filter) {
         tableRows.forEach(row => {
           row.style.display = ''; // Hiện tất cả các dòng
-          const checkbox = row.querySelector('input[type="checkbox"]');
+          // const checkbox = row.querySelector('input[type="checkbox"]');
           //checkbox.disabled = false; // Kích hoạt checkbox
         });
         return;
@@ -1303,7 +1298,7 @@
       tableRows.forEach(row => {
         const nameCell = row.querySelector('td:nth-child(1)'); // Giả sử tên giảng viên nằm ở cột thứ 5
         const name = nameCell.textContent.toLowerCase();
-        const checkbox = row.querySelector('input[type="checkbox"]');
+        // const checkbox = row.querySelector('input[type="checkbox"]');
 
         if (name.includes(filter)) {
           row.style.display = ''; // Hiện hàng nếu khớp
