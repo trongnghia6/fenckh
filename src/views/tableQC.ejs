@@ -642,7 +642,7 @@
           // Kiểm tra nếu response thành công
           const MaPhongBan = response.MaPhongBan;
           if (response.success) {
-            $('#MaPhongBan').prepend('<option value="ALL">Tất cả khoa</option>');
+            $('#MaPhongBan').prepend('<option value="ALL">ALL</option>');
             // Lặp qua từng mục trong mảng MaPhongBan
             response.MaPhongBan.forEach(function (item) {
               // Nếu item.MaPhongBan bằng boMon.MaPhongBan, hiển thị trước

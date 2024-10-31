@@ -243,10 +243,10 @@
     <div class="mx-5 flex-grow-1">
       <div class="header-actions">
         <div class="left">
-          <button class="btn" id="ban-hanh">
+          <button class="btn" id="ban-hanh" style="margin-bottom: 0px;">
             Ban Hành
           </button>
-          <button class="btn text-nowrap" id="quychuandukien" style="width: max-content;">
+          <button class="btn text-nowrap" id="quychuandukien" style="width: max-content; margin-bottom: 0px;">
             Thêm bảng quy chuẩn
           </button>
         </div>
@@ -254,8 +254,8 @@
         <!-- <button class="btn btn-outline-primary button">
           <a href="/import">Thêm bảng quy chuẩn</a>
         </button> -->
-        <div class="right">
-          <div class="loc d-flex align-items-center" style="margin-top: -15px">
+        <div class="right" style="margin-top: 0px;">
+          <div class="loc d-flex align-items-center">
             <select class="selectop " id="combobox-dot">
               <option value="1">Đợt 1</option>
               <option value="2">Đợt 2</option>
@@ -694,11 +694,12 @@
         method: 'GET',
         success: function (response) {
           if (response.success) {
-            const NamHoc = response.NamHoc;
+            const NamHoc = localStorage.getItem("Year");
             console.log(NamHoc);
 
             response.NamHoc.forEach(function (item) {
-              if (item.NamHoc === NamHoc) {
+              console.log(item.NamHoc);
+              if (item.NamHoc.toString() === NamHoc) {
                 $('#NamHoc').prepend(
                   `<option value="${item.NamHoc}" selected>${item.NamHoc}</option>`
                 );
