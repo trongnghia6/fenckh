@@ -58,13 +58,16 @@ const checkDataQC = async (req, res) => {
     const exist = results[0].exist === 1;
 
     if (exist) {
-      return res.status(200).json({ message: "Dữ liệu đã tồn tại trong hệ thống." });
+      return res
+        .status(200)
+        .json({ message: "Dữ liệu đã tồn tại trong hệ thống." });
     } else {
-      return res.status(404).json({ message: "Dữ liệu không tồn tại trong hệ thống." });
+      return res
+        .status(404)
+        .json({ message: "Dữ liệu không tồn tại trong hệ thống." });
     }
   });
 };
-
 
 const importTableQC = async (jsonData) => {
   const tableName = process.env.DB_TABLE_QC; // Giả sử biến này có giá trị là "quychuan"
@@ -123,11 +126,11 @@ const importTableQC = async (jsonData) => {
   }
 
   function tachGiaoVien(giaoVienInput) {
-    // null 
+    // null
     if (!giaoVienInput) {
       return [{ MoiGiang: false, GiaoVienGiangDay: "" }];
     }
-    // trường hợp có không có ( gvm ) 
+    // trường hợp có không có ( gvm )
     else if (!giaoVienInput.includes("gvm")) {
       const gvmKeyword1 = "( gvm )"; // Từ khóa cho giảng viên mời
       const gvmKeyword2 = "Giảng viên mời"; // Từ khóa cho giảng viên mời
@@ -171,7 +174,6 @@ const importTableQC = async (jsonData) => {
           GiaoVienGiangDay: lecturers[0], // Lấy tên giảng viên đầu tiên
         },
       ];
-
     } else {
       // const gvmKeyword1 = "( gvm )"; // Từ khóa cho giảng viên mời
       // const gvmKeyword2 = "Giảng viên mời"; // Từ khóa cho giảng viên mời
@@ -304,8 +306,6 @@ const importTableQC = async (jsonData) => {
 
   return results;
 };
-
-
 
 // Hàm nhập dữ liệu vào bảng quychuan
 const importTableTam = async (jsonData) => {
@@ -616,15 +616,11 @@ const deleteFile = (req, res) => {
   connection.query(sql, [Khoa, Dot, Ki, Nam], (err, results) => {
     if (err) {
       console.error(err);
-      return res
-        .status(500)
-        .json({ message: "Lỗi truy vấn", error: err });
+      return res.status(500).json({ message: "Lỗi truy vấn", error: err });
     }
 
     if (results.affectedRows === 0) {
-      return res
-        .status(404)
-        .json({ message: "Không tìm thấy dữ liệu" });
+      return res.status(404).json({ message: "Không tìm thấy dữ liệu" });
     }
 
     return res.status(200).json({ message: "Xóa thành công" });
@@ -917,6 +913,47 @@ const updateQC = async (req, res) => {
   }
 };
 
+// Phòng ban duyệt - teching info2
+const phongBanDuyet = async (req, res) => {
+  const role = req.session.role;
+  const duyet = process.env.DUYET;
+
+  const tableName = process.env.DB_TABLE_QC; // Giả sử biến này có giá trị là "quychuan"
+  const jsonData = req.body; // Lấy dữ liệu từ req.body
+
+  // Lấy kết nối từ pool
+  const connection = await createPoolConnection();
+
+  try {
+    // Duyệt qua từng phần tử trong jsonData
+    for (let item of jsonData) {
+      const { ID, KhoaDuyet, DaoTaoDuyet, TaiChinhDuyet } = item;
+
+      // Nếu chưa duyệt đầy đủ, tiến hành cập nhật
+      const updateQuery = `
+        UPDATE ${tableName}
+        SET 
+          KhoaDuyet = ?,
+          DaoTaoDuyet = ?,
+          TaiChinhDuyet = ?
+        WHERE ID = ?
+      `;
+
+      const updateValues = [KhoaDuyet, DaoTaoDuyet, TaiChinhDuyet, ID];
+
+      await connection.query(updateQuery, updateValues);
+    }
+
+    // Nếu tất cả cập nhật thành công
+    res.status(200).json({ message: "Cập nhật thành công" });
+  } catch (error) {
+    console.error("Lỗi cập nhật:", error);
+    res.status(500).json({ error: "Có lỗi xảy ra khi cập nhật dữ liệu" });
+  } finally {
+    connection.release(); // Trả kết nối về pool sau khi hoàn tất
+  }
+};
+
 // const updateAllTeachingInfo = async (req, res) => {
 //   const query2 = `
 //     SELECT
@@ -1090,6 +1127,8 @@ const updateAllTeachingInfo = async () => {
             MaSoThue,
             HoTen,
             NgaySinh,
+            HocVi,
+            ChucVu,
             HSL,
             CCCD,
             NoiCapCCCD,
@@ -1127,6 +1166,8 @@ const updateAllTeachingInfo = async () => {
             DanhXung,
             HoTen,
             NgaySinh,
+            HocVi,
+            ChucVu,
             HSL,
             CCCD,
             NoiCapCCCD,
@@ -1164,7 +1205,7 @@ const updateAllTeachingInfo = async () => {
     // Định nghĩa câu lệnh chèn
     const queryInsert = `
       INSERT INTO hopdonggvmoi (
-        id_Gvm, DienThoai, Email, MaSoThue, DanhXung, HoTen, NgaySinh, HSL, CCCD, NoiCapCCCD,
+        id_Gvm, DienThoai, Email, MaSoThue, DanhXung, HoTen, NgaySinh, HocVi, ChucVu, HSL, CCCD, NoiCapCCCD,
         DiaChi, STK, NganHang, NgayBatDau, NgayKetThuc, KiHoc, SoTiet, SoTien, TruThue,
         Dot, NamHoc, MaPhongBan, MaBoMon, KhoaDuyet, DaoTaoDuyet, TaiChinhDuyet
       ) VALUES ?;
@@ -1440,4 +1481,5 @@ module.exports = {
   submitData2,
   updateQC,
   checkDataQC,
+  phongBanDuyet,
 };

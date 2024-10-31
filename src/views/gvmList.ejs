@@ -131,6 +131,7 @@
                 Bảng Quy Chuẩn
               </a>
               <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="nav-link" href="/import" id="actionButton2" style="width: 100%;">Thêm file quy chuẩn</a>
                 <a class="nav-link" href="/tableTam">Bảng quy chuẩn dự kiến</a>
                 <a class="nav-link" href="/tableQC">Bảng quy chuẩn chính thức</a>
                 <a class="nav-link" id="ThongTinGD" href="">Thông tin giảng viên theo lớp</a>
@@ -145,7 +146,6 @@
               </a>
               <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                 <a class="nav-link" href="/xemCacLopGvm">Xem các lớp mời</a>
-
                 <a class="nav-link " href="/classInfoGvm">Thông tin lớp giảng viên mời</a>
                 <a class="nav-link" href="/infoHDGvm" role="button">Thông tin hợp đồng</a>
                 <li class="nav-item"></li>
@@ -255,17 +255,7 @@
                 </option>
                 <% }); %>
             </select>
-            <!-- <select
-                      id="filterByDepartment"
-                      class="filter"
-                      onchange="filterClasses()"
-                    >
-                      <option value="">Tất cả</option>
-                      <option value="CNTT">Công nghệ thông tin</option>
-                      <option value="ATTT">An toàn thông tin</option>
-                      <option value="DTVT">Điện tử viễn thông</option>
-                      <option value="MM">Mật mã</option>
-                    </select> -->
+            
           </div>
           <table class="class-table" id="classTable">
             <thead>
@@ -313,45 +303,6 @@
                   </tr>
                   <% } %>
             </tbody>
-
-            <!-- code cũ -->
-            <!-- <tbody>
-              <% for (var i=0; i < gvmLists.length; i++) {%>
-                <tr>
-                  <td>
-                    <%= i+1 %>
-                  </td>
-                  <td>
-                    <%= gvmLists[i].MaGvm %>
-                  </td>
-                  <td>
-                    <%= gvmLists[i].HoTen %>
-                  </td>
-
-                  <% const options={ year: 'numeric' , month: '2-digit' , day:'2-digit' }; %>
-                    <td>
-                      <%= new Date(gvmLists[i].NgaySinh).toLocaleDateString('vi-VN', options) %>
-                    </td>
-                    <td style="display: none;">
-                      <%= gvmLists[i].MaPhongBan %>
-                    </td>
-                    <td id="BoMon">
-                      <%= gvmLists[i].MonGiangDayChinh %>
-                    </td>
-
-                    <td>
-                      <button class="action-button edit"
-                        onclick="editClass(this, <%= parseInt(gvmLists[i].id_Gvm) - 1 %>)">
-                        ✏️
-                      </button>
-                      <button class="action-button view"
-                        onclick="viewClass(this, <%= parseInt(gvmLists[i].id_Gvm) - 1 %>)">
-                        👁️
-                      </button>
-                    </td>
-                </tr>
-                <% } %>
-            </tbody> -->
           </table>
 
         </div>
@@ -399,33 +350,33 @@
           }
         }
       }
+
       // Tìm kiếm theo bộ môn
       function searchBoMon() {
-        console.log()
-        // alert('mé')
         const input = document.getElementById('searchBoMon');
         const filter = input.value.trim().toLowerCase(); // Bỏ khoảng trắng và chuyển chữ thường
-        const tableRows = document.querySelectorAll('#tableBody tr');
+        const tableRows = document.querySelectorAll('#classTable tr');
 
         tableRows.forEach(row => {
-          const nameInput = row.querySelector('td:nth-child(7) input[name="bomon"]'); // Lấy input có name="bomon" ở cột thứ 7
+          //if (row.style.display === 'none') return;
+
+          const nameCell = row.querySelector('td:nth-child(6)'); // Lấy ô chứa bộ môn ở cột thứ 7
           const checkbox = row.querySelector('input[type="checkbox"]');
-
-          if (nameInput) {
-            const name = nameInput.value.toLowerCase(); // Lấy giá trị của input có name="bomon"
-
+      
+          if (nameCell) {
+            const name = nameCell.textContent.trim().toLowerCase(); // Lấy nội dung text của ô bộ môn
+            
             if (filter === '' || name.includes(filter)) {
               row.style.display = ''; // Hiện hàng nếu khớp hoặc filter trống
-              checkbox.disabled = false; // Kích hoạt checkbox
+              if (checkbox) checkbox.disabled = false; // Kích hoạt checkbox nếu có
             } else {
               row.style.display = 'none'; // Ẩn hàng nếu không khớp
-              checkbox.disabled = true; // Vô hiệu hóa checkbox
+              if (checkbox) checkbox.disabled = true; // Vô hiệu hóa checkbox nếu có
             }
           }
         });
       }
-
-
+      
 
       // Thêm lớp học
       function addClass() {
@@ -453,80 +404,6 @@
       // Gọi hàm disableInputs khi trang đã tải
       window.onload = disableInputs;
     </script>
-    <!-- async function fetchGVMLists() {
-      try {
-        const response = await fetch('/api/gvm');
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-
-          const gvmLists = await response.json();
-          return gvmLists;
-        } catch (error) {
-          console.error("Error fetching data:", error);
-        }
-      }
-      /*
-     function fetchGVMLists() {
-      fetch('/api/gvm')
-          .then(response => {
-              if (!response.ok) {
-                  throw new Error('Network response was not ok');
-              }
-              return response.json(); // Trả về Promise cho kết quả JSON
-          })
-          .then(gvmLists => {
-              alert("Lấy thành công");
-              return gvmLists; // Trả về danh sách giảng viên mời
-          })
-          .catch(error => {
-              console.error('Error fetching data:', error); // Xử lý lỗi
-          });
-    }
-    */
-
-      async function viewClass(index) {
-        gvmLists = await fetchGVMLists();
-
-        var gvm = gvmLists[index];
-
-        document.getElementById("modal-ma-gv").innerText = gvm.MaGvm;
-        document.getElementById("modal-ho-ten").innerText = gvm.HoTen;
-        document.getElementById("modal-ngay-sinh").innerText = new Date(
-          gvm.NgaySinh
-        ).toLocaleDateString("vi-VN");
-        document.getElementById("modal-cccd").innerText = gvm.CCCD;
-        document.getElementById("modal-ngay-cap").innerText = new Date(
-          gvm.NgayCapCCCD
-        ).toLocaleDateString("vi-VN");
-        document.getElementById("modal-noi-cap").innerText = gvm.NoiCapCCCD;
-        document.getElementById("modal-dia-chi-cccd").innerText = gvm.DiaChi;
-        document.getElementById("modal-so-tk").innerText = gvm.STK;
-        document.getElementById("modal-ngan-hang").innerText = gvm.NganHang;
-        document.getElementById("modal-email").innerText = gvm.Email;
-        document.getElementById("modal-heso-luong").innerText = gvm.HSL; 
-        document.getElementById("modal-noi-cong-tac").innerText =
-          gvm.NoiCongTac;
-        document.getElementById("modal-chuc-vu").innerText = gvm.ChucVu;
-        document.getElementById("modal-ma-so-thue").innerText = gvm.MaSoThue;
-        // Hiển thị modal
-        document.getElementById("modal").style.display = "flex";
-      }
-
-      // Đóng modal
-      function closeModal() {
-        document.getElementById("modal").style.display = "none";
-      }
-
-    // Thêm sự kiện khi nhấn ra ngoài modal để đóng modal
-    window.onclick = function (event) {
-      let modal = document.getElementById("modal");
-      if (event.target == modal) {
-        modal.style.display = "none";
-      }
-    }; -->
-
-    <!-- </script> -->
 
     <script>
       // Lấy query string từ URL
@@ -605,24 +482,22 @@
         } else {
           document.querySelector(".fullname").innerText = "Hi, Guest"; // Hiển thị nếu không có tên người dùng
         }
-
-        document.querySelector(".role").innerText = `${Role}`;
       };
     </script>
 
     <script>
       function filterClasses() {
-        let filterValue = document.getElementById("filterByDepartment").value;
+        let filterValue = document.getElementById("filterByDepartment").value.trim();
         let table = document.getElementById("classTable");
         let tr = table.getElementsByTagName("tr");
-
+      
         for (let i = 1; i < tr.length; i++) { // Bỏ qua hàng tiêu đề
-          let td = tr[i].getElementsByTagName("td")[4]; // Lấy mã giảng viên mời từ cột thứ 2
+          let td = tr[i].getElementsByTagName("td")[4]; // Đảm bảo cột chứa mã phòng ban là cột thứ 5
           if (td) {
-            let textValue = td.textContent || td.innerText;
-
-            // Nếu chọn "Tất cả" hoặc giá trị khớp với Mã Phòng Ban
-            if (filterValue === "all" || textValue.startsWith(filterValue)) {
+            let textValue = (td.textContent || td.innerText).trim(); // Loại bỏ khoảng trắng thừa
+      
+            // So sánh chính xác giá trị mã phòng ban
+            if (filterValue === "all" || textValue === filterValue) {
               tr[i].style.display = ""; // Hiển thị hàng
             } else {
               tr[i].style.display = "none"; // Ẩn hàng
@@ -630,8 +505,9 @@
           }
         }
       }
-
+      
     </script>
+
     <script>
       document.getElementById("changePasswordLink").addEventListener("click", function (event) {
         event.preventDefault(); // Ngăn chặn hành vi mặc định của thẻ a
@@ -765,14 +641,14 @@
         const input = document.getElementById('filterBoMon');
         const filter = input.value.trim().toLowerCase(); // Bỏ khoảng trắng và chuyển chữ thường
         const tableRows = document.querySelectorAll('#tableBody tr');
-
+      
         tableRows.forEach(row => {
-          const nameInput = row.querySelector('td:nth-child(7) input[name="bomon"]'); // Lấy input có name="bomon" ở cột thứ 7
+          const nameCell = row.querySelector('td:nth-child(7)'); // Lấy ô chứa tên bộ môn ở cột thứ 7
           const checkbox = row.querySelector('input[type="checkbox"]');
-
-          if (nameInput) {
-            const name = nameInput.value.toLowerCase(); // Lấy giá trị của input có name="bomon"
-
+      
+          if (nameCell) {
+            const name = nameCell.textContent.trim().toLowerCase(); // Lấy nội dung text của ô bộ môn và chuyển thành chữ thường
+      
             if (filter === '' || name.includes(filter)) {
               row.style.display = ''; // Hiện hàng nếu khớp hoặc filter trống
               checkbox.disabled = false; // Kích hoạt checkbox
@@ -783,6 +659,8 @@
           }
         });
       }
+      
+    
     </script>
 
 </body>
