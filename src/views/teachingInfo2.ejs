@@ -888,7 +888,6 @@
         tableRows.forEach((row) => {
           row.style.display = ""; // Hiện tất cả các dòng
           const checkbox = row.querySelector('input[type="checkbox"]');
-          checkbox.disabled = false; // Kích hoạt checkbox
         });
         return;
       }
@@ -901,10 +900,8 @@
 
         if (name.includes(filter)) {
           row.style.display = ""; // Hiện hàng nếu khớp
-          checkbox.disabled = false; // Kích hoạt checkbox
         } else {
           row.style.display = "none"; // Ẩn hàng nếu không khớp
-          checkbox.disabled = true; // Vô hiệu hóa checkbox
         }
       });
       calculateTotals();
@@ -919,8 +916,6 @@
       if (!filter) {
         tableRows.forEach((row) => {
           row.style.display = ""; // Hiện tất cả các dòng
-          const checkbox = row.querySelector('input[type="checkbox"]');
-          checkbox.disabled = false; // Kích hoạt checkbox
         });
         return;
       }
@@ -929,14 +924,11 @@
       tableRows.forEach((row) => {
         const nameCell = row.querySelector("td:nth-child(1)"); // Giả sử tên giảng viên nằm ở cột thứ 5
         const name = nameCell.textContent.toLowerCase();
-        const checkbox = row.querySelector('input[type="checkbox"]');
 
         if (name.includes(filter)) {
           row.style.display = ""; // Hiện hàng nếu khớp
-          checkbox.disabled = false; // Kích hoạt checkbox
         } else {
           row.style.display = "none"; // Ẩn hàng nếu không khớp
-          checkbox.disabled = true; // Vô hiệu hóa checkbox
         }
       });
       calculateTotals();
@@ -951,8 +943,6 @@
       if (!filter) {
         tableRows.forEach((row) => {
           row.style.display = ""; // Hiện tất cả các dòng
-          const checkbox = row.querySelector('input[type="checkbox"]');
-          checkbox.disabled = false; // Kích hoạt checkbox
         });
         return;
       }
@@ -961,14 +951,11 @@
       tableRows.forEach((row) => {
         const nameCell = row.querySelector("td:nth-child(6)"); // Giả sử tên giảng viên nằm ở cột thứ 5
         const name = nameCell.textContent.toLowerCase();
-        const checkbox = row.querySelector('input[type="checkbox"]');
 
         if (name.includes(filter)) {
           row.style.display = ""; // Hiện hàng nếu khớp
-          checkbox.disabled = false; // Kích hoạt checkbox
         } else {
           row.style.display = "none"; // Ẩn hàng nếu không khớp
-          checkbox.disabled = true; // Vô hiệu hóa checkbox
         }
       });
       calculateTotals();
@@ -1302,8 +1289,6 @@
       if (!filter) {
         tableRows.forEach((row) => {
           row.style.display = ""; // Hiện tất cả các dòng
-          const checkbox = row.querySelector('input[type="checkbox"]');
-          checkbox.disabled = false; // Kích hoạt checkbox
         });
         return;
       }
@@ -1312,14 +1297,11 @@
       tableRows.forEach((row) => {
         const nameCell = row.querySelector("td:nth-child(7)"); // Giả sử tên giảng viên nằm ở cột thứ 5
         const name = nameCell.textContent.toLowerCase();
-        const checkbox = row.querySelector('input[type="checkbox"]');
 
         if (name.includes(filter)) {
           row.style.display = ""; // Hiện hàng nếu khớp
-          checkbox.disabled = false; // Kích hoạt checkbox
         } else {
           row.style.display = "none"; // Ẩn hàng nếu không khớp
-          checkbox.disabled = true; // Vô hiệu hóa checkbox
         }
       });
       calculateTotals();

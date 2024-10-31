@@ -14,6 +14,9 @@
 
 - Bỏ duyệt mất ngày bắt đầu ngày kết thúc ( done )
 
+- Khi lọc sẽ bị mất duyệt Khoa bên teachinginfo2 và mời giảng
+
+- Khi lọc bên khoa sẽ bị mất disable cột mời giảng
 
 
 # không phải bug
