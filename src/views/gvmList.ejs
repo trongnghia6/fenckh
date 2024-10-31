@@ -356,7 +356,9 @@
         const input = document.getElementById('searchBoMon');
         const filter = input.value.trim().toLowerCase(); // Bỏ khoảng trắng và chuyển chữ thường
         const tableRows = document.querySelectorAll('#classTable tr');
+
         tableRows.forEach(row => {
+          //if (row.style.display === 'none') return;
 
           const nameCell = row.querySelector('td:nth-child(6)'); // Lấy ô chứa bộ môn ở cột thứ 7
           const checkbox = row.querySelector('input[type="checkbox"]');
