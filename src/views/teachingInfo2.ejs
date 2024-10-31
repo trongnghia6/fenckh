@@ -1257,7 +1257,10 @@
 
           // Điền tên gợi ý đã xử lý vào ô input
           input.value = processedName;
-          filterBoMon();
+          // filterBoMon();
+          if (input.id == 'filterBoMon') {
+            filterBoMon();
+          }
           hideSuggestionsBoMon(); // Ẩn gợi ý sau khi chọn
         };
 
