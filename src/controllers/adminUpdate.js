@@ -263,11 +263,14 @@ const postUpdateTK = async (req, res) => {
 const postUpdateBoMon = async (req, res) => {
   let connection;
   try {
-    connection = createPoolConnection();
+    connection = await createPoolConnection();
+    const id_BoMon = req.params;
+    const id = id_BoMon.id_BoMon;
     const { MaPhongBan, MaBoMon, TenBoMon, TruongBoMon } = req.body;
+    console.log(MaPhongBan, MaBoMon, TenBoMon, TruongBoMon, id );
     const query =
-      "UPDATE bomon set MaPhongBan = ?, TenBoMon = ?, TruongBoMon = ? WHERE MaBoMon = ?";
-    await connection.query(query, [MaPhongBan, TenBoMon, TruongBoMon, MaBoMon]);
+      "UPDATE bomon set MaBoMon = ?, MaPhongBan = ?, TenBoMon = ?, TruongBoMon = ? WHERE id_BoMon = ?";
+    await connection.query(query, [MaBoMon, MaPhongBan, TenBoMon, TruongBoMon, id]);
     res.redirect("/boMon?Success");
   } catch (error) {
     console.error("Lỗi khi cập nhật dữ liệu: ", error.message);
@@ -277,9 +280,7 @@ const postUpdateBoMon = async (req, res) => {
         `Lỗi server, không thể cập nhật dữ liệu. Chi tiết: ${error.message}`
       );
   } finally {
-    if (connection) {
-      if (connection) connection.release(); // Đảm bảo giải phóng kết nối
-    }
+      if (connection){connection.release();}  // Đảm bảo giải phóng kết nối
   }
 };
 

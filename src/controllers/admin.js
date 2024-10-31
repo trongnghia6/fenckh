@@ -205,11 +205,11 @@ const updatePassword = async (req, res) => {
 const getupdateBoMon = async (req, res) => {
   let connection;
   try {
-    const MaBoMon = req.params.MaBoMon;
+    const id_BoMon = req.params.id_BoMon;
     connection = await createPoolConnection();
-    const query = `SELECT * FROM bomon WHERE MaBoMon = ?`;
+    const query = `SELECT * FROM bomon WHERE id_BoMon  = ?`;
 
-    const [results, fields] = await connection.query(query, [MaBoMon]);
+    const [results, fields] = await connection.query(query, [id_BoMon]);
     const boMon = results[0];
     res.render("updateBoMon.ejs", { boMon: boMon });
   } catch (error) {
@@ -238,8 +238,8 @@ const postNamHoc = async (req, res) => {
   const NamHoc = req.body.NamHoc;
   const connection = await createPoolConnection();
   try {
-    const query = `INSERT INTO namhoc (NamHoc) VALUES (?)`;
-    await connection.query(query, [NamHoc]);
+    const query = `INSERT INTO namhoc (NamHoc, trangthai) VALUES (?, ?)`;
+    await connection.query(query, [NamHoc, 0]);
     res.redirect("/namHoc?Success");
   } catch (error) {
     console.error("Lỗi khi cập nhật dữ liệu: ", error);

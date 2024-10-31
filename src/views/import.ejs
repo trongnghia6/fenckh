@@ -177,14 +177,12 @@
         <!-- Combo box Đợt -->
         <!-- Combo box Đợt -->
         <select class="selectop mx-1" id="combobox-dot">
-          <option value="1">Đợt 1</option>
-          <option value="2">Đợt 2</option>
+          <option value="">Đợt</option>
         </select>
 
         <!-- Combo box kì -->
         <select class="selectop mx-1" id="combobox-ki">
-          <option value="1">Kỳ 1</option>
-          <option value="2">Kỳ 2</option>
+          <option value="">Kỳ</option>
         </select>
 
         <!-- Combo box Năm -->
@@ -705,30 +703,34 @@
   <script>
     $(document).ready(function () {
       $('#NamHoc option[value=""]').remove();
+      $('#combobox-ki option[value=""]').remove();
+      $('#combobox-dot option[value=""]').remove();
 
       $.ajax({
         url: '/getNamHoc',
         method: 'GET',
         success: function (response) {
           if (response.success) {
-            const NamHoc = response.NamHoc;
-            console.log(NamHoc);
 
             response.NamHoc.forEach(function (item) {
-              if (item.NamHoc === NamHoc) {
-                $('#NamHoc').prepend(
-                  `<option value="${item.NamHoc}" selected>${item.NamHoc}</option>`
-                );
-              } else {
+              console.log(item.NamHoc);
                 $('#NamHoc').append(
                   `<option value="${item.NamHoc}">${item.NamHoc}</option>`
                 );
-              }
             });
 
-            if (!$('#NamHoc option:selected').length) {
-              $('#NamHoc').prepend('<option value="">Chọn Năm Học</option>');
-            }
+            response.Ki.forEach(function (item) {
+              console.log(item.Ki);
+                $('#combobox-ki').append(
+                  `<option value="${item.value}">${item.Ki}</option>`
+                );
+            });
+            response.Dot.forEach(function (item) {
+              console.log(item.Dot);
+                $('#combobox-dot').append(
+                  `<option value="${item.value}">${item.Dot}</option>`
+                );
+            });
           } else {
             console.error("Không lấy được dữ liệu năm học:", response.message);
           }

@@ -257,14 +257,12 @@
         <div class="right" style="margin-top: 0px;">
           <div class="loc d-flex align-items-center">
             <select class="selectop " id="combobox-dot">
-              <option value="1">Đợt 1</option>
-              <option value="2">Đợt 2</option>
+              <option value="">Đợt</option>
             </select>
 
             <!-- Combo box kì -->
             <select class="selectop " id="combobox-ki">
-              <option value="1">Kỳ 1</option>
-              <option value="2">Kỳ 2</option>
+              <option value="">Kì</option>
             </select>
 
             <!-- Combo box Năm -->
@@ -565,6 +563,7 @@
           alert("Gửi dữ liệu thất bại! Vui lòng thử lại.");
         }
       });
+      
   </script>
 
 
@@ -618,8 +617,10 @@
   <script>
     window.onload = function () {
       const TenNhanVien = localStorage.getItem("TenNhanVien"); // Lấy tên người dùng từ localStorage
-      const Role = localStorage.getItem("userRole");
-
+      let Role = localStorage.getItem("userRole");
+      if (Role.toUpperCase() == 'LÃNH ĐẠO KHOA'){
+        Role = 'LĐK';
+      }
       if (TenNhanVien) {
         // Hiển thị tên người dùng trên phần tử HTML
         document.querySelector(
@@ -688,31 +689,34 @@
   <script>
     $(document).ready(function () {
       $('#NamHoc option[value=""]').remove();
+      $('#combobox-ki option[value=""]').remove();
+      $('#combobox-dot option[value=""]').remove();
 
       $.ajax({
         url: '/getNamHoc',
         method: 'GET',
         success: function (response) {
           if (response.success) {
-            const NamHoc = localStorage.getItem("Year");
-            console.log(NamHoc);
 
             response.NamHoc.forEach(function (item) {
               console.log(item.NamHoc);
-              if (item.NamHoc.toString() === NamHoc) {
-                $('#NamHoc').prepend(
-                  `<option value="${item.NamHoc}" selected>${item.NamHoc}</option>`
-                );
-              } else {
                 $('#NamHoc').append(
                   `<option value="${item.NamHoc}">${item.NamHoc}</option>`
                 );
-              }
             });
 
-            if (!$('#NamHoc option:selected').length) {
-              $('#NamHoc').prepend('<option value="">Chọn Năm Học</option>');
-            }
+            response.Ki.forEach(function (item) {
+              console.log(item.Ki);
+                $('#combobox-ki').append(
+                  `<option value="${item.value}">${item.Ki}</option>`
+                );
+            });
+            response.Dot.forEach(function (item) {
+              console.log(item.Dot);
+                $('#combobox-dot').append(
+                  `<option value="${item.value}">${item.Dot}</option>`
+                );
+            });
           } else {
             console.error("Không lấy được dữ liệu năm học:", response.message);
           }
@@ -759,6 +763,50 @@
       });
     });
   </script>
+  <script>
+    document
+        .getElementById("ban-hanh")
+        .addEventListener("click", async function () {
+            // Xác nhận lại hành động ban hành
+            const confirmed = confirm("Bạn có chắc chắn muốn đặt năm đợt kì mặc định không?");
+            if (!confirmed) {
+                return; // Thoát nếu người dùng không đồng ý
+            }
+
+            // Lấy giá trị của option đang được chọn
+            let Dot = document.getElementById("combobox-dot")?.value;
+            let Ki = document.getElementById("combobox-ki")?.value;
+            let NamHoc = document.getElementById("NamHoc")?.value;
+
+            try {
+                const updateResult = await updateDatabase(NamHoc, Ki, Dot); // Gọi hàm updateDatabase với NamHoc
+
+                if (updateResult.success) {
+                    alert(updateResult.message || "Cập nhật thành công!");
+                } else {
+                    alert(updateResult.message || "Cập nhật thất bại!");
+                }
+            } catch (error) {
+                console.error("Error:", error);
+                alert("Cập nhật dữ liệu thất bại! Vui lòng thử lại.");
+            }
+
+            // Gọi hàm updateDatabase để update dữ liệu
+            async function updateDatabase(NamHoc) {
+                const response = await fetch(`http://localhost:3000/update/${NamHoc}/${Ki}/${Dot}`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    // body: JSON.stringify(dataQC), // Nếu cần gửi dữ liệu khác, hãy mở comment và thêm dataQC
+                });
+
+                const result = await response.json();
+                return result;
+            }
+        });
+</script>
+
 </body>
 
 </html>

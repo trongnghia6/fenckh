@@ -302,14 +302,12 @@
       <div class="d-flex">
         <div class="cbb d-flex" style="margin-top: 20px;">
           <select class="selectop mx-1" id="combobox-dot">
-            <option value="1">Đợt 1</option>
-            <option value="2">Đợt 2</option>
+            <option value="">Đợt</option>
           </select>
 
           <!-- Combo box Kỳ -->
           <select class="selectop mx-1" id="combobox-ki">
-            <option value="1">Kỳ 1</option>
-            <option value="2">Kỳ 2</option>
+            <option value="">Kỳ</option>
           </select>
 
           <!-- Combo box Năm -->
@@ -456,83 +454,6 @@
   }
 </script>
 
-  <!-- phần chèn ngày bd kt cho tất cả các dòng khi nhấn Chèn -->
-  <script>
-    document.getElementById('fillDay').addEventListener('click', function () {
-      // Lấy giá trị của ngày bắt đầu và ngày kết thúc
-      const globalStartDate = document.getElementById('startDate').value;
-      const globalEndDate = document.getElementById('endDate').value;
-
-      // Kiểm tra nếu người dùng chưa nhập ngày
-      if (!globalStartDate || !globalEndDate) {
-        alert('Vui lòng nhập ngày bắt đầu và ngày kết thúc.');
-        return;
-      }
-
-      // Lấy dữ liệu từ localStorage (giả sử dữ liệu đã có id)
-      let data = JSON.parse(localStorage.getItem('tableData'));
-      console.log(data);
-
-      // Lấy tất cả các dòng đang hiển thị trong bảng (có chứa id của đối tượng)
-      const rows = document.querySelectorAll('#tableBody tr');
-
-      rows.forEach(row => {
-        // Bỏ qua các hàng bị ẩn (display: none)
-        if (row.style.display === 'none') {
-          return;
-        }
-
-        // Lấy id của hàng từ thuộc tính data-id
-        const rowId = row.getAttribute('data-id');
-        console.log('id trong bảng : ', rowId);
-
-        // Tìm đối tượng trong localStorage dựa vào id
-        let item = data.find(d => parseInt(d.id) === parseInt(rowId));
-        console.log(item);
-
-        // Nếu tìm thấy đối tượng và KhoaDuyet == 0
-        if (item && item.KhoaDuyet == 0) {
-          // Cập nhật ngày bắt đầu và ngày kết thúc cho đối tượng trong localStorage
-          item.NgayBatDau = globalStartDate;
-          item.NgayKetThuc = globalEndDate;
-
-          // Cập nhật ngày bắt đầu và kết thúc trong hàng của bảng
-          const ngayBatDauCell = row.querySelector('.ngay-bat-dau');
-          const ngayKetThucCell = row.querySelector('.ngay-ket-thuc');
-          if (ngayBatDauCell) ngayBatDauCell.textContent = globalStartDate;
-          if (ngayKetThucCell) ngayKetThucCell.textContent = globalEndDate;
-        }
-      });
-
-      // Lưu lại dữ liệu đã cập nhật vào localStorage
-      localStorage.setItem('tableData', JSON.stringify(data));
-
-      // Gửi dữ liệu đã cập nhật lên server
-      fetch('http://localhost:3000/check-teaching', {
-        method: 'POST', // Phương thức POST
-        headers: {
-          'Content-Type': 'application/json' // Định dạng gửi là JSON
-        },
-        body: JSON.stringify(data) // Chuyển đổi data đã cập nhật thành chuỗi JSON
-      })
-        .then(response => {
-          if (!response.ok) {
-            throw new Error('Lỗi khi gửi dữ liệu');
-          }
-          return response.json(); // Chuyển đổi phản hồi thành JSON
-        })
-        .then(data => {
-          // Hiển thị thông báo từ server
-          alert(data.message);
-          console.log(data.message);
-          // window.location.reload();
-        })
-        .catch(error => {
-          console.error('Có lỗi xảy ra:', error);
-          alert('Có lỗi xảy ra khi cập nhật dữ liệu.');
-        });
-    });
-  </script>
 
 
 <script>
@@ -651,9 +572,7 @@
     return `${year}-${month}-${day}`;
   }
 
-
   // Fill all startDate and endDate
-  /*
   document.getElementById('fillDay').addEventListener('click', function () {
     const startDateValue = document.getElementById('startDate').value;
     const endDateValue = document.getElementById('endDate').value;
@@ -678,10 +597,9 @@
       }
     });
 
-    alert("Chèn thành công")
+    submitData();
   });
 
-  */
 
   // Hàm render bảng
   function renderTable(data) {
@@ -700,9 +618,6 @@
       if (row.MoiGiang == 0) {
         tableRow.style.display = 'none'; // Ẩn hàng
       }
-
-      // Gán id vào thuộc tính data-id của hàng
-      tableRow.setAttribute('data-id', row.id);
 
       // Lớp học phần
       const lopHocPhanTd = document.createElement('td');
@@ -1819,7 +1734,10 @@ function checkAll(type) {
 <script>
   window.onload = function () {
     const TenNhanVien = localStorage.getItem("TenNhanVien"); // Lấy tên người dùng từ localStorage
-    const Role = localStorage.getItem("userRole");
+    let Role = localStorage.getItem("userRole");
+    if (Role.toUpperCase() == 'LÃNH ĐẠO KHOA'){
+      Role = 'LĐK';
+    }
 
     if (TenNhanVien) {
       // Hiển thị tên người dùng trên phần tử HTML
@@ -1936,30 +1854,34 @@ function checkAll(type) {
 <script>
   $(document).ready(function () {
     $('#NamHoc option[value=""]').remove();
+    $('#combobox-ki option[value=""]').remove();
+    $('#combobox-dot option[value=""]').remove();
 
     $.ajax({
       url: '/getNamHoc',
       method: 'GET',
       success: function (response) {
         if (response.success) {
-          const NamHoc = response.NamHoc;
-          console.log(NamHoc);
 
           response.NamHoc.forEach(function (item) {
-            if (item.NamHoc === NamHoc) {
-              $('#NamHoc').prepend(
-                `<option value="${item.NamHoc}" selected>${item.NamHoc}</option>`
-              );
-            } else {
+            console.log(item.NamHoc);
               $('#NamHoc').append(
                 `<option value="${item.NamHoc}">${item.NamHoc}</option>`
               );
-            }
           });
 
-          if (!$('#NamHoc option:selected').length) {
-            $('#NamHoc').prepend('<option value="">Chọn Năm Học</option>');
-          }
+          response.Ki.forEach(function (item) {
+            console.log(item.Ki);
+              $('#combobox-ki').append(
+                `<option value="${item.value}">${item.Ki}</option>`
+              );
+          });
+          response.Dot.forEach(function (item) {
+            console.log(item.Dot);
+              $('#combobox-dot').append(
+                `<option value="${item.value}">${item.Dot}</option>`
+              );
+          });
         } else {
           console.error("Không lấy được dữ liệu năm học:", response.message);
         }

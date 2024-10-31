@@ -388,6 +388,50 @@ const importTableQC = async (jsonData) => {
   return results;
 };
 
+const updateBanHanh = async(req, res) => {
+
+  let connection;
+  try {
+    const NamHoc = req.params;
+    console.log(NamHoc);
+    // Lấy kết nối từ pool
+    connection = await createPoolConnection();
+
+    // Câu lệnh SQL để cập nhật trangthai
+    const query1 = `UPDATE namhoc SET trangthai = ?`;
+    const [result1] = await connection.query(query1, [0]);
+
+    const query2 = `UPDATE namhoc SET trangthai = ? WHERE NamHoc = ?`;
+    const [result2] = await connection.query(query2, [1, NamHoc.NamHoc]);
+    // cập nhật bảng kì
+    const query3 = `UPDATE ki SET trangthai = ?`;
+    const [result3] = await connection.query(query3, [0]);
+
+    const query4 = `UPDATE ki SET trangthai = ? WHERE value = ?`;
+    const [result4] = await connection.query(query4, [1, NamHoc.Ki]);
+
+    //update bảng đợt
+
+    const query5 = `UPDATE dot SET trangthai = ?`;
+    const [result5] = await connection.query(query5, [0]);
+
+    const query6 = `UPDATE dot SET trangthai = ? WHERE value = ?`;
+    const [result6] = await connection.query(query6, [1, NamHoc.Dot]);
+
+    // Kiểm tra nếu không có dòng nào bị ảnh hưởng
+    if (result2.affectedRows === 0) {
+      return res.status(404).json({ success: false, message: "Không tìm thấy năm học để cập nhật." });
+    }
+
+    res.json({ success: true, message: "Cập nhật trạng thái thành công." });
+  } catch (error) {
+    console.error("Lỗi khi cập nhật dữ liệu:", error);
+    res.status(500).json({ success: false, message: "Cập nhật thất bại, lỗi server." });
+  } finally {
+    if (connection) connection.release(); // Giải phóng kết nối
+  }
+};
+
 
 // Hàm nhập dữ liệu vào bảng quychuan
 const importTableTam = async (jsonData) => {
@@ -1564,4 +1608,5 @@ module.exports = {
   updateQC,
   checkDataQC,
   phongBanDuyet,
+  updateBanHanh,
 };
