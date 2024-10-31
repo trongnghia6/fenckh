@@ -82,7 +82,7 @@
       overflow: hidden;
     }
 
-    /* phần css cho label tổng số tiết  ki*/
+    /* phần css cho label tổng số tiết ki*/
     .total-label {
       margin-left: auto;
       /* Căn phải cho thẻ total-label */
@@ -307,9 +307,9 @@
           <select class="selectop w-100px mx-1 " id="NamHoc">
             <option value="">Năm học</option>
           </select>
-          <button id="getData" class="btn text-nowrap mx-3" style="width: max-content;">Lấy bảng quy chuẩn</button>
+          <button id="getData" class="btn text-nowrap mx-3" style="width: max-content;">Hiển thị</button>
           <!-- <button id="infoGvm" class="button text-nowrap">Xem bảng cục bộ</button> -->
-          <button id="update-qc" onclick="updateLocalTable()" class="btn mx-3 luuTamThoi">Lưu</button>
+          <!-- <button id="update-qc" onclick="updateLocalTable()" class="btn mx-3 luuTamThoi">Lưu</button> -->
           <button id="update-qc" onclick="submitData()" class="btn mx-3 luu">Cập nhật</button>
         </div>
 
@@ -317,7 +317,7 @@
 
 
       <div class="d-flex my-3" style="height: 70px;">
-        <!-- Tìm kiếm theo giảng viên  -->
+        <!-- Tìm kiếm theo giảng viên -->
         <input type="text" id="filterName" placeholder="Tìm theo giảng viên TKB" oninput="filterByName()"
           class="form-control my-2 mx-1 search" style="width: 180px;" />
         <!-- Tìm kiếm theo tên học phần -->
@@ -327,7 +327,6 @@
         <input type="text" id="filterBoMon" placeholder="Tìm theo tên bộ môn"
           oninput="filterBoMon(); showSuggestionsBoMon(this)" onclick="showSuggestionsBoMon(this)"
           class="form-control my-2 mx-1 search" style="width: 180px;" />
-
 
         <div class="input-group my-2 mx-1" style="width: 350px;" id="batdau">
           <label for="startDate" class="input-group-text">Ngày bắt đầu</label>
@@ -498,8 +497,8 @@
 
       // Chỉ cho nhập ngày bắt đầu ngày kết thúc với role thi hành
       // if (role && role.includes('GV_CNBM')) {
-      //   document.getElementById('batdau').style.display = '';
-      //   document.getElementById('ketthuc').style.display = '';
+      // document.getElementById('batdau').style.display = '';
+      // document.getElementById('ketthuc').style.display = '';
       // }
 
       // Nếu role là 1 trong 3 giá trị sau thì hiển thị cột, ngược lại thì ẩn
@@ -529,7 +528,7 @@
       }
 
       // Lấy dữ liệu từ localStorage (giả sử dữ liệu được lưu dưới dạng JSON)
-      let data = JSON.parse(localStorage.getItem('tableData')); // Nếu không có, tạo mảng trống
+      let data = JSON.parse(localStorage.getItem('tableData'));
       // Cập nhật từng đối tượng trong dữ liệu
       data.forEach(item => {
         // Nếu khoa chưa duyệt thì mới chèn
@@ -542,15 +541,34 @@
       // Lưu lại dữ liệu đã cập nhật vào localStorage
       localStorage.setItem('tableData', JSON.stringify(data));
 
+      let data2 = JSON.parse(localStorage.getItem('tableData'));
 
-      console.log('sau khi cập nhật ngày :', data);
-      // lấy ra bảng 
-      // let table = JSON.parse(localStorage.getItem('tableData')); // Nếu không có, tạo mảng trống
+      console.log('sau khi cập nhật ngày :', data2);
 
-
-      // Thông báo cho người dùng
-      alert('Chèn thành công');
-      window.location.reload();
+      // Gửi dữ liệu lên server
+      fetch('http://localhost:3000/check-teaching', {
+        method: 'POST', // Phương thức POST
+        headers: {
+          'Content-Type': 'application/json' // Định dạng gửi là JSON
+        },
+        body: JSON.stringify(data2) // Chuyển đổi globalData thành chuỗi JSON
+      })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Lỗi khi gửi dữ liệu');
+          }
+          return response.json(); // Chuyển đổi phản hồi thành JSON
+        })
+        .then(data => {
+          // Hiển thị thông báo từ server
+          alert(data.message);
+          console.log(data.message);
+          window.location.reload();
+        })
+        .catch(error => {
+          console.error('Có lỗi xảy ra:', error);
+          alert('Có lỗi xảy ra khi cập nhật dữ liệu.');
+        });
     });
 
 
@@ -821,8 +839,8 @@
         // Điều kiện ẩn checkbox Khoa nếu role không phải "CNTT_ALL"
         if (role != "Lãnh đạo khoa") {
           // Thiết lập thuộc tính CSS để thu nhỏ checkbox và ô <td> chứa nó
-          khoaCheckbox.style.width = '10px';    // Đặt chiều rộng nhỏ nhất có thể
-          khoaCheckbox.style.height = '10px';   // Đặt chiều cao nhỏ nhất có thể
+          khoaCheckbox.style.width = '10px'; // Đặt chiều rộng nhỏ nhất có thể
+          khoaCheckbox.style.height = '10px'; // Đặt chiều cao nhỏ nhất có thể
           khoaCheckbox.style.display = 'none';
 
           // Thu nhỏ <td>
@@ -916,7 +934,7 @@
       suggestionsContainer.style.width = `${width}px`; // Chiều rộng bằng với input
       suggestionsContainer.style.zIndex = '1000'; // Đảm bảo luôn hiển thị trên các thành phần khác
       suggestionsContainer.style.maxHeight = '200px'; // Giới hạn chiều cao để không quá lớn
-      suggestionsContainer.style.overflowY = 'auto';  // Cho phép cuộn dọc nếu quá nhiều gợi ý
+      suggestionsContainer.style.overflowY = 'auto'; // Cho phép cuộn dọc nếu quá nhiều gợi ý
 
       // Thêm suggestionsContainer vào DOM
       document.body.appendChild(suggestionsContainer); // Đặt suggestionsContainer vào body thay vì cha của input
@@ -1018,7 +1036,7 @@
         const currentNgayBatDau = localData[index].NgayBatDau || '';
         const currentNgayKetThuc = localData[index].NgayKetThuc || '';
 
-        // Cập nhật vào dữ liệu cục bộ 
+        // Cập nhật vào dữ liệu cục bộ
         if (currentNgayBatDau == '' || currentNgayBatDau != ngayBatDauValue) {
           localData[index].NgayBatDau = ngayBatDauValue; // Cập nhật ngày bắt đầu nếu cần
         }
@@ -1038,8 +1056,8 @@
       localStorage.setItem('tableData', JSON.stringify(localData));
       console.log(localData)
       // Hiển thị thông báo thành công
-      alert('Lưu cục bộ thành công');
-      window.location.reload();
+      console.log('Lưu cục bộ thành công');
+      // window.location.reload();
     }
 
     function calculateTotals() {
@@ -1081,7 +1099,7 @@
   <!-- phần lọc bộ môn -->
   <script>
 
-    // Hàm gợi ý bộ môn ở ô nhập 
+    // Hàm gợi ý bộ môn ở ô nhập
     function showSuggestionsBoMon(input) {
       const value = input.value.toLowerCase(); // Lấy giá trị nhập vào và chuyển thành chữ thường
       hideSuggestionsBoMon(); // Ẩn gợi ý cũ trước khi hiển thị gợi ý mới
@@ -1098,7 +1116,7 @@
       suggestionsContainer.style.width = `${width}px`; // Chiều rộng bằng với input
       suggestionsContainer.style.zIndex = '1000'; // Đảm bảo luôn hiển thị trên các thành phần khác
       suggestionsContainer.style.maxHeight = '200px'; // Giới hạn chiều cao để không quá lớn
-      suggestionsContainer.style.overflowY = 'auto';  // Cho phép cuộn dọc nếu quá nhiều gợi ý
+      suggestionsContainer.style.overflowY = 'auto'; // Cho phép cuộn dọc nếu quá nhiều gợi ý
 
       // Thêm suggestionsContainer vào DOM
       document.body.appendChild(suggestionsContainer); // Đặt suggestionsContainer vào body thay vì cha của input
@@ -1129,7 +1147,6 @@
         suggestionItem.className = 'suggestion-item'; // Đặt class để tùy chỉnh giao diện
         suggestionItem.textContent = name; // Hiển thị tên giảng viên kèm theo khoa
 
-        // Thêm sự kiện click để điền tên vào ô input
         // Thêm sự kiện click để điền tên vào ô input
         suggestionItem.onclick = function () {
           // Giả sử 'name' là giá trị gợi ý bạn nhận được từ suggestionItem
@@ -1268,14 +1285,14 @@
     // hàm check All
     /*
     function checkAll(type) {
-      const checkboxes = document.querySelectorAll(`input[type="checkbox"][name="${type}"]`);
-      const checkAllCheckbox = document.getElementById(`checkAll${type.charAt(0).toUpperCase() + type.slice(1)}`);
-
-      checkboxes.forEach(checkbox => {
-        checkbox.checked = checkAllCheckbox.checked; // Gán trạng thái checkbox "Check All" cho tất cả các checkbox
-      });
+    const checkboxes = document.querySelectorAll(`input[type="checkbox"][name="${type}"]`);
+    const checkAllCheckbox = document.getElementById(`checkAll${type.charAt(0).toUpperCase() + type.slice(1)}`);
+    
+    checkboxes.forEach(checkbox => {
+    checkbox.checked = checkAllCheckbox.checked; // Gán trạng thái checkbox "Check All" cho tất cả các checkbox
+    });
     }
-      */
+    */
     function checkAll(type) {
       const checkboxes = document.querySelectorAll(`input[type="checkbox"][name="${type}"]`);
       const checkAllCheckbox = document.getElementById(`checkAll${type.charAt(0).toUpperCase() + type.slice(1)}`);
@@ -1290,7 +1307,7 @@
 
 
 
-    // hàm xử lí check all 
+    // hàm xử lí check all
     function updateCheckAll(type) {
       const checkboxes = document.querySelectorAll(`input[type="checkbox"][name="${type}"]`);
       const checkAllCheckbox = document.getElementById(`checkAll${type.charAt(0).toUpperCase() + type.slice(1)}`);
@@ -1300,8 +1317,12 @@
       checkAllCheckbox.checked = allChecked; // Cập nhật trạng thái của checkbox "Check All"
     }
 
-    // Hàm đẩy dữ liệu lên server 
+    // Hàm đẩy dữ liệu lên server
     function submitData() {
+
+      // gọi hàm này để lưu vào local storage trước
+      updateLocalTable();
+
       // Lấy bảng tableData từ localStorage
       const tableData = localStorage.getItem('tableData');
 
@@ -1331,6 +1352,7 @@
         .then(data => {
           // Hiển thị thông báo từ server
           alert(data.message);
+          console.log(data.message);
 
           // Load lại trang sau khi nhận được phản hồi
           //location.reload();
