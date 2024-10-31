@@ -13,10 +13,11 @@ table {
   width: 100%;
   border-collapse: collapse;
   overflow: hidden;
-  box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
   border: 3px solid;
   border-radius: 7px;
 }
+
 th {
   text-align: center;
   color: #ffffff;
@@ -34,6 +35,7 @@ tbody {
       background-color: rgba(119, 119, 119, 0.3) !important;
     }
   }
+
   /* td {
     position: relative;
     &:hover {
@@ -50,12 +52,15 @@ tbody {
     }
   } */
 }
+
 .class-table {
-  width: 100%; /* hoặc một kích thước cố định, ví dụ 1000px */
+  width: 100%;
+  /* hoặc một kích thước cố định, ví dụ 1000px */
   table-layout: fixed;
 }
 
-.class-table th, .class-table td {
+.class-table th,
+.class-table td {
   width: auto;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -64,4 +69,11 @@ tbody {
 
 .hidden-row {
   display: none;
+}
+
+.fixed-section {
+  height: 500px;
+  /* Cố định chiều cao của khung */
+  overflow-y: auto;
+  /* Cho phép cuộn khi quá nhiều nội dung */
 }
