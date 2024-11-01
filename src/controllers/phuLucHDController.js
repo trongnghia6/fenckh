@@ -65,7 +65,6 @@ exports.exportPhuLucGiangVienMoi = async (req, res) => {
             titleRow5.alignment = { horizontal: 'center', vertical: 'middle' };
             worksheet.mergeCells(`J${titleRow5.number}:L${titleRow5.number}`);
 
-
             // Định nghĩa tiêu đề cột
             const header = [
                 'Họ Tên', 'Học Vị', 'Lớp', 'Số Tiết', 'Tên Học Phần',
@@ -77,20 +76,21 @@ exports.exportPhuLucGiangVienMoi = async (req, res) => {
             const headerRow = worksheet.addRow(header);
             headerRow.font = { name: 'Times New Roman', bold: true };
 
-            // Đặt cỡ chữ riêng cho từng tiêu đề cột
-            headerRow.getCell(1).font = { name: 'Times New Roman', size: 9 }; // Họ Tên
-            headerRow.getCell(2).font = { name: 'Times New Roman', size: 8 }; // Học Vị
-            headerRow.getCell(3).font = { name: 'Times New Roman', size: 9 }; // Lớp
-            headerRow.getCell(4).font = { name: 'Times New Roman', size: 9 }; // Số Tiết
-            headerRow.getCell(5).font = { name: 'Times New Roman', size: 9 }; // Tên Học Phần
-            headerRow.getCell(6).font = { name: 'Times New Roman', size: 8 }; // Học Kỳ
-            headerRow.getCell(7).font = { name: 'Times New Roman', size: 9 }; // Thời Gian Thực Hiện
-            headerRow.getCell(8).font = { name: 'Times New Roman', size: 9 }; // Hệ Số Lương
-            headerRow.getCell(9).font = { name: 'Times New Roman', size: 9 }; // Mức thanh toán
-            headerRow.getCell(10).font = { name: 'Times New Roman', size: 9 }; // Số Tiền
-            headerRow.getCell(11).font = { name: 'Times New Roman', size: 9 }; // Trừ Thuế
-            headerRow.getCell(12).font = { name: 'Times New Roman', size: 9 }; // Thực Nhận
+            // Căn chỉnh độ rộng cột
+            worksheet.getColumn(1).width = 19;  // Họ Tên
+            worksheet.getColumn(2).width = 9;  // Học Vị
+            worksheet.getColumn(3).width = 10;  // Lớp
+            worksheet.getColumn(4).width = 9;  // Số Tiết
+            worksheet.getColumn(5).width = 25;  // Tên Học Phần
+            worksheet.getColumn(6).width = 10;  // HK
+            worksheet.getColumn(7).width = 20;  // Thời Gian Thực Hiện
+            worksheet.getColumn(8).width = 8;  // HSL
+            worksheet.getColumn(9).width = 12;  // Mức thanh toán
+            worksheet.getColumn(10).width = 12; // Số Tiền
+            worksheet.getColumn(11).width = 12; // Trừ Thuế
+            worksheet.getColumn(12).width = 12; // Thực Nhận
 
+            // Bật wrapText cho tiêu đề
             headerRow.eachCell((cell) => {
                 cell.fill = {
                     type: 'pattern',
@@ -103,8 +103,7 @@ exports.exportPhuLucGiangVienMoi = async (req, res) => {
                     bottom: { style: 'thin' },
                     right: { style: 'thin' },
                 };
-                cell.alignment = { horizontal: 'center' };
-
+                cell.alignment = { horizontal: 'center', vertical: 'middle', wrapText: true }; // Bật wrapText cho tiêu đề
             });
 
             let totalSoTiet = 0;
@@ -125,19 +124,64 @@ exports.exportPhuLucGiangVienMoi = async (req, res) => {
                     item.TenHocPhan, item.HocKy, thoiGianThucHien, item.HSL,
                     mucThanhToan, soTien, truThue, thucNhan
                 ]);
-                row.font = { name: 'Times New Roman' };
+                row.font = { name: 'Times New Roman', size: 12 }; // Chỉnh cỡ chữ cho toàn bộ hàng
+
+                // Bật wrapText cho các ô dữ liệu và căn giữa
+                row.eachCell((cell, colNumber) => {
+                    cell.alignment = { horizontal: 'center', vertical: 'middle', wrapText: true };
+
+                    // Chỉnh cỡ chữ cho từng cột
+                    switch (colNumber) {
+                        case 1: // Họ Tên
+                            cell.font = { name: 'Times New Roman', size: 11 }; 
+                            break;
+                        case 2: // Học Vị
+                            cell.font = { name: 'Times New Roman', size: 10 };
+                            break;
+                        case 3: // Lớp
+                            cell.font = { name: 'Times New Roman', size: 10 };
+                            break;
+                        case 4: // Số Tiết
+                            cell.font = { name: 'Times New Roman', size: 10 };
+                            break;
+                        case 5: // Tên Học Phần
+                            cell.font = { name: 'Times New Roman', size: 11 };
+                            break;
+                        case 6: // HK
+                            cell.font = { name: 'Times New Roman', size: 9 };
+                            break;
+                        case 7: // Thời Gian Thực Hiện
+                            cell.font = { name: 'Times New Roman', size: 11 };
+                            break;
+                        case 8: // HSL
+                            cell.font = { name: 'Times New Roman', size: 10 };
+                            break;
+                        case 9: // Mức thanh toán
+                            cell.font = { name: 'Times New Roman', size: 11 };
+                            break;
+                        case 10: // Số Tiền
+                            cell.font = { name: 'Times New Roman', size: 11 };
+                            break;
+                        case 11: // Trừ Thuế
+                            cell.font = { name: 'Times New Roman', size: 11 };
+                            break;
+                        case 12: // Thực Nhận
+                            cell.font = { name: 'Times New Roman', size: 11 };
+                            break;
+                    }
+                });
 
                 totalSoTiet += item.SoTiet;
                 totalSoTien += soTien;
-                totalTruThue += truThue;
+                totalTruThue += truThue;A
                 totalThucNhan += thucNhan;
             });
 
+            // Thêm hàng tổng cộng
             const totalRow = worksheet.addRow(['Tổng cộng', '', '', totalSoTiet, '', '', '', '', '', totalSoTien, totalTruThue, totalThucNhan]);
             totalRow.font = { name: 'Times New Roman', bold: true };
-
             totalRow.eachCell((cell) => {
-                cell.alignment = { horizontal: 'center' };
+                cell.alignment = { horizontal: 'center', vertical: 'middle' }; // Căn giữa hàng tổng cộng
                 cell.border = {
                     top: { style: 'thin' },
                     left: { style: 'thin' },
@@ -146,18 +190,8 @@ exports.exportPhuLucGiangVienMoi = async (req, res) => {
                 };
             });
 
-            // Định dạng chiều rộng cột
-            worksheet.getColumn('A').width = 16; // Chiều rộng cột "Họ Tên"
-            worksheet.getColumn('B').width = 9; // Chiều rộng cột "Học vị"
-
-
-            worksheet.getColumn('D').width = 7; // Chiều rộng cột "Số Tiết"
-            worksheet.getColumn('F').width = 6; // Chiều rộng cột "Học Kỳ"
-            worksheet.getColumn('I').width = 8; // Chiều rộng cột "Hệ Số Lương"
-            worksheet.getColumn('J').width = 10; // Chiều rộng cột "Mức thanh toán"
-            worksheet.getColumn('K').width = 10; // Chiều rộng cột "Số Tiền"
-            worksheet.getColumn('L').width = 10; // Chiều rộng cột "Trừ Thuế"
-            worksheet.getColumn('M').width = 10; // Chiều rộng cột "Thực Nhận"
+            // Gộp ô cho hàng tổng cộng
+            worksheet.mergeCells(`A${totalRow.number}:C${totalRow.number}`);
 
             // Định dạng viền cho các hàng từ dòng thứ 6 trở đi
             const rowCount = worksheet.lastRow.number;
@@ -179,13 +213,18 @@ exports.exportPhuLucGiangVienMoi = async (req, res) => {
         await workbook.xlsx.writeFile(filePath);
 
         // Gửi file cho client
-        res.download(filePath);
+        res.download(filePath, (err) => {
+            if (err) {
+                console.error("Error downloading file:", err);
+                res.status(500).send("Error downloading file");
+            }
+        });
     } catch (error) {
-        console.error("Error exporting data: ", error);
+        console.error("Error exporting data:", error);
         res.status(500).send("Error exporting data");
     } finally {
         if (connection) {
-            connection.end();
+            connection.end(); // Đóng kết nối đến database
         }
     }
 };
