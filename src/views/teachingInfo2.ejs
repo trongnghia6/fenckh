@@ -33,7 +33,15 @@
     } */
 
     /* phần css cho label tổng số tiết  ki*/
-
+    .search {
+    /* Các style chung cho các ô tìm kiếm */
+    width: 200px; /* Hoặc bất kỳ chiều rộng nào bạn muốn */
+    padding: 8px; /* Padding cho ô input */
+    border: 1px solid #ccc; /* Đường viền cho ô input */
+    border-radius: 4px; /* Bo góc cho ô input */
+    font-size: 14px; /* Kích thước chữ */
+    height: 50px;
+}
     .total-label {
       margin-left: auto;
       /* Căn phải cho thẻ total-label */
@@ -360,16 +368,56 @@
       </div>
 
       <div class="d-flex my-3" style="height: 70px">
-        <input type="text" id="filterName" placeholder="Tìm theo tên giảng viên" oninput="filterByName()"
-          class="form-control m-2 search" style="width: 200px" />
-        <input type="text" id="filterClass" placeholder="Tìm theo tên học phần" oninput="filterByClass()"
-          class="form-control m-2 search" style="width: 200px" />
-        <input type="text" id="filterKhoa" placeholder="Tìm theo khoa" oninput="filterByKhoa()"
-          class="form-control m-2 search" style="width: 200px" />
-        <input type="text" id="filterBoMon" placeholder="Tìm theo tên bộ môn"
-          oninput="filterBoMon(); showSuggestionsBoMon(this)" onclick="showSuggestionsBoMon(this)"
-          class="form-control m-2 search" style="width: 180px;" />
+        <input type="text" id="filterName" placeholder="Tìm theo tên giảng viên" class="form-control m-2 search" />
+<input type="text" id="filterClass" placeholder="Tìm theo tên học phần" class="form-control m-2 search" />
+<input type="text" id="filterKhoa" placeholder="Tìm theo khoa" class="form-control m-2 search" />
+<input type="text" id="filterBoMon" placeholder="Tìm theo tên bộ môn"  onclick="showSuggestionsBoMon(this)" class="form-control m-2 search" />
       </div>
+      <script>
+        // Hàm lọc chung
+function filterClasses() {
+    const nameInput = document.getElementById("filterName").value.toLowerCase();
+    const classInput = document.getElementById("filterClass").value.toLowerCase();
+    const departmentInput = document.getElementById("filterKhoa").value.toLowerCase();
+    const boMonInput = document.getElementById("filterBoMon").value.toLowerCase();
+    
+    const tableRows = document.querySelectorAll("#tableBody tr");
+
+    tableRows.forEach(row => {
+        const nameCell = row.querySelector("td:nth-child(3)"); // Tên giảng viên
+        const classCell = row.querySelector("td:nth-child(1)"); // Tên học phần
+        const departmentCell = row.querySelector("td:nth-child(6)"); // Khoa
+        const boMonCell = row.querySelector("td:nth-child(7)"); // Bộ môn
+
+        // Lấy giá trị từ các ô
+        const nameValue = nameCell ? nameCell.textContent.toLowerCase() : '';
+        const classValue = classCell ? classCell.textContent.toLowerCase() : '';
+        const departmentValue = departmentCell ? departmentCell.textContent.toLowerCase() : '';
+        const boMonValue = boMonCell ? boMonCell.textContent.toLowerCase() : '';
+
+        // Kiểm tra điều kiện lọc
+        const nameMatch = nameValue.includes(nameInput);
+        const classMatch = classValue.includes(classInput);
+        const departmentMatch = departmentValue.includes(departmentInput);
+        const boMonMatch = boMonValue.includes(boMonInput);
+
+        // Hiện hoặc ẩn hàng dựa trên các điều kiện
+        if (nameMatch && classMatch && departmentMatch && boMonMatch) {
+            row.style.display = ""; // Hiện hàng nếu tất cả các điều kiện đều khớp
+        } else {
+            row.style.display = "none"; // Ẩn hàng nếu không khớp
+        }
+    });
+
+    calculateTotals(); // Cập nhật tổng số tiết
+}
+
+// Gọi hàm lọc khi có thay đổi trong các ô tìm kiếm
+document.getElementById("filterName").addEventListener("input", filterClasses);
+document.getElementById("filterClass").addEventListener("input", filterClasses);
+document.getElementById("filterKhoa").addEventListener("input", filterClasses);
+document.getElementById("filterBoMon").addEventListener("input", filterClasses);
+      </script>
       <div id="renderInfo" class="fixed-section">
         <table class="text-center" style="width: 100%">
           <thead>
@@ -903,86 +951,88 @@ function checkAll(type) {
       }
     }
 
-    function filterByName() {
-      const input = document.getElementById("filterName");
-      const filter = input.value.toLowerCase();
-      const tableRows = document.querySelectorAll("#tableBody tr");
+    // function filterByName() {
+    //   const input = document.getElementById("filterName");
+    //   const filter = input.value.toLowerCase();
+    //   const tableRows = document.querySelectorAll("#tableBody tr");
 
-      // Nếu ô tìm kiếm trống, hiển thị tất cả các dòng
-      if (!filter) {
-        tableRows.forEach((row) => {
-          row.style.display = ""; // Hiện tất cả các dòng
-        });
-        return;
-      }
+    //   // Nếu ô tìm kiếm trống, hiển thị tất cả các dòng
+    //   if (!filter) {
+    //     tableRows.forEach((row) => {
+    //       row.style.display = ""; // Hiện tất cả các dòng
+    //       const checkbox = row.querySelector('input[type="checkbox"]');
+    //     });
+    //     return;
+    //   }
 
-      // Chỉ hiện các dòng có tên giảng viên khớp với giá trị tìm kiếm
-      tableRows.forEach((row) => {
-        const nameCell = row.querySelector("td:nth-child(3)"); // Giả sử tên giảng viên nằm ở cột thứ 5
-        const name = nameCell.textContent.toLowerCase();
+    //   // Chỉ hiện các dòng có tên giảng viên khớp với giá trị tìm kiếm
+    //   tableRows.forEach((row) => {
+    //     const nameCell = row.querySelector("td:nth-child(3)"); // Giả sử tên giảng viên nằm ở cột thứ 5
+    //     const name = nameCell.textContent.toLowerCase();
+    //     const checkbox = row.querySelector('input[type="checkbox"]');
 
-        if (name.includes(filter)) {
-          row.style.display = ""; // Hiện hàng nếu khớp
-        } else {
-          row.style.display = "none"; // Ẩn hàng nếu không khớp
-        }
-      });
-      calculateTotals();
-    }
+    //     if (name.includes(filter)) {
+    //       row.style.display = ""; // Hiện hàng nếu khớp
+    //     } else {
+    //       row.style.display = "none"; // Ẩn hàng nếu không khớp
+    //     }
+    //   });
+    //   calculateTotals();
+    // }
 
-    function filterByClass() {
-      const input = document.getElementById("filterClass");
-      const filter = input.value.toLowerCase();
-      const tableRows = document.querySelectorAll("#tableBody tr");
+    // function filterByClass() {
+    //   const input = document.getElementById("filterClass");
+    //   const filter = input.value.toLowerCase();
+    //   const tableRows = document.querySelectorAll("#tableBody tr");
 
-      // Nếu ô tìm kiếm trống, hiển thị tất cả các dòng
-      if (!filter) {
-        tableRows.forEach((row) => {
-          row.style.display = ""; // Hiện tất cả các dòng
-        });
-        return;
-      }
+    //   // Nếu ô tìm kiếm trống, hiển thị tất cả các dòng
+    //   if (!filter) {
+    //     tableRows.forEach((row) => {
+    //       row.style.display = ""; // Hiện tất cả các dòng
+    //     });
+    //     return;
+    //   }
 
-      // Chỉ hiện các dòng có tên giảng viên khớp với giá trị tìm kiếm
-      tableRows.forEach((row) => {
-        const nameCell = row.querySelector("td:nth-child(1)"); // Giả sử tên giảng viên nằm ở cột thứ 5
-        const name = nameCell.textContent.toLowerCase();
+    //   // Chỉ hiện các dòng có tên giảng viên khớp với giá trị tìm kiếm
+    //   tableRows.forEach((row) => {
+    //     const nameCell = row.querySelector("td:nth-child(1)"); // Giả sử tên giảng viên nằm ở cột thứ 5
+    //     const name = nameCell.textContent.toLowerCase();
 
-        if (name.includes(filter)) {
-          row.style.display = ""; // Hiện hàng nếu khớp
-        } else {
-          row.style.display = "none"; // Ẩn hàng nếu không khớp
-        }
-      });
-      calculateTotals();
-    }
+    //     if (name.includes(filter)) {
+    //       row.style.display = ""; // Hiện hàng nếu khớp
+    //     } else {
+    //       row.style.display = "none"; // Ẩn hàng nếu không khớp
+    //     }
+    //   });
+    //   calculateTotals();
+    // }
 
-    function filterByKhoa() {
-      const input = document.getElementById("filterKhoa");
-      const filter = input.value.toLowerCase();
-      const tableRows = document.querySelectorAll("#tableBody tr");
+    // function filterByKhoa() {
+    //   const input = document.getElementById("filterKhoa");
+    //   const filter = input.value.toLowerCase();
+    //   const tableRows = document.querySelectorAll("#tableBody tr");
 
-      // Nếu ô tìm kiếm trống, hiển thị tất cả các dòng
-      if (!filter) {
-        tableRows.forEach((row) => {
-          row.style.display = ""; // Hiện tất cả các dòng
-        });
-        return;
-      }
+    //   // Nếu ô tìm kiếm trống, hiển thị tất cả các dòng
+    //   if (!filter) {
+    //     tableRows.forEach((row) => {
+    //       row.style.display = ""; // Hiện tất cả các dòng
+    //     });
+    //     return;
+    //   }
 
-      // Chỉ hiện các dòng có tên giảng viên khớp với giá trị tìm kiếm
-      tableRows.forEach((row) => {
-        const nameCell = row.querySelector("td:nth-child(6)"); // Giả sử tên giảng viên nằm ở cột thứ 5
-        const name = nameCell.textContent.toLowerCase();
+    //   // Chỉ hiện các dòng có tên giảng viên khớp với giá trị tìm kiếm
+    //   tableRows.forEach((row) => {
+    //     const nameCell = row.querySelector("td:nth-child(6)"); // Giả sử tên giảng viên nằm ở cột thứ 5
+    //     const name = nameCell.textContent.toLowerCase();
 
-        if (name.includes(filter)) {
-          row.style.display = ""; // Hiện hàng nếu khớp
-        } else {
-          row.style.display = "none"; // Ẩn hàng nếu không khớp
-        }
-      });
-      calculateTotals();
-    }
+    //     if (name.includes(filter)) {
+    //       row.style.display = ""; // Hiện hàng nếu khớp
+    //     } else {
+    //       row.style.display = "none"; // Ẩn hàng nếu không khớp
+    //     }
+    //   });
+    //   calculateTotals();
+    // }
 
     // Hàm tính tổng số tiết từ globalData
     // function calculateTotals() {
