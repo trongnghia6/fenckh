@@ -72,6 +72,7 @@ const checkDataQC = async (req, res) => {
 const importTableQC = async (jsonData) => {
   const tableName = process.env.DB_TABLE_QC; // Giả sử biến này có giá trị là "quychuan"
 
+  // console.log(jsonData);
   function tachChuoi(chuoi) {
     // Kiểm tra đầu vào
     if (typeof chuoi !== "string" || chuoi.trim() === "") {
@@ -175,19 +176,6 @@ const importTableQC = async (jsonData) => {
         },
       ];
     } else {
-      // const gvmKeyword1 = "( gvm )"; // Từ khóa cho giảng viên mời
-      // const gvmKeyword2 = "Giảng viên mời"; // Từ khóa cho giảng viên mời
-
-      // // Nếu chuỗi đầu vào rỗng, trả về giá trị mặc định
-      // if (!giaoVienInput || giaoVienInput.trim() === "") {
-      //   return [{ MoiGiang: false, GiaoVienGiangDay: "" }];
-      // }
-
-      // // Kiểm tra xem có giảng viên mời hay không
-      // const isGuestLecturer =
-      //   giaoVienInput.toLowerCase().includes(gvmKeyword1.toLowerCase()) ||
-      //   giaoVienInput.toLowerCase().includes(gvmKeyword2.toLowerCase());
-
       // Tách tên giảng viên từ chuỗi
       const titleRegex = /(PGS\.?|( gvm )\.?|TS\.?|PGS\.? TS\.?)\s*/gi; // Biểu thức chính quy để loại bỏ danh hiệu gồm PGS. TS. PGS. TS. ( gvm )
 
@@ -208,14 +196,214 @@ const importTableQC = async (jsonData) => {
       // Tạo mảng kết quả chứa thông tin giảng viên
       return [
         {
-          MoiGiang: true, // Không có giảng viên mời
+          MoiGiang: true, // Có giảng viên mời
           GiaoVienGiangDay: lecturers[0], // Lấy tên giảng viên đầu tiên
         },
       ];
     }
   }
 
-  // console.log("ok");
+  // const getBoMon = async (lecturers) => {
+  //   // // console.log(lecturers);
+
+  //   // // Câu truy vấn SQL
+  //   // const query = "SELECT HoTen, MonGiangDayChinh FROM `gvmoi` WHERE HoTen = ?";
+
+  //   // // Tạo mảng các Promise để thực hiện truy vấn với từng tên giảng viên
+  //   // const lecturerPromises = lecturers.map(async (lecturerName) => {
+  //   //   // console.log(lecturerName);
+  //   //   if (!lecturerName) return null; // Kiểm tra nếu tên giảng viên không hợp lệ
+
+  //   //   try {
+  //   //     const results = await new Promise((resolve, reject) => {
+  //   //       connection.query(query, [lecturerName], (err, results) => {
+  //   //         if (err) {
+  //   //           console.error("Error:", err);
+  //   //           return reject(err);
+  //   //         }
+  //   //         resolve(results);
+  //   //       });
+  //   //     });
+
+  //   //     // Nếu có kết quả, trả về đối tượng chứa thông tin giảng viên
+  //   //     return results[0] || null; // trả về thông tin giảng viên hoặc null nếu không có kết quả
+  //   //   } catch (error) {
+  //   //     console.error("Error fetching lecturer info:", error);
+  //   //     return null; // Trả về null nếu có lỗi xảy ra
+  //   //   }
+  //   // });
+
+  //   // try {
+  //   //   // Đợi tất cả các truy vấn hoàn thành và lọc bỏ kết quả null
+  //   //   const results = await Promise.all(lecturerPromises);
+  //   //   return results.filter(Boolean); // Trả về mảng các đối tượng chứa thông tin giảng viên
+  //   // } catch (error) {
+  //   //   console.error("Error during processing lecturer promises:", error);
+  //   //   return []; // Trả về mảng rỗng nếu có lỗi
+  //   // }
+
+  //   // Câu truy vấn SQL đầu tiên
+  //   const query1 = "SELECT HoTen, MonGiangDayChinh FROM `gvmoi` WHERE HoTen = ?";
+  //   // Câu truy vấn SQL thứ hai
+  //   const query2 = "SELECT TenNhanVien, MonGiangDayChinh FROM `nhanvien` WHERE TenNhanVien = ?";
+
+  //   // Tạo mảng các Promise để thực hiện truy vấn với từng tên giảng viên cho cả hai bảng
+  //   const lecturerPromises = lecturers.map(async (lecturerName) => {
+  //     if (!lecturerName) return null; // Kiểm tra nếu tên giảng viên không hợp lệ
+
+  //     try {
+  //       // Truy vấn bảng `gvmoi`
+  //       const results1 = await new Promise((resolve, reject) => {
+  //         connection.query(query1, [lecturerName], (err, results) => {
+  //           if (err) {
+  //             console.error("Error in query1:", err);
+  //             return reject(err);
+  //           }
+  //           resolve(results);
+  //         });
+  //       });
+
+  //       // Truy vấn bảng `nhanvien`
+  //       const results2 = await new Promise((resolve, reject) => {
+  //         connection.query(query2, [lecturerName], (err, results) => {
+  //           if (err) {
+  //             console.error("Error in query2:", err);
+  //             return reject(err);
+  //           }
+  //           resolve(results);
+  //         });
+  //       });
+
+  //       // Nếu có kết quả từ bất kỳ truy vấn nào, trả về đối tượng chứa thông tin giảng viên
+  //       if (results1[0]) {
+  //         return results1[0]; // Trả về kết quả từ bảng `gvmoi`
+  //       } else if (results2[0]) {
+  //         console.log('Bảng nhân viên : ', results2[0]);
+  //         return results2[0]; // Trả về kết quả từ bảng `nhanvien`
+  //       } else {
+  //         return null; // Không có kết quả từ cả hai bảng
+  //       }
+  //     } catch (error) {
+  //       console.error("Error fetching lecturer info:", error);
+  //       return null; // Trả về null nếu có lỗi xảy ra
+  //     }
+  //   });
+
+  //   try {
+  //     // Đợi tất cả các truy vấn hoàn thành và lọc bỏ kết quả null
+  //     const results = await Promise.all(lecturerPromises);
+  //     // console.log('Dữ liệu giảng viên có trong db : ', results);
+  //     return results.filter(Boolean); // Trả về mảng các đối tượng chứa thông tin giảng viên
+  //   } catch (error) {
+  //     console.error("Error during processing lecturer promises:", error);
+  //     return []; // Trả về mảng rỗng nếu có lỗi
+  //   }
+  // };
+
+  const getBoMon = async (lecturers) => {
+    const query1 =
+      "SELECT HoTen, MonGiangDayChinh FROM `gvmoi` WHERE HoTen = ?";
+    const query2 =
+      "SELECT TenNhanVien, MonGiangDayChinh FROM `nhanvien` WHERE TenNhanVien = ?";
+
+    const lecturerPromises = lecturers.map(async (lecturerName) => {
+      if (!lecturerName) return null;
+
+      try {
+        const results1 = await new Promise((resolve, reject) => {
+          connection.query(query1, [lecturerName], (err, results) => {
+            if (err) return reject(err);
+            resolve(results);
+          });
+        });
+
+        const results2 = await new Promise((resolve, reject) => {
+          connection.query(query2, [lecturerName], (err, results) => {
+            if (err) return reject(err);
+            resolve(results);
+          });
+        });
+
+        // Tạo mảng để lưu kết quả
+        const allResults = [];
+
+        // Ánh xạ kết quả từ bảng `gvmoi`
+        results1.forEach((item) => {
+          allResults.push({
+            HoTen: item.HoTen, // Tên giảng viên từ bảng gvmoi
+            MonGiangDayChinh: item.MonGiangDayChinh, // Môn giảng dạy chính
+          });
+        });
+
+        // Ánh xạ kết quả từ bảng `nhanvien`
+        results2.forEach((item) => {
+          allResults.push({
+            HoTen: item.TenNhanVien, // Sử dụng TenNhanVien cho trường HoTen
+            MonGiangDayChinh: item.MonGiangDayChinh, // Môn giảng dạy chính
+          });
+        });
+
+        return allResults.length > 0 ? allResults : null;
+      } catch (error) {
+        console.error("Error fetching lecturer info:", error);
+        return null;
+      }
+    });
+
+    try {
+      const results = await Promise.all(lecturerPromises);
+      return results.filter(Boolean).flat(); // Gộp các kết quả lại
+    } catch (error) {
+      console.error("Error during processing lecturer promises:", error);
+      return [];
+    }
+  };
+
+  // Hàm này để kết nối hai hàm tachGiaoVien và getBoMon với nhau
+  // Hàm để lấy thông tin giảng viên từ cơ sở dữ liệu
+  const dataBoMon = async (jsonData) => {
+    const allResults = []; // Mảng để chứa tất cả kết quả
+
+    for (const item of jsonData) {
+      const giaoVienInput = item.GiaoVien; // Lấy giá trị GiaoVien từ từng đối tượng
+      const lecturerInfo = tachGiaoVien(giaoVienInput); // Tách thông tin giảng viên
+
+      // Lấy tên giảng viên từ kết quả
+      const lecturers = lecturerInfo
+        .map((info) => info.GiaoVienGiangDay)
+        .filter(Boolean);
+
+      // Nếu không có giảng viên nào, bỏ qua vòng lặp
+      if (lecturers.length === 0) {
+        continue;
+      }
+
+      // Gọi hàm getBoMon để lấy thông tin chi tiết giảng viên từ cơ sở dữ liệu
+      const boMonResults = await getBoMon(lecturers);
+
+      // Ánh xạ kết quả từ cơ sở dữ liệu thành các đối tượng và thêm vào mảng allResults
+      boMonResults.forEach((item) => {
+        allResults.push({
+          HoTen: item.HoTen.trim(), // Tên giảng viên
+          MonGiangDayChinh: item.MonGiangDayChinh, // Môn giảng dạy chính
+        });
+      });
+    }
+    // console.log(allResults);
+    console.log("Dữ liệu giảng viên có trong db : ", allResults);
+    return allResults; // Trả về mảng chứa tất cả thông tin giảng viên
+  };
+
+  // Hàm thực thi ví dụ cho việc gọi dataBoMon với dữ liệu từ jsonData
+  const executeDataBoMonFromJsonData = async (jsonData) => {
+    const results = await dataBoMon(jsonData); // Gọi hàm và chờ kết quả
+    // console.log("Thông tin giảng viên trả về:", results); // Xuất kết quả ra console
+    return results;
+  };
+
+  const boMonData = await executeDataBoMonFromJsonData(jsonData);
+  // console.log(boMonData);
+
   // Tạo câu lệnh INSERT động với các trường đầy đủ
   const queryInsert = `INSERT INTO ${tableName} (
     Khoa,
@@ -229,6 +417,7 @@ const importTableQC = async (jsonData) => {
     MaHocPhan, 
     LopHocPhan,
     TenLop, 
+    BoMon,
     LL, 
     SoTietCTDT, 
     HeSoT7CN, 
@@ -236,7 +425,7 @@ const importTableQC = async (jsonData) => {
     HeSoLopDong, 
     QuyChuan, 
     GhiChu
-  ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`;
+  ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`;
 
   const insertPromises = jsonData.flatMap((item) => {
     // Sử dụng hàm tachChuoi để tách các thông tin từ chuỗi
@@ -244,9 +433,20 @@ const importTableQC = async (jsonData) => {
 
     // Tách giảng viên và tạo mảng các đối tượng giảng viên
     const giangVienArray = tachGiaoVien(item["GiaoVien"]);
-    console.log(giangVienArray);
+    // const boMondata = executeDataBoMonFromJsonData(jsonData);
+
+    // Giả sử boMon là mảng các đối tượng đã được lấy từ jsonData
+    // const boMondata = executeDataBoMonFromJsonData(jsonData);
+
     return giangVienArray.map(({ MoiGiang, GiaoVienGiangDay }) => {
       return new Promise((resolve, reject) => {
+        // Tìm MonGiangDayChinh tương ứng với GiaoVienGiangDay
+        const boMonFound = boMonData.find(
+          (boMon) => boMon.HoTen === GiaoVienGiangDay
+        );
+        const monGiangDayChinh = boMonFound ? boMonFound.MonGiangDayChinh : "";
+
+        // Tạo mảng giá trị
         const values = [
           item["Khoa"], // Khoa
           item["Dot"], // Đợt
@@ -259,6 +459,7 @@ const importTableQC = async (jsonData) => {
           item["MaHocPhan"], // Mã học phần
           TenLop, // Lớp học phần (được tách từ chuỗi)
           Lop,
+          monGiangDayChinh, // Thêm MonGiangDayChinh nếu có
           item["LL"], // LL (Số tiết theo lịch)
           item["SoTietCTDT"], // Số tiết theo CTĐT
           item["HeSoT7CN"], // Hệ số T7/CN
@@ -274,6 +475,7 @@ const importTableQC = async (jsonData) => {
             reject(err);
             return;
           }
+          // console.log(results);
           resolve(results);
         });
       });
@@ -305,6 +507,53 @@ const importTableQC = async (jsonData) => {
   }
 
   return results;
+};
+
+const updateBanHanh = async (req, res) => {
+  let connection;
+  try {
+    const NamHoc = req.params;
+    // Lấy kết nối từ pool
+    connection = await createPoolConnection();
+
+    // Câu lệnh SQL để cập nhật trangthai
+    const query1 = `UPDATE namhoc SET trangthai = ?`;
+    const [result1] = await connection.query(query1, [0]);
+
+    const query2 = `UPDATE namhoc SET trangthai = ? WHERE NamHoc = ?`;
+    const [result2] = await connection.query(query2, [1, NamHoc.NamHoc]);
+    // cập nhật bảng kì
+    const query3 = `UPDATE ki SET trangthai = ?`;
+    const [result3] = await connection.query(query3, [0]);
+
+    const query4 = `UPDATE ki SET trangthai = ? WHERE value = ?`;
+    const [result4] = await connection.query(query4, [1, NamHoc.Ki]);
+
+    //update bảng đợt
+
+    const query5 = `UPDATE dot SET trangthai = ?`;
+    const [result5] = await connection.query(query5, [0]);
+
+    const query6 = `UPDATE dot SET trangthai = ? WHERE value = ?`;
+    const [result6] = await connection.query(query6, [1, NamHoc.Dot]);
+
+    // Kiểm tra nếu không có dòng nào bị ảnh hưởng
+    if (result2.affectedRows === 0) {
+      return res.status(404).json({
+        success: false,
+        message: "Không tìm thấy năm học để cập nhật.",
+      });
+    }
+
+    res.json({ success: true, message: "Cập nhật trạng thái thành công." });
+  } catch (error) {
+    console.error("Lỗi khi cập nhật dữ liệu:", error);
+    res
+      .status(500)
+      .json({ success: false, message: "Cập nhật thất bại, lỗi server." });
+  } finally {
+    if (connection) connection.release(); // Giải phóng kết nối
+  }
 };
 
 // Hàm nhập dữ liệu vào bảng quychuan
@@ -763,6 +1012,7 @@ const updateQC = async (req, res) => {
   const tableName = process.env.DB_TABLE_QC; // Giả sử biến này có giá trị là "quychuan"
   const jsonData = req.body; // Lấy dữ liệu từ req.body
 
+  //console.log("jsson = ", jsonData);
   // Hàm trợ giúp để promisify connection.query
   const queryAsync = (query, values) => {
     return new Promise((resolve, reject) => {
@@ -863,8 +1113,8 @@ const updateQC = async (req, res) => {
           NgayBatDau = ?,
           NgayKetThuc = ?
         WHERE ID = ?
-          AND (KhoaDuyet = 0 OR DaoTaoDuyet = 0 OR TaiChinhDuyet = 0)
       `;
+      //          AND (KhoaDuyet = 0 OR DaoTaoDuyet = 0 OR TaiChinhDuyet = 0)
 
       const updateValues = [
         Khoa,
@@ -1089,19 +1339,60 @@ const themHocPhan = async (TenHocPhan, DVHT, Khoa) => {
   await connection.promise().query(query, values);
 };
 
+// Xét xem đã duyệt hết chưa để lưu
+const TaiChinhCheckAll = async (Dot, KiHoc, NamHoc) => {
+  let kq = ""; // Biến để lưu kết quả
+
+  const connection = await createPoolConnection();
+
+  try {
+    const query = `SELECT MaPhongBan FROM phongban WHERE isKhoa = 1`;
+    const [results, fields] = await connection.query(query);
+
+    // Chọn theo từng phòng ban
+    for (let i = 0; i < results.length; i++) {
+      const MaPhongBan = results[i].MaPhongBan;
+
+      const checkQuery = `
+        SELECT TaiChinhDuyet FROM quychuan 
+        WHERE Khoa = ? AND Dot = ? AND KiHoc = ? AND NamHoc = ?`;
+      const [check, checkFields] = await connection.query(checkQuery, [
+        MaPhongBan,
+        Dot,
+        KiHoc,
+        NamHoc,
+      ]);
+
+      let checkAll = true;
+      for (let j = 0; j < check.length; j++) {
+        if (check[j].TaiChinhDuyet == 0) {
+          checkAll = false;
+          break;
+        }
+      }
+      if (checkAll === true) {
+        kq += MaPhongBan + ",";
+      }
+    }
+  } finally {
+    if (connection) connection.release();
+  }
+
+  return kq;
+};
+
 const updateAllTeachingInfo = async () => {
   const query2 = `
-  SELECT
-    qc.*,
-    gvmoi.*,
-    SUM(qc.QuyChuan) AS TongSoTiet,  
-    SUBSTRING_INDEX(qc.GiaoVienGiangDay, ' - ', 1) AS TenGiangVien
-  FROM quychuan qc
-  JOIN gvmoi ON SUBSTRING_INDEX(qc.GiaoVienGiangDay, ' - ', 1) = gvmoi.HoTen
-  WHERE qc.DaLuu = 0
-  GROUP BY gvmoi.HoTen;  
-`;
-
+      SELECT
+        qc.*,
+        gvmoi.*,
+        SUM(qc.QuyChuan) AS TongSoTiet,
+        SUBSTRING_INDEX(qc.GiaoVienGiangDay, ' - ', 1) AS TenGiangVien
+      FROM quychuan qc
+      JOIN gvmoi ON SUBSTRING_INDEX(qc.GiaoVienGiangDay, ' - ', 1) = gvmoi.HoTen
+      WHERE qc.DaLuu = 0
+      GROUP BY gvmoi.HoTen;
+    `;
   try {
     const [dataJoin] = await connection.promise().query(query2);
 
@@ -1113,11 +1404,26 @@ const updateAllTeachingInfo = async () => {
       };
     }
 
+    const firstItem = dataJoin[0]; // Lấy phần tử đầu tiên
+
+    // Lấy các thuộc tính Dot, Ki, Nam từ phần tử đầu tiên
+    const dot = firstItem.Dot; // Lấy thuộc tính Dot
+    const ki = firstItem.KiHoc; // Lấy thuộc tính Ki
+    const nam = firstItem.NamHoc; // Lấy thuộc tính Nam
+
+    const daDuyetHet = await TaiChinhCheckAll(dot, ki, nam);
+    const daDuyetHetArray = daDuyetHet.split(","); // Chuyển đổi thành mảng
+
     // Chuẩn bị dữ liệu để chèn từng loạt
     //const insertValues = dataJoin.map((item) => {
     const insertValues = await Promise.all(
       dataJoin
-        .filter((item) => item.TaiChinhDuyet != 0 && item.DaLuu == 0) // Loại bỏ các mục có TaiChinhDuyet = 0
+        .filter(
+          (item) =>
+            item.TaiChinhDuyet != 0 &&
+            item.DaLuu == 0 &&
+            daDuyetHetArray.includes(item.Khoa) // Kiểm tra sự tồn tại trong mảng
+        ) // Loại bỏ các mục có TaiChinhDuyet = 0
         .map(async (item) => {
           const {
             ID,
@@ -1238,10 +1544,25 @@ const insertGiangDay = async () => {
   try {
     const [dataJoin] = await connection.promise().query(query2);
 
+    const firstItem = dataJoin[0]; // Lấy phần tử đầu tiên
+
+    // Lấy các thuộc tính Dot, Ki, Nam từ phần tử đầu tiên
+    const dot = firstItem.Dot; // Lấy thuộc tính Dot
+    const ki = firstItem.KiHoc; // Lấy thuộc tính Ki
+    const nam = firstItem.NamHoc; // Lấy thuộc tính Nam
+
+    const daDuyetHet = await TaiChinhCheckAll(dot, ki, nam);
+    const daDuyetHetArray = daDuyetHet.split(","); // Chuyển đổi thành mảng
+
     // Chuẩn bị dữ liệu để chèn từng loạt
     const insertValues = await Promise.all(
       dataJoin
-        .filter((item) => item.TaiChinhDuyet != 0 && item.DaLuu == 0) // Bỏ qua các mục có TaiChinhDuyet = 0
+        .filter(
+          (item) =>
+            item.TaiChinhDuyet != 0 &&
+            item.DaLuu == 0 &&
+            daDuyetHetArray.includes(item.Khoa)
+        ) // Bỏ qua các mục có TaiChinhDuyet = 0
         .map(async (item) => {
           const {
             ID,
@@ -1348,10 +1669,25 @@ const insertGiangDay2 = async () => {
   try {
     const [dataJoin] = await connection.promise().query(query2);
 
+    const firstItem = dataJoin[0]; // Lấy phần tử đầu tiên
+
+    // Lấy các thuộc tính Dot, Ki, Nam từ phần tử đầu tiên
+    const dot = firstItem.Dot; // Lấy thuộc tính Dot
+    const ki = firstItem.KiHoc; // Lấy thuộc tính Ki
+    const nam = firstItem.NamHoc; // Lấy thuộc tính Nam
+
+    const daDuyetHet = await TaiChinhCheckAll(dot, ki, nam);
+    const daDuyetHetArray = daDuyetHet.split(","); // Chuyển đổi thành mảng
+
     // Chuẩn bị dữ liệu để chèn từng loạt
     const insertValues = await Promise.all(
       dataJoin
-        .filter((item) => item.TaiChinhDuyet != 0 && item.DaLuu == 0) // Bỏ qua các mục có TaiChinhDuyet = 0
+        .filter(
+          (item) =>
+            item.TaiChinhDuyet != 0 &&
+            item.DaLuu == 0 &&
+            daDuyetHetArray.includes(item.Khoa)
+        ) // Bỏ qua các mục có TaiChinhDuyet = 0
         .map(async (item) => {
           //dataJoin.map(async (item) => {
           const {
@@ -1482,4 +1818,5 @@ module.exports = {
   updateQC,
   checkDataQC,
   phongBanDuyet,
+  updateBanHanh,
 };

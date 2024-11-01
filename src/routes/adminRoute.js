@@ -55,8 +55,8 @@ router.get('/themBoMon', (req, res) => {
     res.render('themBoMon');
 });
 router.post("/themBoMon", AdminController.themBoMon);
-router.get('/updateBoMon/:MaBoMon', GetTable.getupdateBoMon);
-router.post('/updateBoMon/:MaBoMon',postUpdateBoMon );
+router.get('/updateBoMon/:id_BoMon', GetTable.getupdateBoMon);
+router.post('/updateBoMon/:id_BoMon',postUpdateBoMon );
 
 //Đổi mật khẩu
 router.get('/changePassword', GetTable.getchangePassword);
@@ -66,5 +66,8 @@ router.post('/changePassword', AdminController.updatePassword);
 router.get('/namHoc', GetTable.getNamHoc);
 router.post('/namHoc', GetTable.postNamHoc);
 router.delete('/namHoc/:NamHoc', GetTable.deleteNamHoc);
+
+//lấy dữ liệu hiển thị vào thẻ select
+router.get('/getNamHoc', AdminController.getNamHoc);
 
 module.exports = router;

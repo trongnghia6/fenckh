@@ -539,6 +539,36 @@ const AdminController = {
       if (connection) connection.release(); // Đảm bảo giải phóng kết nối
     }
   },
+  getNamHoc: async (req, res) => {
+    let connection;
+    try {
+      const connection = await createPoolConnection();
+      const query1 = "SELECT *FROM `namhoc` ORDER BY trangthai DESC";
+      const [result1] = await connection.query(query1);
+      const query2 = "SELECT *FROM `ki` ORDER BY trangthai DESC";
+      const [result2] = await connection.query(query2);
+      const query3 = "SELECT *FROM `dot` ORDER BY trangthai DESC";
+      const [result3] = await connection.query(query3);
+
+      // Đóng kết nối sau khi truy vấn hoàn thành
+      //connection.end();
+
+      res.json({
+        success: true,
+        NamHoc: result1,
+        Ki: result2,
+        Dot: result3,
+      });
+    } catch (error) {
+      console.error("Lỗi: ", error);
+      res.status(500).json({
+        success: false,
+        message: "Đã có lỗi xảy ra khi lấy dữ liệu năm học",
+      });
+    } finally {
+      if (connection) connection.release(); // Đảm bảo giải phóng kết nối
+    }
+  },
 
   // Other methods can be added here as needed...
 };

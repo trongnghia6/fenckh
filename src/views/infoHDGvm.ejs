@@ -188,13 +188,11 @@
 
           <div class="controls-container">
             <select class="form-select w-100px mx-2 selectop" id="combobox-dot">
-              <option value="1">Đợt 1</option>
-              <option value="2">Đợt 2</option>
+              <option value="">Đợt</option>
             </select>
 
             <select class="form-select w-100px mx-2 selectop" id="combobox-ki">
-              <option value="1">Kỳ 1</option>
-              <option value="2">Kỳ 2</option>
+              <option value="">Kỳ</option>
             </select>
 
             <select class="form-select w-100px mx-2 selectop" id="NamHoc">
@@ -487,7 +485,10 @@
       <script>
         window.onload = function () {
           const TenNhanVien = localStorage.getItem("TenNhanVien"); // Lấy tên người dùng từ localStorage
-          const Role = localStorage.getItem("userRole");
+          let Role = localStorage.getItem("userRole");
+          if (Role.toUpperCase() == 'LÃNH ĐẠO KHOA'){
+            Role = 'LĐK';
+          }
 
           if (TenNhanVien) {
             // Hiển thị tên người dùng trên phần tử HTML
@@ -516,30 +517,34 @@
       <script>
         $(document).ready(function () {
           $('#NamHoc option[value=""]').remove();
-
+          $('#combobox-ki option[value=""]').remove();
+          $('#combobox-dot option[value=""]').remove();
+    
           $.ajax({
             url: '/getNamHoc',
             method: 'GET',
             success: function (response) {
               if (response.success) {
-                const NamHoc = response.NamHoc;
-                console.log(NamHoc);
-
+    
                 response.NamHoc.forEach(function (item) {
-                  if (item.NamHoc === NamHoc) {
-                    $('#NamHoc').prepend(
-                      `<option value="${item.NamHoc}" selected>${item.NamHoc}</option>`
-                    );
-                  } else {
+                  console.log(item.NamHoc);
                     $('#NamHoc').append(
                       `<option value="${item.NamHoc}">${item.NamHoc}</option>`
                     );
-                  }
                 });
-
-                if (!$('#NamHoc option:selected').length) {
-                  $('#NamHoc').prepend('<option value="">Chọn Năm Học</option>');
-                }
+    
+                response.Ki.forEach(function (item) {
+                  console.log(item.Ki);
+                    $('#combobox-ki').append(
+                      `<option value="${item.value}">${item.Ki}</option>`
+                    );
+                });
+                response.Dot.forEach(function (item) {
+                  console.log(item.Dot);
+                    $('#combobox-dot').append(
+                      `<option value="${item.value}">${item.Dot}</option>`
+                    );
+                });
               } else {
                 console.error("Không lấy được dữ liệu năm học:", response.message);
               }

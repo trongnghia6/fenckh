@@ -253,7 +253,7 @@
                   <td><%= boMon[i].TruongBoMon %></td>
                   <td class="d-flex" style="border: none;">
                     <button class="action-button edit"
-                        onclick="editBoMon(this, '<%= boMon[i].MaBoMon %>')">
+                        onclick="editBoMon(this, '<%= boMon[i].id_BoMon %>')">
                         ✏️
                       </button>
                   </td>
@@ -267,9 +267,9 @@
       </div>
   </div>
 <script>
-  function editBoMon(button, MaBoMon) {
-    console.log(MaBoMon);
-  hre = '/updateBoMon/' + MaBoMon;
+  function editBoMon(button, id_BoMon) {
+    console.log(id_BoMon);
+  hre = '/updateBoMon/' + id_BoMon;
   window.location.href = hre;
 
 }

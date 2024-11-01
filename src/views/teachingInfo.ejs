@@ -208,9 +208,12 @@
               </a>
               <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                 <a class="nav-link" href="/xemCacLopGvm">Xem các lớp mời</a>
-
                 <a class="nav-link " href="/classInfoGvm">Thông tin lớp giảng viên mời</a>
                 <a class="nav-link" href="/infoHDGvm" role="button">Thông tin hợp đồng</a>
+                <li class="nav-item"></li>
+                <a class="nav-link " href="/phuLucHD">Phụ lục hợp đồng</a>
+                </li>
+                <a class="nav-link " href="/exportHD">Hợp Đồng</a>
               </div>
             </div>
           </div>
@@ -293,14 +296,12 @@
       <div class="d-flex justify-content-between">
         <div class="cbb d-flex" style="margin-top: 20px;">
           <select class="selectop w-100px mx-1 " id="combobox-dot">
-            <option value="1">Đợt 1</option>
-            <option value="2">Đợt 2</option>
+            <option value="">Đợt</option>
           </select>
 
           <!-- Combo box Đợt -->
           <select class="selectop w-100px mx-1 " id="combobox-ki">
-            <option value="1">Kỳ 1</option>
-            <option value="2">Kỳ 2</option>
+            <option value="">Kỳ</option>
           </select>
 
           <!-- Combo box Năm -->
@@ -491,7 +492,6 @@
 
   <!-- phần hiển thị phân theo role -->
   <script>
-    // dùng window onclick đéo được
     document.addEventListener("DOMContentLoaded", function () {
       const role = localStorage.getItem("userRole");
 
@@ -515,550 +515,533 @@
   </script>
 
   <!-- phần chèn ngày bd kt cho tất cả các dòng khi nhấn Chèn -->
+  <!-- phần render bảng -->
   <script>
-    document.getElementById('fillDay').addEventListener('click', function () {
-      // Lấy giá trị của ngày bắt đầu và ngày kết thúc
-      const globalStartDate = document.getElementById('startDate').value;
-      const globalEndDate = document.getElementById('endDate').value;
+    document.addEventListener('DOMContentLoaded', function () {
+      var totalLL;
+      var totalQC;
+      var globalDataNew = [];
 
-      // Kiểm tra nếu người dùng chưa nhập ngày
-      if (!globalStartDate || !globalEndDate) {
-        alert('Vui lòng nhập ngày bắt đầu và ngày kết thúc.');
-        return;
-      }
+      document.getElementById('fillDay').addEventListener('click', function () {
+        // Lấy giá trị ngày bắt đầu và ngày kết thúc từ người dùng
+        const globalStartDate = document.getElementById('startDate').value;
+        const globalEndDate = document.getElementById('endDate').value;
 
-      // Lấy dữ liệu từ localStorage (giả sử dữ liệu được lưu dưới dạng JSON)
-      let data = JSON.parse(localStorage.getItem('tableData'));
-      // Cập nhật từng đối tượng trong dữ liệu
-      data.forEach(item => {
-        // Nếu khoa chưa duyệt thì mới chèn
-        if (item.KhoaDuyet == 0) {
-          item.NgayBatDau = globalStartDate; // Cập nhật ngày bắt đầu
-          item.NgayKetThuc = globalEndDate; // Cập nhật ngày kết thúc
-        }
-      });
-
-      // Lưu lại dữ liệu đã cập nhật vào localStorage
-      localStorage.setItem('tableData', JSON.stringify(data));
-
-      let data2 = JSON.parse(localStorage.getItem('tableData'));
-
-      console.log('sau khi cập nhật ngày :', data2);
-
-      // Gửi dữ liệu lên server
-      fetch('http://localhost:3000/check-teaching', {
-        method: 'POST', // Phương thức POST
-        headers: {
-          'Content-Type': 'application/json' // Định dạng gửi là JSON
-        },
-        body: JSON.stringify(data2) // Chuyển đổi globalData thành chuỗi JSON
-      })
-        .then(response => {
-          if (!response.ok) {
-            throw new Error('Lỗi khi gửi dữ liệu');
-          }
-          return response.json(); // Chuyển đổi phản hồi thành JSON
-        })
-        .then(data => {
-          // Hiển thị thông báo từ server
-          alert(data.message);
-          console.log(data.message);
-          window.location.reload();
-        })
-        .catch(error => {
-          console.error('Có lỗi xảy ra:', error);
-          alert('Có lỗi xảy ra khi cập nhật dữ liệu.');
-        });
-    });
-
-
-  </script>
-
-  <!-- phần render bảng dùng localStorage -->
-  <script>
-    var totalLL;
-    var totalQC;
-    var globalDataNew = [];
-
-    // gọi hàm này sau khi đọc hết script
-    function init() {
-      // document.getElementById('infoGvm').addEventListener('click', viewData);
-      document.getElementById('getData').addEventListener('click', loadData);
-    }
-
-    // lấy ra bảng trong localstorage truyền vào hàm render, bắt buộc gọi hàm tính tổng để lấy dữ liệu từ bảng :)
-    function viewData() {
-      let data = JSON.parse(localStorage.getItem('tableData'));
-      renderTable(data);
-      calculateTotals();
-    }
-
-
-
-    // lấy dữ liệu tương ứng từ bảng quy chuẩn, lưu vào bảng trong local storage
-    async function loadData() {
-
-      const MaPhongBan = localStorage.getItem("MaPhongBan");
-
-      try {
-        const response = await fetch('http://localhost:3000/bo-mon', {
-          method: 'POST', // Thay đổi thành POST
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ MaPhongBan }) // Gửi MaPhongBan trong thân yêu cầu
-        });
-
-        if (!response.ok) {
-          throw new Error(`Error: ${response.status} - ${response.statusText}`);
+        // Kiểm tra nếu người dùng chưa nhập ngày
+        if (!globalStartDate || !globalEndDate) {
+          alert('Vui lòng nhập ngày bắt đầu và ngày kết thúc.');
+          return;
         }
 
-        const data = await response.json(); // Chuyển đổi dữ liệu JSON
-        localStorage.setItem('boMon', JSON.stringify(data));
-        // Thêm vào bảng hoặc xử lý dữ liệu theo nhu cầu của bạn
+        // Lấy dữ liệu gốc từ localStorage
+        let data = JSON.parse(localStorage.getItem('tableData')) || [];
+        console.log('Dữ liệu ban đầu từ localStorage:', data);
 
-      } catch (error) {
-        console.error('Có lỗi xảy ra khi lấy dữ liệu bộ môn:', error);
-      }
+        // Lấy tất cả các dòng hiển thị trong bảng
+        const rows = document.querySelectorAll('#tableBody tr');
 
-
-
-      try {
-        // Lấy giá trị từ các combobox
-        const dotValue = document.getElementById('combobox-dot').value;
-        const kiValue = document.getElementById('combobox-ki').value;
-        const namValue = document.getElementById('NamHoc').value;
-
-        // Tạo đối tượng dữ liệu để gửi
-        const requestData = {
-          Dot: dotValue,
-          Ki: kiValue,
-          Nam: namValue,
-        };
-
-        // Gọi API để lấy dữ liệu mới
-        console.log('Gọi API lấy dữ liệu mới...');
-
-        const [gvmResponse, khoaResponse, teachingResponse] = await Promise.all([
-          fetch('http://localhost:3000/index/name-gvm'),
-          fetch('http://localhost:3000/index/name-gvm-khoa'),
-          fetch('http://localhost:3000/teaching-info', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(requestData),
-          }),
-        ]);
-
-        // Kiểm tra xem có lỗi trong các phản hồi không
-        if (!gvmResponse.ok || !khoaResponse.ok || !teachingResponse.ok) {
-          alert("Không tìm thấy dữ liệu!");
-          return; // Dừng lại nếu có lỗi
-        }
-
-        // Lưu dữ liệu mới vào biến
-        const nameGvNew = await gvmResponse.json();
-        const nameGvmNew = await khoaResponse.json();
-        const rs = await teachingResponse.json();
-
-        // Thêm check
-        globalDataNew = rs.results; // Dữ liệu kết quả
-        // globalData = globalDataNew;
-        const check = rs.check; // Dữ liệu check
-
-        localStorage.setItem("check", check);
-
-        // Kiểm tra dữ liệu trong localStorage
-        let cachedData = localStorage.getItem('tableData');
-
-        // Nếu có dữ liệu trong localStorage
-        if (cachedData) {
-          cachedData = JSON.parse(cachedData);
-          // So sánh dữ liệu mới với dữ liệu cũ
-          const isDataEqual = (JSON.stringify(cachedData) === JSON.stringify(globalDataNew));
-
-          if (isDataEqual) {
-            console.log('Dữ liệu không thay đổi, sử dụng dữ liệu từ localStorage');
-            console.log(cachedData)
-            // Render bảng từ dữ liệu đã cache
-            renderTable(cachedData);
-            calculateTotals();
-            window.location.reload();
+        rows.forEach(row => {
+          // Bỏ qua hàng bị ẩn
+          if (row.style.display === 'none') {
             return;
           }
+
+          // Lấy id của hàng từ thuộc tính data-id
+          const rowId = row.getAttribute('data-id');
+
+          // Tìm đối tượng trong localStorage có id trùng với hàng hiện tại
+          let item = data.find(d => parseInt(d.id) === parseInt(rowId));
+
+          // Nếu tìm thấy đối tượng và KhoaDuyet == 0
+          if (item && item.KhoaDuyet == 0) {
+            // Định dạng ngày trước khi lưu để tránh lỗi múi giờ
+            item.NgayBatDau = format(globalStartDate);
+            item.NgayKetThuc = format(globalEndDate);
+
+            // Cập nhật ngày trong hàng của bảng để hiển thị thay đổi
+            const ngayBatDauCell = row.querySelector('.ngay-bat-dau');
+            const ngayKetThucCell = row.querySelector('.ngay-ket-thuc');
+            if (ngayBatDauCell) ngayBatDauCell.textContent = item.NgayBatDau; // Hiển thị ngày đã định dạng
+            if (ngayKetThucCell) ngayKetThucCell.textContent = item.NgayKetThuc; // Hiển thị ngày đã định dạng
+          }
+        });
+
+        // Kiểm tra định dạng ngày và format lại nếu cần
+        data.forEach(item => {
+          if (item.NgayBatDau && isISODate(item.NgayBatDau)) {
+            item.NgayBatDau = format(item.NgayBatDau);
+          }
+          if (item.NgayKetThuc && isISODate(item.NgayKetThuc)) {
+            item.NgayKetThuc = format(item.NgayKetThuc);
+          }
+        });
+
+        // Lưu lại toàn bộ dữ liệu đã cập nhật vào localStorage
+        // localStorage.setItem('tableData', JSON.stringify(data));
+
+        // Kiểm tra lại dữ liệu sau khi cập nhật
+        console.log('Dữ liệu sau khi chèn:', data);
+
+        // Gửi dữ liệu đã cập nhật lên server
+        fetch('http://localhost:3000/check-teaching', {
+          method: 'POST', // Phương thức POST
+          headers: {
+            'Content-Type': 'application/json' // Định dạng gửi là JSON
+          },
+          body: JSON.stringify(data) // Chuyển đổi data đã cập nhật thành chuỗi JSON
+        })
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('Lỗi khi gửi dữ liệu');
+            }
+            return response.json(); // Chuyển đổi phản hồi thành JSON
+          })
+          .then(data => {
+            // Hiển thị thông báo từ server
+            alert(data.message);
+            // console.log(data.message);
+            // window.location.reload();
+            loadData();
+            viewData()
+          })
+          .catch(error => {
+            console.error('Có lỗi xảy ra:', error);
+            alert('Có lỗi xảy ra khi cập nhật dữ liệu.');
+          });
+      });
+
+      // Hàm định dạng ngày thành chuỗi YYYY-MM-DD
+      function format(dateStr) {
+        const date = new Date(dateStr);
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+      }
+
+      // Hàm kiểm tra xem ngày có định dạng ISO hay không
+      function isISODate(dateStr) {
+        const isoRegex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/;
+        return isoRegex.test(dateStr);
+      }
+
+      // load data lấy dữ liệu từ server
+      document.getElementById('getData').addEventListener('click', loadData);
+
+      // view data lấy dữ liệu từ storage
+      function viewData() {
+        let data = JSON.parse(localStorage.getItem('tableData'));
+        renderTable(data);
+        calculateTotals();
+      }
+
+      // lấy dữ liệu tương ứng từ từ bảng quy chuẩn, lấy dữ liệu bảng bộ môn, lưu vào bảng trong local storage
+      async function loadData() {
+
+        const MaPhongBan = localStorage.getItem("MaPhongBan");
+
+        try {
+          const response = await fetch('http://localhost:3000/bo-mon', {
+            method: 'POST', // Thay đổi thành POST
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ MaPhongBan }) // Gửi MaPhongBan trong thân yêu cầu
+          });
+
+          if (!response.ok) {
+            throw new Error(`Error: ${response.status} - ${response.statusText}`);
+          }
+
+          const data = await response.json(); // Chuyển đổi dữ liệu JSON
+          localStorage.setItem('boMon', JSON.stringify(data));
+          // Thêm vào bảng hoặc xử lý dữ liệu theo nhu cầu của bạn
+
+        } catch (error) {
+          console.error('Có lỗi xảy ra khi lấy dữ liệu bộ môn:', error);
         }
+
+
+
+        try {
+          // Lấy giá trị từ các combobox
+          const dotValue = document.getElementById('combobox-dot').value;
+          const kiValue = document.getElementById('combobox-ki').value;
+          const namValue = document.getElementById('NamHoc').value;
+
+          // Tạo đối tượng dữ liệu để gửi
+          const requestData = {
+            Dot: dotValue,
+            Ki: kiValue,
+            Nam: namValue,
+          };
+
+          // Gọi API để lấy dữ liệu mới
+          console.log('Gọi API lấy dữ liệu mới...');
+
+          const [gvmResponse, khoaResponse, teachingResponse] = await Promise.all([
+            fetch('http://localhost:3000/index/name-gvm'),
+            fetch('http://localhost:3000/index/name-gvm-khoa'),
+            fetch('http://localhost:3000/teaching-info', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify(requestData),
+            }),
+          ]);
+
+          // Kiểm tra xem có lỗi trong các phản hồi không
+          if (!gvmResponse.ok || !khoaResponse.ok || !teachingResponse.ok) {
+            alert("Không tìm thấy dữ liệu!");
+            return; // Dừng lại nếu có lỗi
+          }
+
+          // Lưu dữ liệu mới vào biến
+          const nameGvNew = await gvmResponse.json();
+          const nameGvmNew = await khoaResponse.json();
+          const rs = await teachingResponse.json();
+
+          // Thêm check
+          globalDataNew = rs.results; // Dữ liệu kết quả
+          // globalData = globalDataNew;
+          const check = rs.check; // Dữ liệu check
+
+          localStorage.setItem("check", check);
+
+          // Kiểm tra dữ liệu trong localStorage
+          let cachedData = localStorage.getItem('tableData');
+
+        // // Nếu có dữ liệu trong localStorage
+        // if (cachedData) {
+        //   cachedData = JSON.parse(cachedData);
+        //   // So sánh dữ liệu mới với dữ liệu cũ
+        //   const isDataEqual = (JSON.stringify(cachedData) === JSON.stringify(globalDataNew));
+
+        //   if (isDataEqual) {
+        //     console.log('Dữ liệu không thay đổi, sử dụng dữ liệu từ localStorage');
+        //     console.log(cachedData)
+        //     // Render bảng từ dữ liệu đã cache
+        //     renderTable(cachedData);
+        //     calculateTotals();
+        //     window.location.reload();
+        //     return;
+        //   }
+        // }
 
         // Nếu có sự thay đổi, cập nhật localStorage
         localStorage.setItem('nameGv', JSON.stringify(nameGvNew));
         localStorage.setItem('nameGvm', JSON.stringify(nameGvmNew));
-        localStorage.setItem('tableData', JSON.stringify(globalDataNew));
 
-        console.log('Bảng : ', globalDataNew);
+          // thêm id vào bảng local
+          globalDataNew = globalDataNew.map((item, index) => ({
+            ...item,
+            id: index // hoặc một ID khác tùy theo logic bạn muốn
+          }));
+          // đẩy vào bảng local
+          localStorage.setItem('tableData', JSON.stringify(globalDataNew));
 
-        window.location.reload();
+          console.log('Bảng : ', globalDataNew);
 
+          viewData(globalDataNew);
 
-      } catch (error) {
-        console.error('Đã có lỗi xảy ra:', error);
+        } catch (error) {
+          console.error('Đã có lỗi xảy ra:', error);
+        }
       }
-    }
+
+      // render ra bảng
+      function renderTable(data) {
+        const tableBody = document.getElementById('tableBody');
+        tableBody.innerHTML = ''; // Xóa nội dung cũ
+
+        const role = localStorage.getItem("userRole");
+        const isKhoa = parseInt(localStorage.getItem("isKhoa"), 10); // Chuyển đổi isKhoa thành số
+        const MaPhongBan = localStorage.getItem("MaPhongBan")
+
+        data.forEach((row) => {
+          const tableRow = document.createElement('tr');
+
+          // Gán id vào thuộc tính data-id của hàng
+          tableRow.setAttribute('data-id', row.id);
+
+          const lopHocPhanTd = document.createElement('td');
+          lopHocPhanTd.textContent = `${row.LopHocPhan} (${row.TenLop})` || '';
+          tableRow.appendChild(lopHocPhanTd);
+
+          const soTcTd = document.createElement('td');
+          soTcTd.textContent = row.SoTinChi || '';
+          tableRow.appendChild(soTcTd);
+
+          const giaoVienTd = document.createElement('td');
+          giaoVienTd.textContent = row.GiaoVien || '';
+          tableRow.appendChild(giaoVienTd);
+
+          // Tạo một ô td cho checkbox
+          const moiGiangTd = document.createElement('td');
+
+          // Tạo checkbox
+          const inviteCheckbox = document.createElement('input');
+          inviteCheckbox.name = 'moigiang';
+          inviteCheckbox.type = 'checkbox';
+          inviteCheckbox.checked = row.MoiGiang || false;
+
+          // Thêm checkbox vào ô td
+          moiGiangTd.appendChild(inviteCheckbox);
+
+          // Thêm ô td vào hàng bảng
+          tableRow.appendChild(moiGiangTd);
 
 
-    // render ra bảng
-    function renderTable(data) {
-      const tableBody = document.getElementById('tableBody');
-      tableBody.innerHTML = ''; // Xóa nội dung cũ
-
-      const role = localStorage.getItem("userRole");
-      const isKhoa = parseInt(localStorage.getItem("isKhoa"), 10); // Chuyển đổi isKhoa thành số
-      const MaPhongBan = localStorage.getItem("MaPhongBan")
-
-      data.forEach((row) => {
-        const tableRow = document.createElement('tr');
-
-        const lopHocPhanTd = document.createElement('td');
-        lopHocPhanTd.textContent = `${row.LopHocPhan} (${row.TenLop})` || '';
-        tableRow.appendChild(lopHocPhanTd);
-
-        const soTcTd = document.createElement('td');
-        soTcTd.textContent = row.SoTinChi || '';
-        tableRow.appendChild(soTcTd);
-
-        const giaoVienTd = document.createElement('td');
-        giaoVienTd.textContent = row.GiaoVien || '';
-        tableRow.appendChild(giaoVienTd);
-
-        // Tạo một ô td cho checkbox
-        const moiGiangTd = document.createElement('td');
-
-        // Tạo checkbox
-        const inviteCheckbox = document.createElement('input');
-        inviteCheckbox.name = 'moigiang';
-        inviteCheckbox.type = 'checkbox';
-        inviteCheckbox.checked = row.MoiGiang || false;
-
-        // Thêm checkbox vào ô td
-        moiGiangTd.appendChild(inviteCheckbox);
-
-        // Thêm ô td vào hàng bảng
-        tableRow.appendChild(moiGiangTd);
+          const giaoVienGiangDayTd = document.createElement('td');
+          const giaoVienGiangDayInput = document.createElement('input');
+          giaoVienGiangDayInput.type = 'text';
+          giaoVienGiangDayInput.placeholder = 'Nhập tên giảng viên';
+          giaoVienGiangDayInput.value = row.GiaoVienGiangDay || '';
 
 
-        const giaoVienGiangDayTd = document.createElement('td');
-        const giaoVienGiangDayInput = document.createElement('input');
-        giaoVienGiangDayInput.type = 'text';
-        giaoVienGiangDayInput.placeholder = 'Nhập tên giảng viên';
-        giaoVienGiangDayInput.value = row.GiaoVienGiangDay || '';
+          giaoVienGiangDayTd.appendChild(giaoVienGiangDayInput);
+          tableRow.appendChild(giaoVienGiangDayTd);
+          giaoVienGiangDayInput.onclick = () => {
+            const moiGiang = inviteCheckbox.checked;
+            showSuggestions(giaoVienGiangDayInput, moiGiang);
+          };
 
+          giaoVienGiangDayInput.oninput = () => {
+            const moiGiang = inviteCheckbox.checked;
+            showSuggestions(giaoVienGiangDayInput, moiGiang);
+          };
 
-        giaoVienGiangDayTd.appendChild(giaoVienGiangDayInput);
-        tableRow.appendChild(giaoVienGiangDayTd);
-        giaoVienGiangDayInput.onclick = () => {
-          const moiGiang = inviteCheckbox.checked;
-          showSuggestions(giaoVienGiangDayInput, moiGiang);
-        };
+          giaoVienGiangDayTd.appendChild(giaoVienGiangDayInput);
+          tableRow.appendChild(giaoVienGiangDayTd);
 
-        giaoVienGiangDayInput.oninput = () => {
-          const moiGiang = inviteCheckbox.checked;
-          showSuggestions(giaoVienGiangDayInput, moiGiang);
-        };
+          giaoVienGiangDayTd.appendChild(giaoVienGiangDayInput);
+          tableRow.appendChild(giaoVienGiangDayTd);
 
-        giaoVienGiangDayTd.appendChild(giaoVienGiangDayInput);
-        tableRow.appendChild(giaoVienGiangDayTd);
+          const khoaTd = document.createElement('td');
+          khoaTd.textContent = row.Khoa || '';
+          tableRow.appendChild(khoaTd);
 
-        giaoVienGiangDayTd.appendChild(giaoVienGiangDayInput);
-        tableRow.appendChild(giaoVienGiangDayTd);
+          const boMonTd = document.createElement('td');
+          const boMonInput = document.createElement('input');
+          boMonInput.type = 'text';
+          boMonInput.name = 'bomon';
+          boMonInput.value = row.BoMon || '';
+          boMonInput.placeholder = 'Nhập tên bộ môn';
+          boMonTd.appendChild(boMonInput);
+          tableRow.appendChild(boMonTd);
 
-        const khoaTd = document.createElement('td');
-        khoaTd.textContent = row.Khoa || '';
-        tableRow.appendChild(khoaTd);
+          boMonInput.onclick = () => {
+            showSuggestionsBoMon(boMonInput);
+          };
 
-        const boMonTd = document.createElement('td');
-        const boMonInput = document.createElement('input');
-        boMonInput.type = 'text';
-        boMonInput.name = 'bomon';
-        boMonInput.value = row.BoMon || '';
-        boMonInput.placeholder = 'Nhập tên bộ môn';
-        boMonTd.appendChild(boMonInput);
-        tableRow.appendChild(boMonTd);
+          const soTietLLTd = document.createElement('td');
+          soTietLLTd.textContent = row.LL || '';
+          tableRow.appendChild(soTietLLTd);
 
-        boMonInput.onclick = () => {
-          showSuggestionsBoMon(boMonInput);
-        };
+          const soTietQCTd = document.createElement('td');
+          soTietQCTd.textContent = row.QuyChuan || '';
+          tableRow.appendChild(soTietQCTd);
 
-        const soTietLLTd = document.createElement('td');
-        soTietLLTd.textContent = row.LL || '';
-        tableRow.appendChild(soTietLLTd);
+          // Cột Ngày Bắt Đầu
+          const ngayBatDauTd = document.createElement('td');
+          const ngayBatDauInput = document.createElement('input');
+          ngayBatDauInput.type = 'date';
+          ngayBatDauInput.name = 'startDate';
+          ngayBatDauInput.value = formatDate(row.NgayBatDau); // Định dạng ngày
 
-        const soTietQCTd = document.createElement('td');
-        soTietQCTd.textContent = row.QuyChuan || '';
-        tableRow.appendChild(soTietQCTd);
+          // Thêm sự kiện paste cho input ngày bắt đầu
+          ngayBatDauInput.addEventListener('paste', (event) => {
+            handleDatePaste(event, ngayBatDauInput);
+          });
 
-        // Cột Ngày Bắt Đầu
-        const ngayBatDauTd = document.createElement('td');
-        const ngayBatDauInput = document.createElement('input');
-        ngayBatDauInput.type = 'date';
-        ngayBatDauInput.name = 'startDate';
-        ngayBatDauInput.value = formatDate(row.NgayBatDau); // Định dạng ngày
+          ngayBatDauTd.appendChild(ngayBatDauInput);
+          tableRow.appendChild(ngayBatDauTd);
 
-        // Thêm sự kiện paste cho input ngày bắt đầu
-        ngayBatDauInput.addEventListener('paste', (event) => {
-          handleDatePaste(event, ngayBatDauInput);
-        });
+          // Cột Ngày Kết Thúc
+          const ngayKetThucTd = document.createElement('td');
+          const ngayKetThucInput = document.createElement('input');
+          ngayKetThucInput.type = 'date';
+          ngayKetThucInput.name = 'endDate';
+          ngayKetThucInput.value = formatDate(row.NgayKetThuc); // Định dạng ngày
 
-        ngayBatDauTd.appendChild(ngayBatDauInput);
-        tableRow.appendChild(ngayBatDauTd);
+          // Thêm sự kiện paste cho input ngày kết thúc
+          ngayKetThucInput.addEventListener('paste', (event) => {
+            handleDatePaste(event, ngayKetThucInput);
+          });
 
-        // Cột Ngày Kết Thúc
-        const ngayKetThucTd = document.createElement('td');
-        const ngayKetThucInput = document.createElement('input');
-        ngayKetThucInput.type = 'date';
-        ngayKetThucInput.name = 'endDate';
-        ngayKetThucInput.value = formatDate(row.NgayKetThuc); // Định dạng ngày
-
-        // Thêm sự kiện paste cho input ngày kết thúc
-        ngayKetThucInput.addEventListener('paste', (event) => {
-          handleDatePaste(event, ngayKetThucInput);
-        });
-
-        ngayKetThucTd.appendChild(ngayKetThucInput);
-        tableRow.appendChild(ngayKetThucTd);
+          ngayKetThucTd.appendChild(ngayKetThucInput);
+          tableRow.appendChild(ngayKetThucTd);
 
 
 
-        let khoaCheckboxTd, khoaCheckbox;
-        khoaCheckboxTd = document.createElement('td');
-        khoaCheckbox = document.createElement('input');
-        khoaCheckbox.type = 'checkbox';
-        khoaCheckbox.name = 'khoa';
-        khoaCheckbox.checked = row.KhoaDuyet || false;
-        khoaCheckbox.onchange = () => updateCheckAll('khoa');
-        khoaCheckboxTd.appendChild(khoaCheckbox);
-        tableRow.appendChild(khoaCheckboxTd);
-        // Điều kiện ẩn checkbox Khoa nếu role không phải "CNTT_ALL"
-        if (role != "Lãnh đạo khoa") {
-          // Thiết lập thuộc tính CSS để thu nhỏ checkbox và ô <td> chứa nó
-          khoaCheckbox.style.width = '10px'; // Đặt chiều rộng nhỏ nhất có thể
-          khoaCheckbox.style.height = '10px'; // Đặt chiều cao nhỏ nhất có thể
-          khoaCheckbox.style.display = 'none';
+          let khoaCheckboxTd, khoaCheckbox;
+          khoaCheckboxTd = document.createElement('td');
+          khoaCheckbox = document.createElement('input');
+          khoaCheckbox.type = 'checkbox';
+          khoaCheckbox.name = 'khoa';
+          khoaCheckbox.checked = row.KhoaDuyet || false;
+          khoaCheckbox.onchange = () => updateCheckAll('khoa');
+          khoaCheckboxTd.appendChild(khoaCheckbox);
+          tableRow.appendChild(khoaCheckboxTd);
+          // Điều kiện ẩn checkbox Khoa nếu role không phải "CNTT_ALL"
+          if (role != "Lãnh đạo khoa") {
+            // Thiết lập thuộc tính CSS để thu nhỏ checkbox và ô <td> chứa nó
+            khoaCheckbox.style.width = '10px'; // Đặt chiều rộng nhỏ nhất có thể
+            khoaCheckbox.style.height = '10px'; // Đặt chiều cao nhỏ nhất có thể
+            khoaCheckbox.style.display = 'none';
 
-          // Thu nhỏ <td>
-          khoaCheckboxTd.style.width = '1px';
-          khoaCheckboxTd.style.padding = '0';
-        }
+            // Thu nhỏ <td>
+            khoaCheckboxTd.style.width = '1px';
+            khoaCheckboxTd.style.padding = '0';
+          }
 
 
-        // Nếu Lãnh đạo khoa đã duyệt, thi hành sẽ không nhập được
-        // Nếu role là giảng viên thường cũng sẽ không nhập được
-        if (role == "GV" || row.KhoaDuyet == 1) {
-          inviteCheckbox.disabled = true
-          giaoVienGiangDayInput.disabled = true;
-          boMonInput.disabled = true;
-          ngayBatDauInput.disabled = true;
-          // Ngăn người dùng thay đổi trạng thái ngày kết thúc
-          ngayKetThucInput.disabled = true;
-        }
-
-        const check = localStorage.getItem("check");
-
-        // Phân quyền theo phòng ban
-        if (isKhoa == 1) { // Nếu là khoa
-          if (check.includes(MaPhongBan)) {
-            inviteCheckbox.disabled = true;
-
+          // Nếu Lãnh đạo khoa đã duyệt, thi hành sẽ không nhập được
+          // Nếu role là giảng viên thường cũng sẽ không nhập được
+          if (role == "GV" || row.KhoaDuyet == 1) {
+            inviteCheckbox.disabled = true
             giaoVienGiangDayInput.disabled = true;
             boMonInput.disabled = true;
             ngayBatDauInput.disabled = true;
             // Ngăn người dùng thay đổi trạng thái ngày kết thúc
             ngayKetThucInput.disabled = true;
+          }
 
-            if (role == "Lãnh đạo khoa") {
-              khoaCheckbox.disabled = true;
+          const check = localStorage.getItem("check");
 
-              // Ngăn checkbox tổng của 'khoa' không cho thay đổi
-              disableCheckAll('khoa');
+          // Phân quyền theo phòng ban
+          if (isKhoa == 1) { // Nếu là khoa
+            if (check.includes(MaPhongBan)) {
+              inviteCheckbox.disabled = true;
+
+              giaoVienGiangDayInput.disabled = true;
+              boMonInput.disabled = true;
+              ngayBatDauInput.disabled = true;
+              // Ngăn người dùng thay đổi trạng thái ngày kết thúc
+              ngayKetThucInput.disabled = true;
+
+              if (role == "Lãnh đạo khoa") {
+                khoaCheckbox.disabled = true;
+
+                // Ngăn checkbox tổng của 'khoa' không cho thay đổi
+                disableCheckAll('khoa');
+
+              }
+              // Ngăn người dùng thay đổi trạng thái checkbox
 
             }
-            // Ngăn người dùng thay đổi trạng thái checkbox
-
           }
-        }
 
-        // Thêm hàng vào body của bảng
-        tableBody.appendChild(tableRow);
-      });
-    }
-
-    function disableCheckAll(type) {
-      const checkAllCheckbox = document.getElementById(`checkAll${type.charAt(0).toUpperCase() + type.slice(1)}`);
-
-      if (checkAllCheckbox) {
-        // Ngăn không cho người dùng thay đổi checkbox tổng
-        checkAllCheckbox.addEventListener('click', function (e) {
-          e.preventDefault(); // Ngăn thay đổi trạng thái
+          // Thêm hàng vào body của bảng
+          tableBody.appendChild(tableRow);
         });
       }
-    }
 
-    // xử lí hiển thị ngày tháng năm
-    function formatDate(dateString) {
-      if (!dateString) return 'N/A'; // Hoặc trả về giá trị mặc định
-      const date = new Date(dateString);
-      if (isNaN(date)) return 'N/A'; // Kiểm tra nếu ngày không hợp lệ
-      const year = date.getFullYear();
-      const month = String(date.getMonth() + 1).padStart(2, '0');
-      const day = String(date.getDate()).padStart(2, '0');
-      return `${year}-${month}-${day}`; // Định dạng YYYY-MM-DD
-    }
+      function disableCheckAll(type) {
+        const checkAllCheckbox = document.getElementById(`checkAll${type.charAt(0).toUpperCase() + type.slice(1)}`);
 
-    // lưu bảng vào localStorage
-    function saveTableToLocalStorage(data) {
-      localStorage.setItem('tableData', JSON.stringify(data));
-    }
-
-    // Hàm hiển thị gợi ý đã được cập nhật
-    function showSuggestions(input, moiGiang) {
-      const value = input.value.toLowerCase(); // Lấy giá trị nhập vào và chuyển thành chữ thường
-      hideSuggestions(); // Ẩn gợi ý cũ trước khi hiển thị gợi ý mới
-
-      // Tạo thẻ div chứa gợi ý
-      const suggestionsContainer = document.createElement('div');
-      suggestionsContainer.className = 'suggestions'; // Đặt class cho khung gợi ý
-
-      // Đặt vị trí cho suggestionsContainer
-      const { bottom, left, width } = input.getBoundingClientRect(); // Lấy vị trí của input
-      suggestionsContainer.style.position = 'absolute'; // Để đè lên bảng
-      suggestionsContainer.style.top = `${bottom + window.scrollY}px`; // Đặt vị trí ngay dưới input
-      suggestionsContainer.style.left = `${left + window.scrollX}px`; // Căn trái với input
-      suggestionsContainer.style.width = `${width}px`; // Chiều rộng bằng với input
-      suggestionsContainer.style.zIndex = '1000'; // Đảm bảo luôn hiển thị trên các thành phần khác
-      suggestionsContainer.style.maxHeight = '200px'; // Giới hạn chiều cao để không quá lớn
-      suggestionsContainer.style.overflowY = 'auto'; // Cho phép cuộn dọc nếu quá nhiều gợi ý
-
-      // Thêm suggestionsContainer vào DOM
-      document.body.appendChild(suggestionsContainer); // Đặt suggestionsContainer vào body thay vì cha của input
-
-      let suggestions = []; // Khởi tạo mảng gợi ý
-
-      // Lấy dữ liệu từ localStorage
-      const nameGvm = JSON.parse(localStorage.getItem("nameGvm")) || []; // Giảng viên mời
-      const nameGv = JSON.parse(localStorage.getItem("nameGv")) || []; // Giảng viên
-
-      // Kiểm tra giá trị moiGiang để xác định dữ liệu nào sẽ hiển thị
-      if (moiGiang) {
-        // Hiển thị toàn bộ giảng viên mời
-        suggestions = nameGvm.map(item => `${item.HoTen} - ${item.MaPhongBan}`);
-      } else {
-        // Hiển thị toàn bộ giảng viên
-        suggestions = nameGv.map(item => `${item.TenNhanVien} - ${item.MaPhongBan}`);
+        if (checkAllCheckbox) {
+          // Ngăn không cho người dùng thay đổi checkbox tổng
+          checkAllCheckbox.addEventListener('click', function (e) {
+            e.preventDefault(); // Ngăn thay đổi trạng thái
+          });
+        }
       }
 
-      // Nếu người dùng nhập dữ liệu, lọc kết quả theo tên giảng viên
-      if (value) {
-        suggestions = suggestions.filter(name => name.toLowerCase().includes(value));
+      // xử lí hiển thị ngày tháng năm
+      function formatDate(dateString) {
+        if (!dateString) return 'N/A'; // Hoặc trả về giá trị mặc định
+        const date = new Date(dateString);
+        if (isNaN(date)) return 'N/A'; // Kiểm tra nếu ngày không hợp lệ
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`; // Định dạng YYYY-MM-DD
       }
 
-      // Nếu không có gợi ý, ẩn container
-      if (suggestions.length === 0) {
-        suggestionsContainer.remove();
-        return; // Kết thúc hàm nếu không có gợi ý
+      // lưu bảng vào localStorage
+      function saveTableToLocalStorage(data) {
+        localStorage.setItem('tableData', JSON.stringify(data));
       }
 
-      // Tạo gợi ý dưới dạng danh sách (list)
-      suggestions.forEach(name => {
-        const suggestionItem = document.createElement('div'); // Tạo phần tử cho từng gợi ý
-        suggestionItem.className = 'suggestion-item'; // Đặt class để tùy chỉnh giao diện
-        suggestionItem.textContent = name; // Hiển thị tên giảng viên kèm theo khoa
+      // Hàm hiển thị gợi ý đã được cập nhật
+      function showSuggestions(input, moiGiang) {
+        const value = input.value.toLowerCase(); // Lấy giá trị nhập vào và chuyển thành chữ thường
+        hideSuggestions(); // Ẩn gợi ý cũ trước khi hiển thị gợi ý mới
 
-        // Thêm sự kiện click để điền tên vào ô input
-        suggestionItem.onclick = function () {
-          input.value = name; // Điền tên gợi ý vào ô input
-          hideSuggestions(); // Ẩn gợi ý sau khi chọn
+        // Tạo thẻ div chứa gợi ý
+        const suggestionsContainer = document.createElement('div');
+        suggestionsContainer.className = 'suggestions'; // Đặt class cho khung gợi ý
+
+        // Đặt vị trí cho suggestionsContainer
+        const { bottom, left, width } = input.getBoundingClientRect(); // Lấy vị trí của input
+        suggestionsContainer.style.position = 'absolute'; // Để đè lên bảng
+        suggestionsContainer.style.top = `${bottom + window.scrollY}px`; // Đặt vị trí ngay dưới input
+        suggestionsContainer.style.left = `${left + window.scrollX}px`; // Căn trái với input
+        suggestionsContainer.style.width = `${width}px`; // Chiều rộng bằng với input
+        suggestionsContainer.style.zIndex = '1000'; // Đảm bảo luôn hiển thị trên các thành phần khác
+        suggestionsContainer.style.maxHeight = '200px'; // Giới hạn chiều cao để không quá lớn
+        suggestionsContainer.style.overflowY = 'auto'; // Cho phép cuộn dọc nếu quá nhiều gợi ý
+
+        // Thêm suggestionsContainer vào DOM
+        document.body.appendChild(suggestionsContainer); // Đặt suggestionsContainer vào body thay vì cha của input
+
+        let suggestions = []; // Khởi tạo mảng gợi ý
+
+        // Lấy dữ liệu từ localStorage
+        const nameGvm = JSON.parse(localStorage.getItem("nameGvm")) || []; // Giảng viên mời
+        const nameGv = JSON.parse(localStorage.getItem("nameGv")) || []; // Giảng viên
+
+        // Kiểm tra giá trị moiGiang để xác định dữ liệu nào sẽ hiển thị
+        if (moiGiang) {
+          // Hiển thị toàn bộ giảng viên mời
+          suggestions = nameGvm.map(item => `${item.HoTen} - ${item.MaPhongBan}`);
+        } else {
+          // Hiển thị toàn bộ giảng viên
+          suggestions = nameGv.map(item => `${item.TenNhanVien} - ${item.MaPhongBan}`);
+        }
+
+        // Nếu người dùng nhập dữ liệu, lọc kết quả theo tên giảng viên
+        if (value) {
+          suggestions = suggestions.filter(name => name.toLowerCase().includes(value));
+        }
+
+        // Nếu không có gợi ý, ẩn container
+        if (suggestions.length === 0) {
+          suggestionsContainer.remove();
+          return; // Kết thúc hàm nếu không có gợi ý
+        }
+
+        // Tạo gợi ý dưới dạng danh sách (list)
+        suggestions.forEach(name => {
+          const suggestionItem = document.createElement('div'); // Tạo phần tử cho từng gợi ý
+          suggestionItem.className = 'suggestion-item'; // Đặt class để tùy chỉnh giao diện
+          suggestionItem.textContent = name; // Hiển thị tên giảng viên kèm theo khoa
+
+          // Thêm sự kiện click để điền tên vào ô input
+          suggestionItem.onclick = function () {
+            input.value = name; // Điền tên gợi ý vào ô input
+            hideSuggestions(); // Ẩn gợi ý sau khi chọn
+          };
+
+          suggestionsContainer.appendChild(suggestionItem); // Thêm mục vào danh sách gợi ý
+        });
+
+        // Ẩn gợi ý khi input không còn focus
+        input.onblur = function () {
+          setTimeout(() => {
+            hideSuggestions();
+          }, 100); // Thời gian chờ để nhận diện click
         };
+      }
 
-        suggestionsContainer.appendChild(suggestionItem); // Thêm mục vào danh sách gợi ý
-      });
-
-      // Ẩn gợi ý khi input không còn focus
-      input.onblur = function () {
-        setTimeout(() => {
-          hideSuggestions();
-        }, 100); // Thời gian chờ để nhận diện click
-      };
-    }
-
-    // Hàm ẩn gợi ý
-    function hideSuggestions() {
-      const existingSuggestions = document.querySelectorAll('.suggestions');
-      existingSuggestions.forEach(suggestion => suggestion.remove());
-    }
-
-
-    // Hàm xử lí : ấn lưu dữ liệu sẽ cập nhật vào localStorage, db chưa thay đổi
-    function updateLocalTable() {
-      const rows = document.querySelectorAll('#tableBody tr'); // Lấy tất cả các hàng trong bảng
-
-      // Lấy dữ liệu từ localStorage nếu có
-      let data = localStorage.getItem('tableData');
-      let localData = JSON.parse(data);
-
-      rows.forEach((row, index) => {
-        // Bỏ qua các hàng đang bị ẩn
-        if (row.style.display === 'none') {
-          return;
-        }
-
-        // Lấy các giá trị từ các ô nhập và checkbox
-        const giaoVienGiangDayInput = row.querySelector('input[type="text"][placeholder="Nhập tên giảng viên"]');
-        const boMonInput = row.querySelector('input[type="text"][placeholder="Nhập tên bộ môn"]');
-        const moiGiangCheckbox = row.querySelector('input[type="checkbox"][name="moigiang"]');
-        const khoaCheckbox = row.querySelector('input[type="checkbox"][name="khoa"]');
-
-        // Lấy giá trị từ các ô nhập liệu
-        const giaoVienGiangDay = giaoVienGiangDayInput ? giaoVienGiangDayInput.value : '';
-        const boMon = boMonInput ? boMonInput.value : '';
-
-
-        // Lấy trạng thái của checkbox "Khoa" và "Đào Tạo"
-        const khoaDuyet = khoaCheckbox ? khoaCheckbox.checked : false;
-        const moiGiang = moiGiangCheckbox ? moiGiangCheckbox.checked : false;
-
-        // Lấy giá trị của các ô ngày bắt đầu và kết thúc
-        const ngayBatDauInput = row.querySelector('input[type="date"][name="startDate"]');
-        const ngayKetThucInput = row.querySelector('input[type="date"][name="endDate"]');
-
-        const ngayBatDauValue = ngayBatDauInput ? ngayBatDauInput.value : '';
-        const ngayKetThucValue = ngayKetThucInput ? ngayKetThucInput.value : '';
-
-
-        // So sánh và cập nhật nếu cần
-        const currentNgayBatDau = localData[index].NgayBatDau || '';
-        const currentNgayKetThuc = localData[index].NgayKetThuc || '';
-
-        // Cập nhật vào dữ liệu cục bộ
-        if (currentNgayBatDau == '' || currentNgayBatDau != ngayBatDauValue) {
-          localData[index].NgayBatDau = ngayBatDauValue; // Cập nhật ngày bắt đầu nếu cần
-        }
-
-        if (currentNgayKetThuc == '' || currentNgayKetThuc != ngayKetThucValue) {
-          localData[index].NgayKetThuc = ngayKetThucValue; // Cập nhật ngày kết thúc nếu cần
-        }
-
-        // Cập nhật các giá trị khác không thay đổi
-        localData[index].GiaoVienGiangDay = giaoVienGiangDay;
-        localData[index].KhoaDuyet = khoaDuyet;
-        localData[index].MoiGiang = moiGiang;
-        localData[index].BoMon = boMon;
-      });
-
-      // Cập nhật lại localStorage với dữ liệu mới
-      localStorage.setItem('tableData', JSON.stringify(localData));
-      console.log(localData)
-      // Hiển thị thông báo thành công
-      console.log('Lưu cục bộ thành công');
-      // window.location.reload();
-    }
+      // Hàm ẩn gợi ý
+      function hideSuggestions() {
+        const existingSuggestions = document.querySelectorAll('.suggestions');
+        existingSuggestions.forEach(suggestion => suggestion.remove());
+      }
+    });
 
     function calculateTotals() {
       let totalLL = 0; // Reset tổng số tiết LL
@@ -1088,16 +1071,6 @@
       document.getElementById('totalLL').textContent = totalLL;
       document.getElementById('totalQC').textContent = totalQC;
     }
-
-    document.addEventListener('DOMContentLoaded', function () {
-      viewData();
-      init();
-    });
-
-  </script>
-
-  <!-- phần lọc bộ môn -->
-  <script>
 
     // Hàm gợi ý bộ môn ở ô nhập
     function showSuggestionsBoMon(input) {
@@ -1165,7 +1138,9 @@
 
           // Điền tên gợi ý đã xử lý vào ô input
           input.value = processedName;
-          filterBoMon();
+          if (input.id == 'filterBoMon') {
+            filterBoMon();
+          }
           hideSuggestionsBoMon(); // Ẩn gợi ý sau khi chọn
         };
 
@@ -1195,21 +1170,83 @@
 
       tableRows.forEach(row => {
         const nameInput = row.querySelector('td:nth-child(7) input[name="bomon"]'); // Lấy input có name="bomon" ở cột thứ 7
-        const checkbox = row.querySelector('input[type="checkbox"]');
 
         if (nameInput) {
           const name = nameInput.value.toLowerCase(); // Lấy giá trị của input có name="bomon"
 
           if (filter === '' || name.includes(filter)) {
             row.style.display = ''; // Hiện hàng nếu khớp hoặc filter trống
-            checkbox.disabled = false; // Kích hoạt checkbox
           } else {
             row.style.display = 'none'; // Ẩn hàng nếu không khớp
-            checkbox.disabled = true; // Vô hiệu hóa checkbox
           }
         }
       });
       calculateTotals();
+    }
+
+    // Hàm xử lí : ấn lưu dữ liệu sẽ cập nhật vào localStorage, db chưa thay đổi
+    function updateLocalTable() {
+      const rows = document.querySelectorAll('#tableBody tr'); // Lấy tất cả các hàng trong bảng
+
+      // Lấy dữ liệu từ localStorage nếu có
+      let data = localStorage.getItem('tableData');
+      let localData = JSON.parse(data);
+
+      rows.forEach((row, index) => {
+        // Bỏ qua các hàng đang bị ẩn
+        if (row.style.display === 'none') {
+          return;
+        }
+
+        // Lấy các giá trị từ các ô nhập và checkbox
+        const giaoVienGiangDayInput = row.querySelector('input[type="text"][placeholder="Nhập tên giảng viên"]');
+        const boMonInput = row.querySelector('input[type="text"][placeholder="Nhập tên bộ môn"]');
+        const moiGiangCheckbox = row.querySelector('input[type="checkbox"][name="moigiang"]');
+        const khoaCheckbox = row.querySelector('input[type="checkbox"][name="khoa"]');
+
+        // Lấy giá trị từ các ô nhập liệu
+        const giaoVienGiangDay = giaoVienGiangDayInput ? giaoVienGiangDayInput.value : '';
+        const boMon = boMonInput ? boMonInput.value : '';
+
+
+        // Lấy trạng thái của checkbox "Khoa" và "Đào Tạo"
+        const khoaDuyet = khoaCheckbox ? khoaCheckbox.checked : false;
+        const moiGiang = moiGiangCheckbox ? moiGiangCheckbox.checked : false;
+
+        // Lấy giá trị của các ô ngày bắt đầu và kết thúc
+        const ngayBatDauInput = row.querySelector('input[type="date"][name="startDate"]');
+        const ngayKetThucInput = row.querySelector('input[type="date"][name="endDate"]');
+
+        const ngayBatDauValue = ngayBatDauInput ? ngayBatDauInput.value : '';
+        const ngayKetThucValue = ngayKetThucInput ? ngayKetThucInput.value : '';
+
+
+        // So sánh và cập nhật nếu cần
+        const currentNgayBatDau = localData[index].NgayBatDau || '';
+        const currentNgayKetThuc = localData[index].NgayKetThuc || '';
+
+        // Cập nhật vào dữ liệu cục bộ 
+        if (currentNgayBatDau == '' || currentNgayBatDau != ngayBatDauValue) {
+          localData[index].NgayBatDau = ngayBatDauValue; // Cập nhật ngày bắt đầu nếu cần
+        }
+
+        if (currentNgayKetThuc == '' || currentNgayKetThuc != ngayKetThucValue) {
+          localData[index].NgayKetThuc = ngayKetThucValue; // Cập nhật ngày kết thúc nếu cần
+        }
+
+        // Cập nhật các giá trị khác không thay đổi
+        localData[index].GiaoVienGiangDay = giaoVienGiangDay;
+        localData[index].KhoaDuyet = khoaDuyet;
+        localData[index].MoiGiang = moiGiang;
+        localData[index].BoMon = boMon;
+      });
+
+      // Cập nhật lại localStorage với dữ liệu mới
+      localStorage.setItem('tableData', JSON.stringify(localData));
+      console.log(localData)
+      // Hiển thị thông báo thành công
+      // alert('Lưu cục bộ thành công');
+      // window.location.reload();
     }
   </script>
 
@@ -1226,8 +1263,6 @@
       if (!filter) {
         tableRows.forEach(row => {
           row.style.display = ''; // Hiện tất cả các dòng
-          const checkbox = row.querySelector('input[type="checkbox"]');
-          checkbox.disabled = false; // Kích hoạt checkbox
         });
         return;
       }
@@ -1236,14 +1271,11 @@
       tableRows.forEach(row => {
         const nameCell = row.querySelector('td:nth-child(3)'); // Giả sử tên giảng viên nằm ở cột thứ 3
         const name = nameCell.textContent.toLowerCase();
-        const checkbox = row.querySelector('input[type="checkbox"]');
 
         if (name.includes(filter)) {
           row.style.display = ''; // Hiện hàng nếu khớp
-          checkbox.disabled = false; // Kích hoạt checkbox
         } else {
           row.style.display = 'none'; // Ẩn hàng nếu không khớp
-          checkbox.disabled = true; // Vô hiệu hóa checkbox
         }
       });
       calculateTotals();
@@ -1259,8 +1291,6 @@
       if (!filter) {
         tableRows.forEach(row => {
           row.style.display = ''; // Hiện tất cả các dòng
-          const checkbox = row.querySelector('input[type="checkbox"]');
-          checkbox.disabled = false; // Kích hoạt checkbox
         });
         return;
       }
@@ -1269,14 +1299,11 @@
       tableRows.forEach(row => {
         const nameCell = row.querySelector('td:nth-child(1)'); // Giả sử tên giảng viên nằm ở cột thứ 5
         const name = nameCell.textContent.toLowerCase();
-        const checkbox = row.querySelector('input[type="checkbox"]');
 
         if (name.includes(filter)) {
           row.style.display = ''; // Hiện hàng nếu khớp
-          checkbox.disabled = false; // Kích hoạt checkbox
         } else {
           row.style.display = 'none'; // Ẩn hàng nếu không khớp
-          checkbox.disabled = true; // Vô hiệu hóa checkbox
         }
       });
       calculateTotals();
@@ -1293,6 +1320,32 @@
     });
     }
     */
+
+    
+    function checkAll(type) {
+      const checkboxes = document.querySelectorAll(
+        `input[type="checkbox"][name="${type}"]`
+      );
+      const checkAllCheckbox = document.getElementById(
+        `checkAll${type.charAt(0).toUpperCase() + type.slice(1)}`
+      );
+    
+      for (const checkbox of checkboxes) {
+        if (checkbox.disabled || !checkbox.offsetParent) {
+          continue; // Bỏ qua checkbox bị vô hiệu hóa
+        }
+    
+        const row = checkbox.closest('tr');
+        if (row.style.display == 'none') { // Kiểm tra nếu dòng hiện trên màn hình
+          continue; // Gán trạng thái checkbox "Check All" cho checkbox hiển thị
+        }
+    
+        checkbox.checked = checkAllCheckbox.checked; // Gán giá trị checked cho checkbox không bị vô hiệu hóa
+      }
+    }
+
+
+    /*
     function checkAll(type) {
       const checkboxes = document.querySelectorAll(`input[type="checkbox"][name="${type}"]`);
       const checkAllCheckbox = document.getElementById(`checkAll${type.charAt(0).toUpperCase() + type.slice(1)}`);
@@ -1304,7 +1357,7 @@
         }
       });
     }
-
+*/
 
 
     // hàm xử lí check all
@@ -1464,30 +1517,34 @@
   <script>
     $(document).ready(function () {
       $('#NamHoc option[value=""]').remove();
+      $('#combobox-ki option[value=""]').remove();
+      $('#combobox-dot option[value=""]').remove();
 
       $.ajax({
         url: '/getNamHoc',
         method: 'GET',
         success: function (response) {
           if (response.success) {
-            const NamHoc = response.NamHoc;
-            console.log(NamHoc);
 
             response.NamHoc.forEach(function (item) {
-              if (item.NamHoc === NamHoc) {
-                $('#NamHoc').prepend(
-                  `<option value="${item.NamHoc}" selected>${item.NamHoc}</option>`
-                );
-              } else {
-                $('#NamHoc').append(
-                  `<option value="${item.NamHoc}">${item.NamHoc}</option>`
-                );
-              }
+              console.log(item.NamHoc);
+              $('#NamHoc').append(
+                `<option value="${item.NamHoc}">${item.NamHoc}</option>`
+              );
             });
 
-            if (!$('#NamHoc option:selected').length) {
-              $('#NamHoc').prepend('<option value="">Chọn Năm Học</option>');
-            }
+            response.Ki.forEach(function (item) {
+              console.log(item.Ki);
+              $('#combobox-ki').append(
+                `<option value="${item.value}">${item.Ki}</option>`
+              );
+            });
+            response.Dot.forEach(function (item) {
+              console.log(item.Dot);
+              $('#combobox-dot').append(
+                `<option value="${item.value}">${item.Dot}</option>`
+              );
+            });
           } else {
             console.error("Không lấy được dữ liệu năm học:", response.message);
           }
