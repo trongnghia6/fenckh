@@ -634,7 +634,6 @@
   
       // Lấy dữ liệu từ localStorage
       let data = JSON.parse(localStorage.getItem('tableData')) || [];
-      alert('Dữ liệu trước khi cập nhật: ', JSON.stringify(data));
   
       // Lấy tất cả các dòng đang hiển thị trong bảng
       const rows = document.querySelectorAll('#tableBody tr');
@@ -673,7 +672,6 @@
   
       // Lưu lại dữ liệu đã cập nhật vào localStorage
       localStorage.setItem('tableData', JSON.stringify(data));
-      alert('Dữ liệu sau khi cập nhật: ', JSON.stringify(data));
   
       // Gửi dữ liệu đã cập nhật lên server
       fetch('http://localhost:3000/check-teaching', {
