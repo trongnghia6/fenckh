@@ -240,22 +240,56 @@
             <button id="createGvm" class="bi bi-plus btn" onclick="addClass()">
               Thêm giảng viên mời
             </button>
-            <input type="text" placeholder="Tìm kiếm theo Tên..." class="search" id="searchInput"
-              onkeyup="searchClass()" />
-            <!-- Tìm kiếm theo bộ môn -->
-            <input type="text" placeholder="Tìm kiếm theo Bộ môn" class="searchBoMon" id="searchBoMon"
-              onkeyup="searchBoMon(); showSuggestionsBoMon(this);" onclick="showSuggestionsBoMon(this)" />
-
-            <!-- Lọc theo khoa -->
-            <select id="filterByDepartment" class="filter" onchange="filterClasses()">
-              <option value="all">Tất cả</option>
-              <% phongBanList.forEach(function(phongBan) { %>
-                <option value="<%= phongBan.MaPhongBan %>">
-                  <%= phongBan.TenPhongBan %>
-                </option>
+            <input type="text" placeholder="Tìm kiếm theo Tên..." class="search" id="searchInput" />
+            <input type="text" placeholder="Tìm kiếm theo Bộ môn" class="searchBoMon" id="searchBoMon" 
+            onkeyup="searchBoMon(); showSuggestionsBoMon(this);" onclick="showSuggestionsBoMon(this)"/>
+            <select id="filterByDepartment" class="filter">
+                <option value="all">Tất cả</option>
+                <% phongBanList.forEach(function(phongBan) { %>
+                    <option value="<%= phongBan.MaPhongBan %>">
+                        <%= phongBan.TenPhongBan %>
+                    </option>
                 <% }); %>
             </select>
-            
+            <script>
+              // Hàm lọc chung
+            function filterClasses() {
+                let nameInput = document.getElementById("searchInput").value.toLowerCase();
+                let boMonInput = document.getElementById('searchBoMon').value.toLowerCase();
+                let departmentFilter = document.getElementById("filterByDepartment").value.trim();
+                
+                let table = document.getElementById("classTable");
+                let tr = table.getElementsByTagName("tr");
+
+                for (let i = 1; i < tr.length; i++) { // Bỏ qua hàng tiêu đề
+                    let nameCell = tr[i].getElementsByTagName("td")[2]; // Tên giảng viên
+                    let boMonCell = tr[i].getElementsByTagName("td")[5]; // Bộ môn
+                    let departmentCell = tr[i].getElementsByTagName("td")[4]; // Khoa
+
+                    // Lấy giá trị từ các ô
+                    let nameValue = nameCell ? nameCell.textContent.toLowerCase() : '';
+                    let boMonValue = boMonCell ? boMonCell.textContent.toLowerCase() : '';
+                    let departmentValue = departmentCell ? departmentCell.textContent.trim() : '';
+
+                    // Kiểm tra điều kiện lọc
+                    let nameMatch = nameValue.includes(nameInput);
+                    let boMonMatch = boMonValue.includes(boMonInput);
+                    let departmentMatch = (departmentFilter === "all" || departmentValue === departmentFilter);
+
+                    // Hiện hoặc ẩn hàng dựa trên các điều kiện
+                    if (nameMatch && boMonMatch && departmentMatch) {
+                        tr[i].style.display = ""; // Hiện hàng nếu tất cả các điều kiện đều khớp
+                    } else {
+                        tr[i].style.display = "none"; // Ẩn hàng nếu không khớp
+                    }
+                }
+            }
+
+            // Gọi hàm lọc khi có thay đổi trong các ô tìm kiếm
+            document.getElementById("searchInput").addEventListener("keyup", filterClasses);
+            document.getElementById("searchBoMon").addEventListener("keyup", filterClasses);
+            document.getElementById("filterByDepartment").addEventListener("change", filterClasses);
+            </script>
           </div>
           <table class="class-table" id="classTable">
             <thead>
@@ -332,50 +366,50 @@
     </script>
 
     <script>
-      // Tìm kiếm giảng viên mời theo tên
-      function searchClass() {
-        let input = document.getElementById("searchInput").value.toLowerCase();
-        let table = document.getElementById("classTable");
-        let tr = table.getElementsByTagName("tr");
+      // // Tìm kiếm giảng viên mời theo tên
+      // function searchClass() {
+      //   let input = document.getElementById("searchInput").value.toLowerCase();
+      //   let table = document.getElementById("classTable");
+      //   let tr = table.getElementsByTagName("tr");
 
-        for (let i = 1; i < tr.length; i++) {
-          let td = tr[i].getElementsByTagName("td")[2];
-          if (td) {
-            let textValue = td.textContent || td.innerText;
-            if (textValue.toLowerCase().indexOf(input) > -1) {
-              tr[i].style.display = "";
-            } else {
-              tr[i].style.display = "none";
-            }
-          }
-        }
-      }
+      //   for (let i = 1; i < tr.length; i++) {
+      //     let td = tr[i].getElementsByTagName("td")[2];
+      //     if (td) {
+      //       let textValue = td.textContent || td.innerText;
+      //       if (textValue.toLowerCase().indexOf(input) > -1) {
+      //         tr[i].style.display = "";
+      //       } else {
+      //         tr[i].style.display = "none";
+      //       }
+      //     }
+      //   }
+      // }
 
-      // Tìm kiếm theo bộ môn
-      function searchBoMon() {
-        const input = document.getElementById('searchBoMon');
-        const filter = input.value.trim().toLowerCase(); // Bỏ khoảng trắng và chuyển chữ thường
-        const tableRows = document.querySelectorAll('#classTable tr');
+      // // Tìm kiếm theo bộ môn
+      // function searchBoMon() {
+      //   const input = document.getElementById('searchBoMon');
+      //   const filter = input.value.trim().toLowerCase(); // Bỏ khoảng trắng và chuyển chữ thường
+      //   const tableRows = document.querySelectorAll('#classTable tr');
 
-        tableRows.forEach(row => {
-          //if (row.style.display === 'none') return;
+      //   tableRows.forEach(row => {
+      //     //if (row.style.display === 'none') return;
 
-          const nameCell = row.querySelector('td:nth-child(6)'); // Lấy ô chứa bộ môn ở cột thứ 7
-          const checkbox = row.querySelector('input[type="checkbox"]');
+      //     const nameCell = row.querySelector('td:nth-child(6)'); // Lấy ô chứa bộ môn ở cột thứ 7
+      //     const checkbox = row.querySelector('input[type="checkbox"]');
       
-          if (nameCell) {
-            const name = nameCell.textContent.trim().toLowerCase(); // Lấy nội dung text của ô bộ môn
+      //     if (nameCell) {
+      //       const name = nameCell.textContent.trim().toLowerCase(); // Lấy nội dung text của ô bộ môn
             
-            if (filter === '' || name.includes(filter)) {
-              row.style.display = ''; // Hiện hàng nếu khớp hoặc filter trống
-              if (checkbox) checkbox.disabled = false; // Kích hoạt checkbox nếu có
-            } else {
-              row.style.display = 'none'; // Ẩn hàng nếu không khớp
-              if (checkbox) checkbox.disabled = true; // Vô hiệu hóa checkbox nếu có
-            }
-          }
-        });
-      }
+      //       if (filter === '' || name.includes(filter)) {
+      //         row.style.display = ''; // Hiện hàng nếu khớp hoặc filter trống
+      //         if (checkbox) checkbox.disabled = false; // Kích hoạt checkbox nếu có
+      //       } else {
+      //         row.style.display = 'none'; // Ẩn hàng nếu không khớp
+      //         if (checkbox) checkbox.disabled = true; // Vô hiệu hóa checkbox nếu có
+      //       }
+      //     }
+      //   });
+      // }
       
 
       // Thêm lớp học
