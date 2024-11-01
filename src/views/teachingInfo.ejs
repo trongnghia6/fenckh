@@ -515,115 +515,115 @@
   </script>
 
   <!-- phần chèn ngày bd kt cho tất cả các dòng khi nhấn Chèn -->
-  <!-- phần render bảng -->
+  <script>
+    document.getElementById('fillDay').addEventListener('click', function () {
+      // Lấy giá trị ngày bắt đầu và ngày kết thúc từ người dùng
+      const globalStartDate = document.getElementById('startDate').value;
+      const globalEndDate = document.getElementById('endDate').value;
+
+      // Kiểm tra nếu người dùng chưa nhập ngày
+      if (!globalStartDate || !globalEndDate) {
+        alert('Vui lòng nhập ngày bắt đầu và ngày kết thúc.');
+        return;
+      }
+
+      // Lấy dữ liệu gốc từ localStorage
+      let data = JSON.parse(localStorage.getItem('tableData')) || [];
+      console.log('Dữ liệu ban đầu từ localStorage:', data);
+
+      // Lấy tất cả các dòng hiển thị trong bảng
+      const rows = document.querySelectorAll('#tableBody tr');
+
+      rows.forEach(row => {
+        // Bỏ qua hàng bị ẩn
+        if (row.style.display === 'none') {
+          return;
+        }
+
+        // Lấy id của hàng từ thuộc tính data-id
+        const rowId = row.getAttribute('data-id');
+
+        // Tìm đối tượng trong localStorage có id trùng với hàng hiện tại
+        let item = data.find(d => parseInt(d.id) === parseInt(rowId));
+
+        // Nếu tìm thấy đối tượng và KhoaDuyet == 0
+        if (item && item.KhoaDuyet == 0) {
+          // Định dạng ngày trước khi lưu để tránh lỗi múi giờ
+          item.NgayBatDau = format(globalStartDate);
+          item.NgayKetThuc = format(globalEndDate);
+
+          // Cập nhật ngày trong hàng của bảng để hiển thị thay đổi
+          const ngayBatDauCell = row.querySelector('.ngay-bat-dau');
+          const ngayKetThucCell = row.querySelector('.ngay-ket-thuc');
+          if (ngayBatDauCell) ngayBatDauCell.textContent = item.NgayBatDau; // Hiển thị ngày đã định dạng
+          if (ngayKetThucCell) ngayKetThucCell.textContent = item.NgayKetThuc; // Hiển thị ngày đã định dạng
+        }
+      });
+
+      // Kiểm tra định dạng ngày và format lại nếu cần
+      data.forEach(item => {
+        if (item.NgayBatDau && isISODate(item.NgayBatDau)) {
+          item.NgayBatDau = format(item.NgayBatDau);
+        }
+        if (item.NgayKetThuc && isISODate(item.NgayKetThuc)) {
+          item.NgayKetThuc = format(item.NgayKetThuc);
+        }
+      });
+
+      // Lưu lại toàn bộ dữ liệu đã cập nhật vào localStorage
+      // localStorage.setItem('tableData', JSON.stringify(data));
+
+      // Kiểm tra lại dữ liệu sau khi cập nhật
+      console.log('Dữ liệu sau khi chèn:', data);
+
+      // Gửi dữ liệu đã cập nhật lên server
+      fetch('http://localhost:3000/check-teaching', {
+        method: 'POST', // Phương thức POST
+        headers: {
+          'Content-Type': 'application/json' // Định dạng gửi là JSON
+        },
+        body: JSON.stringify(data) // Chuyển đổi data đã cập nhật thành chuỗi JSON
+      })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Lỗi khi gửi dữ liệu');
+          }
+          return response.json(); // Chuyển đổi phản hồi thành JSON
+        })
+        .then(data => {
+          // Hiển thị thông báo từ server
+          alert(data.message);
+          console.log(data.message);
+          // window.location.reload();
+        })
+        .catch(error => {
+          console.error('Có lỗi xảy ra:', error);
+          alert('Có lỗi xảy ra khi cập nhật dữ liệu.');
+        });
+    });
+
+    // Hàm định dạng ngày thành chuỗi YYYY-MM-DD
+    function format(dateStr) {
+      const date = new Date(dateStr);
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const day = String(date.getDate()).padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    }
+
+    // Hàm kiểm tra xem ngày có định dạng ISO hay không
+    function isISODate(dateStr) {
+      const isoRegex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/;
+      return isoRegex.test(dateStr);
+    }
+  </script>
+
+  <!-- phần render bảng dùng localStorage -->
   <script>
     document.addEventListener('DOMContentLoaded', function () {
       var totalLL;
       var totalQC;
       var globalDataNew = [];
-
-      document.getElementById('fillDay').addEventListener('click', function () {
-        // Lấy giá trị ngày bắt đầu và ngày kết thúc từ người dùng
-        const globalStartDate = document.getElementById('startDate').value;
-        const globalEndDate = document.getElementById('endDate').value;
-
-        // Kiểm tra nếu người dùng chưa nhập ngày
-        if (!globalStartDate || !globalEndDate) {
-          alert('Vui lòng nhập ngày bắt đầu và ngày kết thúc.');
-          return;
-        }
-
-        // Lấy dữ liệu gốc từ localStorage
-        let data = JSON.parse(localStorage.getItem('tableData')) || [];
-        console.log('Dữ liệu ban đầu từ localStorage:', data);
-
-        // Lấy tất cả các dòng hiển thị trong bảng
-        const rows = document.querySelectorAll('#tableBody tr');
-
-        rows.forEach(row => {
-          // Bỏ qua hàng bị ẩn
-          if (row.style.display === 'none') {
-            return;
-          }
-
-          // Lấy id của hàng từ thuộc tính data-id
-          const rowId = row.getAttribute('data-id');
-
-          // Tìm đối tượng trong localStorage có id trùng với hàng hiện tại
-          let item = data.find(d => parseInt(d.id) === parseInt(rowId));
-
-          // Nếu tìm thấy đối tượng và KhoaDuyet == 0
-          if (item && item.KhoaDuyet == 0) {
-            // Định dạng ngày trước khi lưu để tránh lỗi múi giờ
-            item.NgayBatDau = format(globalStartDate);
-            item.NgayKetThuc = format(globalEndDate);
-
-            // Cập nhật ngày trong hàng của bảng để hiển thị thay đổi
-            const ngayBatDauCell = row.querySelector('.ngay-bat-dau');
-            const ngayKetThucCell = row.querySelector('.ngay-ket-thuc');
-            if (ngayBatDauCell) ngayBatDauCell.textContent = item.NgayBatDau; // Hiển thị ngày đã định dạng
-            if (ngayKetThucCell) ngayKetThucCell.textContent = item.NgayKetThuc; // Hiển thị ngày đã định dạng
-          }
-        });
-
-        // Kiểm tra định dạng ngày và format lại nếu cần
-        data.forEach(item => {
-          if (item.NgayBatDau && isISODate(item.NgayBatDau)) {
-            item.NgayBatDau = format(item.NgayBatDau);
-          }
-          if (item.NgayKetThuc && isISODate(item.NgayKetThuc)) {
-            item.NgayKetThuc = format(item.NgayKetThuc);
-          }
-        });
-
-        // Lưu lại toàn bộ dữ liệu đã cập nhật vào localStorage
-        // localStorage.setItem('tableData', JSON.stringify(data));
-
-        // Kiểm tra lại dữ liệu sau khi cập nhật
-        console.log('Dữ liệu sau khi chèn:', data);
-
-        // Gửi dữ liệu đã cập nhật lên server
-        fetch('http://localhost:3000/check-teaching', {
-          method: 'POST', // Phương thức POST
-          headers: {
-            'Content-Type': 'application/json' // Định dạng gửi là JSON
-          },
-          body: JSON.stringify(data) // Chuyển đổi data đã cập nhật thành chuỗi JSON
-        })
-          .then(response => {
-            if (!response.ok) {
-              throw new Error('Lỗi khi gửi dữ liệu');
-            }
-            return response.json(); // Chuyển đổi phản hồi thành JSON
-          })
-          .then(data => {
-            // Hiển thị thông báo từ server
-            alert(data.message);
-            // console.log(data.message);
-            // window.location.reload();
-            loadData();
-            viewData()
-          })
-          .catch(error => {
-            console.error('Có lỗi xảy ra:', error);
-            alert('Có lỗi xảy ra khi cập nhật dữ liệu.');
-          });
-      });
-
-      // Hàm định dạng ngày thành chuỗi YYYY-MM-DD
-      function format(dateStr) {
-        const date = new Date(dateStr);
-        const year = date.getFullYear();
-        const month = String(date.getMonth() + 1).padStart(2, '0');
-        const day = String(date.getDate()).padStart(2, '0');
-        return `${year}-${month}-${day}`;
-      }
-
-      // Hàm kiểm tra xem ngày có định dạng ISO hay không
-      function isISODate(dateStr) {
-        const isoRegex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/;
-        return isoRegex.test(dateStr);
-      }
 
       // load data lấy dữ liệu từ server
       document.getElementById('getData').addEventListener('click', loadData);
@@ -712,26 +712,9 @@
           // Kiểm tra dữ liệu trong localStorage
           let cachedData = localStorage.getItem('tableData');
 
-        // // Nếu có dữ liệu trong localStorage
-        // if (cachedData) {
-        //   cachedData = JSON.parse(cachedData);
-        //   // So sánh dữ liệu mới với dữ liệu cũ
-        //   const isDataEqual = (JSON.stringify(cachedData) === JSON.stringify(globalDataNew));
-
-        //   if (isDataEqual) {
-        //     console.log('Dữ liệu không thay đổi, sử dụng dữ liệu từ localStorage');
-        //     console.log(cachedData)
-        //     // Render bảng từ dữ liệu đã cache
-        //     renderTable(cachedData);
-        //     calculateTotals();
-        //     window.location.reload();
-        //     return;
-        //   }
-        // }
-
-        // Nếu có sự thay đổi, cập nhật localStorage
-        localStorage.setItem('nameGv', JSON.stringify(nameGvNew));
-        localStorage.setItem('nameGvm', JSON.stringify(nameGvmNew));
+          // Nếu có sự thay đổi, cập nhật localStorage
+          localStorage.setItem('nameGv', JSON.stringify(nameGvNew));
+          localStorage.setItem('nameGvm', JSON.stringify(nameGvmNew));
 
           // thêm id vào bảng local
           globalDataNew = globalDataNew.map((item, index) => ({
@@ -1170,14 +1153,17 @@
 
       tableRows.forEach(row => {
         const nameInput = row.querySelector('td:nth-child(7) input[name="bomon"]'); // Lấy input có name="bomon" ở cột thứ 7
+        const checkbox = row.querySelector('input[type="checkbox"]');
 
         if (nameInput) {
           const name = nameInput.value.toLowerCase(); // Lấy giá trị của input có name="bomon"
 
           if (filter === '' || name.includes(filter)) {
             row.style.display = ''; // Hiện hàng nếu khớp hoặc filter trống
+            checkbox.disabled = false; // Kích hoạt checkbox
           } else {
             row.style.display = 'none'; // Ẩn hàng nếu không khớp
+            checkbox.disabled = true; // Vô hiệu hóa checkbox
           }
         }
       });
@@ -1320,32 +1306,6 @@
     });
     }
     */
-
-    
-    function checkAll(type) {
-      const checkboxes = document.querySelectorAll(
-        `input[type="checkbox"][name="${type}"]`
-      );
-      const checkAllCheckbox = document.getElementById(
-        `checkAll${type.charAt(0).toUpperCase() + type.slice(1)}`
-      );
-    
-      for (const checkbox of checkboxes) {
-        if (checkbox.disabled || !checkbox.offsetParent) {
-          continue; // Bỏ qua checkbox bị vô hiệu hóa
-        }
-    
-        const row = checkbox.closest('tr');
-        if (row.style.display == 'none') { // Kiểm tra nếu dòng hiện trên màn hình
-          continue; // Gán trạng thái checkbox "Check All" cho checkbox hiển thị
-        }
-    
-        checkbox.checked = checkAllCheckbox.checked; // Gán giá trị checked cho checkbox không bị vô hiệu hóa
-      }
-    }
-
-
-    /*
     function checkAll(type) {
       const checkboxes = document.querySelectorAll(`input[type="checkbox"][name="${type}"]`);
       const checkAllCheckbox = document.getElementById(`checkAll${type.charAt(0).toUpperCase() + type.slice(1)}`);
@@ -1357,7 +1317,7 @@
         }
       });
     }
-*/
+
 
 
     // hàm xử lí check all
@@ -1483,7 +1443,11 @@
   <script>
     window.onload = function () {
       const TenNhanVien = localStorage.getItem("TenNhanVien"); // Lấy tên người dùng từ localStorage
-      const Role = localStorage.getItem("userRole");
+
+      let Role = localStorage.getItem("userRole");
+      if (Role.toUpperCase() == 'LÃNH ĐẠO KHOA'){
+        Role = 'LĐK';
+      }
 
       if (TenNhanVien) {
         // Hiển thị tên người dùng trên phần tử HTML
@@ -1559,3 +1523,5 @@
 </body>
 
 </html>
+
+

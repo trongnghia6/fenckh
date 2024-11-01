@@ -84,11 +84,18 @@
       const MaPhongBan = localStorage.getItem("MaPhongBan");
       const role = localStorage.getItem("userRole");
 
+      if (role == "Duyệt"){
+        document.getElementById("ban-hanh").style.visibility = "visible";
+        document.getElementById("quychuandukien").style.visibility = "visible";
+        document.getElementById("xoa-qc-du-kien").style.visibility = "visible";
+      }
+/*
       if (MaPhongBan != "DAOTAO" || role == "Thường") {
         document.getElementById("ban-hanh").style.visibility = "hidden";
         document.getElementById("quychuandukien").style.visibility = "hidden";
         document.getElementById("xoa-qc-du-kien").style.visibility = "hidden";
       }
+        */
     });
   </script>
 
@@ -243,10 +250,10 @@
     <div class="mx-5 flex-grow-1">
       <div class="header-actions">
         <div class="left">
-          <button class="btn" id="ban-hanh" style="margin-bottom: 0px;">
+          <button class="btn" id="ban-hanh" style="margin-bottom: 0px; visibility: hidden;">
             Ban Hành
           </button>
-          <button class="btn text-nowrap" id="quychuandukien" style="width: max-content; margin-bottom: 0px;">
+          <button class="btn text-nowrap" id="quychuandukien" style="width: max-content; margin-bottom: 0px; visibility: hidden;">
             Thêm bảng quy chuẩn
           </button>
         </div>
@@ -280,7 +287,7 @@
             <!-- <button class="button text-nowrap" id="filter" style="margin-top: 17px" onclick="filterTable()">
               Lọc
             </button> -->
-            <button class="btn text-nowrap" id="xoa-qc-du-kien" style="margin-top: 17px">
+            <button class="btn text-nowrap" id="xoa-qc-du-kien" style="margin-top: 17px; visibility: hidden;">
               Xóa
             </button>
 
