@@ -161,6 +161,8 @@ const exportSingleContract = async (req, res) => {
             'Tiền_thuế_Text': tienThueText.toLocaleString('vi-VN'),
             'Tiền_thực_nhận_Text': tienThucNhanText.toLocaleString('vi-VN'),
             'Bằng_chữ_của_thực_nhận': numberToWords(tienThucNhanText),
+            'Kỳ': teacher.KiHoc,            // Thêm trường KiHoc
+            'Năm_học': teacher.NamHoc       // Thêm trường NamHoc
         };
 
         const templatePath = path.resolve(__dirname, '../templates/HopDong.docx');
@@ -271,6 +273,8 @@ const exportMultipleContracts = async (req, res) => {
                 'Tiền_thuế_Text': tienThueText.toLocaleString('vi-VN'),
                 'Tiền_thực_nhận_Text': tienThucNhanText.toLocaleString('vi-VN'),
                 'Bằng_chữ_của_thực_nhận': numberToWords(tienThucNhanText),
+                'Kỳ': teacher.KiHoc,            // Thêm trường KiHoc
+                'Năm_học': teacher.NamHoc       // Thêm trường NamHoc
             };
 
             const templatePath = path.resolve(__dirname, '../templates/HopDong.docx');
