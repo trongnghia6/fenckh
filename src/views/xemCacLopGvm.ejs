@@ -538,6 +538,7 @@
         ghiChu: "", // Khởi tạo ghi chú rỗng
       }));
 
+
       const check = rs.check; // Dữ liệu check
       const DaoTaoCheck = rs.DaoTaoCheck;
       const TaiChinhCheck = rs.TaiChinhCheck;
@@ -862,6 +863,8 @@
         ghiChuTd.innerHTML = "📜"; // Hiển thị biểu tượng ghi chú nếu không có ghi chú
       }
       ghiChuTd.style.cursor = "pointer"; // Thay đổi con trỏ chuột khi di chuột qua biểu tượng
+      
+      
       ghiChuTd.onclick = () => openNoteForm(tableRow); // Gọi hàm mở form khi nhấn vào biểu tượng
       tableRow.appendChild(ghiChuTd); // Thêm ô ghi chú vào hàng
       tableBody.appendChild(tableRow);
@@ -1037,6 +1040,7 @@
       } else if (MaPhongBan == 'TAICHINH' && role == 'Duyệt') {
         // Khi role là TAICHINH_ALL
         khoaDuyet = globalData[index].KhoaDuyet; // Giữ nguyên giá trị cũ của Khoa
+        
         taiChinhDuyet = taiChinhCheckbox ? taiChinhCheckbox.checked : false; // Cập nhật Tài Chính
       }
 
@@ -1055,6 +1059,7 @@
       globalData[index].DaoTaoDuyet = daoTaoDuyet; // Cập nhật Đào Tạo
 
       globalData[index].TaiChinhDuyet = taiChinhDuyet; // Cập nhật Tài Chính
+
     });
 
     // Gửi dữ liệu lên server
