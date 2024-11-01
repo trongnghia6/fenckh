@@ -404,34 +404,44 @@
     });
   </script>
 
-  <script>
-    $(document).ready(function () {
-      $('#NamHoc option[value=""]').remove();
+<script>
+  $(document).ready(function () {
+    // Xóa tùy chọn rỗng nếu có
+    $('#NamHoc option[value=""]').remove();
 
-      $.ajax({
-        url: '/getNamHoc',
-        method: 'GET',
-        success: function (response) {
-          if (response.success) {
-            const NamHoc = response.NamHoc;
-            console.log(NamHoc);
+    $.ajax({
+      url: '/getNamHoc',
+      method: 'GET',
+      success: function (response) {
+        if (response.success) {
+          const namHocList = response.NamHoc; // Giả sử NamHoc là một mảng
+          console.log(namHocList);
 
-            response.NamHoc.forEach(function (item) {
-              if (item.NamHoc === NamHoc) {
-                $('#NamHoc').prepend(
-                  `<option value="${item.NamHoc}" selected>${item.NamHoc}</option>`
-                );
-              } else {
-                $('#NamHoc').append(
-                  `<option value="${item.NamHoc}">${item.NamHoc}</option>`
-                );
-              }
-            });
+          // Xóa tất cả các tùy chọn hiện có để tránh trùng lặp
+          $('#NamHoc').empty();
 
-            if (!$('#NamHoc option:selected').length) {
-              $('#NamHoc').prepend('<option value="">Chọn Năm Học</option>');
+          // Thêm các tùy chọn từ dữ liệu trả về
+          namHocList.forEach(function (item) {
+            $('#NamHoc').append(
+              `<option value="${item.NamHoc}">${item.NamHoc}</option>`
+            );
+          });
 
-    </script>
+          // Kiểm tra và thêm tùy chọn mặc định nếu không có tùy chọn nào được chọn
+          if ($('#NamHoc option:selected').length === 0) {
+            $('#NamHoc').prepend('<option value="">Chọn Năm Học</option>');
+          }
+        } else {
+          console.error("Không thể lấy năm học:", response.message);
+        }
+      },
+      error: function (xhr, status, error) {
+        console.error("Lỗi khi gọi API:", error);
+      }
+    });
+  });
+</script>
+
     <script>
       $(document).ready(function () {
         $('#NamHoc option[value=""]').remove();
@@ -503,7 +513,7 @@
             if (!$('#MaPhongBan option:selected').length) {
               $('#MaPhongBan').prepend('<option value="">Chọn Phòng Ban</option>');
             }
-          } else {
+          }   else {
             console.error("Không lấy được dữ liệu phongBan:", response.message);
           }
         },
@@ -515,5 +525,5 @@
   </script>
   
 </body>
-
+          
 </html>
