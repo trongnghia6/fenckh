@@ -43,7 +43,8 @@ const AdminController = {
       MonGiangDayChinh,
       CacMonLienQuan,
       MatKhau, // Lấy từ form
-      Quyen, // Lấy từ form
+      Quyen,
+      HSL, // Lấy từ form
     } = req.body;
     let TenDangNhap = req.body.TenDangNhap; // Lấy từ form
 
@@ -54,8 +55,8 @@ const AdminController = {
               TenNhanVien, NgaySinh, GioiTinh, DienThoai, HocVi, CCCD,
               NgayCapCCCD, NoiCapCCCD, DiaChiHienNay, DiaChiCCCD, ChucVu, NoiCongTac,
               MaPhongBan, MaSoThue, SoTaiKhoan, NganHang, ChiNhanh,
-              MonGiangDayChinh, CacMonLienQuan
-          ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+              MonGiangDayChinh, CacMonLienQuan,HSL
+          ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)
       `;
 
       const valuesInsert = [
@@ -78,6 +79,7 @@ const AdminController = {
         ChiNhanh,
         MonGiangDayChinh,
         CacMonLienQuan,
+        HSL,
       ];
 
       console.log(MaPhongBan);
