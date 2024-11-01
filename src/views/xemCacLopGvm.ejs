@@ -1313,7 +1313,32 @@ function filterByClass() {
 function filterBoMon() {
   applyFilters();
 }
+function filterByKhoa() {
+      const input = document.getElementById("filterKhoa");
+      const filter = input.value.toLowerCase();
+      const tableRows = document.querySelectorAll("#tableBody tr");
 
+      // Nếu ô tìm kiếm trống, hiển thị tất cả các dòng
+      if (!filter) {
+        tableRows.forEach((row) => {
+          row.style.display = ""; // Hiện tất cả các dòng
+        });
+        return;
+      }
+
+      // Chỉ hiện các dòng có tên giảng viên khớp với giá trị tìm kiếm
+      tableRows.forEach((row) => {
+        const nameCell = row.querySelector("td:nth-child(6)"); // Giả sử tên giảng viên nằm ở cột thứ 5
+        const name = nameCell.textContent.toLowerCase();
+
+        if (name.includes(filter)) {
+          row.style.display = ""; // Hiện hàng nếu khớp
+        } else {
+          row.style.display = "none"; // Ẩn hàng nếu không khớp
+        }
+      });
+      calculateTotals();
+    }
 // Hàm gợi ý bộ môn với cải tiến cho việc điền giá trị vào input
 function showSuggestionsBoMon(input) {
   const value = input.value.toLowerCase(); 
