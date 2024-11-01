@@ -79,16 +79,16 @@
                                 </div> -->
                                 <input type="hidden" name="Id_User" value="<%= value.id_User %> ">
                                 <div class="col-md-4 input-wrapper">
-                                    <label for="TenNhanVien" class="form-label">Tên Nhân Viên</label>
+                                    <label for="TenNhanVien" class="form-label">Tên Nhân Viên*</label>
                                     <input type="text" class="form-control" id="TenNhanVien" name="TenNhanVien" value="<%= value.TenNhanVien %> " required>
                                 </div>
                                 <div class="col-md-4 input-wrapper">
-                                    <label for="NgaySinh" class="form-label">Ngày Sinh</label>
-                                    <input type="date" class="form-control" id="NgaySinh" name="NgaySinh" value="<%= new Date(value.NgaySinh).toISOString().split('T')[0] %>" >
+                                    <label for="NgaySinh" class="form-label">Ngày Sinh*</label>
+                                    <input type="date" class="form-control" id="NgaySinh" name="NgaySinh" value="<%= new Date(value.NgaySinh).toISOString().split('T')[0] %>" required >
                                 </div>
                                 <div class="col-md-4 input-wrapper">
-                                    <label for="HocVi" class="form-label">Học Vị</label>
-                                    <input type="text" class="form-control" id="HocVi" name="HocVi" value="<%= value.HocVi %>">
+                                    <label for="HocVi" class="form-label">Học Vị*</label>
+                                    <input type="text" class="form-control" id="HocVi" name="HocVi" value="<%= value.HocVi %>" required>
                                 </div>
                             </div>
                             <div class="row mb-3">
@@ -124,8 +124,8 @@
                             </div>
                             <div class="row mb-3">
                                 <div class="col-md-4 input-wrapper">
-                                    <label for="ChucVu" class="form-label">Chức Vụ</label>
-                                    <input type="text" class="form-control" id="ChucVu" name="ChucVu" value="<%= value.ChucVu %>">
+                                    <label for="ChucVu" class="form-label">Chức Vụ*</label>
+                                    <input type="text" class="form-control" id="ChucVu" name="ChucVu" value="<%= value.ChucVu %>" required>
                                 </div>
                                 <div class="col-md-4 input-wrapper">
                                     <label for="NoiCongTac" class="form-label">Nơi Công Tác</label>
@@ -141,14 +141,9 @@
                                 <label for="TenDangNhap" class="form-label">Tên đăng nhập</label>
                                 <input type="text" class="form-control" id="TenDangNhap" name="TenDangNhap" value="<%= account.TenDangNhap %>" readonly />
                               </div>
-                              <div class="col-md-4 input-wrapper">
-                                <label for="Quyen" class="form-label">Quyền</label>
-                                <select id="Quyen" class="form-control" name="Quyen">
-                                  <option value="<%= role.Quyen %>"><%= role.Quyen %></option>
-                                </select>
-                              </div>
-                              <div class="col-md-4 input-wrapper">
-                                <label for="MaPhongBan" class="form-label">Mã Phòng Ban</label>
+                              <div class="col-md-4 input-wrapper d-flex justify-content-between">
+                                <div>
+                                  <label for="MaPhongBan" class="form-label">Mã Phòng Ban</label>
                                 <select class="form-control" id="MaPhongBan" name="MaPhongBan" onchange="fetchQuyen()">
                                   <!-- Option đầu tiên là giá trị hiện tại của role.MaPhongBan -->
                                   <option value="<%= role.MaPhongBan %>"><%= role.MaPhongBan %></option>
@@ -160,6 +155,17 @@
                                     <% } %>
                                   <% }); %>
                                 </select>
+                              </div>
+                              <div>
+                                <label for="Quyen" class="form-label">Quyền</label>
+                                <select id="Quyen" class="form-control" name="Quyen">
+                                  <option value="<%= role.Quyen %>"><%= role.Quyen %></option>
+                                </select>
+                              </div>
+                              </div>
+                              <div class="col-md-4 input-wrapper">
+                                <label for="HSL" class="form-label">Hệ số lương*</label>
+                                <input type="text" class="form-control" id="HSL" name="HSL" value="<%= value.HSL %>" required>
                               </div>
                               <div class="col-md-4 input-wrapper" hidden>
                                 <label for="MatKhau" class="form-label">Mật khẩu</label>
@@ -187,24 +193,47 @@
                                 </div>
                                 
                                 <div class="col-md-4 input-wrapper">
-                                    <label for="MonGiangDayChinh" class="form-label">Môn Giảng Dạy Chính</label>
-                                    <input type="text" class="form-control" id="MonGiangDayChinh" name="MonGiangDayChinh" value="<%= value.MonGiangDayChinh %>">
+                                    <label for="MonGiangDayChinh" class="form-label">Môn Giảng Dạy Chính*</label>
+                                    <input type="text" class="form-control" id="MonGiangDayChinh" name="MonGiangDayChinh" value="<%= value.MonGiangDayChinh %>" required>
                                 </div>
                                 <div class="col-md-4 input-wrapper">
                                     <label for="CacMonLienQuan" class="form-label">Các Môn Liên Quan</label>
                                     <input type="text" class="form-control" id="CacMonLienQuan" name="CacMonLienQuan" value="<%= value.CacMonLienQuan %>">
                                 </div>
                             </div>
-                            <div class="row mb-3">
-                            </div>
-                            
                             <button type="submit" class="btn" id="btnUpdateNV">Cập nhật</button>
                             <button class="btn mx-5" type="button" onclick="window.location.href='/nhanVien'">Trở về</button>
+                            <h6 class="p-2">Ghi chú: Những ô có dấu * là thông tin bắt buộc.</h6>
                         </form>                          
                    </div>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const khoa = <%= role.isKhoa %>;
+    const quyenSelect = document.getElementById('Quyen');
+
+    // Kiểm tra isKhoa và cập nhật quyền dựa theo giá trị
+    if (khoa === 1) {
+      quyenSelect.innerHTML = `
+        <option value="GV">Giảng Viên</option>
+        <option value="GV_CNBM">Giảng viên-Chủ nhiệm bộ môn</option>
+        <option value="Lãnh đạo khoa">Lãnh đạo khoa</option>`;
+    } else {
+      quyenSelect.innerHTML = `
+        <option value="Duyệt">Duyệt</option>
+        <option value="Thường">Thường</option>`;
+    }
+    const quyenValue = "<%= role.Quyen %>";
+
+// Đặt option có value khớp với role.Quyen là selected
+    const optionToSelect = quyenSelect.querySelector(`option[value="${quyenValue}"]`);
+    if (optionToSelect) {
+      optionToSelect.selected = true;
+    }
+        })
+  </script>
   <script>
     // Lấy query string từ URL
     const urlParams = new URLSearchParams(window.location.search);

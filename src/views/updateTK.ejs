@@ -138,6 +138,31 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const khoa = <%= id.isKhoa %>;
+      const quyenSelect = document.getElementById('Quyen');
+
+      // Kiểm tra isKhoa và cập nhật quyền dựa theo giá trị
+      if (khoa === 1) {
+        quyenSelect.innerHTML = `
+          <option value="GV">Giảng Viên</option>
+          <option value="GV_CNBM">Giảng viên-Chủ nhiệm bộ môn</option>
+          <option value="Lãnh đạo khoa">Lãnh đạo khoa</option>`;
+      } else {
+        quyenSelect.innerHTML = `
+          <option value="Duyệt">Duyệt</option>
+          <option value="Thường">Thường</option>`;
+      }
+      const quyenValue = "<%= role.Quyen %>";
+
+  // Đặt option có value khớp với role.Quyen là selected
+      const optionToSelect = quyenSelect.querySelector(`option[value="${quyenValue}"]`);
+      if (optionToSelect) {
+        optionToSelect.selected = true;
+      }
+          })
+    </script>
 <script>
   document.getElementById("changePasswordLink").addEventListener("click", function(event) {
 event.preventDefault(); // Ngăn chặn hành vi mặc định của thẻ a
