@@ -1169,6 +1169,71 @@
       });
       calculateTotals();
     }
+
+    // Hàm xử lí : ấn lưu dữ liệu sẽ cập nhật vào localStorage, db chưa thay đổi
+    function updateLocalTable() {
+      const rows = document.querySelectorAll('#tableBody tr'); // Lấy tất cả các hàng trong bảng
+
+      // Lấy dữ liệu từ localStorage nếu có
+      let data = localStorage.getItem('tableData');
+      let localData = JSON.parse(data);
+
+      rows.forEach((row, index) => {
+        // Bỏ qua các hàng đang bị ẩn
+        if (row.style.display === 'none') {
+          return;
+        }
+
+        // Lấy các giá trị từ các ô nhập và checkbox
+        const giaoVienGiangDayInput = row.querySelector('input[type="text"][placeholder="Nhập tên giảng viên"]');
+        const boMonInput = row.querySelector('input[type="text"][placeholder="Nhập tên bộ môn"]');
+        const moiGiangCheckbox = row.querySelector('input[type="checkbox"][name="moigiang"]');
+        const khoaCheckbox = row.querySelector('input[type="checkbox"][name="khoa"]');
+
+        // Lấy giá trị từ các ô nhập liệu
+        const giaoVienGiangDay = giaoVienGiangDayInput ? giaoVienGiangDayInput.value : '';
+        const boMon = boMonInput ? boMonInput.value : '';
+
+
+        // Lấy trạng thái của checkbox "Khoa" và "Đào Tạo"
+        const khoaDuyet = khoaCheckbox ? khoaCheckbox.checked : false;
+        const moiGiang = moiGiangCheckbox ? moiGiangCheckbox.checked : false;
+
+        // Lấy giá trị của các ô ngày bắt đầu và kết thúc
+        const ngayBatDauInput = row.querySelector('input[type="date"][name="startDate"]');
+        const ngayKetThucInput = row.querySelector('input[type="date"][name="endDate"]');
+
+        const ngayBatDauValue = ngayBatDauInput ? ngayBatDauInput.value : '';
+        const ngayKetThucValue = ngayKetThucInput ? ngayKetThucInput.value : '';
+
+
+        // So sánh và cập nhật nếu cần
+        const currentNgayBatDau = localData[index].NgayBatDau || '';
+        const currentNgayKetThuc = localData[index].NgayKetThuc || '';
+
+        // Cập nhật vào dữ liệu cục bộ 
+        if (currentNgayBatDau == '' || currentNgayBatDau != ngayBatDauValue) {
+          localData[index].NgayBatDau = ngayBatDauValue; // Cập nhật ngày bắt đầu nếu cần
+        }
+
+        if (currentNgayKetThuc == '' || currentNgayKetThuc != ngayKetThucValue) {
+          localData[index].NgayKetThuc = ngayKetThucValue; // Cập nhật ngày kết thúc nếu cần
+        }
+
+        // Cập nhật các giá trị khác không thay đổi
+        localData[index].GiaoVienGiangDay = giaoVienGiangDay;
+        localData[index].KhoaDuyet = khoaDuyet;
+        localData[index].MoiGiang = moiGiang;
+        localData[index].BoMon = boMon;
+      });
+
+      // Cập nhật lại localStorage với dữ liệu mới
+      localStorage.setItem('tableData', JSON.stringify(localData));
+      console.log(localData)
+      // Hiển thị thông báo thành công
+      // alert('Lưu cục bộ thành công');
+      // window.location.reload();
+    }
   </script>
 
   <!-- các hàm phụ xử lí trong bảng -->
