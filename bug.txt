@@ -16,9 +16,11 @@
 
 - Cập nhật ngày bắt đầu ngày kết khi lọc ( done )
 
-- Khi lọc sẽ bị mất duyệt Khoa bên teachinginfo2 và mời giảng
+- Khi lọc sẽ bị mất duyệt Khoa bên teachinginfo2 và mời giảng ( done )
 
-- Khi lọc bên khoa sẽ bị mất disable cột mời giảng
+- Khi lọc bên khoa sẽ bị mất disable cột mời giảng ( done )
+
+- Constraint tên giảng viên
 
 
 # không phải bug
@@ -31,3 +33,5 @@
 - Đồng bộ tên gọi của các button trong all site
 
 - Nếu tách script thì phải chuyển hết các button gắn sự kiện gọi hàm thành querySelector
+
+- fix cứng cái bảng để khi lọc không bị nhảy html

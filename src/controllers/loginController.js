@@ -91,7 +91,7 @@ BEGIN
 
   -- Kiểm tra cột GiaoVienGiangDay
   IF OLD.GiaoVienGiangDay != NEW.GiaoVienGiangDay THEN
-      SET change_message = CONCAT(change_message, 'Giảng Viên giảng dạy cho môn "', NEW.LopHocPhan, '": từ "', OLD.GiaoVienGiangDay, '" thành "', NEW.GiaoVienGiangDay, '". ');
+     SET change_message = CONCAT(change_message, 'Giảng Viên giảng dạy cho môn "', NEW.LopHocPhan, ' - ', NEW.TenLop, '": từ "', OLD.GiaoVienGiangDay, '" thành "', NEW.GiaoVienGiangDay, '". ');
       SET thay_doi_thong_tin = 1;
   END IF;
 
@@ -99,9 +99,9 @@ BEGIN
   IF OLD.KhoaDuyet != NEW.KhoaDuyet THEN
       SET thay_doi_duyet = 1;
       IF OLD.KhoaDuyet = 0 AND NEW.KhoaDuyet = 1 THEN
-          SET change_message = CONCAT(change_message, 'Khoa thay đổi duyệt môn "', NEW.LopHocPhan, '": Đã duyệt. ');
+          SET change_message = CONCAT(change_message, 'Khoa thay đổi duyệt môn "',  NEW.LopHocPhan, ' - ', NEW.TenLop, '": Đã duyệt. ');
       ELSEIF OLD.KhoaDuyet = 1 AND NEW.KhoaDuyet = 0 THEN
-          SET change_message = CONCAT(change_message, 'Khoa thay đổi duyệt môn "', NEW.LopHocPhan, '": Hủy duyệt. ');
+          SET change_message = CONCAT(change_message, 'Khoa thay đổi duyệt môn "',  NEW.LopHocPhan, ' - ', NEW.TenLop, '": Hủy duyệt. ');
       END IF;
   END IF;
 
@@ -109,9 +109,9 @@ BEGIN
   IF OLD.DaoTaoDuyet != NEW.DaoTaoDuyet THEN
       SET thay_doi_duyet = 1;
       IF OLD.DaoTaoDuyet = 0 AND NEW.DaoTaoDuyet = 1 THEN
-          SET change_message = CONCAT(change_message, 'Đào tạo thay đổi duyệt môn "', NEW.LopHocPhan, '": Đã duyệt. ');
+          SET change_message = CONCAT(change_message, 'Đào tạo thay đổi duyệt môn "',  NEW.LopHocPhan, ' - ', NEW.TenLop, '": Đã duyệt. ');
       ELSEIF OLD.DaoTaoDuyet = 1 AND NEW.DaoTaoDuyet = 0 THEN
-          SET change_message = CONCAT(change_message, 'Đào tạo thay đổi duyệt môn "', NEW.LopHocPhan, '": Hủy duyệt. ');
+          SET change_message = CONCAT(change_message, 'Đào tạo thay đổi duyệt môn "',  NEW.LopHocPhan, ' - ', NEW.TenLop, '": Hủy duyệt. ');
       END IF;
   END IF;
 
@@ -119,15 +119,15 @@ BEGIN
   IF OLD.TaiChinhDuyet != NEW.TaiChinhDuyet THEN
       SET thay_doi_duyet = 1;
       IF OLD.TaiChinhDuyet = 0 AND NEW.TaiChinhDuyet = 1 THEN
-          SET change_message = CONCAT(change_message, 'Tài chính thay đổi duyệt môn "', NEW.LopHocPhan, '": Đã duyệt. ');
+          SET change_message = CONCAT(change_message, 'Tài chính thay đổi duyệt môn "',  NEW.LopHocPhan, ' - ', NEW.TenLop, '": Đã duyệt. ');
       ELSEIF OLD.TaiChinhDuyet = 1 AND NEW.TaiChinhDuyet = 0 THEN
-          SET change_message = CONCAT(change_message, 'Tài chính thay đổi duyệt môn "', NEW.LopHocPhan, '": Hủy duyệt. ');
+          SET change_message = CONCAT(change_message, 'Tài chính thay đổi duyệt môn "',  NEW.LopHocPhan, ' - ', NEW.TenLop, '": Hủy duyệt. ');
       END IF;
   END IF;
 
   -- Kiểm tra cột GiaoVien
   IF OLD.GiaoVien != NEW.GiaoVien THEN
-      SET change_message = CONCAT(change_message, 'Giảng viên cho môn "', NEW.LopHocPhan, '": từ "', OLD.GiaoVien, '" thành "', NEW.GiaoVien, '". ');
+      SET change_message = CONCAT(change_message, 'Giảng viên cho môn "',  NEW.LopHocPhan, ' - ', NEW.TenLop, '": từ "', OLD.GiaoVien, '" thành "', NEW.GiaoVien, '". ');
       SET thay_doi_thong_tin = 1;
   END IF;
 
