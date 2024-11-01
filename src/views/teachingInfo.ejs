@@ -425,7 +425,7 @@
               </th>
             </tr>
           </thead>
-          <tbody id="tableBody" class="fixed-section">
+          <tbody id="tableBody">
             <tr>
               <td></td>
               <td></td>
@@ -515,9 +515,9 @@
   </script>
 
   <!-- phần chèn ngày bd kt cho tất cả các dòng khi nhấn Chèn -->
-  <!-- <script>
+  <script>
     document.getElementById('fillDay').addEventListener('click', function () {
-      // Lấy giá trị của ngày bắt đầu và ngày kết thúc
+      // Lấy giá trị ngày bắt đầu và ngày kết thúc từ người dùng
       const globalStartDate = document.getElementById('startDate').value;
       const globalEndDate = document.getElementById('endDate').value;
 
@@ -527,60 +527,54 @@
         return;
       }
 
+      // Lấy dữ liệu gốc từ localStorage
+      let data = JSON.parse(localStorage.getItem('tableData')) || [];
+      console.log('Dữ liệu ban đầu từ localStorage:', data);
 
-      // Chèn ngày bắt đầu, bỏ qua các ô bị disable
-      document.querySelectorAll("input[id^='NgayBatDau_']").forEach(input => {
-        if (!input.disabled && input.offsetParent !== null) {
-          input.value = globalStartDate;
-        }
-      });
-
-      // Chèn ngày kết thúc, bỏ qua các ô bị disable
-      document.querySelectorAll("input[id^='NgayKetThuc_']").forEach(input => {
-        if (!input.disabled && input.offsetParent !== null) {
-          input.value = globalEndDate;
-        }
-      });
-
-      // Lấy dữ liệu từ localStorage (giả sử dữ liệu đã có id)
-      let data = JSON.parse(localStorage.getItem('tableData'));
-
-      console.log(data);
-
-      // Lấy tất cả các dòng đang hiển thị trong bảng (có chứa id của đối tượng)
+      // Lấy tất cả các dòng hiển thị trong bảng
       const rows = document.querySelectorAll('#tableBody tr');
 
       rows.forEach(row => {
-        // Bỏ qua các hàng bị ẩn (display: none)
+        // Bỏ qua hàng bị ẩn
         if (row.style.display === 'none') {
           return;
         }
 
         // Lấy id của hàng từ thuộc tính data-id
         const rowId = row.getAttribute('data-id');
-        console.log('id trong bảng : ', rowId);
 
-        // Tìm đối tượng trong localStorage dựa vào id
+        // Tìm đối tượng trong localStorage có id trùng với hàng hiện tại
         let item = data.find(d => parseInt(d.id) === parseInt(rowId));
-        console.log(item);
 
         // Nếu tìm thấy đối tượng và KhoaDuyet == 0
         if (item && item.KhoaDuyet == 0) {
-          // Cập nhật ngày bắt đầu và ngày kết thúc cho đối tượng trong localStorage
-          item.NgayBatDau = globalStartDate;
-          item.NgayKetThuc = globalEndDate;
+          // Định dạng ngày trước khi lưu để tránh lỗi múi giờ
+          item.NgayBatDau = format(globalStartDate);
+          item.NgayKetThuc = format(globalEndDate);
 
-          // Cập nhật ngày bắt đầu và kết thúc trong hàng của bảng
+          // Cập nhật ngày trong hàng của bảng để hiển thị thay đổi
           const ngayBatDauCell = row.querySelector('.ngay-bat-dau');
           const ngayKetThucCell = row.querySelector('.ngay-ket-thuc');
-          if (ngayBatDauCell) ngayBatDauCell.textContent = globalStartDate;
-          if (ngayKetThucCell) ngayKetThucCell.textContent = globalEndDate;
+          if (ngayBatDauCell) ngayBatDauCell.textContent = item.NgayBatDau; // Hiển thị ngày đã định dạng
+          if (ngayKetThucCell) ngayKetThucCell.textContent = item.NgayKetThuc; // Hiển thị ngày đã định dạng
         }
       });
 
-      alert("data = " + JSON.stringify(data));
-      // Lưu lại dữ liệu đã cập nhật vào localStorage
-      localStorage.setItem('tableData', JSON.stringify(data));
+      // Kiểm tra định dạng ngày và format lại nếu cần
+      data.forEach(item => {
+        if (item.NgayBatDau && isISODate(item.NgayBatDau)) {
+          item.NgayBatDau = format(item.NgayBatDau);
+        }
+        if (item.NgayKetThuc && isISODate(item.NgayKetThuc)) {
+          item.NgayKetThuc = format(item.NgayKetThuc);
+        }
+      });
+
+      // Lưu lại toàn bộ dữ liệu đã cập nhật vào localStorage
+      // localStorage.setItem('tableData', JSON.stringify(data));
+
+      // Kiểm tra lại dữ liệu sau khi cập nhật
+      console.log('Dữ liệu sau khi chèn:', data);
 
       // Gửi dữ liệu đã cập nhật lên server
       fetch('http://localhost:3000/check-teaching', {
@@ -607,102 +601,26 @@
           alert('Có lỗi xảy ra khi cập nhật dữ liệu.');
         });
     });
-  </script> -->
 
-  <script>
-    document.getElementById('fillDay').addEventListener('click', function () {
-      // Lấy giá trị của ngày bắt đầu và ngày kết thúc
-      const globalStartDate = document.getElementById('startDate').value;
-      const globalEndDate = document.getElementById('endDate').value;
-  
-      // Kiểm tra nếu người dùng chưa nhập ngày
-      if (!globalStartDate || !globalEndDate) {
-        alert('Vui lòng nhập ngày bắt đầu và ngày kết thúc.');
-        return;
-      }
-  
-      // Chèn ngày bắt đầu, bỏ qua các ô bị disable
-      document.querySelectorAll("input[id^='NgayBatDau_']").forEach(input => {
-        if (!input.disabled && input.offsetParent !== null) {
-          input.value = globalStartDate;
-        }
-      });
-  
-      // Chèn ngày kết thúc, bỏ qua các ô bị disable
-      document.querySelectorAll("input[id^='NgayKetThuc_']").forEach(input => {
-        if (!input.disabled && input.offsetParent !== null) {
-          input.value = globalEndDate;
-        }
-      });
-  
-      // Lấy dữ liệu từ localStorage
-      let data = JSON.parse(localStorage.getItem('tableData')) || [];
-  
-      // Lấy tất cả các dòng đang hiển thị trong bảng
-      const rows = document.querySelectorAll('#tableBody tr');
-  
-      rows.forEach(row => {
-        // Lấy id của hàng từ thuộc tính data-id
-        const rowId = row.getAttribute('data-id');
-        let item = data.find(d => parseInt(d.id) === parseInt(rowId));
-  
-        // Nếu tìm thấy đối tượng và KhoaDuyet == 0
-        if (item && item.KhoaDuyet == 0) {
-          // Cập nhật giá trị vào localStorage
-          item.NgayBatDau = globalStartDate;
-          item.NgayKetThuc = globalEndDate;
-  
-          // Cập nhật ngày bắt đầu và kết thúc trong hàng của bảng
-          const ngayBatDauCell = row.querySelector('.ngay-bat-dau');
-          const ngayKetThucCell = row.querySelector('.ngay-ket-thuc');
-  
-          // Cập nhật giá trị trong bảng
-          if (ngayBatDauCell) ngayBatDauCell.textContent = globalStartDate;
-          if (ngayKetThucCell) ngayKetThucCell.textContent = globalEndDate;
-  
-          // Lấy giá trị từ các ô input bị ẩn và cập nhật vào localStorage
-          const ngayBatDauInput = document.getElementById(`NgayBatDau_${rowId}`);
-          const ngayKetThucInput = document.getElementById(`NgayKetThuc_${rowId}`);
-  
-          if (ngayBatDauInput) {
-            item.NgayBatDau = ngayBatDauInput.value || item.NgayBatDau; // Lấy giá trị ô input
-          }
-          if (ngayKetThucInput) {
-            item.NgayKetThuc = ngayKetThucInput.value || item.NgayKetThuc; // Lấy giá trị ô input
-          }
-        }
-      });
-  
-      // Lưu lại dữ liệu đã cập nhật vào localStorage
-      localStorage.setItem('tableData', JSON.stringify(data));
-  
-      // Gửi dữ liệu đã cập nhật lên server
-      fetch('http://localhost:3000/check-teaching', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
-      })
-        .then(response => {
-          if (!response.ok) {
-            throw new Error('Lỗi khi gửi dữ liệu');
-          }
-          return response.json();
-        })
-        .then(data => {
-          alert(data.message);
-          console.log(data.message);
-        })
-        .catch(error => {
-          console.error('Có lỗi xảy ra:', error);
-          alert('Có lỗi xảy ra khi cập nhật dữ liệu.');
-        });
-    });
+    // Hàm định dạng ngày thành chuỗi YYYY-MM-DD
+    function format(dateStr) {
+      const date = new Date(dateStr);
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const day = String(date.getDate()).padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    }
+
+    // Hàm kiểm tra xem ngày có định dạng ISO hay không
+    function isISODate(dateStr) {
+      const isoRegex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/;
+      return isoRegex.test(dateStr);
+    }
   </script>
-  
-  
-  
+
+
+
+  </script>
 
   <!-- phần render bảng dùng localStorage -->
   <script>
@@ -802,25 +720,25 @@
         // Kiểm tra dữ liệu trong localStorage
         let cachedData = localStorage.getItem('tableData');
 
-        // Nếu có dữ liệu trong localStorage
-        if (cachedData) {
-          cachedData = JSON.parse(cachedData);
-          // So sánh dữ liệu mới với dữ liệu cũ
-          const isDataEqual = (JSON.stringify(cachedData) === JSON.stringify(globalDataNew));
+        // // Nếu có dữ liệu trong localStorage
+        // if (cachedData) {
+        //   cachedData = JSON.parse(cachedData);
+        //   // So sánh dữ liệu mới với dữ liệu cũ
+        //   const isDataEqual = (JSON.stringify(cachedData) === JSON.stringify(globalDataNew));
 
-          if (isDataEqual) {
-            console.log('Dữ liệu không thay đổi, sử dụng dữ liệu từ localStorage');
-            console.log(cachedData)
-            // Render bảng từ dữ liệu đã cache
-            renderTable(cachedData);
-            calculateTotals();
-            window.location.reload();
-            return;
-          }
-        }
+        //   if (isDataEqual) {
+        //     console.log('Dữ liệu không thay đổi, sử dụng dữ liệu từ localStorage');
+        //     console.log(cachedData)
+        //     // Render bảng từ dữ liệu đã cache
+        //     renderTable(cachedData);
+        //     calculateTotals();
+        //     window.location.reload();
+        //     return;
+        //   }
+        // }
 
         // Nếu có sự thay đổi, cập nhật localStorage
-        console.log('thay đổi')
+        alert('thay đổi')
         localStorage.setItem('nameGv', JSON.stringify(nameGvNew));
         localStorage.setItem('nameGvm', JSON.stringify(nameGvmNew));
 
@@ -852,7 +770,7 @@
       const isKhoa = parseInt(localStorage.getItem("isKhoa"), 10); // Chuyển đổi isKhoa thành số
       const MaPhongBan = localStorage.getItem("MaPhongBan")
 
-      data.forEach((row, index) => {
+      data.forEach((row) => {
         const tableRow = document.createElement('tr');
 
         // Gán id vào thuộc tính data-id của hàng
@@ -941,8 +859,6 @@
         const ngayBatDauInput = document.createElement('input');
         ngayBatDauInput.type = 'date';
         ngayBatDauInput.name = 'startDate';
-        ngayBatDauInput.id = `NgayBatDau_${index}`; // Thêm id
-
         ngayBatDauInput.value = formatDate(row.NgayBatDau); // Định dạng ngày
 
         // Thêm sự kiện paste cho input ngày bắt đầu
@@ -958,8 +874,6 @@
         const ngayKetThucInput = document.createElement('input');
         ngayKetThucInput.type = 'date';
         ngayKetThucInput.name = 'endDate';
-        ngayKetThucInput.id = `NgayKetThuc_${index}`; // Thêm id
-
         ngayKetThucInput.value = formatDate(row.NgayKetThuc); // Định dạng ngày
 
         // Thêm sự kiện paste cho input ngày kết thúc
@@ -1343,15 +1257,16 @@
       tableRows.forEach(row => {
         const nameInput = row.querySelector('td:nth-child(7) input[name="bomon"]'); // Lấy input có name="bomon" ở cột thứ 7
         const checkbox = row.querySelector('input[type="checkbox"]');
+
         if (nameInput) {
           const name = nameInput.value.toLowerCase(); // Lấy giá trị của input có name="bomon"
 
-          if (!row.style.display == 'none' || name.includes(filter)) {
+          if (filter === '' || name.includes(filter)) {
             row.style.display = ''; // Hiện hàng nếu khớp hoặc filter trống
-            //checkbox.disabled = false; // Kích hoạt checkbox
+            checkbox.disabled = false; // Kích hoạt checkbox
           } else {
             row.style.display = 'none'; // Ẩn hàng nếu không khớp
-            //checkbox.disabled = true; // Vô hiệu hóa checkbox
+            checkbox.disabled = true; // Vô hiệu hóa checkbox
           }
         }
       });
@@ -1368,12 +1283,12 @@
       const filter = input.value.toLowerCase();
       const tableRows = document.querySelectorAll('#tableBody tr');
 
-      // // Nếu ô tìm kiếm trống, hiển thị tất cả các dòng
+      // Nếu ô tìm kiếm trống, hiển thị tất cả các dòng
       if (!filter) {
         tableRows.forEach(row => {
           row.style.display = ''; // Hiện tất cả các dòng
-          // const checkbox = row.querySelector('input[type="checkbox"]');
-          //checkbox.disabled = false; // Kích hoạt checkbox
+          const checkbox = row.querySelector('input[type="checkbox"]');
+          checkbox.disabled = false; // Kích hoạt checkbox
         });
         return;
       }
@@ -1386,10 +1301,10 @@
 
         if (name.includes(filter)) {
           row.style.display = ''; // Hiện hàng nếu khớp
-          //checkbox.disabled = false; // Kích hoạt checkbox
+          checkbox.disabled = false; // Kích hoạt checkbox
         } else {
           row.style.display = 'none'; // Ẩn hàng nếu không khớp
-          //checkbox.disabled = true; // Vô hiệu hóa checkbox
+          checkbox.disabled = true; // Vô hiệu hóa checkbox
         }
       });
       calculateTotals();
@@ -1405,8 +1320,8 @@
       if (!filter) {
         tableRows.forEach(row => {
           row.style.display = ''; // Hiện tất cả các dòng
-          // const checkbox = row.querySelector('input[type="checkbox"]');
-          //checkbox.disabled = false; // Kích hoạt checkbox
+          const checkbox = row.querySelector('input[type="checkbox"]');
+          checkbox.disabled = false; // Kích hoạt checkbox
         });
         return;
       }
@@ -1415,14 +1330,14 @@
       tableRows.forEach(row => {
         const nameCell = row.querySelector('td:nth-child(1)'); // Giả sử tên giảng viên nằm ở cột thứ 5
         const name = nameCell.textContent.toLowerCase();
-        // const checkbox = row.querySelector('input[type="checkbox"]');
+        const checkbox = row.querySelector('input[type="checkbox"]');
 
         if (name.includes(filter)) {
           row.style.display = ''; // Hiện hàng nếu khớp
-          //checkbox.disabled = false; // Kích hoạt checkbox
+          checkbox.disabled = false; // Kích hoạt checkbox
         } else {
           row.style.display = 'none'; // Ẩn hàng nếu không khớp
-          //checkbox.disabled = true; // Vô hiệu hóa checkbox
+          checkbox.disabled = true; // Vô hiệu hóa checkbox
         }
       });
       calculateTotals();
@@ -1576,10 +1491,7 @@
   <script>
     window.onload = function () {
       const TenNhanVien = localStorage.getItem("TenNhanVien"); // Lấy tên người dùng từ localStorage
-      let Role = localStorage.getItem("userRole");
-      if (Role.toUpperCase() == 'LÃNH ĐẠO KHOA'){
-        Role = 'LĐK';
-      }
+      const Role = localStorage.getItem("userRole");
 
       if (TenNhanVien) {
         // Hiển thị tên người dùng trên phần tử HTML
