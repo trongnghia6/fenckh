@@ -792,7 +792,7 @@ document.getElementById("filterBoMon").addEventListener("input", filterClasses);
         tableBody.appendChild(tableRow); // Thêm hàng vào bảng
       });
     }
-
+/*
     function disableCheckAll(type) {
       const checkAllCheckbox = document.getElementById(
         `checkAll${type.charAt(0).toUpperCase() + type.slice(1)}`
@@ -805,6 +805,33 @@ document.getElementById("filterBoMon").addEventListener("input", filterClasses);
         });
       }
     }
+*/
+
+   /* 
+function checkAll(type) {
+  alert("1")
+  const checkboxes = document.querySelectorAll(
+    `input[type="checkbox"][name="${type}"]`
+  );
+  const checkAllCheckbox = document.getElementById(
+    `checkAll${type.charAt(0).toUpperCase() + type.slice(1)}`
+  );
+
+  for (const checkbox of checkboxes) {
+    if (checkbox.disabled || !checkbox.offsetParent) {
+      continue; // Bỏ qua checkbox bị vô hiệu hóa
+    }
+
+    const row = checkbox.closest('tr');
+    if (row.style.display == 'none') { // Kiểm tra nếu dòng hiện trên màn hình
+      continue; // Gán trạng thái checkbox "Check All" cho checkbox hiển thị
+    }
+
+    checkbox.checked = checkAllCheckbox.checked; // Gán giá trị checked cho checkbox không bị vô hiệu hóa
+  }
+}
+*/
+
 
     async function submitData() {
       const role = localStorage.getItem("userRole");
@@ -1059,14 +1086,16 @@ document.getElementById("filterBoMon").addEventListener("input", filterClasses);
       const checkAllCheckbox = document.getElementById(
         `checkAll${type.charAt(0).toUpperCase() + type.slice(1)}`
       );
-
-      checkboxes.forEach((checkbox) => {
-        if (!checkbox.disabled) { // Kiểm tra xem checkbox có bị vô hiệu hóa không
-          checkbox.checked = checkAllCheckbox.checked;
+    
+      for (const checkbox of checkboxes) {
+        if (checkbox.disabled || !checkbox.offsetParent) {
+          continue; // Bỏ qua checkbox bị vô hiệu hóa hoặc bị ẩn hoàn toàn
         }
-        //checkbox.checked = checkAllCheckbox.checked; // Gán trạng thái checkbox "Check All" cho tất cả các checkbox
-      });
+    
+        checkbox.checked = checkAllCheckbox.checked; // Gán trạng thái checked cho checkbox hiển thị và không bị vô hiệu hóa
+      }
     }
+    
 
     // Hàm để cập nhật trạng thái của checkbox "Check All" khi checkbox cá nhân được chọn
     function updateCheckAll(type) {

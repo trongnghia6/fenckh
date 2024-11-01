@@ -97,7 +97,7 @@ const exportHDGvmToExcel = async (req, res) => {
       { header: "Trừ Thuế Bằng Chữ", key: "BangChuTruThue", width: 30 },
       { header: "Thực Nhận", key: "ThucNhan", width: 15 },
       { header: "Thực Nhận Bằng Chữ", key: "BangChuThucNhan", width: 30 },
-      { header: "Ngày Nghiệm Thu", key: "NgayNghiemThu", width: 15 },
+      { header: "Ngày Nghiệm Thu", key: "NgayBatDau", width: 15 },
     ];
 
     // Thêm dữ liệu vào bảng và tính toán các cột mới
