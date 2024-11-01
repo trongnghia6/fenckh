@@ -382,7 +382,7 @@ const importTableQC = async (jsonData) => {
       // Ánh xạ kết quả từ cơ sở dữ liệu thành các đối tượng và thêm vào mảng allResults
       boMonResults.forEach(item => {
         allResults.push({
-          HoTen: item.HoTen, // Tên giảng viên
+          HoTen: item.HoTen.trim(), // Tên giảng viên
           MonGiangDayChinh: item.MonGiangDayChinh, // Môn giảng dạy chính
         });
       });
