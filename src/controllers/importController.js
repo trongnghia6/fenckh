@@ -1339,19 +1339,60 @@ const themHocPhan = async (TenHocPhan, DVHT, Khoa) => {
   await connection.promise().query(query, values);
 };
 
+// Xét xem đã duyệt hết chưa để lưu
+const TaiChinhCheckAll = async (Dot, KiHoc, NamHoc) => {
+  let kq = ""; // Biến để lưu kết quả
+
+  const connection = await createPoolConnection();
+
+  try {
+    const query = `SELECT MaPhongBan FROM phongban WHERE isKhoa = 1`;
+    const [results, fields] = await connection.query(query);
+
+    // Chọn theo từng phòng ban
+    for (let i = 0; i < results.length; i++) {
+      const MaPhongBan = results[i].MaPhongBan;
+
+      const checkQuery = `
+        SELECT TaiChinhDuyet FROM quychuan 
+        WHERE Khoa = ? AND Dot = ? AND KiHoc = ? AND NamHoc = ?`;
+      const [check, checkFields] = await connection.query(checkQuery, [
+        MaPhongBan,
+        Dot,
+        KiHoc,
+        NamHoc,
+      ]);
+
+      let checkAll = true;
+      for (let j = 0; j < check.length; j++) {
+        if (check[j].TaiChinhDuyet == 0) {
+          checkAll = false;
+          break;
+        }
+      }
+      if (checkAll === true) {
+        kq += MaPhongBan + ",";
+      }
+    }
+  } finally {
+    if (connection) connection.release();
+  }
+
+  return kq;
+};
+
 const updateAllTeachingInfo = async () => {
   const query2 = `
-  SELECT
-    qc.*,
-    gvmoi.*,
-    SUM(qc.QuyChuan) AS TongSoTiet,  
-    SUBSTRING_INDEX(qc.GiaoVienGiangDay, ' - ', 1) AS TenGiangVien
-  FROM quychuan qc
-  JOIN gvmoi ON SUBSTRING_INDEX(qc.GiaoVienGiangDay, ' - ', 1) = gvmoi.HoTen
-  WHERE qc.DaLuu = 0
-  GROUP BY gvmoi.HoTen;  
-`;
-
+      SELECT
+        qc.*,
+        gvmoi.*,
+        SUM(qc.QuyChuan) AS TongSoTiet,
+        SUBSTRING_INDEX(qc.GiaoVienGiangDay, ' - ', 1) AS TenGiangVien
+      FROM quychuan qc
+      JOIN gvmoi ON SUBSTRING_INDEX(qc.GiaoVienGiangDay, ' - ', 1) = gvmoi.HoTen
+      WHERE qc.DaLuu = 0
+      GROUP BY gvmoi.HoTen;
+    `;
   try {
     const [dataJoin] = await connection.promise().query(query2);
 
@@ -1363,11 +1404,26 @@ const updateAllTeachingInfo = async () => {
       };
     }
 
+    const firstItem = dataJoin[0]; // Lấy phần tử đầu tiên
+
+    // Lấy các thuộc tính Dot, Ki, Nam từ phần tử đầu tiên
+    const dot = firstItem.Dot; // Lấy thuộc tính Dot
+    const ki = firstItem.KiHoc; // Lấy thuộc tính Ki
+    const nam = firstItem.NamHoc; // Lấy thuộc tính Nam
+
+    const daDuyetHet = await TaiChinhCheckAll(dot, ki, nam);
+    const daDuyetHetArray = daDuyetHet.split(","); // Chuyển đổi thành mảng
+
     // Chuẩn bị dữ liệu để chèn từng loạt
     //const insertValues = dataJoin.map((item) => {
     const insertValues = await Promise.all(
       dataJoin
-        .filter((item) => item.TaiChinhDuyet != 0 && item.DaLuu == 0) // Loại bỏ các mục có TaiChinhDuyet = 0
+        .filter(
+          (item) =>
+            item.TaiChinhDuyet != 0 &&
+            item.DaLuu == 0 &&
+            daDuyetHetArray.includes(item.Khoa) // Kiểm tra sự tồn tại trong mảng
+        ) // Loại bỏ các mục có TaiChinhDuyet = 0
         .map(async (item) => {
           const {
             ID,
@@ -1488,10 +1544,25 @@ const insertGiangDay = async () => {
   try {
     const [dataJoin] = await connection.promise().query(query2);
 
+    const firstItem = dataJoin[0]; // Lấy phần tử đầu tiên
+
+    // Lấy các thuộc tính Dot, Ki, Nam từ phần tử đầu tiên
+    const dot = firstItem.Dot; // Lấy thuộc tính Dot
+    const ki = firstItem.KiHoc; // Lấy thuộc tính Ki
+    const nam = firstItem.NamHoc; // Lấy thuộc tính Nam
+
+    const daDuyetHet = await TaiChinhCheckAll(dot, ki, nam);
+    const daDuyetHetArray = daDuyetHet.split(","); // Chuyển đổi thành mảng
+
     // Chuẩn bị dữ liệu để chèn từng loạt
     const insertValues = await Promise.all(
       dataJoin
-        .filter((item) => item.TaiChinhDuyet != 0 && item.DaLuu == 0) // Bỏ qua các mục có TaiChinhDuyet = 0
+        .filter(
+          (item) =>
+            item.TaiChinhDuyet != 0 &&
+            item.DaLuu == 0 &&
+            daDuyetHetArray.includes(item.Khoa)
+        ) // Bỏ qua các mục có TaiChinhDuyet = 0
         .map(async (item) => {
           const {
             ID,
@@ -1598,10 +1669,25 @@ const insertGiangDay2 = async () => {
   try {
     const [dataJoin] = await connection.promise().query(query2);
 
+    const firstItem = dataJoin[0]; // Lấy phần tử đầu tiên
+
+    // Lấy các thuộc tính Dot, Ki, Nam từ phần tử đầu tiên
+    const dot = firstItem.Dot; // Lấy thuộc tính Dot
+    const ki = firstItem.KiHoc; // Lấy thuộc tính Ki
+    const nam = firstItem.NamHoc; // Lấy thuộc tính Nam
+
+    const daDuyetHet = await TaiChinhCheckAll(dot, ki, nam);
+    const daDuyetHetArray = daDuyetHet.split(","); // Chuyển đổi thành mảng
+
     // Chuẩn bị dữ liệu để chèn từng loạt
     const insertValues = await Promise.all(
       dataJoin
-        .filter((item) => item.TaiChinhDuyet != 0 && item.DaLuu == 0) // Bỏ qua các mục có TaiChinhDuyet = 0
+        .filter(
+          (item) =>
+            item.TaiChinhDuyet != 0 &&
+            item.DaLuu == 0 &&
+            daDuyetHetArray.includes(item.Khoa)
+        ) // Bỏ qua các mục có TaiChinhDuyet = 0
         .map(async (item) => {
           //dataJoin.map(async (item) => {
           const {

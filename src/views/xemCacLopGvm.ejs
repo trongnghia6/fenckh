@@ -1427,6 +1427,7 @@ function hideSuggestionsBoMon() {
     });
   }
 */
+
 function checkAll(type) {
   const checkboxes = document.querySelectorAll(
     `input[type="checkbox"][name="${type}"]`
@@ -1436,7 +1437,7 @@ function checkAll(type) {
   );
 
   for (const checkbox of checkboxes) {
-    if (checkbox.disabled) {
+    if (checkbox.disabled || !checkbox.offsetParent) {
       continue; // Bỏ qua checkbox bị vô hiệu hóa
     }
 
@@ -1444,6 +1445,7 @@ function checkAll(type) {
     if (row.style.display == 'none') { // Kiểm tra nếu dòng hiện trên màn hình
       continue; // Gán trạng thái checkbox "Check All" cho checkbox hiển thị
     }
+
     checkbox.checked = checkAllCheckbox.checked; // Gán giá trị checked cho checkbox không bị vô hiệu hóa
   }
 }
