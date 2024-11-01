@@ -136,7 +136,7 @@ exports.exportPhuLucGiangVienMoi = async (req, res) => {
                             cell.font = { name: 'Times New Roman', size: 11 }; 
                             break;
                         case 2: // Học Vị
-                            cell.font = { name: 'Times New Roman', size: 10 };
+                            cell.font = { name: 'Times New Roman', size: 8 };
                             break;
                         case 3: // Lớp
                             cell.font = { name: 'Times New Roman', size: 10 };
