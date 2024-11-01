@@ -203,45 +203,161 @@ const importTableQC = async (jsonData) => {
     }
   }
 
+  // const getBoMon = async (lecturers) => {
+  //   // // console.log(lecturers);
+
+  //   // // Câu truy vấn SQL
+  //   // const query = "SELECT HoTen, MonGiangDayChinh FROM `gvmoi` WHERE HoTen = ?";
+
+  //   // // Tạo mảng các Promise để thực hiện truy vấn với từng tên giảng viên
+  //   // const lecturerPromises = lecturers.map(async (lecturerName) => {
+  //   //   // console.log(lecturerName);
+  //   //   if (!lecturerName) return null; // Kiểm tra nếu tên giảng viên không hợp lệ
+
+  //   //   try {
+  //   //     const results = await new Promise((resolve, reject) => {
+  //   //       connection.query(query, [lecturerName], (err, results) => {
+  //   //         if (err) {
+  //   //           console.error("Error:", err);
+  //   //           return reject(err);
+  //   //         }
+  //   //         resolve(results);
+  //   //       });
+  //   //     });
+
+  //   //     // Nếu có kết quả, trả về đối tượng chứa thông tin giảng viên
+  //   //     return results[0] || null; // trả về thông tin giảng viên hoặc null nếu không có kết quả
+  //   //   } catch (error) {
+  //   //     console.error("Error fetching lecturer info:", error);
+  //   //     return null; // Trả về null nếu có lỗi xảy ra
+  //   //   }
+  //   // });
+
+  //   // try {
+  //   //   // Đợi tất cả các truy vấn hoàn thành và lọc bỏ kết quả null
+  //   //   const results = await Promise.all(lecturerPromises);
+  //   //   return results.filter(Boolean); // Trả về mảng các đối tượng chứa thông tin giảng viên
+  //   // } catch (error) {
+  //   //   console.error("Error during processing lecturer promises:", error);
+  //   //   return []; // Trả về mảng rỗng nếu có lỗi
+  //   // }
+
+  //   // Câu truy vấn SQL đầu tiên
+  //   const query1 = "SELECT HoTen, MonGiangDayChinh FROM `gvmoi` WHERE HoTen = ?";
+  //   // Câu truy vấn SQL thứ hai
+  //   const query2 = "SELECT TenNhanVien, MonGiangDayChinh FROM `nhanvien` WHERE TenNhanVien = ?";
+
+  //   // Tạo mảng các Promise để thực hiện truy vấn với từng tên giảng viên cho cả hai bảng
+  //   const lecturerPromises = lecturers.map(async (lecturerName) => {
+  //     if (!lecturerName) return null; // Kiểm tra nếu tên giảng viên không hợp lệ
+
+  //     try {
+  //       // Truy vấn bảng `gvmoi`
+  //       const results1 = await new Promise((resolve, reject) => {
+  //         connection.query(query1, [lecturerName], (err, results) => {
+  //           if (err) {
+  //             console.error("Error in query1:", err);
+  //             return reject(err);
+  //           }
+  //           resolve(results);
+  //         });
+  //       });
+
+  //       // Truy vấn bảng `nhanvien`
+  //       const results2 = await new Promise((resolve, reject) => {
+  //         connection.query(query2, [lecturerName], (err, results) => {
+  //           if (err) {
+  //             console.error("Error in query2:", err);
+  //             return reject(err);
+  //           }
+  //           resolve(results);
+  //         });
+  //       });
+
+  //       // Nếu có kết quả từ bất kỳ truy vấn nào, trả về đối tượng chứa thông tin giảng viên
+  //       if (results1[0]) {
+  //         return results1[0]; // Trả về kết quả từ bảng `gvmoi`
+  //       } else if (results2[0]) {
+  //         console.log('Bảng nhân viên : ', results2[0]);
+  //         return results2[0]; // Trả về kết quả từ bảng `nhanvien`
+  //       } else {
+  //         return null; // Không có kết quả từ cả hai bảng
+  //       }
+  //     } catch (error) {
+  //       console.error("Error fetching lecturer info:", error);
+  //       return null; // Trả về null nếu có lỗi xảy ra
+  //     }
+  //   });
+
+  //   try {
+  //     // Đợi tất cả các truy vấn hoàn thành và lọc bỏ kết quả null
+  //     const results = await Promise.all(lecturerPromises);
+  //     // console.log('Dữ liệu giảng viên có trong db : ', results);
+  //     return results.filter(Boolean); // Trả về mảng các đối tượng chứa thông tin giảng viên
+  //   } catch (error) {
+  //     console.error("Error during processing lecturer promises:", error);
+  //     return []; // Trả về mảng rỗng nếu có lỗi
+  //   }
+  // };
+
   const getBoMon = async (lecturers) => {
-    // console.log(lecturers);
+    const query1 = "SELECT HoTen, MonGiangDayChinh FROM `gvmoi` WHERE HoTen = ?";
+    const query2 = "SELECT TenNhanVien, MonGiangDayChinh FROM `nhanvien` WHERE TenNhanVien = ?";
 
-    // Câu truy vấn SQL
-    const query = "SELECT HoTen, MonGiangDayChinh FROM `gvmoi` WHERE HoTen = ?";
-
-    // Tạo mảng các Promise để thực hiện truy vấn với từng tên giảng viên
     const lecturerPromises = lecturers.map(async (lecturerName) => {
-      // console.log(lecturerName);
-      if (!lecturerName) return null; // Kiểm tra nếu tên giảng viên không hợp lệ
+      if (!lecturerName) return null;
 
       try {
-        const results = await new Promise((resolve, reject) => {
-          connection.query(query, [lecturerName], (err, results) => {
-            if (err) {
-              console.error("Error:", err);
-              return reject(err);
-            }
+        const results1 = await new Promise((resolve, reject) => {
+          connection.query(query1, [lecturerName], (err, results) => {
+            if (err) return reject(err);
             resolve(results);
           });
         });
 
-        // Nếu có kết quả, trả về đối tượng chứa thông tin giảng viên
-        return results[0] || null; // trả về thông tin giảng viên hoặc null nếu không có kết quả
+        const results2 = await new Promise((resolve, reject) => {
+          connection.query(query2, [lecturerName], (err, results) => {
+            if (err) return reject(err);
+            resolve(results);
+          });
+        });
+
+        // Tạo mảng để lưu kết quả
+        const allResults = [];
+
+        // Ánh xạ kết quả từ bảng `gvmoi`
+        results1.forEach(item => {
+          allResults.push({
+            HoTen: item.HoTen, // Tên giảng viên từ bảng gvmoi
+            MonGiangDayChinh: item.MonGiangDayChinh // Môn giảng dạy chính
+          });
+        });
+
+        // Ánh xạ kết quả từ bảng `nhanvien`
+        results2.forEach(item => {
+          allResults.push({
+            HoTen: item.TenNhanVien, // Sử dụng TenNhanVien cho trường HoTen
+            MonGiangDayChinh: item.MonGiangDayChinh // Môn giảng dạy chính
+          });
+        });
+
+        return allResults.length > 0 ? allResults : null;
+
       } catch (error) {
         console.error("Error fetching lecturer info:", error);
-        return null; // Trả về null nếu có lỗi xảy ra
+        return null;
       }
     });
 
     try {
-      // Đợi tất cả các truy vấn hoàn thành và lọc bỏ kết quả null
       const results = await Promise.all(lecturerPromises);
-      return results.filter(Boolean); // Trả về mảng các đối tượng chứa thông tin giảng viên
+      return results.filter(Boolean).flat(); // Gộp các kết quả lại
     } catch (error) {
       console.error("Error during processing lecturer promises:", error);
-      return []; // Trả về mảng rỗng nếu có lỗi
+      return [];
     }
   };
+
 
   // Hàm này để kết nối hai hàm tachGiaoVien và getBoMon với nhau
   // Hàm để lấy thông tin giảng viên từ cơ sở dữ liệu
@@ -271,7 +387,8 @@ const importTableQC = async (jsonData) => {
         });
       });
     }
-
+    // console.log(allResults);
+    console.log('Dữ liệu giảng viên có trong db : ', allResults);
     return allResults; // Trả về mảng chứa tất cả thông tin giảng viên
   };
 
@@ -354,6 +471,7 @@ const importTableQC = async (jsonData) => {
             reject(err);
             return;
           }
+          // console.log(results);
           resolve(results);
         });
       });
@@ -388,7 +506,7 @@ const importTableQC = async (jsonData) => {
   return results;
 };
 
-const updateBanHanh = async(req, res) => {
+const updateBanHanh = async (req, res) => {
 
   let connection;
   try {
