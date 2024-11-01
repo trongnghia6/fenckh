@@ -116,20 +116,20 @@ exports.exportPhuLucGiangVienMoi = async (req, res) => {
                 const soTien = item.SoTiet * mucThanhToan;
                 const truThue = soTien * 0.1;
                 const thucNhan = soTien - truThue;
-
+            
                 const thoiGianThucHien = `${new Date(item.NgayBatDau).toLocaleDateString()} - ${new Date(item.NgayKetThuc).toLocaleDateString()}`;
-
+            
                 const row = worksheet.addRow([
                     item.GiangVien, item.HocVi, item.Lop, item.SoTiet,
                     item.TenHocPhan, item.HocKy, thoiGianThucHien, item.HSL,
                     mucThanhToan, soTien, truThue, thucNhan
                 ]);
-                row.font = { name: 'Times New Roman', size: 12 }; // Chỉnh cỡ chữ cho toàn bộ hàng
-
+                row.font = { name: 'Times New Roman', size: 12 };
+            
                 // Bật wrapText cho các ô dữ liệu và căn giữa
                 row.eachCell((cell, colNumber) => {
                     cell.alignment = { horizontal: 'center', vertical: 'middle', wrapText: true };
-
+            
                     // Chỉnh cỡ chữ cho từng cột
                     switch (colNumber) {
                         case 1: // Họ Tên
@@ -170,13 +170,13 @@ exports.exportPhuLucGiangVienMoi = async (req, res) => {
                             break;
                     }
                 });
-
+            
                 totalSoTiet += item.SoTiet;
                 totalSoTien += soTien;
-                totalTruThue += truThue;A
+                totalTruThue += truThue; // Xóa ký tự 'A' ở đây
                 totalThucNhan += thucNhan;
             });
-
+            
             // Thêm hàng tổng cộng
             const totalRow = worksheet.addRow(['Tổng cộng', '', '', totalSoTiet, '', '', '', '', '', totalSoTien, totalTruThue, totalThucNhan]);
             totalRow.font = { name: 'Times New Roman', bold: true };
@@ -189,6 +189,7 @@ exports.exportPhuLucGiangVienMoi = async (req, res) => {
                     right: { style: 'thin' },
                 };
             });
+            
 
             // Gộp ô cho hàng tổng cộng
             worksheet.mergeCells(`A${totalRow.number}:C${totalRow.number}`);

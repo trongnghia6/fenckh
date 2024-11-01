@@ -165,51 +165,13 @@
       </div>
     </div>
   </nav>
-<<<<<<< HEAD
-  <div class="d-flex justify-content-center">
-    <!-- Main content -->
-    <div class="gvmList">
-      <div class="m-3">
-        <h1>HỢP ĐỒNG GIẢNG VIÊN MỜI</h1>
-=======
+
+
     <div class="d-flex justify-content-center">
       <!-- Main content -->
       <div class="gvmList">
         <div class="m-3">
           <h1>HỢP ĐỒNG GIẢNG VIÊN MỜI</h1>
-          
-          <div class="controls-container d-flex align-items-center">
-            <select class="form-select w-100px mx-2 selectop" id="combobox-dot">
-              <option value="">Đợt </option>
-            </select>
-          
-            <select class="form-select w-100px mx-2 selectop" id="combobox-ki">
-              <option value="">Kỳ </option>
-            </select>
-          
-            <select class="form-select w-100px mx-2 selectop" id="NamHoc">
-              <option value="">Năm học</option>
-            </select>
-          
-            <button type="button" class="btn mx-2" id="exportButton">Xuất Hợp Đồng</button>
-          </div>
-              <script>
-                document.getElementById("exportButton").addEventListener("click", function () {
-                    const dot = document.getElementById("combobox-dot").value;
-                    const ki = document.getElementById("combobox-ki").value;
-                    const namHoc = document.getElementById("NamHoc").value;
-                    
-                    if (dot && ki && namHoc) {
-                        window.location.href = `/exportHD/downloadAll?dot=${dot}&ki=${ki}&namHoc=${encodeURIComponent(namHoc)}`;
-                    } else {
-                        alert("Vui lòng chọn đầy đủ thông tin đợt, kỳ và năm học.");
-                    }
-                });
-                </script>
-            </form>
-          </div>
-        </div>
->>>>>>> a781917d467a555aa5a27bc444dc3c4b10f948df
 
         <div class="controls-container d-flex align-items-center">
           <select class="form-select w-100px mx-2 selectop" id="combobox-dot">
@@ -349,12 +311,9 @@
 
         const isKhoa = localStorage.getItem("isKhoa"); // Lấy role từ localStorage
 
-<<<<<<< HEAD
         if (isKhoa == 0) { // Nếu là đào tạo hoặc tài chính
           window.location.href = "/info2";
-=======
-          if (isKhoa == 0) { // Nếu là đào tạo hoặc tài chính
-            window.location.href = "/info2";
+         
           } else {
             window.location.href = "/info";
           }
@@ -390,12 +349,10 @@
         if (TenNhanVien) {
           // Hiển thị tên người dùng trên phần tử HTML
           document.querySelector('.fullname').innerText = `${TenNhanVien} - ${Role}`;
->>>>>>> a781917d467a555aa5a27bc444dc3c4b10f948df
         } else {
           window.location.href = "/info";
         }
-      });
-<<<<<<< HEAD
+      };
 
       // Thêm sự kiện click cho phần tử có id="Home"
 
@@ -412,7 +369,7 @@
           window.location.href = "/mainkhoa";
         }
       });
-    });
+    
 
   </script>
 
@@ -446,6 +403,7 @@
       }
     });
   </script>
+
   <script>
     $(document).ready(function () {
       $('#NamHoc option[value=""]').remove();
@@ -472,7 +430,7 @@
 
             if (!$('#NamHoc option:selected').length) {
               $('#NamHoc').prepend('<option value="">Chọn Năm Học</option>');
-=======
+
     </script>
     <script>
       $(document).ready(function () {
@@ -507,11 +465,8 @@
               });
             } else {
               console.error("Không lấy được dữ liệu năm học:", response.message);
->>>>>>> a781917d467a555aa5a27bc444dc3c4b10f948df
             }
-          } else {
-            console.error("Không lấy được dữ liệu năm học:", response.message);
-          }
+          
         },
         error: function (error) {
           console.error("Lỗi khi lấy dữ liệu năm học:", error);
@@ -519,6 +474,9 @@
       });
     });
   </script>
+
+
+
   <script>
     $(document).ready(function () {
       $('#MaPhongBan option[value=""]').remove();
@@ -555,6 +513,7 @@
       });
     });
   </script>
+  
 </body>
 
 </html>
