@@ -53,7 +53,7 @@ const exportHDGvmToExcel = async (req, res) => {
     // Truy vấn dữ liệu mà không lấy các cột không cần thiết
     const [rows] = await connection.execute(
       `SELECT NgayBatDau, NgayKetThuc, KiHoc, DanhXung, HoTen, NgaySinh, CCCD, NoiCapCCCD, Email, 
-          MaSoThue, HocVi, ChucVu, HSL, DienThoai, STK, NganHang, SUM(SoTiet) AS SoTiet, NgayNghiemThu 
+          MaSoThue, HocVi, ChucVu, HSL, DienThoai, STK, NganHang, SUM(SoTiet) AS SoTiet
        FROM hopdonggvmoi 
        WHERE NamHoc = ? AND Dot = ? AND KiHoc = ? 
        GROUP BY HoTen;`,
@@ -97,7 +97,9 @@ const exportHDGvmToExcel = async (req, res) => {
       { header: "Trừ Thuế Bằng Chữ", key: "BangChuTruThue", width: 30 },
       { header: "Thực Nhận", key: "ThucNhan", width: 15 },
       { header: "Thực Nhận Bằng Chữ", key: "BangChuThucNhan", width: 30 },
-      { header: "Ngày Nghiệm Thu", key: "NgayNghiemThu", width: 15 },
+      { header: "Ngày Nghiệm Thu", key: "NgayNghiemThu", width: 15 }, // Thêm cột Ngày Nghiệm Thu
+      { header: "Ngày Nghiệm Thu", key: "NgayNghiemThu", width: 15 }, // Thêm cột Ngày Nghiệm Thu
+
     ];
 
     // Thêm dữ liệu vào bảng và tính toán các cột mới
@@ -114,6 +116,8 @@ const exportHDGvmToExcel = async (req, res) => {
         BangChuTruThue: soTienBangChu(truThue), // Trừ Thuế Bằng Chữ
         ThucNhan: thucNhan,
         BangChuThucNhan: soTienBangChu(thucNhan), // Thực Nhận Bằng Chữ
+        NgayNghiemThu: row.NgayKetThuc, // Thiết lập Ngày Nghiệm Thu bằng Ngày Kết Thúc
+
       });
     });
 

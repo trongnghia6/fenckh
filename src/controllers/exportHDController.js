@@ -161,6 +161,8 @@ const exportSingleContract = async (req, res) => {
             'Tiền_thuế_Text': tienThueText.toLocaleString('vi-VN'),
             'Tiền_thực_nhận_Text': tienThucNhanText.toLocaleString('vi-VN'),
             'Bằng_chữ_của_thực_nhận': numberToWords(tienThucNhanText),
+            'Kỳ': teacher.KiHoc,            // Thêm trường KiHoc
+            'Năm_học': teacher.NamHoc       // Thêm trường NamHoc
         };
 
         const templatePath = path.resolve(__dirname, '../templates/HopDong.docx');
@@ -205,23 +207,34 @@ const exportSingleContract = async (req, res) => {
 const exportMultipleContracts = async (req, res) => {
     let connection;
     try {
-        const { dot, ki, namHoc } = req.query;
-        
+        const { dot, ki, namHoc, khoa, teacherName } = req.query;
+
         if (!dot || !ki || !namHoc) {
             return res.status(400).send('Thiếu thông tin đợt, kỳ hoặc năm học');
         }
 
         connection = await createConnection();
-        
-        // Lấy danh sách giảng viên theo đợt, kỳ, năm học
-        const [teachers] = await connection.execute(
-            `SELECT * FROM hopdonggvmoi WHERE Dot = ? AND KiHoc = ? AND NamHoc = ?`,
-            [dot, ki, namHoc]
-        );
+
+        let query = 'SELECT * FROM hopdonggvmoi WHERE Dot = ? AND KiHoc = ? AND NamHoc = ?';
+        let params = [dot, ki, namHoc];
+
+        // Xử lý các trường hợp khác nhau
+        if (khoa && khoa !== 'ALL') {
+            query += ' AND MaPhongBan = ?';
+            params.push(khoa);
+        }
+
+        if (teacherName) {
+            query += ' AND HoTen LIKE ?';
+            params.push(`%${teacherName}%`);
+        }
+
+        const [teachers] = await connection.execute(query, params);
 
         if (!teachers || teachers.length === 0) {
-            console.log("Không có dữ liệu để xuất ");
-            res.send("<script>alert('Không tìm thấy giảng viên phù hợp điều kiện'); window.location.href='/exportHD';</script>");        }
+            return res.send("<script>alert('Không tìm thấy giảng viên phù hợp điều kiện'); window.location.href='/exportHD';</script>");
+        }
+
 
         // Tạo thư mục tạm để lưu các file hợp đồng
         const tempDir = path.join(__dirname, '..', 'public', 'temp', Date.now().toString());
@@ -231,7 +244,6 @@ const exportMultipleContracts = async (req, res) => {
 
         // Tạo hợp đồng cho từng giảng viên
         for (const teacher of teachers) {
-            // Tính toán các giá trị tiền
             const soTiet = teacher.SoTiet || 0;
             const tienText = soTiet * 100000;
             const tienThueText = Math.round(tienText * 0.1);
@@ -261,6 +273,8 @@ const exportMultipleContracts = async (req, res) => {
                 'Tiền_thuế_Text': tienThueText.toLocaleString('vi-VN'),
                 'Tiền_thực_nhận_Text': tienThucNhanText.toLocaleString('vi-VN'),
                 'Bằng_chữ_của_thực_nhận': numberToWords(tienThucNhanText),
+                'Kỳ': teacher.KiHoc,            // Thêm trường KiHoc
+                'Năm_học': teacher.NamHoc       // Thêm trường NamHoc
             };
 
             const templatePath = path.resolve(__dirname, '../templates/HopDong.docx');
@@ -287,12 +301,11 @@ const exportMultipleContracts = async (req, res) => {
             fs.writeFileSync(path.join(tempDir, fileName), buf);
         }
 
-        // Tạo file zip chứa tất cả hợp đồng
         const archive = archiver('zip', {
             zlib: { level: 9 }
         });
 
-        const zipFileName = `HopDong_Dot${dot}_Ki${ki}_${namHoc}.zip`;
+        const zipFileName = `HopDong_Dot${dot}_Ki${ki}_${namHoc}_${khoa || 'all'}.zip`;
         const zipPath = path.join(tempDir, zipFileName);
         const output = fs.createWriteStream(zipPath);
 
@@ -304,30 +317,27 @@ const exportMultipleContracts = async (req, res) => {
             archive.on('error', reject);
             archive.finalize();
         });
-        // Trong hàm exportMultipleContracts, thay đổi phần xử lý xóa thư mục như sau:
+
         res.download(zipPath, zipFileName, (err) => {
             if (err) {
                 console.error("Error sending zip file:", err);
                 return;
             }
         
-            // Đợi một khoảng thời gian ngắn trước khi xóa thư mục
             setTimeout(() => {
                 try {
                     if (fs.existsSync(tempDir)) {
-                        // Xóa từng file trong thư mục trước
                         const files = fs.readdirSync(tempDir);
                         for (const file of files) {
                             const filePath = path.join(tempDir, file);
                             fs.unlinkSync(filePath);
                         }
-                        // Sau đó xóa thư mục
                         fs.rmdirSync(tempDir);
                     }
                 } catch (error) {
                     console.error("Error cleaning up temporary directory:", error);
                 }
-            }, 1000); // Đợi 1 giây
+            }, 1000);
         });
     } catch (error) {
         console.error("Error in exportMultipleContracts:", error);
@@ -342,6 +352,7 @@ const exportMultipleContracts = async (req, res) => {
         }
     }
 };
+
 
 module.exports = {
     exportSingleContract,

@@ -111,7 +111,7 @@
       >
         <div class="row mb-3">
           <div class="col-md-4 input-wrapper">
-            <label for="TenNhanVien" class="form-label">Tên Nhân Viên</label>
+            <label for="TenNhanVien" class="form-label">Tên Nhân Viên*</label>
             <input
               type="text"
               class="form-control"
@@ -121,23 +121,24 @@
             />
           </div>
           <div class="col-md-4 input-wrapper">
-            <label for="NgaySinh" class="form-label">Ngày Sinh</label>
+            <label for="NgaySinh" class="form-label">Ngày Sinh*</label>
             <input
               type="date"
               class="form-control"
               id="NgaySinh"
               name="NgaySinh"
+              required
             />
           </div>
           <div class="col-md-4 input-wrapper">
-            <label for="HocVi" class="form-label">Học Vị</label>
-            <input type="text" class="form-control" id="HocVi" name="HocVi" />
+            <label for="HocVi" class="form-label">Học Vị*</label>
+            <input type="text" class="form-control" id="HocVi" name="HocVi" required/>
           </div>
         </div>
         <div class="row mb-3">
           <div class="col-md-4 input-wrapper">
             <label for="CCCD" class="form-label">CCCD</label>
-            <input type="text" class="form-control" id="CCCD" name="CCCD" />
+            <input type="text" class="form-control" id="CCCD" name="CCCD"/>
           </div>
           <div class="col-md-4 input-wrapper">
             <label for="NgayCapCCCD" class="form-label">Ngày Cấp CCCD</label>
@@ -189,8 +190,8 @@
         </div>
         <div class="row mb-3">
           <div class="col-md-4 input-wrapper">
-            <label for="ChucVu" class="form-label">Chức Vụ</label>
-            <input type="text" class="form-control" id="ChucVu" name="ChucVu" />
+            <label for="ChucVu" class="form-label">Chức Vụ*</label>
+            <input type="text" class="form-control" id="ChucVu" name="ChucVu" required/>
           </div>
           <div class="col-md-4 input-wrapper">
             <label for="NoiCongTac" class="form-label">Nơi Công Tác</label>
@@ -215,7 +216,7 @@
         </div>
         <div class="row mb-3">
           <div class="col-md-4 input-wrapper">
-            <label for="TenDangNhap" class="form-label">Tên đăng nhập</label>
+            <label for="TenDangNhap" class="form-label">Tên đăng nhập*</label>
             <input
               type="text"
               class="form-control"
@@ -224,28 +225,40 @@
               required
             />
           </div>
-          <div class="col-md-4 input-wrapper">
-            <label for="Quyen" class="form-label">Quyền</label>
-            <select id="Quyen" class="form-control" name="Quyen">
-              <option value="GV">Giảng Viên</option>
-              <option value="GV_CNBM">Giảng viên-Chủ nhiệm bộ môn</option>
-              <option value="Lãnh đạo khoa">Lãnh đạo khoa</option>
-            </select>
+          <div class="col-md-4 input-wrapper d-flex justify-content-between">
+            <div>
+              <label for="Quyen" class="form-label">Quyền</label>
+              <select id="Quyen" class="form-control" name="Quyen">
+                <option value="GV">Giảng Viên</option>
+                <option value="GV_CNBM">Giảng viên-Chủ nhiệm bộ môn</option>
+                <option value="Lãnh đạo khoa">Lãnh đạo khoa</option>
+              </select>
+            </div>
+            <div>
+              <label for="MaPhongBan" class="form-label">Mã Phòng Ban</label>
+              <select
+                class="form-control"
+                id="MaPhongBan"
+                name="MaPhongBan"
+                onchange="fetchQuyen()"
+              >
+                <% departmentLists.forEach(function(departmentLists) { %>
+                <option value="<%= departmentLists.MaPhongBan %>">
+                  <%= departmentLists.MaPhongBan %>
+                </option>
+                <% }); %>
+              </select>
+            </div>
           </div>
           <div class="col-md-4 input-wrapper">
-            <label for="MaPhongBan" class="form-label">Mã Phòng Ban</label>
-            <select
+            <label for="HSL" class="form-label">Hệ số lương*</label>
+            <input
+              type="text"
               class="form-control"
-              id="MaPhongBan"
-              name="MaPhongBan"
-              onchange="fetchQuyen()"
-            >
-              <% departmentLists.forEach(function(departmentLists) { %>
-              <option value="<%= departmentLists.MaPhongBan %>">
-                <%= departmentLists.MaPhongBan %>
-              </option>
-              <% }); %>
-            </select>
+              id="HSL"
+              name="HSL"
+              required
+            />
           </div>
           <div class="col-md-4 input-wrapper" hidden>
             <label for="MatKhau" class="form-label">Mật khẩu</label>
@@ -299,13 +312,14 @@
 
           <div class="col-md-4 input-wrapper">
             <label for="MonGiangDayChinh" class="form-label"
-              >Môn Giảng Dạy Chính</label
+              >Môn Giảng Dạy Chính*</label
             >
             <input
               type="text"
               class="form-control"
               id="MonGiangDayChinh"
               name="MonGiangDayChinh"
+              required
             />
           </div>
           <div class="col-md-4 input-wrapper">
@@ -331,6 +345,7 @@
         >
           Trở về
         </button>
+        <h6 class="p-2">Ghi chú: Những ô có dấu * là thông tin bắt buộc.</h6>
       </form>
     </div>
 
