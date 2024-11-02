@@ -129,6 +129,7 @@ const postUpdateNV = async (req, res) => {
     Id_User,
     TenDangNhap,
     Quyen,
+    HSL,
   } = req.body;
 
   const MaNhanVien = `${MaPhongBan}${Id_User}`;
@@ -156,7 +157,8 @@ const postUpdateNV = async (req, res) => {
       DiaChiCCCD = ?,
       MonGiangDayChinh = ?,
       CacMonLienQuan = ?,
-      MaNhanVien = ?
+      MaNhanVien = ?,
+      HSL = ?
       WHERE id_User = ?`;
 
     const [updateResult] = await connection.query(query, [
@@ -180,6 +182,7 @@ const postUpdateNV = async (req, res) => {
       req.body.MonGiangDayChinh, // Lấy từ req.body
       req.body.CacMonLienQuan, // Lấy từ req.body
       MaNhanVien,
+      HSL,
       Id_User,
     ]);
 

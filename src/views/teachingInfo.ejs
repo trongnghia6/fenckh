@@ -712,6 +712,23 @@
           // Kiểm tra dữ liệu trong localStorage
           let cachedData = localStorage.getItem('tableData');
 
+          // // Nếu có dữ liệu trong localStorage
+          // if (cachedData) {
+          //   cachedData = JSON.parse(cachedData);
+          //   // So sánh dữ liệu mới với dữ liệu cũ
+          //   const isDataEqual = (JSON.stringify(cachedData) === JSON.stringify(globalDataNew));
+
+          //   if (isDataEqual) {
+          //     console.log('Dữ liệu không thay đổi, sử dụng dữ liệu từ localStorage');
+          //     console.log(cachedData)
+          //     // Render bảng từ dữ liệu đã cache
+          //     renderTable(cachedData);
+          //     calculateTotals();
+          //     window.location.reload();
+          //     return;
+          //   }
+          // }
+
           // Nếu có sự thay đổi, cập nhật localStorage
           localStorage.setItem('nameGv', JSON.stringify(nameGvNew));
           localStorage.setItem('nameGvm', JSON.stringify(nameGvmNew));
@@ -817,6 +834,10 @@
           boMonInput.onclick = () => {
             showSuggestionsBoMon(boMonInput);
           };
+          boMonInput.oninput = () => {
+            showSuggestionsBoMon(boMonInput);
+          };
+
 
           const soTietLLTd = document.createElement('td');
           soTietLLTd.textContent = row.LL || '';
@@ -1058,6 +1079,7 @@
     // Hàm gợi ý bộ môn ở ô nhập
     function showSuggestionsBoMon(input) {
       const value = input.value.toLowerCase(); // Lấy giá trị nhập vào và chuyển thành chữ thường
+      // alert(value);
       hideSuggestionsBoMon(); // Ẩn gợi ý cũ trước khi hiển thị gợi ý mới
 
       // Tạo thẻ div chứa gợi ý
@@ -1080,8 +1102,9 @@
       let suggestions = []; // Khởi tạo mảng gợi ý
 
       // Lấy dữ liệu từ localStorage
-      const boMon = JSON.parse(localStorage.getItem("boMon")) || []; // Giảng viên mời
-      console.log(boMon)
+      const boMon = JSON.parse(localStorage.getItem("boMon")) || [];
+      console.log('Danh sách bộ môn :', boMon); // In danh sách bộ môn
+
 
       suggestions = boMon.map(item => `${item.TenBoMon} - ${item.MaBoMon}`);
 
@@ -1107,7 +1130,7 @@
         suggestionItem.onclick = function () {
           // Giả sử 'name' là giá trị gợi ý bạn nhận được từ suggestionItem
           const name = suggestionItem.innerText; // Hoặc có thể là suggestionItem.textContent
-
+          console.log('giá trị nhập : ', name);
           // Tìm vị trí của dấu "-" trong chuỗi
           const dashIndex = name.indexOf("-");
 
@@ -1445,7 +1468,7 @@
       const TenNhanVien = localStorage.getItem("TenNhanVien"); // Lấy tên người dùng từ localStorage
 
       let Role = localStorage.getItem("userRole");
-      if (Role.toUpperCase() == 'LÃNH ĐẠO KHOA'){
+      if (Role.toUpperCase() == 'LÃNH ĐẠO KHOA') {
         Role = 'LĐK';
       }
 
@@ -1523,5 +1546,3 @@
 </body>
 
 </html>
-
-
