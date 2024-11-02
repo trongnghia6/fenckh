@@ -317,7 +317,7 @@
 
           <button id="infoGvm" class="btn text-nowrap mx-2">Xem dữ liệu</button>
           <button onclick="submitData()" class="btn mx-2" id="update-qc">Cập nhật</button>
-          <button onclick="submitData2()" class="btn mx-2" id="save-data-all" style="display: none;">Lưu</button>
+          <!-- <button onclick="submitData2()" class="btn mx-2" id="save-data-all" style="display: none;">Lưu</button> -->
         </div>
       </div>
 
@@ -1088,6 +1088,7 @@
   }
 
   // Phương
+  /*
   async function submitData2() {
     fetch('/submitData2', {
       method: 'POST', // Dùng POST nếu bạn muốn gửi tín hiệu theo yêu cầu HTTP POST
@@ -1105,6 +1106,8 @@
         // Xử lý lỗi, ví dụ: hiển thị thông báo lỗi
       });
   }
+  
+  */
   // Phương
 /*
   function filterByName() {
@@ -1747,7 +1750,7 @@ function checkAll(type) {
         document.getElementById('khoaColumn').style.display = 'none';
         document.getElementById('update-qc').style.display = 'inline-block'; // Sử dụng 'inline-block' để hiển thị nút
         // Hiển thị nút 'Cập nhật'
-        document.getElementById('save-data-all').style.display = 'inline-block'; // Sử dụng 'inline-block' để hiển thị nút
+        //document.getElementById('save-data-all').style.display = 'inline-block'; // Sử dụng 'inline-block' để hiển thị nút
       }
     }
 

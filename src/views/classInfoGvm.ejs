@@ -341,7 +341,7 @@
                   <option value="">Chọn khoa</option>
                 </select>
 
-                <script>
+                <!-- <script>
                   function filterTable() {
                     // Get selected values
                     let dot = document.getElementById("combobox-dot").value;
@@ -373,7 +373,42 @@
                       }
                     }
                   }
-                </script>
+                </script> -->
+
+                <script>
+                  function filterTable() {
+                      // Get selected values
+                      let dot = document.getElementById("combobox-dot").value;
+                      let ki = document.getElementById("combobox-ki").value;
+                      let nam = document.getElementById("NamHoc").value;
+                      let department = document.getElementById("departmentFilter").value.trim();
+              
+                      let tbody = document.getElementById("data-table-body");
+                      let rows = tbody.getElementsByTagName("tr");
+              
+                      for (let i = 0; i < rows.length; i++) {
+                          let row = rows[i];
+                          let rowDepartment = row.getAttribute("data-department");
+                          let rowDot = row.getAttribute("data-dot");
+                          let rowKi = row.getAttribute("data-ki");
+                          let rowNam = row.getAttribute("data-nam");
+              
+                          // Filtering logic
+                          let matchesDepartment = department === "" || rowDepartment === department;
+                          let matchesDot = dot === "" || rowDot === dot;
+                          let matchesKi = ki === "" || rowKi === ki;
+                          let matchesNam = nam === "" || rowNam === nam;
+              
+                          // Show or hide row based on filter results
+                          if (matchesDepartment && matchesDot && matchesKi && matchesNam) {
+                              row.style.display = ""; // Show row
+                          } else {
+                              row.style.display = "none"; // Hide row
+                          }
+                      }
+                  }
+              </script>
+                
                 <button class="btn text-nowrap mx-2" id="render" style="height: 45px;" onclick="filterTable()">Hiển thị
                 </button>
               </div>
@@ -404,18 +439,19 @@
                   <% for (let teacher of Object.keys(GiangDay)) { %>
                     <% let courses=GiangDay[teacher]; %>
                       <% let totalSoTiet=courses.reduce((total, course)=> total + course.QuyChuan, 0); %>
-                        <tr class="teacher-group" data-department="<%= courses[0].Khoa %>"
+                        <tr class="teacher-group" data-department="<%= courses[0].MaPhongBan %>"
                           data-dot="<%= courses[0].Dot %>" data-ki="<%= courses[0].KiHoc %>"
                           data-nam="<%= courses[0].NamHoc %>">
                           <% courses.forEach((course, courseIndex)=> { %>
-                        <tr data-department="<%= course.Khoa %>" data-dot="<%= course.Dot %>"
+                        <tr data-department="<%= course.MaPhongBan  %>" data-dot="<%= course.Dot %>"
                           data-ki="<%= course.KiHoc %>" data-nam="<%= course.NamHoc %>">
                           <% if (courseIndex===0) { %>
                             <td rowspan="<%= courses.length %>">
                               <%= index %>
                             </td>
                             <td rowspan="<%= courses.length %>">
-                              <%= course.GiaoVienGiangDay %>
+                              <!-- <%= course.GiaoVienGiangDay %> -->
+                              <%= course.GiaoVienGiangDay.split(' - ')[0] %>
                             </td>
                             <% index++; %>
                               <% } %>
@@ -462,7 +498,8 @@
                                                       <%= totalSoTiet %>
                                                     </td>
                                                     <td rowspan="<%= courses.length %>">
-                                                      <%= course.Khoa %>
+                                                      <!-- <%= course.Khoa %> -->
+                                                      <%= course.MaPhongBan %>
                                                     </td>
                                                     <td rowspan="<%= courses.length %>">
                                                       <button class="action-button view"

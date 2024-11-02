@@ -19,7 +19,8 @@ exports.exportPhuLucGiangVienMoi = async (req, res) => {
         gv.HocVi, 
         gv.HSL,
         qc.NgayBatDau, 
-        qc.NgayKetThuc
+        qc.NgayKetThuc,
+        gv.DiaChi
     FROM quychuan qc
     JOIN gvmoi gv ON SUBSTRING_INDEX(qc.GiaoVienGiangDay, ' - ', 1) = gv.HoTen
     WHERE qc.DaLuu = 1
