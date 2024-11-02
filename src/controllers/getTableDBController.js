@@ -8,49 +8,6 @@ const createPoolConnection = require("../config/databasePool");
 let tableTam = process.env.DB_TABLE_TAM;
 let tableQC = process.env.DB_TABLE_QC;
 
-// const getTableQC = async (req, res) => {
-//   const { Khoa, Dot, Ki, Nam } = req.body;
-//   // console.log(req.body)
-
-//   console.log('Lấy dữ liệu bảng tạm Khoa Đợt Kì Năm :', Khoa, Dot, Ki, Nam);
-
-//   if (Khoa != 'ALL') {
-//     try {
-//       const query = `SELECT * FROM ${tableQC} WHERE Khoa = ? AND Dot = ? AND KiHoc = ? AND NamHoc = ?`;
-//       const results = await new Promise((resolve, reject) => {
-//         connection.query(query, [Khoa, Dot, Ki, Nam], (error, results) => {
-//           if (error) {
-//             console.error('Lỗi truy vấn cơ sở dữ liệu:', error);
-//             return reject(new Error('Không thể truy xuất dữ liệu từ cơ sở dữ liệu.'));
-//           }
-//           resolve(results);
-//         });
-//       });
-//       res.json(results); // Trả về kết quả dưới dạng JSON
-//     } catch (error) {
-//       console.error('Lỗi trong hàm getTableTam:', error);
-//       res.status(500).json({ message: 'Không thể truy xuất dữ liệu từ cơ sở dữ liệu.' });
-//     }
-//   } else {
-//     try {
-//       const query = `SELECT * FROM ${tableQC} WHERE Dot = ? AND KiHoc = ? AND NamHoc = ?`;
-//       const results = await new Promise((resolve, reject) => {
-//         connection.query(query, [Dot, Ki, Nam], (error, results) => {
-//           if (error) {
-//             console.error('Lỗi truy vấn cơ sở dữ liệu:', error);
-//             return reject(new Error('Không thể truy xuất dữ liệu từ cơ sở dữ liệu.'));
-//           }
-//           resolve(results);
-//         });
-//       });
-//       res.json(results); // Trả về kết quả dưới dạng JSON
-//     } catch (error) {
-//       console.error('Lỗi trong hàm getTableTam:', error);
-//       res.status(500).json({ message: 'Không thể truy xuất dữ liệu từ cơ sở dữ liệu.' });
-//     }
-//   }
-// };
-
 const getTableQC = async (req, res) => {
   const { Khoa, Dot, Ki, Nam } = req.body;
 
@@ -86,57 +43,6 @@ const getTableQC = async (req, res) => {
     if (connection) connection.release(); // Trả lại kết nối cho pool
   }
 };
-
-// const getTableTam = async (req, res) => {
-//   const { Khoa, Dot, Ki, Nam } = req.body;
-//   // console.log(req.body)
-
-//   console.log("Lấy dữ liệu bảng tạm Khoa Đợt Kì Năm :", Khoa, Dot, Ki, Nam);
-
-//   if (Khoa != "ALL") {
-//     try {
-//       const query = `SELECT * FROM ${tableTam} WHERE Khoa = ? AND Dot = ? AND Ki = ? AND Nam = ?`;
-//       const results = await new Promise((resolve, reject) => {
-//         connection.query(query, [Khoa, Dot, Ki, Nam], (error, results) => {
-//           if (error) {
-//             console.error("Lỗi truy vấn cơ sở dữ liệu:", error);
-//             return reject(
-//               new Error("Không thể truy xuất dữ liệu từ cơ sở dữ liệu.")
-//             );
-//           }
-//           resolve(results);
-//         });
-//       });
-//       res.json(results); // Trả về kết quả dưới dạng JSON
-//     } catch (error) {
-//       console.error("Lỗi trong hàm getTableTam:", error);
-//       res
-//         .status(500)
-//         .json({ message: "Không thể truy xuất dữ liệu từ cơ sở dữ liệu." });
-//     }
-//   } else {
-//     try {
-//       const query = `SELECT * FROM ${tableTam} WHERE Dot = ? AND Ki = ? AND Nam = ?`;
-//       const results = await new Promise((resolve, reject) => {
-//         connection.query(query, [Dot, Ki, Nam], (error, results) => {
-//           if (error) {
-//             console.error("Lỗi truy vấn cơ sở dữ liệu:", error);
-//             return reject(
-//               new Error("Không thể truy xuất dữ liệu từ cơ sở dữ liệu.")
-//             );
-//           }
-//           resolve(results);
-//         });
-//       });
-//       res.json(results); // Trả về kết quả dưới dạng JSON
-//     } catch (error) {
-//       console.error("Lỗi trong hàm getTableTam:", error);
-//       res
-//         .status(500)
-//         .json({ message: "Không thể truy xuất dữ liệu từ cơ sở dữ liệu." });
-//     }
-//   }
-// };
 
 const getTableTam = async (req, res) => {
   const { Khoa, Dot, Ki, Nam } = req.body;
@@ -174,5 +80,48 @@ const getTableTam = async (req, res) => {
   }
 };
 
+const getBoMon2 = async (req, res) => {
+  // Câu truy vấn lấy tất cả dữ liệu từ hai bảng
+  const query1 = "SELECT HoTen, MonGiangDayChinh FROM `gvmoi`";
+  const query2 = "SELECT TenNhanVien AS HoTen, MonGiangDayChinh FROM `nhanvien`";
+
+  try {
+    // Thực hiện truy vấn đầu tiên
+    const results1 = await new Promise((resolve, reject) => {
+      connection.query(query1, (err, results) => {
+        if (err) return reject(err);
+        resolve(results);
+      });
+    });
+
+    // Thực hiện truy vấn thứ hai
+    const results2 = await new Promise((resolve, reject) => {
+      connection.query(query2, (err, results) => {
+        if (err) return reject(err);
+        resolve(results);
+      });
+    });
+
+    // Gộp kết quả từ hai bảng với cấu trúc khóa đồng nhất
+    const combinedResults = [
+      ...results1.map((item) => ({
+        HoTen: item.HoTen.trim(), // Đảm bảo dữ liệu có định dạng nhất quán
+        MonGiangDayChinh: item.MonGiangDayChinh,
+      })),
+      ...results2.map((item) => ({
+        HoTen: item.HoTen.trim(),
+        MonGiangDayChinh: item.MonGiangDayChinh,
+      })),
+    ];
+
+    // Phản hồi lại client với dữ liệu
+    res.status(200).json(combinedResults);
+  } catch (error) {
+    console.error("Error fetching lecturer data:", error);
+    res.status(500).json(error.message);
+  }
+};
+
+
 // Xuất các hàm để sử dụng
-module.exports = { getTableQC, getTableTam };
+module.exports = { getTableQC, getTableTam, getBoMon2 };

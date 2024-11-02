@@ -37,8 +37,12 @@ router.get("/update-all-info", (req, res) =>
 
 // router.post("/bo-mon", (req, res) => obj.getBoMon(req, res));
 router.post("/bo-mon", (req, res) => {
-  // console.log(req.body); // Kiểm tra dữ liệu gửi lên
   obj.getBoMon(req, res);
 });
+
+router.get("/bo-mon-theo-gv", (req, res) => {
+  obj2.getBoMon2(req, res);
+});
+
 
 module.exports = router;
