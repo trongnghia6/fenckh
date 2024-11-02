@@ -52,36 +52,36 @@ const exportHDGvmToExcel = async (req, res) => {
 
     // Truy vấn dữ liệu mà không lấy các cột không cần thiết
     const [rows] = await connection.execute(
-      `SELECT NgayBatDau, NgayKetThuc, KiHoc, DanhXung, HoTen, NgaySinh, CCCD, NoiCapCCCD, DiaChi, Email, 
-          MaSoThue, HocVi, ChucVu, HSL, DienThoai, STK, NganHang, SUM(SoTiet) AS SoTiet
-       FROM hopdonggvmoi
-       WHERE NamHoc = ? AND Dot = ? AND KiHoc = ?
-       GROUP BY HoTen;`,
-      //   `SELECT
-      //     MIN(NgayBatDau) AS NgayBatDau,
-      //     MAX(NgayKetThuc) AS NgayKetThuc,
-      //     KiHoc,
-      //     DanhXung,
-      //     HoTen,
-      //     NgaySinh,
-      //     CCCD,
-      //     NoiCapCCCD,
-      //     Email,
-      //     MaSoThue,
-      //     HocVi,
-      //     ChucVu,
-      //     HSL,
-      //     DienThoai,
-      //     STK,
-      //     NganHang,
-      //     SUM(SoTiet) AS SoTiet
-      // FROM
-      //     hopdonggvmoi
-      // WHERE
-      //     NamHoc = ? AND Dot = ? AND KiHoc = ?
-      // GROUP BY
-      //     HoTen, KiHoc, DanhXung, NgaySinh, CCCD, NoiCapCCCD, Email,
-      //     MaSoThue, HocVi, ChucVu, HSL, DienThoai, STK, NganHang;`,
+      // `SELECT NgayBatDau, NgayKetThuc, KiHoc, DanhXung, HoTen, NgaySinh, CCCD, NoiCapCCCD, DiaChi, Email,
+      //     MaSoThue, HocVi, ChucVu, HSL, DienThoai, STK, NganHang, SUM(SoTiet) AS SoTiet
+      //  FROM hopdonggvmoi
+      //  WHERE NamHoc = ? AND Dot = ? AND KiHoc = ?
+      //  GROUP BY HoTen;`,
+      `SELECT
+          MIN(NgayBatDau) AS NgayBatDau,
+          MAX(NgayKetThuc) AS NgayKetThuc,
+          KiHoc,
+          DanhXung,
+          HoTen,
+          NgaySinh,
+          CCCD,
+          NoiCapCCCD,
+          Email,
+          MaSoThue,
+          HocVi,
+          ChucVu,
+          HSL,
+          DienThoai,
+          STK,
+          NganHang,
+          SUM(SoTiet) AS SoTiet
+      FROM
+          hopdonggvmoi
+      WHERE
+          NamHoc = ? AND Dot = ? AND KiHoc = ?
+      GROUP BY
+          HoTen, KiHoc, DanhXung, NgaySinh, CCCD, NoiCapCCCD, Email,
+          MaSoThue, HocVi, ChucVu, HSL, DienThoai, STK, NganHang;`,
 
       [namHoc, dot, ki]
     );
