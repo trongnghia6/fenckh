@@ -52,7 +52,7 @@ const exportHDGvmToExcel = async (req, res) => {
 
     // Truy vấn dữ liệu mà không lấy các cột không cần thiết
     const [rows] = await connection.execute(
-      `SELECT NgayBatDau, NgayKetThuc, KiHoc, DanhXung, HoTen, NgaySinh, CCCD, NoiCapCCCD, Email, 
+      `SELECT NgayBatDau, NgayKetThuc, KiHoc, DanhXung, HoTen, NgaySinh, CCCD, NoiCapCCCD, DiaChi, Email, 
           MaSoThue, HocVi, ChucVu, HSL, DienThoai, STK, NganHang, SUM(SoTiet) AS SoTiet
        FROM hopdonggvmoi 
        WHERE NamHoc = ? AND Dot = ? AND KiHoc = ? 
@@ -82,6 +82,7 @@ const exportHDGvmToExcel = async (req, res) => {
       { header: "Ngày Sinh", key: "NgaySinh", width: 15 },
       { header: "CCCD", key: "CCCD", width: 15 },
       { header: "Nơi Cấp CCCD", key: "NoiCapCCCD", width: 15 },
+      { header: "Địa Chỉ Theo CCCD", key: "DiaChi", width: 20 },
       { header: "Email", key: "Email", width: 25 },
       { header: "Mã Số Thuế", key: "MaSoThue", width: 15 },
       { header: "Học Vị", key: "HocVi", width: 10 },
@@ -97,7 +98,6 @@ const exportHDGvmToExcel = async (req, res) => {
       { header: "Trừ Thuế Bằng Chữ", key: "BangChuTruThue", width: 30 },
       { header: "Thực Nhận", key: "ThucNhan", width: 15 },
       { header: "Thực Nhận Bằng Chữ", key: "BangChuThucNhan", width: 30 },
-      { header: "Ngày Nghiệm Thu", key: "NgayNghiemThu", width: 15 }, // Thêm cột Ngày Nghiệm Thu
       { header: "Ngày Nghiệm Thu", key: "NgayNghiemThu", width: 15 }, // Thêm cột Ngày Nghiệm Thu
 
     ];
