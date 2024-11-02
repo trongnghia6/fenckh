@@ -433,6 +433,7 @@ document.getElementById("filterBoMon").addEventListener("input", filterClasses);
               <th style="width: 50px">Số tiết QC</th>
               <th style="width: 70px">Ngày bắt đầu</th>
               <th style="width: 70px">Ngày kết thúc</th>
+              <th style="width: 50px">Ghi chú</th>
               <th style="width: 50px" id="khoaColumn">
                 <div class="form-check d-flex">
                   <input class="check" type="checkbox" id="checkAllKhoa" onclick="checkAll('khoa')" />
@@ -451,7 +452,6 @@ document.getElementById("filterBoMon").addEventListener("input", filterClasses);
                   <label class="form-check-label text-nowrap" for="checkAllTaiChinh">Tài Chính</label>
                 </div>
               </th>
-              <th style="width: 50px">Ghi chú</th>
             </tr>
           </thead>
           <tbody id="tableBody">
@@ -697,51 +697,76 @@ document.getElementById("filterBoMon").addEventListener("input", filterClasses);
         const role = localStorage.getItem("userRole");
         const MaPhongBan = localStorage.getItem("MaPhongBan");
 
+        const ghiChuTd = document.createElement("td");
+        if (row.ghiChu) {
+          ghiChuTd.innerHTML = `📜 <span style="color: red;">•</span>`; // Hiển thị biểu tượng ghi chú và chấm đỏ
+        } else {
+          ghiChuTd.innerHTML = "📜"; // Hiển thị biểu tượng ghi chú nếu không có ghi chú
+        }
+        ghiChuTd.style.cursor = "pointer"; // Thay đổi con trỏ chuột khi di chuột qua biểu tượng
+        ghiChuTd.onclick = () => openNoteForm(tableRow); // Gọi hàm mở form khi nhấn vào biểu tượng
+        tableRow.appendChild(ghiChuTd); // Thêm ô ghi chú vào hàng
+
+        // Checkbox cho khoa
         let khoaCheckboxTd, khoaCheckbox;
+        khoaCheckboxTd = document.createElement("td");
+        khoaCheckbox = document.createElement("input");
+        khoaCheckbox.type = "checkbox";
+        khoaCheckbox.name = "khoa"; // Thêm thuộc tính name
+        khoaCheckbox.checked = row.KhoaDuyet || false; // Dùng một trường cho checkbox
+        khoaCheckbox.onchange = () => updateCheckAll("khoa"); // Gọi hàm khi checkbox thay đổi
+        khoaCheckboxTd.appendChild(khoaCheckbox);
+        tableRow.appendChild(khoaCheckboxTd);
+        // Ẩn đi
+        khoaCheckboxTd.style.display = 'none';
+
+        // Checkbox cho đào tạo
         let daoTaoCheckboxTd, daoTaoCheckbox;
+        daoTaoCheckboxTd = document.createElement("td");
+        daoTaoCheckbox = document.createElement("input");
+        daoTaoCheckbox.type = "checkbox";
+        daoTaoCheckbox.name = "daoTao"; // Thêm thuộc tính name
+        daoTaoCheckbox.checked = row.DaoTaoDuyet || false; // Dùng một trường cho checkbox
+        daoTaoCheckbox.onchange = () => updateCheckAll("daoTao"); // Gọi hàm khi checkbox thay đổi
+        daoTaoCheckboxTd.appendChild(daoTaoCheckbox);
+        tableRow.appendChild(daoTaoCheckboxTd);
+        // Ẩn đi
+        daoTaoCheckboxTd.style.display = 'none';
+
+        // Checkbox cho tài chính 
         let taiChinhCheckboxTd, taiChinhCheckbox;
+        taiChinhCheckboxTd = document.createElement("td");
+        taiChinhCheckbox = document.createElement("input");
+        taiChinhCheckbox.type = "checkbox";
+        taiChinhCheckbox.name = "taiChinh"; // Thêm thuộc tính name
+        taiChinhCheckbox.checked = row.TaiChinhDuyet || false; // Dùng một trường cho checkbox
+        taiChinhCheckbox.onchange = () => updateCheckAll("taiChinh"); // Gọi hàm khi checkbox thay đổi
+        taiChinhCheckboxTd.appendChild(taiChinhCheckbox);
+        tableRow.appendChild(taiChinhCheckboxTd);
+        // Ẩn đi
+        taiChinhCheckboxTd.style.display = 'none';
+
+        // Hiển thị `td` khi điều kiện thỏa mãn
+        if (MaPhongBan == "DAOTAO" && role == "Duyệt") {
+          khoaCheckboxTd.style.display = 'table-cell';
+          daoTaoCheckboxTd.style.display = 'table-cell';
+        } else if (MaPhongBan == "TAICHINH" && role == "Duyệt") {
+          daoTaoCheckboxTd.style.display = 'table-cell';
+          taiChinhCheckboxTd.style.display = 'table-cell';
+        }
+        /*
         if (MaPhongBan == "DAOTAO" && role == "Duyệt") {
           // Checkbox cho Khoa
-          khoaCheckboxTd = document.createElement("td");
-          khoaCheckbox = document.createElement("input");
-          khoaCheckbox.type = "checkbox";
-          khoaCheckbox.name = "khoa"; // Thêm thuộc tính name
-          khoaCheckbox.checked = row.KhoaDuyet || false; // Dùng một trường cho checkbox
-          khoaCheckbox.onchange = () => updateCheckAll("khoa"); // Gọi hàm khi checkbox thay đổi
-          khoaCheckboxTd.appendChild(khoaCheckbox);
-          tableRow.appendChild(khoaCheckboxTd);
-
+          khoaCheckbox.style.display = 'inline-block';
           // Checkbox cho Đào Tạo
-          daoTaoCheckboxTd = document.createElement("td");
-          daoTaoCheckbox = document.createElement("input");
-          daoTaoCheckbox.type = "checkbox";
-          daoTaoCheckbox.name = "daoTao"; // Thêm thuộc tính name
-          daoTaoCheckbox.checked = row.DaoTaoDuyet || false; // Dùng một trường cho checkbox
-          daoTaoCheckbox.onchange = () => updateCheckAll("daoTao"); // Gọi hàm khi checkbox thay đổi
-          daoTaoCheckboxTd.appendChild(daoTaoCheckbox);
-          tableRow.appendChild(daoTaoCheckboxTd);
+          daoTaoCheckbox.style.display = 'inline-block';
         } else if (MaPhongBan == "TAICHINH" && role == "Duyệt") {
           // Checkbox cho Đào Tạo
-          daoTaoCheckboxTd = document.createElement("td");
-          daoTaoCheckbox = document.createElement("input");
-          daoTaoCheckbox.type = "checkbox";
-          daoTaoCheckbox.name = "daoTao"; // Thêm thuộc tính name
-          daoTaoCheckbox.checked = row.DaoTaoDuyet || false; // Dùng một trường cho checkbox
-          daoTaoCheckbox.onchange = () => updateCheckAll("daoTao"); // Gọi hàm khi checkbox thay đổi
-          daoTaoCheckboxTd.appendChild(daoTaoCheckbox);
-          tableRow.appendChild(daoTaoCheckboxTd);
-
+          daoTaoCheckbox.style.display = 'inline-block';
           // Checkbox cho Tài Chính
-          taiChinhCheckboxTd = document.createElement("td");
-          taiChinhCheckbox = document.createElement("input");
-          taiChinhCheckbox.type = "checkbox";
-          taiChinhCheckbox.name = "taiChinh"; // Thêm thuộc tính name
-          taiChinhCheckbox.checked = row.TaiChinhDuyet || false; // Dùng một trường cho checkbox
-          taiChinhCheckbox.onchange = () => updateCheckAll("taiChinh"); // Gọi hàm khi checkbox thay đổi
-          taiChinhCheckboxTd.appendChild(taiChinhCheckbox);
-          tableRow.appendChild(taiChinhCheckboxTd);
+          taiChinhCheckbox.style.display = 'inline-block';
         }
-
+        */
         const check = localStorage.getItem("check");
         const DaoTaoCheck = localStorage.getItem("DaoTaoCheck");
         const TaiChinhCheck = localStorage.getItem("TaiChinhCheck");
@@ -752,7 +777,6 @@ document.getElementById("filterBoMon").addEventListener("input", filterClasses);
             // Ngăn thay đổi trạng thái check box khoa
             khoaCheckbox.disabled = true
             daoTaoCheckbox.disabled = true
-
           }
 
           // Nếu đào tạo đã check thì disable check đào tạo
@@ -778,16 +802,6 @@ document.getElementById("filterBoMon").addEventListener("input", filterClasses);
             taiChinhCheckbox.disabled = true;
           }
         }
-
-        const ghiChuTd = document.createElement("td");
-        if (row.ghiChu) {
-          ghiChuTd.innerHTML = `📜 <span style="color: red;">•</span>`; // Hiển thị biểu tượng ghi chú và chấm đỏ
-        } else {
-          ghiChuTd.innerHTML = "📜"; // Hiển thị biểu tượng ghi chú nếu không có ghi chú
-        }
-        ghiChuTd.style.cursor = "pointer"; // Thay đổi con trỏ chuột khi di chuột qua biểu tượng
-        ghiChuTd.onclick = () => openNoteForm(tableRow); // Gọi hàm mở form khi nhấn vào biểu tượng
-        tableRow.appendChild(ghiChuTd); // Thêm ô ghi chú vào hàng
 
         tableBody.appendChild(tableRow); // Thêm hàng vào bảng
       });

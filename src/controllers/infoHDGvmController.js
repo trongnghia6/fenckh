@@ -52,11 +52,37 @@ const exportHDGvmToExcel = async (req, res) => {
 
     // Truy vấn dữ liệu mà không lấy các cột không cần thiết
     const [rows] = await connection.execute(
-      `SELECT NgayBatDau, NgayKetThuc, KiHoc, DanhXung, HoTen, NgaySinh, CCCD, NoiCapCCCD, Email, 
+      `SELECT NgayBatDau, NgayKetThuc, KiHoc, DanhXung, HoTen, NgaySinh, CCCD, NoiCapCCCD, Email,
           MaSoThue, HocVi, ChucVu, HSL, DienThoai, STK, NganHang, SUM(SoTiet) AS SoTiet
-       FROM hopdonggvmoi 
-       WHERE NamHoc = ? AND Dot = ? AND KiHoc = ? 
+       FROM hopdonggvmoi
+       WHERE NamHoc = ? AND Dot = ? AND KiHoc = ?
        GROUP BY HoTen;`,
+      //   `SELECT
+      //     MIN(NgayBatDau) AS NgayBatDau,
+      //     MAX(NgayKetThuc) AS NgayKetThuc,
+      //     KiHoc,
+      //     DanhXung,
+      //     HoTen,
+      //     NgaySinh,
+      //     CCCD,
+      //     NoiCapCCCD,
+      //     Email,
+      //     MaSoThue,
+      //     HocVi,
+      //     ChucVu,
+      //     HSL,
+      //     DienThoai,
+      //     STK,
+      //     NganHang,
+      //     SUM(SoTiet) AS SoTiet
+      // FROM
+      //     hopdonggvmoi
+      // WHERE
+      //     NamHoc = ? AND Dot = ? AND KiHoc = ?
+      // GROUP BY
+      //     HoTen, KiHoc, DanhXung, NgaySinh, CCCD, NoiCapCCCD, Email,
+      //     MaSoThue, HocVi, ChucVu, HSL, DienThoai, STK, NganHang;`,
+
       [namHoc, dot, ki]
     );
 
@@ -64,7 +90,9 @@ const exportHDGvmToExcel = async (req, res) => {
 
     if (rows.length === 0) {
       console.log("Không có dữ liệu để xuất ");
-      res.send("<script>alert('Không có dữ liệu để xuất '); window.location.href='/infoHDGvm';</script>");
+      res.send(
+        "<script>alert('Không có dữ liệu để xuất '); window.location.href='/infoHDGvm';</script>"
+      );
       return;
     }
 
@@ -99,7 +127,6 @@ const exportHDGvmToExcel = async (req, res) => {
       { header: "Thực Nhận Bằng Chữ", key: "BangChuThucNhan", width: 30 },
       { header: "Ngày Nghiệm Thu", key: "NgayNghiemThu", width: 15 }, // Thêm cột Ngày Nghiệm Thu
       { header: "Ngày Nghiệm Thu", key: "NgayNghiemThu", width: 15 }, // Thêm cột Ngày Nghiệm Thu
-
     ];
 
     // Thêm dữ liệu vào bảng và tính toán các cột mới
@@ -117,7 +144,6 @@ const exportHDGvmToExcel = async (req, res) => {
         ThucNhan: thucNhan,
         BangChuThucNhan: soTienBangChu(thucNhan), // Thực Nhận Bằng Chữ
         NgayNghiemThu: row.NgayKetThuc, // Thiết lập Ngày Nghiệm Thu bằng Ngày Kết Thúc
-
       });
     });
 
@@ -140,7 +166,10 @@ const exportHDGvmToExcel = async (req, res) => {
     });
 
     // Ghi file Excel
-    const filePath = path.join(__dirname, '../public/exports/hopdonggvmList.xlsx');
+    const filePath = path.join(
+      __dirname,
+      "../public/exports/hopdonggvmList.xlsx"
+    );
     await workbook.xlsx.writeFile(filePath);
     console.log("Ghi file Excel thành công");
 
@@ -247,11 +276,36 @@ const getHDGvmData = async (req, res) => {
     const ki = req.query.ki;
 
     const [rows] = await connection.execute(
-      `SELECT NgayBatDau, NgayKetThuc, KiHoc, DanhXung, HoTen, SUM(SoTiet) AS SoTiet, NgaySinh, CCCD, NoiCapCCCD, Email, 
-          MaSoThue, HocVi, ChucVu, HSL, DienThoai, STK, NganHang, NgayNghiemThu 
-       FROM hopdonggvmoi 
-       WHERE NamHoc = ? AND Dot = ? AND KiHoc = ? 
-       GROUP BY HoTen;`,
+      // `SELECT NgayBatDau, NgayKetThuc, KiHoc, DanhXung, HoTen, SUM(SoTiet) AS SoTiet, NgaySinh, CCCD, NoiCapCCCD, Email,
+      //     MaSoThue, HocVi, ChucVu, HSL, DienThoai, STK, NganHang, NgayNghiemThu
+      //  FROM hopdonggvmoi
+      //  WHERE NamHoc = ? AND Dot = ? AND KiHoc = ?
+      //  GROUP BY HoTen;`,
+      `SELECT
+          MIN(NgayBatDau) AS NgayBatDau,
+          MAX(NgayKetThuc) AS NgayKetThuc,
+          KiHoc,
+          DanhXung,
+          HoTen,
+          NgaySinh,
+          CCCD,
+          NoiCapCCCD,
+          Email,
+          MaSoThue,
+          HocVi,
+          ChucVu,
+          HSL,
+          DienThoai,
+          STK,
+          NganHang,
+          SUM(SoTiet) AS SoTiet
+      FROM
+          hopdonggvmoi
+      WHERE
+          NamHoc = ? AND Dot = ? AND KiHoc = ?
+      GROUP BY
+          HoTen, KiHoc, DanhXung, NgaySinh, CCCD, NoiCapCCCD, Email,
+          MaSoThue, HocVi, ChucVu, HSL, DienThoai, STK, NganHang;`,
       [namHoc, dot, ki]
     );
 
