@@ -514,7 +514,7 @@
 
   </script>
 
-  <!-- phần render bảng dùng localStorage -->
+  <!-- phần chèn ngày, render bảng và và các hàm liên quan -->
   <script>
 
     document.addEventListener('DOMContentLoaded', function () {
@@ -609,22 +609,6 @@
             alert('Có lỗi xảy ra khi cập nhật dữ liệu.');
           });
       });
-
-      // Hàm định dạng ngày thành chuỗi YYYY-MM-DD
-      function format(dateStr) {
-        const date = new Date(dateStr);
-        const year = date.getFullYear();
-        const month = String(date.getMonth() + 1).padStart(2, '0');
-        const day = String(date.getDate()).padStart(2, '0');
-        return `${year}-${month}-${day}`;
-      }
-
-      // Hàm kiểm tra xem ngày có định dạng ISO hay không
-      function isISODate(dateStr) {
-        const isoRegex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/;
-        return isoRegex.test(dateStr);
-      }
-
       // load data lấy dữ liệu từ server
       document.getElementById('getData').addEventListener('click', loadData);
 
@@ -1070,6 +1054,12 @@
                 bangDuLieu[itemIndex].GiaoVienGiangDay = lecturerFound.HoTen; // Cập nhật thuộc tính BoMon của item
                 bangDuLieu[itemIndex].BoMon = lecturerFound.MonGiangDayChinh; // Cập nhật thuộc tính BoMon của item
                 console.log('Dữ liệu vừa cập nhật : ', bangDuLieu[itemIndex]);
+
+                // Format lại ngày
+                bangDuLieu.forEach(item => {
+                  item.NgayBatDau = format(item.NgayBatDau); // Định dạng ngày bắt đầu
+                  item.NgayKetThuc = format(item.NgayKetThuc); // Định dạng ngày bắt đầu
+                });
               }
 
               // Gửi dữ liệu đã cập nhật lên server
@@ -1324,17 +1314,11 @@
 
       // Cập nhật lại localStorage với dữ liệu mới
       localStorage.setItem('tableData', JSON.stringify(localData));
-      console.log(localData)
+      console.log('Cập nhật vào tableData : ', localData)
       // Hiển thị thông báo thành công
       // alert('Lưu cục bộ thành công');
       // window.location.reload();
     }
-
-
-  </script>
-
-  <!-- các hàm phụ xử lí trong bảng -->
-  <script>
 
     // xử lí tìm theo tên
     function filterByName() {
@@ -1392,17 +1376,7 @@
       calculateTotals();
     }
 
-    // hàm check All
-    /*
-    function checkAll(type) {
-    const checkboxes = document.querySelectorAll(`input[type="checkbox"][name="${type}"]`);
-    const checkAllCheckbox = document.getElementById(`checkAll${type.charAt(0).toUpperCase() + type.slice(1)}`);
-    
-    checkboxes.forEach(checkbox => {
-    checkbox.checked = checkAllCheckbox.checked; // Gán trạng thái checkbox "Check All" cho tất cả các checkbox
-    });
-    }
-    */
+    // hàm check all
     function checkAll(type) {
       const checkboxes = document.querySelectorAll(`input[type="checkbox"][name="${type}"]`);
       const checkAllCheckbox = document.getElementById(`checkAll${type.charAt(0).toUpperCase() + type.slice(1)}`);
@@ -1414,8 +1388,6 @@
         }
       });
     }
-
-
 
     // hàm xử lí check all
     function updateCheckAll(type) {
@@ -1434,7 +1406,7 @@
       updateLocalTable();
 
       // Lấy bảng tableData từ localStorage
-      const tableData = localStorage.getItem('tableData');
+      const tableData = JSON.parse(localStorage.getItem('tableData'));
 
       // Kiểm tra xem dữ liệu có tồn tại hay không
       if (!tableData) {
@@ -1442,16 +1414,18 @@
         return;
       }
 
-      // Chuyển đổi dữ liệu từ chuỗi JSON thành đối tượng
-      const globalData = JSON.parse(tableData);
-
+      // Giả sử tableData là một mảng các đối tượng và mỗi đối tượng có các thuộc tính startDate và endDate
+      tableData.forEach(item => {
+        item.NgayBatDau = format(item.NgayBatDau); // Định dạng ngày bắt đầu
+        item.NgayKetThuc = format(item.NgayKetThuc); // Định dạng ngày bắt đầu
+      });
       // Gửi dữ liệu lên server
       fetch('http://localhost:3000/check-teaching', {
         method: 'POST', // Phương thức POST
         headers: {
           'Content-Type': 'application/json' // Định dạng gửi là JSON
         },
-        body: JSON.stringify(globalData) // Chuyển đổi globalData thành chuỗi JSON
+        body: JSON.stringify(tableData) // Chuyển đổi globalData thành chuỗi JSON
       })
         .then(response => {
           if (!response.ok) {
@@ -1472,6 +1446,22 @@
           alert('Có lỗi xảy ra khi cập nhật dữ liệu.');
         });
 
+    }
+
+
+    // Hàm định dạng ngày thành chuỗi YYYY-MM-DD
+    function format(dateStr) {
+      const date = new Date(dateStr);
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const day = String(date.getDate()).padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    }
+
+    // Hàm kiểm tra xem ngày có định dạng ISO hay không
+    function isISODate(dateStr) {
+      const isoRegex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/;
+      return isoRegex.test(dateStr);
     }
 
 
