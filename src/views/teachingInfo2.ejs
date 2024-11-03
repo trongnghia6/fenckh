@@ -717,8 +717,6 @@ document.getElementById("filterBoMon").addEventListener("input", filterClasses);
         khoaCheckbox.onchange = () => updateCheckAll("khoa"); // Gọi hàm khi checkbox thay đổi
         khoaCheckboxTd.appendChild(khoaCheckbox);
         tableRow.appendChild(khoaCheckboxTd);
-        // Ẩn đi
-        khoaCheckboxTd.style.display = 'none';
 
         // Checkbox cho đào tạo
         let daoTaoCheckboxTd, daoTaoCheckbox;
@@ -730,8 +728,6 @@ document.getElementById("filterBoMon").addEventListener("input", filterClasses);
         daoTaoCheckbox.onchange = () => updateCheckAll("daoTao"); // Gọi hàm khi checkbox thay đổi
         daoTaoCheckboxTd.appendChild(daoTaoCheckbox);
         tableRow.appendChild(daoTaoCheckboxTd);
-        // Ẩn đi
-        daoTaoCheckboxTd.style.display = 'none';
 
         // Checkbox cho tài chính 
         let taiChinhCheckboxTd, taiChinhCheckbox;
@@ -743,16 +739,20 @@ document.getElementById("filterBoMon").addEventListener("input", filterClasses);
         taiChinhCheckbox.onchange = () => updateCheckAll("taiChinh"); // Gọi hàm khi checkbox thay đổi
         taiChinhCheckboxTd.appendChild(taiChinhCheckbox);
         tableRow.appendChild(taiChinhCheckboxTd);
-        // Ẩn đi
-        taiChinhCheckboxTd.style.display = 'none';
 
         // Hiển thị `td` khi điều kiện thỏa mãn
-        if (MaPhongBan == "DAOTAO" && role == "Duyệt") {
-          khoaCheckboxTd.style.display = 'table-cell';
-          daoTaoCheckboxTd.style.display = 'table-cell';
-        } else if (MaPhongBan == "TAICHINH" && role == "Duyệt") {
-          daoTaoCheckboxTd.style.display = 'table-cell';
-          taiChinhCheckboxTd.style.display = 'table-cell';
+        if (MaPhongBan == "DAOTAO") {
+            // Thu nhỏ ô <td> chứa checkbox Tài Chính
+          taiChinhCheckboxTd.style.width = '1px';
+          taiChinhCheckboxTd.style.height = '1px';
+          taiChinhCheckbox.style.width = '1px';
+          taiChinhCheckbox.style.height = '1px';
+          taiChinhCheckbox.style.opacity = '0';
+          taiChinhCheckbox.style.display = 'none';
+        
+        } else if (MaPhongBan == "TAICHINH") {
+            // Thu nhỏ ô <td> chứa checkbox Khoa
+          khoaCheckbox.style.display = 'none';
         }
         /*
         if (MaPhongBan == "DAOTAO" && role == "Duyệt") {
@@ -864,30 +864,32 @@ function checkAll(type) {
         const khoaCheckbox = row.querySelector(
           'input[type="checkbox"][name="khoa"]'
         );
+        alert("khoa = " + khoaCheckbox.checked);
         const daoTaoCheckbox = row.querySelector(
           'input[type="checkbox"][name="daoTao"]'
         );
+        alert("dao tao = " + daoTaoCheckbox.checked);
         const taiChinhCheckbox = row.querySelector(
           'input[type="checkbox"][name="taiChinh"]'
-        ); // Lấy checkbox Tài Chính
+        );
+        alert("tai chinh = " + taiChinhCheckbox.checked);
 
         // Lấy trạng thái của checkbox "Đào Tạo"
         const daoTaoDuyet = daoTaoCheckbox ? daoTaoCheckbox.checked : false;
 
         // Biến để lưu trạng thái
-        let khoaDuyet = false; // Khởi tạo biến để lưu trạng thái checkbox "Khoa"
-        let taiChinhDuyet = false; // Khởi tạo biến để lưu trạng thái checkbox "Tài Chính"
-
+        let khoaDuyet = khoaCheckbox ? khoaCheckbox.checked : false; // Cập nhật Khoa
+        let taiChinhDuyet = taiChinhCheckbox ? taiChinhCheckbox.checked : false; // Cập nhật Tài Chính
+/*
         if (MaPhongBan == "DAOTAO" && role == "Duyệt") {
           // Khi role là DAOTAO_ALL
           khoaDuyet = khoaCheckbox ? khoaCheckbox.checked : false; // Cập nhật Khoa
-          taiChinhDuyet = false; // Tài Chính sẽ luôn là false
         } else if (MaPhongBan == "TAICHINH" && role == "Duyệt") {
           // Khi role là TAICHINH_ALL
           khoaDuyet = globalData[index].KhoaDuyet; // Giữ nguyên giá trị cũ của Khoa
           taiChinhDuyet = taiChinhCheckbox ? taiChinhCheckbox.checked : false; // Cập nhật Tài Chính
         }
-
+*/
         // Cập nhật vào mảng globalData tương ứng với chỉ mục hàng (index)
         globalData[index].KhoaDuyet = khoaDuyet; // Cập nhật Khoa
         globalData[index].DaoTaoDuyet = daoTaoDuyet; // Cập nhật Đào Tạo
