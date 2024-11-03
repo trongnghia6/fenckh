@@ -1,23 +1,48 @@
 const express = require("express");
 const ExcelJS = require("exceljs");
-const router = express.Router();
 const createConnection = require("../config/databaseAsync");
+const fs = require('fs');
+const path = require('path');
+
+
+function sanitizeFileName(fileName) {
+    return fileName.replace(/[^a-z0-9]/gi, '_');
+}
 
 exports.exportPhuLucGiangVienMoi = async (req, res) => {
     let connection;
     try {
-        connection = await createConnection(); // Kết nối đến database
+        connection = await createConnection();
 
-        // Truy vấn dữ liệu từ database
-        const [data] = await connection.execute(`
-            SELECT 
-                gd.GiangVien, gd.Lop, hd.SoTiet, gd.TenHocPhan, gd.HocKy,
-                hd.HocVi, hd.HSL,
-                hd.NgayBatDau, hd.NgayKetThuc
-            FROM giangday gd
-            JOIN hopdonggvmoi hd ON gd.GiangVien = hd.HoTen
-            ORDER BY gd.GiangVien, gd.Lop, gd.TenHocPhan
-        `);
+        const { dot, ki, namHoc, khoa, teacherName } = req.query;
+
+        if (!dot || !ki || !namHoc) {
+            return res.status(400).send('Thiếu thông tin đợt, kỳ hoặc năm học');
+        }
+
+        let query = `
+        SELECT 
+            gd.GiangVien, gd.Lop, hd.SoTiet, gd.TenHocPhan, gd.HocKy,
+            hd.HocVi, hd.HSL, hd.DiaChi,
+            hd.NgayBatDau, hd.NgayKetThuc
+        FROM giangday gd
+        JOIN hopdonggvmoi hd ON gd.GiangVien = hd.HoTen
+        WHERE hd.Dot = ? AND hd.KiHoc = ? AND hd.NamHoc = ?
+    `;
+        let params = [dot, ki, namHoc];
+
+        // Nếu khoa không được chỉ định hoặc là 'ALL', không cần thêm điều kiện
+        if (khoa && khoa !== 'ALL') {
+            query += ' AND hd.MaPhongBan = ?';
+            params.push(khoa);
+        }
+
+        if (teacherName) {
+            query += ' AND gd.GiangVien LIKE ?';
+            params.push(`%${teacherName}%`);
+        }
+
+        const [data] = await connection.execute(query, params);
 
         // Tạo workbook mới
         const workbook = new ExcelJS.Workbook();
@@ -59,37 +84,52 @@ exports.exportPhuLucGiangVienMoi = async (req, res) => {
             titleRow4.alignment = { horizontal: 'center', vertical: 'middle' };
             worksheet.mergeCells(`A${titleRow4.number}:K${titleRow4.number}`);
 
-            // Đặt vị trí cho tiêu đề "Đơn vị tính: Đồng" vào cột J đến L
-            const titleRow5 = worksheet.addRow(['', '', '', '', '', '', '', '', '', 'Đơn vị tính: Đồng', '', '']);
+            // Đặt vị trí cho tiêu đề "Đơn vị tính: Đồng" vào cột K đến M
+            const titleRow5 = worksheet.addRow(['', '', '', '', '', '', '', '', '','', 'Đơn vị tính: Đồng', '', '']);
             titleRow5.font = { name: 'Times New Roman', bold: true, size: 10 };
             titleRow5.alignment = { horizontal: 'center', vertical: 'middle' };
-            worksheet.mergeCells(`J${titleRow5.number}:L${titleRow5.number}`);
+            worksheet.mergeCells(`K${titleRow5.number}:M${titleRow5.number}`);
 
             // Định nghĩa tiêu đề cột
             const header = [
-                'Họ Tên', 'Học Vị', 'Lớp', 'Số Tiết', 'Tên Học Phần',
-                'HK', 'Thời Gian Thực Hiện', 'HSL', 'Mức thanh toán',
-                'Số Tiền', 'Trừ Thuế', 'Thực Nhận'
+                'Họ tên giảng viên', 'Tên học phần', 'Tên lớp', 'Số tiết', 'Thời gian thực hiện',
+                'Học kỳ', 'Địa Chỉ', 'Học vị', 'Hệ số lương', 'Mức thanh toán',
+                'Thành tiền', 'Trừ thuế TNCN 10%', 'Còn lại'
             ];
 
             // Thêm tiêu đề cột
             const headerRow = worksheet.addRow(header);
             headerRow.font = { name: 'Times New Roman', bold: true };
+            worksheet.pageSetup = {
+                paperSize: 9, // A4 paper size
+                orientation: 'landscape',
+                fitToPage: true, // Fit to page
+                fitToWidth: 1, // Fit to width
+                fitToHeight: 0, // Do not fit to height
+                margins: {
+                    left: 0.3149,
+                    right: 0.3149,
+                    top: 0,
+                    bottom: 0,
+                    header: 0.3149,
+                    footer: 0.3149
+                }
+            };
 
             // Căn chỉnh độ rộng cột
-            worksheet.getColumn(1).width = 19;  // Họ Tên
-            worksheet.getColumn(2).width = 9;  // Học Vị
-            worksheet.getColumn(3).width = 10;  // Lớp
-            worksheet.getColumn(4).width = 9;  // Số Tiết
-            worksheet.getColumn(5).width = 25;  // Tên Học Phần
-            worksheet.getColumn(6).width = 10;  // HK
-            worksheet.getColumn(7).width = 20;  // Thời Gian Thực Hiện
-            worksheet.getColumn(8).width = 8;  // HSL
-            worksheet.getColumn(9).width = 12;  // Mức thanh toán
-            worksheet.getColumn(10).width = 12; // Số Tiền
-            worksheet.getColumn(11).width = 12; // Trừ Thuế
-            worksheet.getColumn(12).width = 12; // Thực Nhận
-
+            worksheet.getColumn(1).width = 15;  // Họ tên giảng viên
+            worksheet.getColumn(2).width = 20;  // Tên học phần
+            worksheet.getColumn(3).width = 15;  // Tên lớp
+            worksheet.getColumn(4).width = 10;  // Số tiết
+            worksheet.getColumn(5).width = 20;  // Thời gian thực hiện
+            worksheet.getColumn(6).width = 10;  // Học kỳ
+            worksheet.getColumn(7).width = 20;  // Địa Chỉ
+            worksheet.getColumn(8).width = 15;  // Học vị
+            worksheet.getColumn(9).width = 10;  // Hệ số lương
+            worksheet.getColumn(10).width = 15; // Mức thanh toán
+            worksheet.getColumn(11).width = 15; // Thành tiền
+            worksheet.getColumn(12).width = 15; // Trừ thuế TNCN 10%
+            worksheet.getColumn(13).width = 15; // Còn lại
             // Bật wrapText cho tiêu đề
             headerRow.eachCell((cell) => {
                 cell.fill = {
@@ -103,7 +143,7 @@ exports.exportPhuLucGiangVienMoi = async (req, res) => {
                     bottom: { style: 'thin' },
                     right: { style: 'thin' },
                 };
-                cell.alignment = { horizontal: 'center', vertical: 'middle', wrapText: true }; // Bật wrapText cho tiêu đề
+                cell.alignment = { horizontal: 'center', vertical: 'middle', wrapText: true };
             });
 
             let totalSoTiet = 0;
@@ -116,72 +156,76 @@ exports.exportPhuLucGiangVienMoi = async (req, res) => {
                 const soTien = item.SoTiet * mucThanhToan;
                 const truThue = soTien * 0.1;
                 const thucNhan = soTien - truThue;
-            
+
                 const thoiGianThucHien = `${new Date(item.NgayBatDau).toLocaleDateString()} - ${new Date(item.NgayKetThuc).toLocaleDateString()}`;
-            
                 const row = worksheet.addRow([
-                    item.GiangVien, item.HocVi, item.Lop, item.SoTiet,
-                    item.TenHocPhan, item.HocKy, thoiGianThucHien, item.HSL,
-                    mucThanhToan, soTien, truThue, thucNhan
+                    item.GiangVien, item.TenHocPhan, item.Lop, item.SoTiet, thoiGianThucHien,
+                    item.HocKy, item.DiaChi, item.HocVi, item.HSL, mucThanhToan,
+                    soTien, truThue, thucNhan
                 ]);
                 row.font = { name: 'Times New Roman', size: 12 };
-            
+
                 // Bật wrapText cho các ô dữ liệu và căn giữa
                 row.eachCell((cell, colNumber) => {
                     cell.alignment = { horizontal: 'center', vertical: 'middle', wrapText: true };
-            
+
                     // Chỉnh cỡ chữ cho từng cột
                     switch (colNumber) {
-                        case 1: // Họ Tên
-                            cell.font = { name: 'Times New Roman', size: 11 }; 
-                            break;
-                        case 2: // Học Vị
-                            cell.font = { name: 'Times New Roman', size: 8 };
-                            break;
-                        case 3: // Lớp
-                            cell.font = { name: 'Times New Roman', size: 10 };
-                            break;
-                        case 4: // Số Tiết
-                            cell.font = { name: 'Times New Roman', size: 10 };
-                            break;
-                        case 5: // Tên Học Phần
+                        case 1: // Họ tên giảng viên
                             cell.font = { name: 'Times New Roman', size: 11 };
                             break;
-                        case 6: // HK
+                        case 2: // Tên học phần
+                            cell.font = { name: 'Times New Roman', size: 11 };
+                            break;
+                        case 3: // Tên lớp
+                            cell.font = { name: 'Times New Roman', size: 10 };
+                            break;
+                        case 4: // Số tiết
+                            cell.font = { name: 'Times New Roman', size: 10 };
+                            break;
+                        case 5: // Thời gian thực hiện
                             cell.font = { name: 'Times New Roman', size: 9 };
                             break;
-                        case 7: // Thời Gian Thực Hiện
-                            cell.font = { name: 'Times New Roman', size: 11 };
+                        case 6: // Học kỳ
+                            cell.font = { name: 'Times New Roman', size: 9 };
                             break;
-                        case 8: // HSL
+                        case 7: // Địa Chỉ
+                            cell.font = { name: 'Times New Roman', size: 9 };
+                            break;
+                        case 8: // Học vị
+                            cell.font = { name: 'Times New Roman', size: 9 };
+                            break;
+                        case 9: // Hệ số lương
+                            cell.font = { name: 'Times New Roman', size: 9 };
+                            break;
+                        case 10: // Mức thanh toán
                             cell.font = { name: 'Times New Roman', size: 10 };
                             break;
-                        case 9: // Mức thanh toán
+                        case 11: // Thành tiền
                             cell.font = { name: 'Times New Roman', size: 11 };
                             break;
-                        case 10: // Số Tiền
-                            cell.font = { name: 'Times New Roman', size: 11 };
+                        case 12: // Trừ thuế TNCN 10%
+                            cell.font = { name: 'Times New Roman', size: 9 };
                             break;
-                        case 11: // Trừ Thuế
-                            cell.font = { name: 'Times New Roman', size: 11 };
-                            break;
-                        case 12: // Thực Nhận
+                        case 13: // Còn lại
                             cell.font = { name: 'Times New Roman', size: 11 };
                             break;
                     }
                 });
-            
+
                 totalSoTiet += item.SoTiet;
                 totalSoTien += soTien;
-                totalTruThue += truThue; // Xóa ký tự 'A' ở đây
+                totalTruThue += truThue;
                 totalThucNhan += thucNhan;
             });
-            
+
             // Thêm hàng tổng cộng
-            const totalRow = worksheet.addRow(['Tổng cộng', '', '', totalSoTiet, '', '', '', '', '', totalSoTien, totalTruThue, totalThucNhan]);
-            totalRow.font = { name: 'Times New Roman', bold: true };
+            const totalRow = worksheet.addRow([
+                'Tổng cộng', '', '', totalSoTiet, '', '', '', '', '', '',
+                totalSoTien, totalTruThue, totalThucNhan
+            ]);            totalRow.font = { name: 'Times New Roman', bold: true };
             totalRow.eachCell((cell) => {
-                cell.alignment = { horizontal: 'center', vertical: 'middle' }; // Căn giữa hàng tổng cộng
+                cell.alignment = { horizontal: 'center', vertical: 'middle' };
                 cell.border = {
                     top: { style: 'thin' },
                     left: { style: 'thin' },
@@ -189,7 +233,6 @@ exports.exportPhuLucGiangVienMoi = async (req, res) => {
                     right: { style: 'thin' },
                 };
             });
-            
 
             // Gộp ô cho hàng tổng cộng
             worksheet.mergeCells(`A${totalRow.number}:C${totalRow.number}`);
@@ -209,23 +252,34 @@ exports.exportPhuLucGiangVienMoi = async (req, res) => {
             }
         }
 
-        // Lưu file Excel
-        const filePath = 'src/public/exports/PhuLucGiangVienMoi.xlsx';
-        await workbook.xlsx.writeFile(filePath);
+        // Tạo tên file
+        let fileName = `PhuLuc_Dot${dot}_Ki${ki}_${namHoc}`;
+        if (khoa && khoa !== 'ALL') {
+            fileName += `_${khoa}`;
+        }
+        if (teacherName) {
+            fileName += `_${sanitizeFileName(teacherName)}`;
+        }
+        fileName += '.xlsx';
 
-        // Gửi file cho client
-        res.download(filePath, (err) => {
-            if (err) {
-                console.error("Error downloading file:", err);
-                res.status(500).send("Error downloading file");
-            }
-        });
+        // Set headers cho response
+        res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        res.setHeader('Content-Disposition', `attachment; filename=${fileName}`);
+
+
+        await workbook.xlsx.write(res);
+        res.end();
+
     } catch (error) {
         console.error("Error exporting data:", error);
         res.status(500).send("Error exporting data");
     } finally {
         if (connection) {
-            connection.end(); // Đóng kết nối đến database
+            try {
+                await connection.end();
+            } catch (error) {
+                console.error("Error closing database connection:", error);
+            }
         }
     }
 };
