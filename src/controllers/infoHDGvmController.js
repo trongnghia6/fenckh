@@ -66,6 +66,7 @@ const exportHDGvmToExcel = async (req, res) => {
           NgaySinh,
           CCCD,
           NoiCapCCCD,
+          DiaChi,
           Email,
           MaSoThue,
           HocVi,
@@ -134,7 +135,20 @@ const exportHDGvmToExcel = async (req, res) => {
       const soTien = row.SoTiet * 100000; // Số Tiền = Số Tiết * 100000
       const truThue = soTien * 0.1; // Trừ Thuế = 10% của Số Tiền
       const thucNhan = soTien - truThue; // Thực Nhận = Số Tiền - Trừ Thuế
+      // Sửa lại ngày
+      // Sửa lại ngày bắt đầu
+      const utcBatDau = new Date(row.NgayBatDau);
+      row.NgayBatDau = utcBatDau.toLocaleDateString("vi-VN"); // Chỉ lấy phần ngày
 
+      // Sửa lại ngày kết thúc
+      const utcKetThuc = new Date(row.NgayKetThuc);
+      row.NgayKetThuc = utcKetThuc.toLocaleDateString("vi-VN"); // Chỉ lấy phần ngày
+
+      // Sửa lại ngày sinh
+      const utcSinh = new Date(row.NgaySinh);
+      row.NgaySinh = utcSinh.toLocaleDateString("vi-VN"); // Chỉ lấy phần ngày
+
+      // het
       worksheet.addRow({
         ...row,
         SoTien: soTien,
@@ -308,6 +322,8 @@ const getHDGvmData = async (req, res) => {
           MaSoThue, HocVi, ChucVu, HSL, DienThoai, STK, NganHang;`,
       [namHoc, dot, ki]
     );
+
+    console.log("xem ", rows);
 
     res.json(rows);
   } catch (error) {
