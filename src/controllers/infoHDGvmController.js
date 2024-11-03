@@ -52,11 +52,38 @@ const exportHDGvmToExcel = async (req, res) => {
 
     // Truy vấn dữ liệu mà không lấy các cột không cần thiết
     const [rows] = await connection.execute(
-      `SELECT NgayBatDau, NgayKetThuc, KiHoc, DanhXung, HoTen, NgaySinh, CCCD, NoiCapCCCD, DiaChi, Email, 
-          MaSoThue, HocVi, ChucVu, HSL, DienThoai, STK, NganHang, SUM(SoTiet) AS SoTiet
-       FROM hopdonggvmoi 
-       WHERE NamHoc = ? AND Dot = ? AND KiHoc = ? 
-       GROUP BY HoTen;`,
+      // `SELECT NgayBatDau, NgayKetThuc, KiHoc, DanhXung, HoTen, NgaySinh, CCCD, NoiCapCCCD, DiaChi, Email,
+      //     MaSoThue, HocVi, ChucVu, HSL, DienThoai, STK, NganHang, SUM(SoTiet) AS SoTiet
+      //  FROM hopdonggvmoi
+      //  WHERE NamHoc = ? AND Dot = ? AND KiHoc = ?
+      //  GROUP BY HoTen;`,
+      `SELECT
+          MIN(NgayBatDau) AS NgayBatDau,
+          MAX(NgayKetThuc) AS NgayKetThuc,
+          KiHoc,
+          DanhXung,
+          HoTen,
+          NgaySinh,
+          CCCD,
+          NoiCapCCCD,
+          DiaChi,
+          Email,
+          MaSoThue,
+          HocVi,
+          ChucVu,
+          HSL,
+          DienThoai,
+          STK,
+          NganHang,
+          SUM(SoTiet) AS SoTiet
+      FROM
+          hopdonggvmoi
+      WHERE
+          NamHoc = ? AND Dot = ? AND KiHoc = ?
+      GROUP BY
+          HoTen, KiHoc, DanhXung, NgaySinh, CCCD, NoiCapCCCD, Email,
+          MaSoThue, HocVi, ChucVu, HSL, DienThoai, STK, NganHang;`,
+
       [namHoc, dot, ki]
     );
 
@@ -64,7 +91,9 @@ const exportHDGvmToExcel = async (req, res) => {
 
     if (rows.length === 0) {
       console.log("Không có dữ liệu để xuất ");
-      res.send("<script>alert('Không có dữ liệu để xuất '); window.location.href='/infoHDGvm';</script>");
+      res.send(
+        "<script>alert('Không có dữ liệu để xuất '); window.location.href='/infoHDGvm';</script>"
+      );
       return;
     }
 
@@ -99,7 +128,6 @@ const exportHDGvmToExcel = async (req, res) => {
       { header: "Thực Nhận", key: "ThucNhan", width: 15 },
       { header: "Thực Nhận Bằng Chữ", key: "BangChuThucNhan", width: 30 },
       { header: "Ngày Nghiệm Thu", key: "NgayNghiemThu", width: 15 }, // Thêm cột Ngày Nghiệm Thu
-
     ];
 
     // Thêm dữ liệu vào bảng và tính toán các cột mới
@@ -107,7 +135,20 @@ const exportHDGvmToExcel = async (req, res) => {
       const soTien = row.SoTiet * 100000; // Số Tiền = Số Tiết * 100000
       const truThue = soTien * 0.1; // Trừ Thuế = 10% của Số Tiền
       const thucNhan = soTien - truThue; // Thực Nhận = Số Tiền - Trừ Thuế
+      // Sửa lại ngày
+      // Sửa lại ngày bắt đầu
+      const utcBatDau = new Date(row.NgayBatDau);
+      row.NgayBatDau = utcBatDau.toLocaleDateString("vi-VN"); // Chỉ lấy phần ngày
 
+      // Sửa lại ngày kết thúc
+      const utcKetThuc = new Date(row.NgayKetThuc);
+      row.NgayKetThuc = utcKetThuc.toLocaleDateString("vi-VN"); // Chỉ lấy phần ngày
+
+      // Sửa lại ngày sinh
+      const utcSinh = new Date(row.NgaySinh);
+      row.NgaySinh = utcSinh.toLocaleDateString("vi-VN"); // Chỉ lấy phần ngày
+
+      // het
       worksheet.addRow({
         ...row,
         SoTien: soTien,
@@ -117,7 +158,6 @@ const exportHDGvmToExcel = async (req, res) => {
         ThucNhan: thucNhan,
         BangChuThucNhan: soTienBangChu(thucNhan), // Thực Nhận Bằng Chữ
         NgayNghiemThu: row.NgayKetThuc, // Thiết lập Ngày Nghiệm Thu bằng Ngày Kết Thúc
-
       });
     });
 
@@ -140,7 +180,10 @@ const exportHDGvmToExcel = async (req, res) => {
     });
 
     // Ghi file Excel
-    const filePath = path.join(__dirname, '../public/exports/hopdonggvmList.xlsx');
+    const filePath = path.join(
+      __dirname,
+      "../public/exports/hopdonggvmList.xlsx"
+    );
     await workbook.xlsx.writeFile(filePath);
     console.log("Ghi file Excel thành công");
 
@@ -247,13 +290,40 @@ const getHDGvmData = async (req, res) => {
     const ki = req.query.ki;
 
     const [rows] = await connection.execute(
-      `SELECT NgayBatDau, NgayKetThuc, KiHoc, DanhXung, HoTen, SUM(SoTiet) AS SoTiet, NgaySinh, CCCD, NoiCapCCCD, Email, 
-          MaSoThue, HocVi, ChucVu, HSL, DienThoai, STK, NganHang, NgayNghiemThu 
-       FROM hopdonggvmoi 
-       WHERE NamHoc = ? AND Dot = ? AND KiHoc = ? 
-       GROUP BY HoTen;`,
+      // `SELECT NgayBatDau, NgayKetThuc, KiHoc, DanhXung, HoTen, SUM(SoTiet) AS SoTiet, NgaySinh, CCCD, NoiCapCCCD, Email,
+      //     MaSoThue, HocVi, ChucVu, HSL, DienThoai, STK, NganHang, NgayNghiemThu
+      //  FROM hopdonggvmoi
+      //  WHERE NamHoc = ? AND Dot = ? AND KiHoc = ?
+      //  GROUP BY HoTen;`,
+      `SELECT
+          MIN(NgayBatDau) AS NgayBatDau,
+          MAX(NgayKetThuc) AS NgayKetThuc,
+          KiHoc,
+          DanhXung,
+          HoTen,
+          NgaySinh,
+          CCCD,
+          NoiCapCCCD,
+          Email,
+          MaSoThue,
+          HocVi,
+          ChucVu,
+          HSL,
+          DienThoai,
+          STK,
+          NganHang,
+          SUM(SoTiet) AS SoTiet
+      FROM
+          hopdonggvmoi
+      WHERE
+          NamHoc = ? AND Dot = ? AND KiHoc = ?
+      GROUP BY
+          HoTen, KiHoc, DanhXung, NgaySinh, CCCD, NoiCapCCCD, Email,
+          MaSoThue, HocVi, ChucVu, HSL, DienThoai, STK, NganHang;`,
       [namHoc, dot, ki]
     );
+
+    console.log("xem ", rows);
 
     res.json(rows);
   } catch (error) {

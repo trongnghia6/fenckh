@@ -341,7 +341,7 @@
                   <option value="">Chọn khoa</option>
                 </select>
 
-                <script>
+                <!-- <script>
                   function filterTable() {
                     // Get selected values
                     let dot = document.getElementById("combobox-dot").value;
@@ -373,7 +373,42 @@
                       }
                     }
                   }
-                </script>
+                </script> -->
+
+                <script>
+                  function filterTable() {
+                      // Get selected values
+                      let dot = document.getElementById("combobox-dot").value;
+                      let ki = document.getElementById("combobox-ki").value;
+                      let nam = document.getElementById("NamHoc").value;
+                      let department = document.getElementById("departmentFilter").value.trim();
+              
+                      let tbody = document.getElementById("data-table-body");
+                      let rows = tbody.getElementsByTagName("tr");
+              
+                      for (let i = 0; i < rows.length; i++) {
+                          let row = rows[i];
+                          let rowDepartment = row.getAttribute("data-department");
+                          let rowDot = row.getAttribute("data-dot");
+                          let rowKi = row.getAttribute("data-ki");
+                          let rowNam = row.getAttribute("data-nam");
+              
+                          // Filtering logic
+                          let matchesDepartment = department === "" || rowDepartment === department;
+                          let matchesDot = dot === "" || rowDot === dot;
+                          let matchesKi = ki === "" || rowKi === ki;
+                          let matchesNam = nam === "" || rowNam === nam;
+              
+                          // Show or hide row based on filter results
+                          if (matchesDepartment && matchesDot && matchesKi && matchesNam) {
+                              row.style.display = ""; // Show row
+                          } else {
+                              row.style.display = "none"; // Hide row
+                          }
+                      }
+                  }
+              </script>
+                
                 <button class="btn text-nowrap mx-2" id="render" style="height: 45px;" onclick="filterTable()">Hiển thị
                 </button>
               </div>
@@ -404,18 +439,19 @@
                   <% for (let teacher of Object.keys(GiangDay)) { %>
                     <% let courses=GiangDay[teacher]; %>
                       <% let totalSoTiet=courses.reduce((total, course)=> total + course.QuyChuan, 0); %>
-                        <tr class="teacher-group" data-department="<%= courses[0].Khoa %>"
+                        <tr class="teacher-group" data-department="<%= courses[0].MaPhongBan %>"
                           data-dot="<%= courses[0].Dot %>" data-ki="<%= courses[0].KiHoc %>"
                           data-nam="<%= courses[0].NamHoc %>">
                           <% courses.forEach((course, courseIndex)=> { %>
-                        <tr data-department="<%= course.Khoa %>" data-dot="<%= course.Dot %>"
+                        <tr data-department="<%= course.MaPhongBan  %>" data-dot="<%= course.Dot %>"
                           data-ki="<%= course.KiHoc %>" data-nam="<%= course.NamHoc %>">
                           <% if (courseIndex===0) { %>
                             <td rowspan="<%= courses.length %>">
                               <%= index %>
                             </td>
                             <td rowspan="<%= courses.length %>">
-                              <%= course.GiaoVienGiangDay %>
+                              <!-- <%= course.GiaoVienGiangDay %> -->
+                              <%= course.GiaoVienGiangDay.split(' - ')[0] %>
                             </td>
                             <% index++; %>
                               <% } %>
@@ -462,7 +498,8 @@
                                                       <%= totalSoTiet %>
                                                     </td>
                                                     <td rowspan="<%= courses.length %>">
-                                                      <%= course.Khoa %>
+                                                      <!-- <%= course.Khoa %> -->
+                                                      <%= course.MaPhongBan %>
                                                     </td>
                                                     <td rowspan="<%= courses.length %>">
                                                       <button class="action-button view"
@@ -479,7 +516,7 @@
             <!-- tổng tiết -->
             <!-- Label tổng số tiết tách riêng với bảng -->
             <div class="total-label">
-              <label>Tổng số tiết Lên Lớp: <span class="value" id="totalLL">0</span></label>
+              <!-- <label>Tổng số tiết Lên Lớp: <span class="value" id="totalLL">0</span></label> -->
               <label>Tổng số tiết Quy Chuẩn: <span class="value" id="totalQC">0</span></label>
             </div>
             <!-- <div class="pagination">
@@ -549,7 +586,7 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 
-  <script>
+  <!-- <script>
     document.addEventListener('DOMContentLoaded', function () {
       // Khởi tạo tổng số tiết Quy Chuẩn và tổng số tiết Lên Lớp
       let totalQC = 0;
@@ -585,8 +622,38 @@
       // (Tùy chọn) Hiển thị tổng số tiết Lên Lớp trên phần tử có id #totalLL
       // document.getElementById('totalLL').textContent = totalLL;
     });
-  </script>
+  </script> -->
 
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    let totalQC = 0;
+  
+    // Chọn tất cả các hàng chứa dữ liệu
+    const rows = document.querySelectorAll('tbody.teacher-group tr[data-department]');
+  
+    rows.forEach(row => {
+      // Kiểm tra xem hàng có hiển thị hay không
+      const isVisible = row.offsetParent !== null;
+  
+      if (isVisible) {
+        // Lấy ô QuyChuan theo thứ tự cột (giả định cột QuyChuan là cột thứ 10)
+        const qcCell = row.querySelector('td:nth-child(12)');
+        if (qcCell) {
+          const qcValue = parseFloat(qcCell.textContent.trim());
+          if (!isNaN(qcValue)) {
+            totalQC += qcValue;
+          }
+        }
+      }
+    });
+  
+    // Hiển thị tổng số tiết QuyChuẩn vào element có id `totalQC`
+    document.getElementById('totalQC').textContent = totalQC;
+  });
+  
+  
+</script>
+  
   <!-- <script>
         function filterGvmByDepartment() {
           var filter = document.getElementById("departmentFilter").value;

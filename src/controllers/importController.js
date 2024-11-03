@@ -1286,17 +1286,34 @@ const TaiChinhCheckAll = async (Dot, KiHoc, NamHoc) => {
 };
 
 const updateAllTeachingInfo = async () => {
+  // const query2 = `
+  //     SELECT
+  //       qc.*,
+  //       gvmoi.*,
+  //       SUM(qc.QuyChuan) AS TongSoTiet,
+  //       SUBSTRING_INDEX(qc.GiaoVienGiangDay, ' - ', 1) AS TenGiangVien
+  //     FROM quychuan qc
+  //     JOIN gvmoi ON SUBSTRING_INDEX(qc.GiaoVienGiangDay, ' - ', 1) = gvmoi.HoTen
+  //     WHERE qc.DaLuu = 0
+  //     GROUP BY gvmoi.HoTen;
+  //   `;
   const query2 = `
-      SELECT
-        qc.*,
-        gvmoi.*,
-        SUM(qc.QuyChuan) AS TongSoTiet,
-        SUBSTRING_INDEX(qc.GiaoVienGiangDay, ' - ', 1) AS TenGiangVien
-      FROM quychuan qc
-      JOIN gvmoi ON SUBSTRING_INDEX(qc.GiaoVienGiangDay, ' - ', 1) = gvmoi.HoTen
-      WHERE qc.DaLuu = 0
-      GROUP BY gvmoi.HoTen;
-    `;
+SELECT
+    qc.*,                 -- Lấy tất cả các cột từ bảng quychuan
+    gvmoi.*,              -- Lấy tất cả các cột từ bảng gvmoi
+    SUM(qc.QuyChuan) AS TongSoTiet,     -- Tổng số tiết
+    MIN(qc.NgayBatDau) AS NgayBatDau,   -- Ngày bắt đầu sớm nhất
+    MAX(qc.NgayKetThuc) AS NgayKetThuc  -- Ngày kết thúc muộn nhất
+FROM 
+    quychuan qc
+JOIN 
+    gvmoi ON SUBSTRING_INDEX(qc.GiaoVienGiangDay, ' - ', 1) = gvmoi.HoTen
+WHERE 
+    qc.DaLuu = 0
+GROUP BY 
+    gvmoi.HoTen;
+
+`;
   try {
     const [dataJoin] = await connection.promise().query(query2);
 

@@ -317,7 +317,7 @@
 
           <button id="infoGvm" class="btn text-nowrap mx-2">Xem dữ liệu</button>
           <button onclick="submitData()" class="btn mx-2" id="update-qc">Cập nhật</button>
-          <button onclick="submitData2()" class="btn mx-2" id="save-data-all" style="display: none;">Lưu</button>
+          <!-- <button onclick="submitData2()" class="btn mx-2" id="save-data-all" style="display: none;">Lưu</button> -->
         </div>
       </div>
 
@@ -807,10 +807,11 @@
           khoaCheckbox.style.display = "block";
 
           daoTaoCheckbox.style.display = "block";
+          taiChinhCheckboxTd.style.display = "none";
         } else if (MaPhongBan == 'TAICHINH') {
           // Checkbox cho Đào Tạo
           daoTaoCheckbox.style.display = "block";
-
+          khoaCheckboxTd.style.display = "none";
           // Checkbox cho Tài Chính
           taiChinhCheckbox.style.display = "block";
         }
@@ -1031,18 +1032,18 @@
       // Lấy trạng thái của checkbox "Tài Chính"
       let taiChinhDuyet = taiChinhCheckbox ? taiChinhCheckbox.checked : false;
 
+      /*
       // Điều chỉnh theo role
       if (MaPhongBan == 'DAOTAO' && role == 'Duyệt') {
         // Khi role là DAOTAO_ALL
         khoaDuyet = khoaCheckbox ? khoaCheckbox.checked : false; // Cập nhật Khoa
-        taiChinhDuyet = false; // Tài Chính sẽ luôn là false
       } else if (MaPhongBan == 'TAICHINH' && role == 'Duyệt') {
         // Khi role là TAICHINH_ALL
         khoaDuyet = globalData[index].KhoaDuyet; // Giữ nguyên giá trị cũ của Khoa
         
         taiChinhDuyet = taiChinhCheckbox ? taiChinhCheckbox.checked : false; // Cập nhật Tài Chính
       }
-
+*/
       if (isKhoa == 1) {
         // Cập nhật vào mảng globalData tương ứng với chỉ mục hàng (index)
 
@@ -1088,6 +1089,7 @@
   }
 
   // Phương
+  /*
   async function submitData2() {
     fetch('/submitData2', {
       method: 'POST', // Dùng POST nếu bạn muốn gửi tín hiệu theo yêu cầu HTTP POST
@@ -1105,6 +1107,8 @@
         // Xử lý lỗi, ví dụ: hiển thị thông báo lỗi
       });
   }
+  
+  */
   // Phương
 /*
   function filterByName() {
@@ -1747,7 +1751,7 @@ function checkAll(type) {
         document.getElementById('khoaColumn').style.display = 'none';
         document.getElementById('update-qc').style.display = 'inline-block'; // Sử dụng 'inline-block' để hiển thị nút
         // Hiển thị nút 'Cập nhật'
-        document.getElementById('save-data-all').style.display = 'inline-block'; // Sử dụng 'inline-block' để hiển thị nút
+        //document.getElementById('save-data-all').style.display = 'inline-block'; // Sử dụng 'inline-block' để hiển thị nút
       }
     }
 
@@ -1848,7 +1852,7 @@ function checkAll(type) {
         const formattedDeadline = formatDate(deadline);
 
         // Cập nhật hiển thị cho hàng được chọn với biểu tượng và chấm đỏ
-        const ghiChuTd = currentRow.querySelector("td:last-child");
+        const ghiChuTd = currentRow.querySelector("td:nth-child(12)");
         ghiChuTd.innerHTML = `📜 <span style="color: red;">• </br></span>
        Ghi chú: ${note}<br> Hạn sửa: ${formattedDeadline}`;
       } else {
