@@ -1851,7 +1851,7 @@ function checkAll(type) {
         const formattedDeadline = formatDate(deadline);
 
         // Cập nhật hiển thị cho hàng được chọn với biểu tượng và chấm đỏ
-        const ghiChuTd = currentRow.querySelector("td:last-child");
+        const ghiChuTd = currentRow.querySelector("td:nth-child(12)");
         ghiChuTd.innerHTML = `📜 <span style="color: red;">• </br></span>
        Ghi chú: ${note}<br> Hạn sửa: ${formattedDeadline}`;
       } else {
