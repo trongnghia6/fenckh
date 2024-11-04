@@ -44,5 +44,8 @@ router.get("/bo-mon-theo-gv", (req, res) => {
   obj2.getBoMon2(req, res);
 });
 
+//Lưu note
+router.post("/savenote", obj.SaveNote);
+router.post("/donenote", obj.DoneNote);
 
 module.exports = router;

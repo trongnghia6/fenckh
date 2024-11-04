@@ -606,6 +606,43 @@ const getBoMon = async (req, res) => {
     if (connection) connection.release(); // Giải phóng kết nối khi hoàn thành
   }
 };
+  const SaveNote = async (req, res) => {
+    let connection = await createPoolConnection()
+    try {
+      const { id, ghiChu, deadline } = req.body;
+      console.log(id, ghiChu, deadline);
+
+      const query = `
+        UPDATE quychuan 
+        SET GhiChu = ?, Deadline = ? 
+        WHERE ID = ?
+      `;
+      await connection.query(query, [ghiChu,deadline,id]);
+      res.json({ success: true, message: 'Ghi chú đã được lưu thành công' });
+    } catch (error) {
+      console.error('Lỗi khi lưu dữ liệu vào bảng giangday:', error);
+      return res.status(500).json({ success: false, message: 'Lỗi khi lưu ghi chú' });
+    }
+  };
+  const DoneNote = async (req, res) => {
+    let connection = await createPoolConnection()
+    try {
+      const { id } = req.body; // Chỉ lấy id từ body, không lấy ghiChu và deadline
+
+      console.log(id);
+
+      const query = `
+          UPDATE quychuan 
+          SET GhiChu = NULL, Deadline = NULL 
+          WHERE ID = ?
+      `;
+      await connection.query(query, [id]);
+      res.json({ success: true, message: 'Ghi chú đã được lưu thành công' });
+    } catch (error) {
+      console.error('Lỗi khi lưu dữ liệu vào bảng giangday:', error);
+      return res.status(500).json({ success: false, message: 'Lỗi khi lưu ghi chú' });
+    }
+  };
 
 module.exports = {
   renderInfo,
@@ -615,4 +652,6 @@ module.exports = {
   getTeachingInfo2,
   renderInfoWithValueKhoa,
   getBoMon,
+  SaveNote,
+  DoneNote,
 };
