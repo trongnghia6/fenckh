@@ -864,15 +864,12 @@ function checkAll(type) {
         const khoaCheckbox = row.querySelector(
           'input[type="checkbox"][name="khoa"]'
         );
-        alert("khoa = " + khoaCheckbox.checked);
         const daoTaoCheckbox = row.querySelector(
           'input[type="checkbox"][name="daoTao"]'
         );
-        alert("daotao = " + daoTaoCheckbox.checked);
         const taiChinhCheckbox = row.querySelector(
           'input[type="checkbox"][name="taiChinh"]'
         );
-        alert("taichinh = " + taiChinhCheckbox.checked);
         // Lấy trạng thái của checkbox "Đào Tạo"
         const daoTaoDuyet = daoTaoCheckbox ? daoTaoCheckbox.checked : false;
 

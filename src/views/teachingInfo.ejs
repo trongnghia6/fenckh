@@ -947,7 +947,33 @@
           // Thêm hàng vào body của bảng
           tableBody.appendChild(tableRow);
         });
+
+        // Thêm sự kiện khi doubleclick để có thể copy được ngày
+        addDoubleClickEvents();
       }
+
+      function addDoubleClickEvents() {
+        // get all date input fields
+        let dateInputs = document.querySelectorAll('[type="date"]');
+    
+        dateInputs.forEach(el => {
+          // register double-click event to change date input to text input and select the value
+          el.addEventListener('dblclick', () => {
+            el.type = "text";
+    
+            // After changing input type with JS, .select() needs a timeout to work
+            setTimeout(() => {
+              el.select();
+            });
+          });
+    
+          // register the focusout event to reset the input back to a date input field
+          el.addEventListener('focusout', () => {
+            el.type = "date";
+          });
+        });
+      }
+    
 
       function disableCheckAll(type) {
         const checkAllCheckbox = document.getElementById(`checkAll${type.charAt(0).toUpperCase() + type.slice(1)}`);
