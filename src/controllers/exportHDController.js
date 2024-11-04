@@ -583,12 +583,85 @@ const exportMultipleContracts = async (req, res) => {
 
     // Xử lý các trường hợp khác nhau
     if (khoa && khoa !== "ALL") {
-      query += " AND MaPhongBan = ?";
-      params.push(khoa);
+      query = ` SELECT
+                MaHopDong,
+                id_Gvm,
+                DienThoai,
+                Email,
+                MaSoThue,
+                DanhXung,
+                HoTen,
+                NgaySinh,
+                HocVi,
+                ChucVu,
+                HSL,
+                CCCD,
+                NoiCapCCCD,
+                DiaChi,
+                STK,
+                NganHang,
+                MIN(NgayBatDau) AS NgayBatDau,
+                MAX(NgayKetThuc) AS NgayKetThuc,
+                SUM(SoTiet) AS SoTiet,
+                SoTien,
+                TruThue,
+                NgayCap,
+                ThucNhan,
+                NgayNghiemThu,
+                Dot,
+                KiHoc,
+                NamHoc,
+                MaPhongBan,
+                MaBoMon
+            FROM
+                hopdonggvmoi
+            WHERE
+                Dot = ? AND KiHoc = ? AND NamHoc = ? AND MaPhongBan like ?
+            GROUP BY
+                HoTen`;
+      //query += " AND MaPhongBan = ?";
+      //params.push(khoa);
+      params.push(`%${khoa}%`);
     }
 
     if (teacherName) {
-      query += " AND HoTen LIKE ?";
+      query = ` SELECT
+                MaHopDong,
+                id_Gvm,
+                DienThoai,
+                Email,
+                MaSoThue,
+                DanhXung,
+                HoTen,
+                NgaySinh,
+                HocVi,
+                ChucVu,
+                HSL,
+                CCCD,
+                NoiCapCCCD,
+                DiaChi,
+                STK,
+                NganHang,
+                MIN(NgayBatDau) AS NgayBatDau,
+                MAX(NgayKetThuc) AS NgayKetThuc,
+                SUM(SoTiet) AS SoTiet,
+                SoTien,
+                TruThue,
+                NgayCap,
+                ThucNhan,
+                NgayNghiemThu,
+                Dot,
+                KiHoc,
+                NamHoc,
+                MaPhongBan,
+                MaBoMon
+            FROM
+                hopdonggvmoi
+            WHERE
+                Dot = ? AND KiHoc = ? AND NamHoc = ? AND HoTen LIKE ?
+            GROUP BY
+                HoTen`;
+      //query += " AND HoTen LIKE ?";
       params.push(`%${teacherName}%`);
     }
 
