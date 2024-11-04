@@ -203,7 +203,6 @@ const importTableQC = async (jsonData) => {
     }
   }
 
-
   const getBoMon = async (lecturers) => {
     const query1 =
       "SELECT HoTen, MonGiangDayChinh FROM `gvmoi` WHERE HoTen = ?";
@@ -1324,6 +1323,7 @@ GROUP BY
         message: "Không có dữ liệu để chèn.",
       };
     }
+    console.log(dataJoin);
 
     const firstItem = dataJoin[0]; // Lấy phần tử đầu tiên
 
@@ -1358,6 +1358,7 @@ GROUP BY
             ChucVu,
             HSL,
             CCCD,
+            NgayCapCCCD,
             NoiCapCCCD,
             DiaChi,
             STK,
@@ -1397,6 +1398,7 @@ GROUP BY
             ChucVu,
             HSL,
             CCCD,
+            NgayCapCCCD,
             NoiCapCCCD,
             DiaChi,
             STK,
@@ -1432,7 +1434,7 @@ GROUP BY
     // Định nghĩa câu lệnh chèn
     const queryInsert = `
       INSERT INTO hopdonggvmoi (
-        id_Gvm, DienThoai, Email, MaSoThue, DanhXung, HoTen, NgaySinh, HocVi, ChucVu, HSL, CCCD, NoiCapCCCD,
+        id_Gvm, DienThoai, Email, MaSoThue, DanhXung, HoTen, NgaySinh, HocVi, ChucVu, HSL, CCCD, NgayCap, NoiCapCCCD,
         DiaChi, STK, NganHang, NgayBatDau, NgayKetThuc, KiHoc, SoTiet, SoTien, TruThue,
         Dot, NamHoc, MaPhongBan, MaBoMon, KhoaDuyet, DaoTaoDuyet, TaiChinhDuyet
       ) VALUES ?;
