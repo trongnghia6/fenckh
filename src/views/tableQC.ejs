@@ -458,7 +458,7 @@
     // Hàm renderTable sẽ được sử dụng để render bảng
     function renderTable(data) {
       // Chọn các cột bạn muốn hiển thị
-      const columnsToDisplay = ['Khoa', 'Dot', 'KiHoc', 'NamHoc', 'LopHocPhan', 'GiaoVienGiangDay', 'MoiGiang', 'SoTinChi', 'TenLop', 'LL', 'QuyChuan'];
+      const columnsToDisplay = ['Khoa', 'Dot', 'KiHoc', 'NamHoc', 'LopHocPhan', 'GiaoVien', 'GiaoVienGiangDay', 'MoiGiang', 'SoTinChi', 'TenLop', 'LL', 'QuyChuan'];
       let tableHtml = '';
 
       const headersMap = {
@@ -467,6 +467,7 @@
         'KiHoc': 'Kì',
         'NamHoc': 'Năm',
         'LopHocPhan': 'Lớp học phần',
+        'GiaoVien': 'Giảng viên theo TKB',
         'GiaoVienGiangDay': 'Giảng viên giảng dạy',
         'MoiGiang': 'Mời giảng?',
         'SoTinChi': 'Số tín chỉ',
@@ -567,7 +568,7 @@
     window.onload = function () {
       const TenNhanVien = localStorage.getItem("TenNhanVien"); // Lấy tên người dùng từ localStorage
       let Role = localStorage.getItem("userRole");
-      if (Role.toUpperCase() == 'LÃNH ĐẠO KHOA'){
+      if (Role.toUpperCase() == 'LÃNH ĐẠO KHOA') {
         Role = 'LĐK';
       }
       if (TenNhanVien) {
@@ -608,22 +609,22 @@
 
             response.NamHoc.forEach(function (item) {
               console.log(item.NamHoc);
-                $('#NamHoc').append(
-                  `<option value="${item.NamHoc}">${item.NamHoc}</option>`
-                );
+              $('#NamHoc').append(
+                `<option value="${item.NamHoc}">${item.NamHoc}</option>`
+              );
             });
 
             response.Ki.forEach(function (item) {
               console.log(item.Ki);
-                $('#combobox-ki').append(
-                  `<option value="${item.value}">${item.Ki}</option>`
-                );
+              $('#combobox-ki').append(
+                `<option value="${item.value}">${item.Ki}</option>`
+              );
             });
             response.Dot.forEach(function (item) {
               console.log(item.Dot);
-                $('#combobox-dot').append(
-                  `<option value="${item.value}">${item.Dot}</option>`
-                );
+              $('#combobox-dot').append(
+                `<option value="${item.value}">${item.Dot}</option>`
+              );
             });
           } else {
             console.error("Không lấy được dữ liệu năm học:", response.message);
