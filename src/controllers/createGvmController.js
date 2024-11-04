@@ -273,6 +273,8 @@ const express = require("express");
 const multer = require("multer");
 const connection = require("../config/database");
 const createPoolConnection = require("../config/databasePool");
+const mysql = require('mysql2/promise');
+
 
 const gvmList = require("../services/gvmServices");
 const router = express.Router();
@@ -458,6 +460,7 @@ let handleUploadFile = async (req, res) => {
     let NganHang = req.body.NganHang;
     let tinhTrangGiangDay = req.body.tinhTrangGiangDay ? 1 : 0;
     let BangTotNghiepLoai = req.body.BangTotNghiepLoai;
+    let MonGiangDayChinh = req.body.monGiangDayChinh;
     const MaPhongBan = Array.isArray(req.body.maPhongBan)
       ? req.body.maPhongBan.join(",")
       : req.body.maPhongBan || "";
@@ -494,8 +497,8 @@ let handleUploadFile = async (req, res) => {
         ? req.files["FileLyLich"][0].filename
         : null;
 
-      const query = `INSERT INTO gvmoi (MaGvm, HoTen, GioiTinh, NgaySinh, CCCD, NgayCapCCCD, NoiCapCCCD, NoiCongTac, DiaChi, DienThoai, Email, MaSoThue, HocVi, ChucVu, HSL, STK, NganHang, MatTruocCCCD, MatSauCCCD, BangTotNghiep, FileLyLich, MaPhongBan, TinhTrangGiangDay, BangTotNghiepLoai)
-                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+      const query = `INSERT INTO gvmoi (MaGvm, HoTen, GioiTinh, NgaySinh, CCCD, NgayCapCCCD, NoiCapCCCD, NoiCongTac, DiaChi, DienThoai, Email, MaSoThue, HocVi, ChucVu, HSL, STK, NganHang, MatTruocCCCD, MatSauCCCD, BangTotNghiep, FileLyLich, MaPhongBan, TinhTrangGiangDay, BangTotNghiepLoai, MonGiangDayChinh)
+                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
 
       try {
         await con2.query(query, [
@@ -523,6 +526,7 @@ let handleUploadFile = async (req, res) => {
           MaPhongBan,
           tinhTrangGiangDay,
           BangTotNghiepLoai,
+          MonGiangDayChinh,
         ]);
         res.redirect("/gvmList?message=insertSuccess");
       } catch (err) {
@@ -540,9 +544,31 @@ let handleUploadFile = async (req, res) => {
     res.status(500).send("Lỗi khi xử lý tải lên");
   }
 };
+const getBoMonList = async (req, res) =>{
+  let maPhongBan = req.params.maPhongBan;
+  console.log(maPhongBan);
+  let connection = await createPoolConnection();
+  try {
+    
+    const query = `SELECT * FROM bomon WHERE MaPhongBan = ?`;
+    const [results] = await connection.query(query,[maPhongBan]);
+    res.json({
+      success: true,
+      maBoMon: results,
+    });
+  } catch (error) {
+    console.error("Lỗi: ", error);
+    res.status(500).send("Đã có lỗi xảy ra");
+  } finally{
+    if (connection) connection.release(); // Đảm bảo giải phóng kết nối
+
+  }
+
+};
 
 // Xuất các hàm để sử dụng trong router
 module.exports = {
   //  createGVM,
   handleUploadFile,
+  getBoMonList,
 };

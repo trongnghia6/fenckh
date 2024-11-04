@@ -292,6 +292,11 @@
             </select>
         </div>
         <div class="col-md-4">
+          <label for="monGiangDayChinh">Môn giáng dạy chính:</label>
+          <select type="text" class="form-control" name="monGiangDayChinh" id="monGiangDayChinh" disabled>
+          </select>
+      </div>
+        <div class="col-md-4">
             <button class="button-class bt" type="button" id="return" onclick="goBack()">Quay lại</button>
         </div>
       </div>
@@ -304,6 +309,7 @@
     $(document).ready(function() {
 const isKhoa = localStorage.getItem("isKhoa");
 console.log('Giá trị isKhoa từ localStorage: ', isKhoa);
+localStorage.setItem("monGiangDayChinh", "<%= value.MonGiangDayChinh %>");
 hideButton();
 });
 
@@ -482,6 +488,37 @@ hideButton();
       alert("Không tìm thấy TenDangNhap trong localStorage.");
   }
 });
+  </script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const maPhongBan = localStorage.getItem("MaPhongBan");
+      const monGiangDayChinh = localStorage.getItem("monGiangDayChinh"); // Lấy giá trị MonGiangDayChinh từ localStorage    
+      fetch(`/getMaBoMon/${maPhongBan}`)
+        .then(response => response.json())
+        .then(data => {
+          console.log(data); // In ra phản hồi để kiểm tra
+          const maBoMonSelect = document.getElementById('monGiangDayChinh');
+          maBoMonSelect.innerHTML = ''; // Xóa các option cũ
+  
+          // Kiểm tra success và dữ liệu maBoMon
+          if (data.success && data.maBoMon) {
+            // Vòng lặp qua từng mục trong maBoMon và tạo thẻ option
+            data.maBoMon.forEach(item => {
+              const option = document.createElement('option');
+              option.value = item.MaBoMon; // Giả sử MaBoMon là thuộc tính cần làm value
+              option.textContent = item.TenBoMon; // Giả sử TenBoMon là tên bộ môn cần hiển thị
+              // Kiểm tra nếu giá trị trùng với monGiangDayChinh
+              if (item.MaBoMon === monGiangDayChinh) {
+                option.selected = true; // Đặt option thành selected nếu trùng
+              }
+              maBoMonSelect.appendChild(option); // Thêm option vào select
+            });
+          } else {
+            console.error("Dữ liệu maBoMon không tồn tại hoặc không thành công");
+          }
+        })
+        .catch(error => console.error('Error:', error));
+    });
   </script>
 
 </body>

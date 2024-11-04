@@ -10,6 +10,7 @@ const router = express.Router();
 const {
   //createGVM,
   handleUploadFile,
+  getBoMonList,
 } = require("../controllers/createGvmController");
 
 const storage = multer.diskStorage({
@@ -65,5 +66,6 @@ router.post(
   ]),
   handleUploadFile
 );
+router.get('/getMaBoMon/:maPhongBan', getBoMonList);
 
 module.exports = router;

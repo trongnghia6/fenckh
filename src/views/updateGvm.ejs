@@ -285,9 +285,14 @@
            <option value="false" <%= value.TinhTrangGiangDay === false ? 'selected' : '' %>>Đã ngừng giảng dạy</option>
        </select>
    </div>
+    <div class="col-md-4">
+      <label for="monGiangDayChinh">Môn giảng dạy chính:</label>
+      <select class="form-control" type="text" name="monGiangDayChinh" id="monGiangDayChinh">
+      </select>
+    </div>
    <div class="col-md-4 d-flex justify-content-between">
-      <button class="button-class bt" id="submit">Cập nhật</button>
-      <button class="button-class bt" id="return" type="button" onclick="window.location.href='/gvmList'">Quay lại</button>
+      <button class="btn" id="submit">Cập nhật</button>
+      <button class="btn" id="return" type="button" onclick="window.location.href='/gvmList'">Quay lại</button>
    </div>
                                </div>
                            </fieldset>
@@ -300,6 +305,7 @@
     $(document).ready(function() {
 const isKhoa = localStorage.getItem("isKhoa");
 console.log('Giá trị isKhoa từ localStorage: ', isKhoa);
+localStorage.setItem("monGiangDayChinh", "<%= value.MonGiangDayChinh %>");
 hideButton();
 });
 
@@ -312,7 +318,7 @@ hideButton();
             
             const actionButton = document.getElementById('actionButton');
             const actionButton1 = document.getElementById('actionButton1');
-    const actionButton2 = document.getElementById('actionButton2');
+            const actionButton2 = document.getElementById('actionButton2');
     
     if (actionButton1 && actionButton2) {
         if (isKhoa === "0") {
@@ -330,6 +336,38 @@ hideButton();
         }
     }
 </script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const maPhongBan = localStorage.getItem("MaPhongBan");
+    const monGiangDayChinh = localStorage.getItem("monGiangDayChinh"); // Lấy giá trị MonGiangDayChinh từ localStorage    
+    fetch(`/getMaBoMon/${maPhongBan}`)
+      .then(response => response.json())
+      .then(data => {
+        console.log(data); // In ra phản hồi để kiểm tra
+        const maBoMonSelect = document.getElementById('monGiangDayChinh');
+        maBoMonSelect.innerHTML = ''; // Xóa các option cũ
+
+        // Kiểm tra success và dữ liệu maBoMon
+        if (data.success && data.maBoMon) {
+          // Vòng lặp qua từng mục trong maBoMon và tạo thẻ option
+          data.maBoMon.forEach(item => {
+            const option = document.createElement('option');
+            option.value = item.MaBoMon; // Giả sử MaBoMon là thuộc tính cần làm value
+            option.textContent = item.TenBoMon; // Giả sử TenBoMon là tên bộ môn cần hiển thị
+            // Kiểm tra nếu giá trị trùng với monGiangDayChinh
+            if (item.MaBoMon === monGiangDayChinh) {
+              option.selected = true; // Đặt option thành selected nếu trùng
+            }
+            maBoMonSelect.appendChild(option); // Thêm option vào select
+          });
+        } else {
+          console.error("Dữ liệu maBoMon không tồn tại hoặc không thành công");
+        }
+      })
+      .catch(error => console.error('Error:', error));
+  });
+</script>
+
 
   <script>
     // Lấy query string từ URL

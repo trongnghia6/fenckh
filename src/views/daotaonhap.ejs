@@ -288,9 +288,14 @@
                     <option value="false">Đã ngừng giảng dạy</option>
                 </select>
             </div>
+            <div class="col-md-4">
+              <label for="monGiangDayChinh">Môn giảng dạy chính:</label>
+              <select class="form-control" type="text" name="monGiangDayChinh" id="monGiangDayChinh">
+              </select>
+          </div>
             <div class="col-md-4 d-flex justify-content-between">
-              <button class="button-class bt" id="submit">Thêm mới</button>
-              <button class="button-class bt" id="return" onclick="goBack()">Quay lại</button>
+              <button class="btn" id="submit">Thêm mới</button>
+              <button class="btn" id="return" onclick="goBack()">Quay lại</button>
             </div>
         </div>
     </fieldset>
@@ -317,6 +322,34 @@
             actionButton2.style.display = 'none'; // Ẩn actionButton2
             
         }
+      });
+</script>
+<script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const maPhongBan = localStorage.getItem("MaPhongBan");
+        fetch(`/getMaBoMon/${maPhongBan}`)
+        .then(response => response.json())
+        .then(data => {
+          console.log(data); // In ra phản hồi để kiểm tra
+          const maBoMonSelect = document.getElementById('monGiangDayChinh');
+          maBoMonSelect.innerHTML = ''; // Xóa các option cũ
+
+          // Kiểm tra isKhoa và cập nhật quyền dựa theo giá trị
+          if (data.success && data.maBoMon) {
+        // Vòng lặp qua từng mục trong maBoMon và tạo thẻ option
+            data.maBoMon.forEach(item => {
+              const option = document.createElement('option');
+              option.value = item.MaBoMon; // Giả sử MaBoMon là thuộc tính cần làm value
+              option.textContent = item.TenBoMon; // Giả sử TenBoMon là tên bộ môn cần hiển thị
+              maBoMonSelect.appendChild(option);
+            });
+          } else {
+            console.error("Dữ liệu maBoMon không tồn tại hoặc không thành công");
+          }
+          
+          }
+        )
+        .catch(error => console.error('Error:', error));
       });
 </script>
 

@@ -94,6 +94,7 @@ const postUpdateGvm = async (req, res) => {
   let STK = req.body.STK;
   let NganHang = req.body.NganHang;
   let BangTotNghiepLoai = req.body.BangTotNghiepLoai;
+  let MonGiangDayChinh = req.body.monGiangDayChinh;
 
   let oldTruocCCCD = req.body.oldTruocCCCD;
   let oldSauCCCD = req.body.oldSauCCCD;
@@ -153,7 +154,8 @@ const postUpdateGvm = async (req, res) => {
       BangTotNghiep = ?,
       FileLyLich = ?,
       MaPhongBan = ?,
-      TinhTrangGiangDay = ? 
+      TinhTrangGiangDay = ?, 
+      MonGiangDayChinh = ?
     WHERE id_Gvm = ?`;
 
     try {
@@ -181,6 +183,7 @@ const postUpdateGvm = async (req, res) => {
         FileLyLich,
         MaPhongBan,
         tinhTrangGiangDay,
+        MonGiangDayChinh,
         IdGvm,
       ]);
       res.redirect("/gvmList?message=insertSuccess");
