@@ -824,6 +824,11 @@
             taiChinhCheckbox.disabled = true;
           }
         }
+        if(role.toLowerCase() === "thường"){
+          khoaCheckboxTd.style.display = 'none';
+          daoTaoCheckboxTd.style.display = 'none';
+          taiChinhCheckboxTd.style.display = 'none';
+        }
 
         tableBody.appendChild(tableRow); // Thêm hàng vào bảng
       });
