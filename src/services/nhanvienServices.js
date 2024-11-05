@@ -23,3 +23,5 @@ const getGvmLists = async (req, res) => {
 module.exports = {
   getGvmLists,
 };
+
+// có thể bỏ, nằm trong import controller
