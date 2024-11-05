@@ -1573,7 +1573,6 @@
               },
               body: JSON.stringify({ id, ghiChu: note, deadline }),
             });
-            alert(id);
             const result = await response.json();
             if (!result.success) {
               alert("Lỗi khi lưu ghi chú vào CSDL: " + result.message);
