@@ -786,3 +786,24 @@ select{
   text-align: center;
   color: #2c9caf !important;
 }
+#MaPhongBan {
+  width: 250px !important; /* Điều chỉnh số này để phù hợp với nhu cầu của bạn */
+}
+
+/* Điều chỉnh độ rộng cho ô tìm kiếm giảng viên */
+#search-teacher {
+  width: 180px !important; /* Điều chỉnh số này để phù hợp với nhu cầu của bạn */
+}
+
+/* Đảm bảo các phần tử nằm trên cùng một hàng */
+.controls-container {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap; /* Cho phép các phần tử xuống dòng nếu không đủ không gian */
+}
+
+/* Thêm khoảng cách giữa các phần tử */
+.controls-container > * {
+  margin-right: 10px;
+  margin-bottom: 10px; /* Thêm khoảng cách dưới nếu các phần tử xuống dòng */
+}
