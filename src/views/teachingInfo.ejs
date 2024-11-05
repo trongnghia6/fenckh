@@ -786,7 +786,7 @@
 
         data.forEach((row) => {
           const tableRow = document.createElement('tr');
-          
+
 
           // Gán id vào thuộc tính data-id của hàng
           tableRow.setAttribute("data-id", row.ID);
@@ -905,14 +905,14 @@
 
           const ghiChuTd = document.createElement("td");
           const ghiChuValue = row.GhiChu && row.GhiChu.trim() !== "" ? row.GhiChu : false;
-          const deadlineValue = row.Deadline  || ""; // Lấy giá trị Deadline
+          const deadlineValue = row.Deadline || ""; // Lấy giá trị Deadline
           if (ghiChuValue) {
-              ghiChuTd.innerHTML = `📜 <span style="color: red;">•</span>`; // Hiển thị biểu tượng ghi chú và chấm đỏ
+            ghiChuTd.innerHTML = `📜 <span style="color: red;">•</span>`; // Hiển thị biểu tượng ghi chú và chấm đỏ
           } else {
-              ghiChuTd.innerHTML = "📜"; // Hiển thị biểu tượng ghi chú nếu không có ghi chú
+            ghiChuTd.innerHTML = "📜"; // Hiển thị biểu tượng ghi chú nếu không có ghi chú
           }
           ghiChuTd.style.cursor = "pointer"; // Thay đổi con trỏ chuột khi di chuột qua biểu tượng
-          ghiChuTd.onclick = () => openNoteForm(tableRow,ghiChuValue,deadlineValue); // Gọi hàm mở form khi nhấn vào biểu tượng
+          ghiChuTd.onclick = () => openNoteForm(tableRow, ghiChuValue, deadlineValue); // Gọi hàm mở form khi nhấn vào biểu tượng
           tableRow.appendChild(ghiChuTd); // Thêm ô ghi chú vào hàng
 
 
@@ -986,25 +986,25 @@
       function addDoubleClickEvents() {
         // get all date input fields
         let dateInputs = document.querySelectorAll('[type="date"]');
-    
+
         dateInputs.forEach(el => {
           // register double-click event to change date input to text input and select the value
           el.addEventListener('dblclick', () => {
             el.type = "text";
-    
+
             // After changing input type with JS, .select() needs a timeout to work
             setTimeout(() => {
               el.select();
             });
           });
-    
+
           // register the focusout event to reset the input back to a date input field
           el.addEventListener('focusout', () => {
             el.type = "date";
           });
         });
       }
-    
+
 
       function disableCheckAll(type) {
         const checkAllCheckbox = document.getElementById(`checkAll${type.charAt(0).toUpperCase() + type.slice(1)}`);
@@ -1527,15 +1527,15 @@
     let currentRow; // Biến toàn cục để lưu hàng hiện tại
 
     function openNoteForm(row, GhiChu, Deadline) {
-    currentRow = row; // Lưu hàng hiện tại
-    console.log(formatInputDate(Deadline));
-    document.getElementById("noteForm").style.display = "block"; // Hiển thị form
-    document.getElementById("modalBackdrop").style.display = "block"; // Hiển thị nền tối
+      currentRow = row; // Lưu hàng hiện tại
+      console.log(formatInputDate(Deadline));
+      document.getElementById("noteForm").style.display = "block"; // Hiển thị form
+      document.getElementById("modalBackdrop").style.display = "block"; // Hiển thị nền tối
 
-    // Hiển thị giá trị ghi chú và hạn
-    document.getElementById("noteInput").value = GhiChu || ""; // Hiển thị ghi chú
-    document.getElementById("deadlineInput").value = formatInputDate(Deadline)  || ""; // Hiển thị hạn
-}
+      // Hiển thị giá trị ghi chú và hạn
+      document.getElementById("noteInput").value = GhiChu || ""; // Hiển thị ghi chú
+      document.getElementById("deadlineInput").value = formatInputDate(Deadline) || ""; // Hiển thị hạn
+    }
 
 
     function closeNoteForm() {
@@ -1555,11 +1555,11 @@
 
       if (currentRow) {
         const id = currentRow.getAttribute("data-id"); // Lấy ID từ thuộc tính `data-id` của hàng
-        
+
         // Kiểm tra ID có tồn tại
         if (id) {
-          
-          
+
+
           // Gửi dữ liệu đến API để lưu vào CSDL
           try {
             const response = await fetch('/savenote', {
@@ -1594,11 +1594,11 @@
 
       if (currentRow) {
         const id = currentRow.getAttribute("data-id"); // Lấy ID từ thuộc tính `data-id` của hàng
-        
+
         // Kiểm tra ID có tồn tại
         if (id) {
-          
-          
+
+
           // Gửi dữ liệu đến API để lưu vào CSDL
           try {
             const response = await fetch('/donenote', {
@@ -1606,7 +1606,7 @@
               headers: {
                 'Content-Type': 'application/json',
               },
-              body: JSON.stringify({ id}),
+              body: JSON.stringify({ id }),
             });
             const result = await response.json();
             if (!result.success) {
