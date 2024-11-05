@@ -505,7 +505,7 @@
           .then((data) => {
             if (data.exists) {
               const modal = document.getElementById("action-modal");
-              message = `Đã tồn tại dữ liệu của Khoa : ${body.Khoa} Đợt : ${body.Dot} Kì : ${body.Ki} Năm : ${body.Nam}. Bạn muốn XÓA file cũ hay CHÈN file mới?`
+              message = `Đã tồn tại dữ liệu của Khoa ${body.Khoa}, Đợt ${body.Dot}, Kì ${body.Ki}, Năm ${body.Nam}. Bạn muốn XÓA file cũ hay CHÈN file mới?`
               document.getElementById("modal-message").innerText = message;
               modal.style.display = "block";
 
@@ -715,22 +715,22 @@
 
             response.NamHoc.forEach(function (item) {
               console.log(item.NamHoc);
-                $('#NamHoc').append(
-                  `<option value="${item.NamHoc}">${item.NamHoc}</option>`
-                );
+              $('#NamHoc').append(
+                `<option value="${item.NamHoc}">${item.NamHoc}</option>`
+              );
             });
 
             response.Ki.forEach(function (item) {
               console.log(item.Ki);
-                $('#combobox-ki').append(
-                  `<option value="${item.value}">${item.Ki}</option>`
-                );
+              $('#combobox-ki').append(
+                `<option value="${item.value}">${item.Ki}</option>`
+              );
             });
             response.Dot.forEach(function (item) {
               console.log(item.Dot);
-                $('#combobox-dot').append(
-                  `<option value="${item.value}">${item.Dot}</option>`
-                );
+              $('#combobox-dot').append(
+                `<option value="${item.value}">${item.Dot}</option>`
+              );
             });
           } else {
             console.error("Không lấy được dữ liệu năm học:", response.message);
