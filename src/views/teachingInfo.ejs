@@ -567,11 +567,11 @@
 
           // Lấy id của hàng từ thuộc tính data-id
           const rowId = row.getAttribute('data-id');
-          console.log(rowId);
+          // console.log('id trong bảng đang hiển thị : ', rowId);
 
           // Tìm đối tượng trong localStorage có id trùng với hàng hiện tại
           let item = data.find(d => parseInt(d.id) === parseInt(rowId));
-          console.log(item);
+          // console.log('id trong bảng dữ liệu chính : ', item.id);
 
           // Nếu tìm thấy đối tượng và KhoaDuyet == 0
           if (item && item.KhoaDuyet == 0) {
