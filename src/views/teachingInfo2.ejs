@@ -477,8 +477,9 @@ document.getElementById("filterBoMon").addEventListener("input", filterClasses);
     <input type="date" id="deadlineInput"
       style="width: 100%; padding: 5px; border: 1px solid #ccc; border-radius: 4px;" />
     <br />
-    <div style="text-align: right;">
+    <div class="d-flex text-nowrap" style="text-align: right;">
       <button onclick="saveNote()">Lưu</button>
+      <button onclick="doneNote()">Hoàn Thành</button>
       <button class="cancel" onclick="closeNoteForm()">Đóng</button>
     </div>
   </div>
@@ -1220,43 +1221,81 @@ function checkAll(type) {
       }
     }
     async function saveNote() {
-  const note = document.getElementById("noteInput").value;
-  const deadline = document.getElementById("deadlineInput").value;
+      const note = document.getElementById("noteInput").value;
+      const deadline = document.getElementById("deadlineInput").value;
 
-  if (currentRow) {
-    const id = currentRow.getAttribute("data-id"); // Lấy ID từ thuộc tính `data-id` của hàng
-    
-    // Kiểm tra ID có tồn tại
-    if (id) {
-      alert("ID của hàng hiện tại: " + id);
-      
-      // Gửi dữ liệu đến API để lưu vào CSDL
-      try {
-        const response = await fetch('/savenote', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ id, ghiChu: note, deadline }),
-        });
-        const result = await response.json();
-        if (!result.success) {
-          alert("Lỗi khi lưu ghi chú vào CSDL: " + result.message);
+      if (currentRow) {
+        const id = currentRow.getAttribute("data-id"); // Lấy ID từ thuộc tính `data-id` của hàng
+        
+        // Kiểm tra ID có tồn tại
+        if (id) {
+          alert("ID của hàng hiện tại: " + id);
+          
+          // Gửi dữ liệu đến API để lưu vào CSDL
+          try {
+            const response = await fetch('/savenote', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({ id, ghiChu: note, deadline }),
+            });
+            const result = await response.json();
+            if (!result.success) {
+              alert("Lỗi khi lưu ghi chú vào CSDL: " + result.message);
+            } else {
+              alert("Cập nhật thành công");
+            }
+          } catch (error) {
+            alert("Lỗi khi gửi yêu cầu đến server: " + error);
+          }
         } else {
-          alert("Cập nhật thành công");
+          alert("ID của hàng hiện tại không tồn tại.");
         }
-      } catch (error) {
-        alert("Lỗi khi gửi yêu cầu đến server: " + error);
+      } else {
+        alert("currentRow không được xác định.");
+      }
+
+      closeNoteForm();
+    }
+  async function doneNote() {
+    const note = document.getElementById("noteInput").value;
+    const deadline = document.getElementById("deadlineInput").value;
+
+    if (currentRow) {
+      const id = currentRow.getAttribute("data-id"); // Lấy ID từ thuộc tính `data-id` của hàng
+      
+      // Kiểm tra ID có tồn tại
+      if (id) {
+        alert("ID của hàng hiện tại: " + id);
+        
+        // Gửi dữ liệu đến API để lưu vào CSDL
+        try {
+          const response = await fetch('/donenote', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ id}),
+          });
+          const result = await response.json();
+          if (!result.success) {
+            alert("Lỗi khi lưu ghi chú vào CSDL: " + result.message);
+          } else {
+            alert("Cập nhật thành công");
+          }
+        } catch (error) {
+          alert("Lỗi khi gửi yêu cầu đến server: " + error);
+        }
+      } else {
+        alert("ID của hàng hiện tại không tồn tại.");
       }
     } else {
-      alert("ID của hàng hiện tại không tồn tại.");
+      alert("currentRow không được xác định.");
     }
-  } else {
-    alert("currentRow không được xác định.");
-  }
 
-  closeNoteForm();
-}
+    closeNoteForm();
+  }
 
 
     // Hàm để chuyển đổi định dạng ngày
