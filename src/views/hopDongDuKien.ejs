@@ -290,6 +290,7 @@
               const namHoc = document.getElementById('NamHoc').value;
               const dot = document.getElementById('combobox-dot').value;
               const ki = document.getElementById('combobox-ki').value;
+              //const khoa = document.getElementById('filterByDepartment').value;
 
               const response = await fetch(`/hop-dong-du-kien?namHoc=${namHoc}&dot=${dot}&ki=${ki}`);
               if (!response.ok) {

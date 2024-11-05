@@ -59,7 +59,7 @@ app.use(
     resave: false,
     saveUninitialized: true,
     // Đặt true nếu bạn sử dụng HTTPS
-    cookie: { maxAge: 6000000 }, // Session sẽ hết hạn sau 100 phút không hoạt động
+    cookie: { maxAge: 86400000 }, // Session sẽ hết hạn sau 1 ngày không hoạt động
 
     // cookie: { secure: true, maxAge: 6000000 }, // Session sẽ hết hạn sau 100 phút không hoạt động
   })
