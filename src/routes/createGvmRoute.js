@@ -66,6 +66,6 @@ router.post(
   ]),
   handleUploadFile
 );
-router.get('/getMaBoMon/:maPhongBan', getBoMonList);
+router.get('/getMaBoMon/:maPhongBan/:isKhoa', getBoMonList);
 
 module.exports = router;

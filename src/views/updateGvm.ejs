@@ -290,6 +290,7 @@
       <select class="form-control" type="text" name="monGiangDayChinh" id="monGiangDayChinh">
       </select>
     </div>
+    <input type="text" id="boMon" value="<%= value.MonGiangDayChinh %>" hidden>
    <div class="col-md-4 d-flex justify-content-between">
       <button class="btn" id="submit">Cập nhật</button>
       <button class="btn" id="return" type="button" onclick="window.location.href='/gvmList'">Quay lại</button>
@@ -305,7 +306,6 @@
     $(document).ready(function() {
 const isKhoa = localStorage.getItem("isKhoa");
 console.log('Giá trị isKhoa từ localStorage: ', isKhoa);
-localStorage.setItem("monGiangDayChinh", "<%= value.MonGiangDayChinh %>");
 hideButton();
 });
 
@@ -339,34 +339,54 @@ hideButton();
 <script>
   document.addEventListener("DOMContentLoaded", function () {
     const maPhongBan = localStorage.getItem("MaPhongBan");
-    const monGiangDayChinh = localStorage.getItem("monGiangDayChinh"); // Lấy giá trị MonGiangDayChinh từ localStorage    
-    fetch(`/getMaBoMon/${maPhongBan}`)
+    const isKhoa = localStorage.getItem("isKhoa");
+    const monGiangDayChinh = document.getElementById("boMon").value; // Lấy giá trị MonGiangDayChinh từ localStorage    
+    
+    fetch(`/getMaBoMon/${maPhongBan}/${isKhoa}`)
       .then(response => response.json())
       .then(data => {
         console.log(data); // In ra phản hồi để kiểm tra
         const maBoMonSelect = document.getElementById('monGiangDayChinh');
+        
+        if (!maBoMonSelect) {
+          console.error("Không tìm thấy phần tử với ID 'monGiangDayChinh'");
+          return;
+        }
+        
         maBoMonSelect.innerHTML = ''; // Xóa các option cũ
+        let foundMatch = false;
 
         // Kiểm tra success và dữ liệu maBoMon
         if (data.success && data.maBoMon) {
-          // Vòng lặp qua từng mục trong maBoMon và tạo thẻ option
           data.maBoMon.forEach(item => {
             const option = document.createElement('option');
             option.value = item.MaBoMon; // Giả sử MaBoMon là thuộc tính cần làm value
             option.textContent = item.TenBoMon; // Giả sử TenBoMon là tên bộ môn cần hiển thị
+            
             // Kiểm tra nếu giá trị trùng với monGiangDayChinh
             if (item.MaBoMon === monGiangDayChinh) {
               option.selected = true; // Đặt option thành selected nếu trùng
+              foundMatch = true; // Đánh dấu là đã tìm thấy giá trị trùng
             }
+            
             maBoMonSelect.appendChild(option); // Thêm option vào select
+
+            
           });
         } else {
           console.error("Dữ liệu maBoMon không tồn tại hoặc không thành công");
         }
+
+        // Nếu không tìm thấy giá trị nào trùng, hiển thị cảnh báo
+        if (!foundMatch) {
+              alert("Không tồn tại mã bộ môn vui lòng sửa lại");
+            }
+
       })
       .catch(error => console.error('Error:', error));
   });
 </script>
+
 
 
   <script>
