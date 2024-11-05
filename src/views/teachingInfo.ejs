@@ -368,41 +368,41 @@
         </script>
         <script>
           // Hàm kiểm tra và lọc hàng trong bảng
-function filterTable() {
-    const nameFilter = document.getElementById('filterName').value.toLowerCase();
-    const classFilter = document.getElementById('filterClass').value.toLowerCase();
-    const boMonFilter = document.getElementById('filterBoMon').value.toLowerCase();
-    const tableRows = document.querySelectorAll('#tableBody tr');
+          function filterTable() {
+              const nameFilter = document.getElementById('filterName').value.toLowerCase();
+              const classFilter = document.getElementById('filterClass').value.toLowerCase();
+              const boMonFilter = document.getElementById('filterBoMon').value.toLowerCase();
+              const tableRows = document.querySelectorAll('#tableBody tr');
 
-    tableRows.forEach(row => {
-        const nameCell = row.querySelector('td:nth-child(3)'); // Cột tên giảng viên
-        const classCell = row.querySelector('td:nth-child(1)'); // Cột học phần
-        const boMonInput = row.querySelector('td:nth-child(7) input[name="bomon"]'); // Cột bộ môn
+              tableRows.forEach(row => {
+                  const nameCell = row.querySelector('td:nth-child(3)'); // Cột tên giảng viên
+                  const classCell = row.querySelector('td:nth-child(1)'); // Cột học phần
+                  const boMonInput = row.querySelector('td:nth-child(7) input[name="bomon"]'); // Cột bộ môn
 
-        const name = nameCell ? nameCell.textContent.toLowerCase() : '';
-        const className = classCell ? classCell.textContent.toLowerCase() : '';
-        const boMon = boMonInput ? boMonInput.value.toLowerCase() : '';
+                  const name = nameCell ? nameCell.textContent.toLowerCase() : '';
+                  const className = classCell ? classCell.textContent.toLowerCase() : '';
+                  const boMon = boMonInput ? boMonInput.value.toLowerCase() : '';
 
-        // Kiểm tra điều kiện lọc
-        const matchesName = name.includes(nameFilter);
-        const matchesClass = className.includes(classFilter);
-        const matchesBoMon = boMon.includes(boMonFilter);
+                  // Kiểm tra điều kiện lọc
+                  const matchesName = name.includes(nameFilter);
+                  const matchesClass = className.includes(classFilter);
+                  const matchesBoMon = boMon.includes(boMonFilter);
 
-        // Hiện hoặc ẩn hàng dựa trên điều kiện lọc
-        if (matchesName && matchesClass && matchesBoMon) {
-            row.style.display = ''; // Hiện hàng nếu tất cả các điều kiện đều khớp
-        } else {
-            row.style.display = 'none'; // Ẩn hàng nếu không khớp
-        }
-    });
+                  // Hiện hoặc ẩn hàng dựa trên điều kiện lọc
+                  if (matchesName && matchesClass && matchesBoMon) {
+                      row.style.display = ''; // Hiện hàng nếu tất cả các điều kiện đều khớp
+                  } else {
+                      row.style.display = 'none'; // Ẩn hàng nếu không khớp
+                  }
+              });
 
-    calculateTotals(); // Cập nhật tổng số tiết sau khi lọc
-}
+              calculateTotals(); // Cập nhật tổng số tiết sau khi lọc
+          }
 
-// Gán sự kiện cho các input filter
-document.getElementById('filterName').addEventListener('input', filterTable);
-document.getElementById('filterClass').addEventListener('input', filterTable);
-document.getElementById('filterBoMon').addEventListener('input', filterTable);
+          // Gán sự kiện cho các input filter
+          document.getElementById('filterName').addEventListener('input', filterTable);
+          document.getElementById('filterClass').addEventListener('input', filterTable);
+          document.getElementById('filterBoMon').addEventListener('input', filterTable);
         </script>
         <script>
           function sortTableByColumn(columnIndex, direction) {
