@@ -333,6 +333,11 @@ const renderInfo = async (req, res) => {
   const MaPhongBan = req.session.MaPhongBan;
   console.log("Mã phòng ban = ", MaPhongBan);
 
+  if (typeof MaPhongBan === 'undefined') {
+    console.log("ok");
+    return res.status(500).json({ error: "Vui lòng đăng nhập lại!" });
+  }
+
   const { Dot, Ki, Nam } = req.body; // Lấy giá trị Dot, Ki, Nam từ body của yêu cầu
   const tableName = process.env.DB_TABLE_QC;
   let query = "";

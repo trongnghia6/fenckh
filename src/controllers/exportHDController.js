@@ -112,8 +112,9 @@ const numberToWords = (num) => {
   }
 
   // Chuyển chữ cái đầu tiên thành chữ hoa
-  const capitalizeFirstLetter = (str) => str.charAt(0).toUpperCase() + str.slice(1);
-  
+  const capitalizeFirstLetter = (str) =>
+    str.charAt(0).toUpperCase() + str.slice(1);
+
   return capitalizeFirstLetter(words.trim() + " đồng");
 };
 // Hàm chuyển đổi số thập phân thành chữ
@@ -140,11 +141,11 @@ const formatDate = (date) => {
     if (!date) return "";
     const d = new Date(date);
     if (isNaN(d.getTime())) return "";
-    
+
     const day = d.getDate().toString().padStart(2, "0");
     const month = (d.getMonth() + 1).toString().padStart(2, "0");
     const year = d.getFullYear();
-    
+
     return `ngày ${day} tháng ${month} năm ${year}`;
   } catch (error) {
     console.error("Error formatting date:", error);
@@ -634,7 +635,8 @@ const exportMultipleContracts = async (req, res) => {
                 HoTen`;
       //query += " AND MaPhongBan = ?";
       //params.push(khoa);
-      params.push(`%${khoa}%`);
+      params = [dot, ki, namHoc, `%${khoa}%`];
+      //params.push(`%${khoa}%`);
     }
 
     if (teacherName) {
@@ -675,7 +677,8 @@ const exportMultipleContracts = async (req, res) => {
             GROUP BY
                 HoTen`;
       //query += " AND HoTen LIKE ?";
-      params.push(`%${teacherName}%`);
+      params = [dot, ki, namHoc, `%${teacherName}%`];
+      //params.push(`%${teacherName}%`);
     }
 
     const [teachers] = await connection.execute(query, params);
