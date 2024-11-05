@@ -84,18 +84,18 @@
       const MaPhongBan = localStorage.getItem("MaPhongBan");
       const role = localStorage.getItem("userRole");
 
-      if (role == "Duyệt"){
+      if (role == "Duyệt") {
         document.getElementById("ban-hanh").style.visibility = "visible";
         document.getElementById("quychuandukien").style.visibility = "visible";
         document.getElementById("xoa-qc-du-kien").style.visibility = "visible";
       }
-/*
-      if (MaPhongBan != "DAOTAO" || role == "Thường") {
-        document.getElementById("ban-hanh").style.visibility = "hidden";
-        document.getElementById("quychuandukien").style.visibility = "hidden";
-        document.getElementById("xoa-qc-du-kien").style.visibility = "hidden";
-      }
-        */
+      /*
+            if (MaPhongBan != "DAOTAO" || role == "Thường") {
+              document.getElementById("ban-hanh").style.visibility = "hidden";
+              document.getElementById("quychuandukien").style.visibility = "hidden";
+              document.getElementById("xoa-qc-du-kien").style.visibility = "hidden";
+            }
+              */
     });
   </script>
 
@@ -254,7 +254,8 @@
           <button class="btn" id="ban-hanh" style="margin-bottom: 0px; visibility: hidden;">
             Ban Hành
           </button>
-          <button class="btn text-nowrap" id="quychuandukien" style="width: max-content; margin-bottom: 0px; visibility: hidden;">
+          <button class="btn text-nowrap" id="quychuandukien"
+            style="width: max-content; margin-bottom: 0px; visibility: hidden;">
             Thêm bảng quy chuẩn
           </button>
         </div>
@@ -562,9 +563,9 @@
           const result = await response.json();
 
           if (result.success) {
-            // alert(result.message || "Ban hành thành công!");
+            alert(result.message || "Ban hành thành công!");
           } else {
-            // alert(result.message || "Ban hành thất bại!");
+            alert(result.message || "Ban hành thất bại!");
           }
         } catch (error) {
           console.error("Error:", error);

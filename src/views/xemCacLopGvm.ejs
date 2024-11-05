@@ -617,18 +617,21 @@
   function formatDateToInput(dateString) {
     if (!dateString) return ''; // Kiểm tra nếu không có giá trị
 
-    const date = new Date(dateString); // Tạo đối tượng Date từ chuỗi ngày
-    if (isNaN(date.getTime())) {
-      return ''; // Trả về rỗng nếu không thể chuyển đổi thành Date
-    }
+    const utcBatDau = new Date(dateString);
+    dateString = utcBatDau.toLocaleDateString("vi-VN"); // Chỉ lấy phần ngày
 
-    // Format thành chuỗi 'YYYY-MM-DD'
-    const year = date.getFullYear();
-    const month = ('0' + (date.getMonth() + 1)).slice(-2); // Đảm bảo luôn có 2 chữ số
-    const day = ('0' + date.getDate()).slice(-2); // Đảm bảo luôn có 2 chữ số
+    // Chia tách chuỗi ngày thành các phần: năm, tháng, ngày
+    const parts = dateString.split('/'); // Tách theo dấu '-'
+    if (parts.length != 3) return ''; // Đảm bảo định dạng đúng
 
+    const year = parts[2];
+    const month = ('0' + parts[1]).slice(-2); // Đảm bảo tháng có 2 chữ số
+    const day = ('0' + parts[0]).slice(-2); // Đảm bảo ngày có 2 chữ số
+
+    // Trả về chuỗi ngày theo định dạng "YYYY-MM-DD"
     return `${year}-${month}-${day}`;
-  }
+}
+
 
   // Fill all startDate and endDate
   document.getElementById('fillDay').addEventListener('click', function () {
@@ -762,11 +765,19 @@
       boMonTd.appendChild(boMonInput);
       tableRow.appendChild(boMonTd);
 
+      // Kiểm tra ngày bắt đầu 
+      console.log(row.NgayBatDau)
+
+      const utcBatDau = new Date(row.NgayBatDau);
+      const tet = utcBatDau.toLocaleDateString("vi-VN"); // Chỉ lấy phần ngày
+      console.log(tet)
+
       // Ngày Bắt Đầu
       const NgayBatDauTd = document.createElement('td');
       const NgayBatDauInput = document.createElement('input');
       NgayBatDauInput.type = 'date';
       NgayBatDauInput.id = `NgayBatDau_${index}`; // Thêm id
+      console.log("format = " + formatDateToInput(row.NgayBatDau))
       NgayBatDauInput.value = formatDateToInput(row.NgayBatDau);
       NgayBatDauTd.appendChild(NgayBatDauInput);
       tableRow.appendChild(NgayBatDauTd);
@@ -1134,9 +1145,9 @@
 
     rows.forEach((row, index) => {
       // Bỏ qua các hàng đang bị ẩn
-      if (row.style.display === 'none') {
-        return;
-      }
+      //if (row.style.display === 'none') {
+      //  return;
+      //}
 
       // Lấy giá trị nhập vào
       //const giaoVienGiangDayInput = row.querySelector('input[type="text"][placeholder="Nhập tên giảng viên"]');
