@@ -209,7 +209,7 @@
               <% }); %>
           </select>
 
-            <button id="viewDataBtn" class="btn view">Xem dữ liệu</button>
+            <button id="viewDataBtn" onclick="filterByDepartment()" class="btn view">Xem dữ liệu</button>
           </div>
 
           <div id="tableContainer" style="display: none;">
@@ -338,7 +338,7 @@
       <script src="/bootstrap/dist/js/jquery-3.7.1.min.js"></script>
       <script src="/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 
-      <script>
+      <!-- <script>
         // Tìm kiếm giảng viên mời theo tên
         function searchClass() {
           let input = document.getElementById("searchInput").value.toLowerCase();
@@ -372,7 +372,7 @@
           }
         };
 
-      </script>
+      </script> -->
 
       <script>
         // Lấy query string từ URL
@@ -513,7 +513,7 @@
       </script>
 
             <!-- Lọc theo khoa -->
-      <script>
+      <!-- <script>
         function filterByDepartment() {
           // Lấy giá trị của bộ lọc phòng ban
           const departmentFilter = document.getElementById("filterByDepartment").value.trim();
@@ -521,8 +521,6 @@
           // Lấy bảng và các hàng
           const table = document.getElementById("classTable");
           const rows = table.getElementsByTagName("tr");
-
-          alert("gà")
         
           for (let i = 1; i < rows.length; i++) { // Bỏ qua hàng tiêu đề
             // Lấy ô phòng ban từ hàng (cột 14)
@@ -543,9 +541,9 @@
           }
         }
         
-    </script>
+    </script> -->
       <!-- Lọc theo khoa -->
-      <script>
+      <!-- <script>
         function filterByDepartment() {
           console.log("filterByDepartment đã được gọi");
       
@@ -579,7 +577,43 @@
           }
       }
       
+    </script> -->
+
+    <script>
+      function filterByDepartment() {
+        console.log("filterByDepartment đã được gọi");
+    
+        const departmentFilter = document.getElementById("filterByDepartment").value.trim();
+        const table = document.getElementById("dataTable");
+    
+        // Kiểm tra bảng có tồn tại không
+        if (!table) {
+            console.error("Không tìm thấy bảng với ID 'dataTable'");
+            return; // Dừng hàm nếu không tìm thấy bảng
+        }
+        
+        const rows = table.querySelectorAll("tbody tr"); // Lấy tất cả các hàng trong tbody
+    
+        for (let i = 0; i < rows.length; i++) { // Bỏ qua hàng tiêu đề
+            const departmentCell = rows[i].getElementsByTagName("td")[14]; // Chỉ số cột phòng ban (cột thứ 3)
+    
+            // Kiểm tra nếu departmentCell không null
+            if (departmentCell) {
+                const departmentValue = departmentCell.textContent.trim();
+                const departmentMatch = (departmentFilter === "all" || departmentValue === departmentFilter);
+    
+                if (departmentMatch) {
+                    rows[i].style.display = ""; // Hiện hàng nếu điều kiện khớp
+                } else {
+                    rows[i].style.display = "none"; // Ẩn hàng nếu không khớp
+                }
+            } else {
+                console.error("Không tìm thấy ô phòng ban ở hàng:", i);
+            }
+        }
+      }
     </script>
+  
 </body>
 
 </html>
