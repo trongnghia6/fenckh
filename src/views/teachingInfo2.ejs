@@ -500,6 +500,8 @@
       const isKhoa = localStorage.getItem("isKhoa");
       console.log('Giá trị isKhoa từ localStorage: ', isKhoa);
       hideButton();
+      const role = localStorage.getItem("userRole");
+      console.log('Giá trị QUyền từ localStorage: ', role);
     });
 
     function hideButton() {
@@ -710,13 +712,20 @@
         const ghiChuTd = document.createElement("td");
         const ghiChuValue = row.GhiChu && row.GhiChu.trim() !== "" ? row.GhiChu : false;
         const deadlineValue = row.Deadline || ""; // Lấy giá trị Deadline
-        if (ghiChuValue) {
-          ghiChuTd.innerHTML = `📜 <span style="color: red;">•</span>`; // Hiển thị biểu tượng ghi chú và chấm đỏ
-        } else {
-          ghiChuTd.innerHTML = "📜"; // Hiển thị biểu tượng ghi chú nếu không có ghi chú
-        }
-        ghiChuTd.style.cursor = "pointer"; // Thay đổi con trỏ chuột khi di chuột qua biểu tượng
-        ghiChuTd.onclick = () => openNoteForm(tableRow, ghiChuValue, deadlineValue); // Gọi hàm mở form khi nhấn vào biểu tượng
+        if (role === 'GV' || role === 'Thường') {
+            ghiChuTd.innerHTML = "📜"; // Hiển thị biểu tượng ghi chú nếu role là GV hoặc Thường
+            ghiChuTd.style.cursor = "not-allowed"; // Thay đổi con trỏ chuột thành 'not-allowed' để báo hiệu không thể tương tác
+            ghiChuTd.title = "Bạn không có quyền truy cập"; // Thêm tooltip để giải thích lý do không thể nhấn
+          } else {
+
+            if (ghiChuValue) {
+              ghiChuTd.innerHTML = `📜 <span style="color: red;">•</span>`; // Hiển thị biểu tượng ghi chú và chấm đỏ
+            } else {
+              ghiChuTd.innerHTML = "📜"; // Hiển thị biểu tượng ghi chú nếu không có ghi chú
+            }
+            ghiChuTd.style.cursor = "pointer"; // Thay đổi con trỏ chuột khi di chuột qua biểu tượng
+            ghiChuTd.onclick = () => openNoteForm(tableRow, ghiChuValue, deadlineValue); // Gọi hàm mở form khi nhấn vào biểu tượng
+          }
         tableRow.appendChild(ghiChuTd); // Thêm ô ghi chú vào hàng
 
 
