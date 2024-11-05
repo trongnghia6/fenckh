@@ -200,7 +200,7 @@
               <option value="">Năm học</option>
             </select>
 
-            <select id="filterByDepartment" class="filter" onchange="filterByDepartment()">
+            <select id="filterByDepartment" class="filter selectop">
               <option value="all">Tất cả</option>
               <% phongBanList.forEach(function(phongBan) { %>
                   <option value="<%= phongBan.MaPhongBan %>">
@@ -209,7 +209,7 @@
               <% }); %>
           </select>
 
-            <button id="viewDataBtn" onclick="filterByDepartment()" class="btn view">Xem dữ liệu</button>
+            <button id="viewDataBtn" onclick="viewData()" class="btn view">Xem dữ liệu</button>
           </div>
 
           <div id="tableContainer" style="display: none;">
@@ -280,28 +280,18 @@
       </script>
       <!-- phần dữ liệu để hiển thị trên bảng -->
       <script>
-        document.addEventListener('DOMContentLoaded', function () {
-          const viewDataBtn = document.getElementById('viewDataBtn');
-          const tableContainer = document.getElementById('tableContainer');
-          const dataTable = document.getElementById('dataTable');
-
-          viewDataBtn.addEventListener('click', async function () {
-            try {
-              const namHoc = document.getElementById('NamHoc').value;
-              const dot = document.getElementById('combobox-dot').value;
-              const ki = document.getElementById('combobox-ki').value;
-              //const khoa = document.getElementById('filterByDepartment').value;
-
-              const response = await fetch(`/hop-dong-du-kien?namHoc=${namHoc}&dot=${dot}&ki=${ki}`);
-              if (!response.ok) {
-                throw new Error('Network response was not ok');
-              }
-              const data = await response.json();
-
+        function viewData() {
+          const namHoc = document.getElementById('NamHoc').value;
+          const dot = document.getElementById('combobox-dot').value;
+          const ki = document.getElementById('combobox-ki').value;
+      
+          fetch(`/hop-dong-du-kien?namHoc=${namHoc}&dot=${dot}&ki=${ki}`)
+            .then(response => response.json())
+            .then(data => {
               // Xóa dữ liệu cũ trong bảng
               const tbody = dataTable.querySelector('tbody');
               tbody.innerHTML = '';
-
+      
               // Thêm dữ liệu mới vào bảng
               data.forEach(item => {
                 const row = tbody.insertRow();
@@ -322,17 +312,50 @@
                 const cell = row.insertCell(14); // Chỉ gọi insertCell một lần
                 cell.textContent = item.MaPhongBan;
                 cell.style.display = 'none';
-
               });
-
+      
               // Hiển thị bảng
               tableContainer.style.display = 'block';
-            } catch (error) {
+      
+              // Gọi hàm lọc sau khi dữ liệu đã được tải vào bảng
+              filterByDepartment();
+            })
+            .catch(error => {
               console.error('Error:', error);
               alert('Đã xảy ra lỗi khi tải dữ liệu');
+            });
+        }
+      
+        function filterByDepartment() {
+          const departmentFilter = document.getElementById("filterByDepartment").value.trim();
+          const table = document.getElementById("dataTable");
+          
+          // Kiểm tra bảng có tồn tại không
+          if (!table) {
+            console.error("Không tìm thấy bảng với ID 'dataTable'");
+            return; // Dừng hàm nếu không tìm thấy bảng
+          }
+          
+          const rows = table.querySelectorAll("tbody tr"); // Lấy tất cả các hàng trong tbody
+      
+          for (let i = 0; i < rows.length; i++) { // Bỏ qua hàng tiêu đề
+            const departmentCell = rows[i].getElementsByTagName("td")[14]; // Chỉ số cột phòng ban (cột thứ 14)
+      
+            // Kiểm tra nếu departmentCell không null
+            if (departmentCell) {
+              const departmentValue = departmentCell.textContent.trim();
+              const departmentMatch = (departmentFilter === "all" || departmentValue === departmentFilter);
+      
+              if (departmentMatch) {
+                rows[i].style.display = ""; // Hiện hàng nếu điều kiện khớp
+              } else {
+                rows[i].style.display = "none"; // Ẩn hàng nếu không khớp
+              }
+            } else {
+              console.error("Không tìm thấy ô phòng ban ở hàng:", i);
             }
-          });
-        });
+          }
+        }
       </script>
 
 
