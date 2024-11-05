@@ -431,7 +431,7 @@
                   <th>Ngày kết thúc</th>
                   <th>Số tiết</th>
                   <th>Tổng số tiết</th>
-                  <th>Mã học phần</th>
+                  <th>Khoa</th>
                   <!-- Cột Khoa -->
                   <th>Chi tiết giảng viên mời</th>
                 </tr>
@@ -966,7 +966,7 @@
         let rowNam = row.getAttribute("data-nam");
 
         // Filtering logic
-        let matchesDepartment = department === "ALL" || department === "" || rowDepartment === department; // Kiểm tra nếu chọn "ALL"
+        let matchesDepartment = department === "ALL" || department === "" || rowDepartment.includes(department); // Kiểm tra nếu chọn "ALL"
         let matchesDot = dot === "" || rowDot === dot;
         let matchesKi = ki === "" || rowKi === ki;
         let matchesNam = nam === "" || rowNam === nam;

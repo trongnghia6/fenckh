@@ -566,7 +566,8 @@
           }
 
           // Lấy id của hàng từ thuộc tính data-id
-          const rowId = row.getAttribute('data-id');
+          let rowId = parseInt(row.getAttribute('data-id'), 10); // Chuyển đổi rowId thành số nguyên
+          rowId -= 1;
           // console.log('id trong bảng đang hiển thị : ', rowId);
 
           // Tìm đối tượng trong localStorage có id trùng với hàng hiện tại
@@ -792,7 +793,7 @@
 
 
           // Gán id vào thuộc tính data-id của hàng
-          tableRow.setAttribute("data-id", id);
+          tableRow.setAttribute("data-id", row.ID);
 
           const lopHocPhanTd = document.createElement('td');
           lopHocPhanTd.textContent = `${row.LopHocPhan} (${row.TenLop})` || '';
@@ -1731,9 +1732,12 @@
 
       //document.querySelector('.role').innerText = `${Role}`;
       if (Role == 'GV') {
-        document.querySelector('.luuTamThoi').style.display = 'none';
-        document.querySelector('.luu').style.display = 'none';
-
+        //document.querySelector('.luuTamThoi').style.display = 'none';
+        //document.querySelector('.luu').style.display = 'none';
+        document.getElementById('update-qc').style.display = 'none';
+        document.getElementById('fillDay').style.display = 'none';
+        document.getElementById('batdau').style.display = 'none';
+        document.getElementById('ketthuc').style.display = 'none';
       }
     };
   </script>

@@ -544,14 +544,21 @@ let handleUploadFile = async (req, res) => {
     res.status(500).send("Lỗi khi xử lý tải lên");
   }
 };
-const getBoMonList = async (req, res) =>{
+const getBoMonList = async (req, res) => {
   let maPhongBan = req.params.maPhongBan;
-  console.log(maPhongBan);
+  let isKhoa = req.params.isKhoa === "true"; // Chuyển đổi isKhoa thành boolean
+
   let connection = await createPoolConnection();
   try {
+    let results;
+    if (isKhoa) {
+      const query = `SELECT * FROM bomon WHERE MaPhongBan = ?`;
+      [results] = await connection.query(query, [maPhongBan]);
+    } else {
+      const query = `SELECT * FROM bomon`;
+      [results] = await connection.query(query);
+    }
     
-    const query = `SELECT * FROM bomon WHERE MaPhongBan = ?`;
-    const [results] = await connection.query(query,[maPhongBan]);
     res.json({
       success: true,
       maBoMon: results,
@@ -559,12 +566,11 @@ const getBoMonList = async (req, res) =>{
   } catch (error) {
     console.error("Lỗi: ", error);
     res.status(500).send("Đã có lỗi xảy ra");
-  } finally{
+  } finally {
     if (connection) connection.release(); // Đảm bảo giải phóng kết nối
-
   }
-
 };
+
 
 // Xuất các hàm để sử dụng trong router
 module.exports = {
