@@ -7,7 +7,22 @@ const createPoolConnection = require("../config/databasePool");
 const router = express.Router();
 
 const getClassInfoGvm = async (req, res) => {
-  res.render("xemCacLopGvm.ejs");
+  let connection;
+  try {
+    connection = await createPoolConnection();
+    // Lấy danh sách phòng ban để lọc
+    const qrPhongBan = `select MaPhongBan from phongban where isKhoa = 1`;
+    const [phongBanList] = await connection.query(qrPhongBan);
+
+    res.render("xemCacLopGvm.ejs", {
+      phongBanList: phongBanList,
+    });
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    res.status(500).send("Internal Server Error");
+  } finally {
+    if (connection) connection.release(); // Đảm bảo giải phóng kết nối
+  }
 };
 
 // Hàm tách chuỗi - giữ nguyên
