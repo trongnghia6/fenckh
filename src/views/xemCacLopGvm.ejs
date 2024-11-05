@@ -410,8 +410,9 @@
     <input type="date" id="deadlineInput"
       style="width: 100%; padding: 5px; border: 1px solid #ccc; border-radius: 4px;" />
     <br />
-    <div style="text-align: right;">
+    <div class="d-flex text-nowrap" style="text-align: right;">
       <button onclick="saveNote()">Lưu</button>
+      <button onclick="doneNote()">Hoàn Thành</button>
       <button class="cancel" onclick="closeNoteForm()">Đóng</button>
     </div>
   </div>
@@ -621,7 +622,8 @@
       if (row.MoiGiang == 0) {
         tableRow.style.display = 'none'; // Ẩn hàng
       }
-
+      tableRow.setAttribute("data-id", row.ID);
+      
       // Lớp học phần
       const lopHocPhanTd = document.createElement('td');
       lopHocPhanTd.textContent = `${row.LopHocPhan} (${row.TenLop})` || '';
@@ -743,18 +745,20 @@
       }
 
      // Ghi chú
-     const ghiChuTd = document.createElement("td");
-     if (row.ghiChu) {
-       ghiChuTd.innerHTML = `📜 <span style="color: red;">•</span>`; // Hiển thị biểu tượng ghi chú và chấm đỏ
-     } else {
-       ghiChuTd.innerHTML = "📜"; // Hiển thị biểu tượng ghi chú nếu không có ghi chú
-     }
-     ghiChuTd.style.cursor = "pointer"; // Thay đổi con trỏ chuột khi di chuột qua biểu tượng
+      const ghiChuTd = document.createElement("td");
+      const ghiChuValue = row.GhiChu && row.GhiChu.trim() !== "" ? row.GhiChu : false;
+      const deadlineValue = row.Deadline  || ""; // Lấy giá trị Deadline
+      if (ghiChuValue) {
+          ghiChuTd.innerHTML = `📜 <span style="color: red;">•</span>`; // Hiển thị biểu tượng ghi chú và chấm đỏ
+      } else {
+          ghiChuTd.innerHTML = "📜"; // Hiển thị biểu tượng ghi chú nếu không có ghi chú
+      }
+      ghiChuTd.style.cursor = "pointer"; // Thay đổi con trỏ chuột khi di chuột qua biểu tượng
      
      
-     ghiChuTd.onclick = () => openNoteForm(tableRow); // Gọi hàm mở form khi nhấn vào biểu tượng
-     tableRow.appendChild(ghiChuTd); // Thêm ô ghi chú vào hàng
-     tableBody.appendChild(tableRow);
+      ghiChuTd.onclick = () => openNoteForm(tableRow, ghiChuValue, deadlineValue); // Gọi hàm mở form khi nhấn vào biểu tượng
+      tableRow.appendChild(ghiChuTd); // Thêm ô ghi chú vào hàng
+      tableBody.appendChild(tableRow);
 
       let khoaCheckboxTd, khoaCheckbox;
       // Checkbox cho Khoa
@@ -1808,25 +1812,18 @@ function checkAll(type) {
 <script>
   let currentRow; // Biến toàn cục để lưu hàng hiện tại
 
-  function openNoteForm(row) {
-    currentRow = row; // Lưu hàng hiện tại
-    document.getElementById("noteForm").style.display = "block"; // Hiển thị form
-    document.getElementById("modalBackdrop").style.display = "block"; // Hiển thị nền tối
+  function openNoteForm(row, GhiChu, Deadline) {
+  console.log(row, GhiChu, Deadline);
+  currentRow = row; // Lưu hàng hiện tại
+  console.log(formatInputDate(Deadline));
+  document.getElementById("noteForm").style.display = "block"; // Hiển thị form
+  document.getElementById("modalBackdrop").style.display = "block"; // Hiển thị nền tối
 
-    // Lấy chỉ mục của hàng hiện tại
-    const rows = document.querySelectorAll("#tableBody tr");
-    const rowIndex = Array.from(rows).indexOf(currentRow);
+  // Hiển thị giá trị ghi chú và hạn
+  document.getElementById("noteInput").value = GhiChu || ""; // Hiển thị ghi chú
+  document.getElementById("deadlineInput").value = formatInputDate(Deadline)  || ""; // Hiển thị hạn
+}
 
-    // Nếu hàng hiện tại có ghi chú, hiển thị ghi chú và hạn
-    if (rowIndex >= 0 && rowIndex < globalData.length) {
-      document.getElementById("noteInput").value = globalData[rowIndex].ghiChu || ""; // Hiển thị ghi chú
-      document.getElementById("deadlineInput").value = globalData[rowIndex].deadline || ""; // Hiển thị hạn
-    } else {
-      // Nếu không có ghi chú, xóa dữ liệu cũ
-      document.getElementById("noteInput").value = "";
-      document.getElementById("deadlineInput").value = "";
-    }
-  }
 
   function closeNoteForm() {
     document.getElementById("noteForm").style.display = "none"; // Ẩn form
@@ -1839,48 +1836,94 @@ function checkAll(type) {
       closeNoteForm();
     }
   }
-  function saveNote() {
+  async function saveNote() {
     const note = document.getElementById("noteInput").value;
     const deadline = document.getElementById("deadlineInput").value;
 
-    // Kiểm tra nếu currentRow tồn tại
     if (currentRow) {
-      const rows = document.querySelectorAll("#tableBody tr"); // Lấy tất cả các hàng trong bảng
-      const rowIndex = Array.from(rows).indexOf(currentRow); // Lấy chỉ mục của hàng hiện tại
-
-      // Kiểm tra nếu rowIndex hợp lệ trong phạm vi của mảng dữ liệu
-      if (rowIndex >= 0 && rowIndex < globalData.length) {
-        // Cập nhật ghi chú và deadline cho hàng hiện tại trong globalData
-        globalData[rowIndex].ghiChu = note;
-        globalData[rowIndex].deadline = deadline;
-
-        // Chuyển đổi định dạng deadline sang dd/mm/yy
-        const formattedDeadline = formatDate(deadline);
-
-        // Cập nhật hiển thị cho hàng được chọn với biểu tượng và chấm đỏ
-        const ghiChuTd = currentRow.querySelector("td:nth-child(12)");
-        ghiChuTd.innerHTML = `📜 <span style="color: red;">• </br></span>
-       Ghi chú: ${note}<br> Hạn sửa: ${formattedDeadline}`;
+      const id = currentRow.getAttribute("data-id"); // Lấy ID từ thuộc tính `data-id` của hàng
+      
+      // Kiểm tra ID có tồn tại
+      if (id) {
+        
+        
+        // Gửi dữ liệu đến API để lưu vào CSDL
+        try {
+          const response = await fetch('/savenote', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ id, ghiChu: note, deadline }),
+          });
+          const result = await response.json();
+          if (!result.success) {
+            alert("Lỗi khi lưu ghi chú vào CSDL: " + result.message);
+          } else {
+            alert("Cập nhật thành công");
+          }
+        } catch (error) {
+          alert("Lỗi khi gửi yêu cầu đến server: " + error);
+        }
       } else {
-        console.error("Chỉ mục hàng không hợp lệ:", rowIndex);
+        alert("ID của hàng hiện tại không tồn tại.");
       }
     } else {
-      console.error("currentRow không được xác định.");
+      alert("currentRow không được xác định.");
     }
 
-    // Đóng form sau khi lưu
     closeNoteForm();
   }
+async function doneNote() {
+  const note = document.getElementById("noteInput").value;
+  const deadline = document.getElementById("deadlineInput").value;
+
+  if (currentRow) {
+    const id = currentRow.getAttribute("data-id"); // Lấy ID từ thuộc tính `data-id` của hàng
+    
+    // Kiểm tra ID có tồn tại
+    if (id) {
+      
+      
+      // Gửi dữ liệu đến API để lưu vào CSDL
+      try {
+        const response = await fetch('/donenote', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ id}),
+        });
+        const result = await response.json();
+        if (!result.success) {
+          alert("Lỗi khi lưu ghi chú vào CSDL: " + result.message);
+        } else {
+          alert("Cập nhật thành công");
+        }
+      } catch (error) {
+        alert("Lỗi khi gửi yêu cầu đến server: " + error);
+      }
+    } else {
+      alert("ID của hàng hiện tại không tồn tại.");
+    }
+  } else {
+    alert("currentRow không được xác định.");
+  }
+
+  closeNoteForm();
+}
+
 
   // Hàm để chuyển đổi định dạng ngày
-  function formatDate(dateString) {
+  function formatInputDate(dateString) {
     const date = new Date(dateString);
-    const day = String(date.getDate()).padStart(2, '0'); // Lấy ngày và đảm bảo có 2 chữ số
+    const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0'); // Lấy tháng (0-11) và đảm bảo có 2 chữ số
-    const year = String(date.getFullYear()).slice(-2); // Lấy 2 chữ số cuối của năm
+    const day = String(date.getDate()).padStart(2, '0'); // Lấy ngày và đảm bảo có 2 chữ số
 
-    return `${day}/${month}/${year}`; // Trả về định dạng dd/mm/yy
+    return `${year}-${month}-${day}`; // Trả về định dạng yyyy-mm-dd cho input
   }
+
 
 
   // Sự kiện click ngoài modal để đóng modal
