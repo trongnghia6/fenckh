@@ -285,14 +285,17 @@ const numberToWords = (num) => {
       if (unitIndex > 0) {
         chunkWords.push(thousands[unitIndex]);
       }
-      
+
       words = chunkWords.join(" ") + " " + words;
     }
     num = Math.floor(num / 1000);
     unitIndex++;
   }
 
-  return words.trim() + " đồng";
+  // Chuyển chữ cái đầu tiên thành chữ hoa
+  const capitalizeFirstLetter = (str) => str.charAt(0).toUpperCase() + str.slice(1);
+  
+  return capitalizeFirstLetter(words.trim() + " đồng");
 };
 
 const getHDGvmData = async (req, res) => {
