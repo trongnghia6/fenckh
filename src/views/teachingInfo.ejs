@@ -567,9 +567,11 @@
 
           // Lấy id của hàng từ thuộc tính data-id
           const rowId = row.getAttribute('data-id');
+          console.log(rowId);
 
           // Tìm đối tượng trong localStorage có id trùng với hàng hiện tại
           let item = data.find(d => parseInt(d.id) === parseInt(rowId));
+          console.log(item);
 
           // Nếu tìm thấy đối tượng và KhoaDuyet == 0
           if (item && item.KhoaDuyet == 0) {
@@ -784,12 +786,13 @@
         const isKhoa = parseInt(localStorage.getItem("isKhoa"), 10); // Chuyển đổi isKhoa thành số
         const MaPhongBan = localStorage.getItem("MaPhongBan")
 
-        data.forEach((row) => {
+        // id truyền vào để đánh dấu mỗi dòng, mục đích lấy phần tử và so sánh với bảng trong localStorage
+        data.forEach((row, id) => {
           const tableRow = document.createElement('tr');
 
 
           // Gán id vào thuộc tính data-id của hàng
-          tableRow.setAttribute("data-id", row.ID);
+          tableRow.setAttribute("data-id", id);
 
           const lopHocPhanTd = document.createElement('td');
           lopHocPhanTd.textContent = `${row.LopHocPhan} (${row.TenLop})` || '';
