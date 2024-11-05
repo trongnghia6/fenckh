@@ -121,11 +121,11 @@ const exportHDGvmToExcel = async (req, res) => {
       { header: "Số Tài Khoản", key: "STK", width: 15 },
       { header: "Ngân Hàng", key: "NganHang", width: 20 },
       { header: "Số Tiết", key: "SoTiet", width: 10 },
-      { header: "Số Tiền", key: "SoTien", width: 15 },
+      { header: "Số Tiền", key: "SoTien", width: 15, style: { numFmt: '#,##0' }  },
       { header: "Số Tiền Bằng Chữ", key: "BangChuSoTien", width: 30 },
-      { header: "Trừ Thuế", key: "TruThue", width: 15 },
+      { header: "Trừ Thuế", key: "TruThue", width: 15, style: { numFmt: '#,##0' }  },
       { header: "Trừ Thuế Bằng Chữ", key: "BangChuTruThue", width: 30 },
-      { header: "Thực Nhận", key: "ThucNhan", width: 15 },
+      { header: "Thực Nhận", key: "ThucNhan", width: 15, style: { numFmt: '#,##0' }  },
       { header: "Thực Nhận Bằng Chữ", key: "BangChuThucNhan", width: 30 },
       { header: "Ngày Nghiệm Thu", key: "NgayNghiemThu", width: 15 }, // Thêm cột Ngày Nghiệm Thu
     ];
@@ -159,6 +159,7 @@ const exportHDGvmToExcel = async (req, res) => {
         BangChuThucNhan: numberToWords(thucNhan), // Sử dụng hàm mới
         NgayNghiemThu: row.NgayKetThuc,
       });
+      
     });
 
     // Định dạng tiêu đề (in đậm và căn giữa)
