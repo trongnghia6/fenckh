@@ -320,15 +320,11 @@
 
       <div class="d-flex my-3" style="height: 70px;">
         <!-- Tìm kiếm theo giảng viên -->
-        <input type="text" id="filterName" placeholder="Tìm theo giảng viên TKB" oninput="filterByName()"
-          class="form-control my-2 mx-1 search" style="width: 180px;" />
-        <!-- Tìm kiếm theo tên học phần -->
-        <input type="text" id="filterClass" placeholder="Tìm theo tên học phần" oninput="filterByClass()"
-          class="form-control my-2 mx-1 search" style="width: 180px;" />
+        <input type="text" id="filterName" placeholder="Tìm theo tên giảng viên" class="form-control m-2 search" style="width: 200px;"/>
+        <input type="text" id="filterClass" placeholder="Tìm theo tên học phần" class="form-control m-2 search" style="width: 200px;"/>
         <!-- Tìm kiếm theo bộ môn -->
-        <input type="text" id="filterBoMon" placeholder="Tìm theo tên bộ môn"
-          oninput="filterBoMon(); showSuggestionsBoMon(this)" onclick="showSuggestionsBoMon(this)"
-          class="form-control my-2 mx-1 search" style="width: 180px;" />
+        <input type="text" id="filterBoMon" placeholder="Tìm theo tên bộ môn" onclick="showSuggestionsBoMon(this)"
+          class="form-control m-2 search" style="width: 200px;"/>
 
         <div class="input-group my-2 mx-1" style="width: 350px;" id="batdau">
           <label for="startDate" class="input-group-text">Ngày bắt đầu</label>
@@ -368,9 +364,46 @@
             tableBody.innerHTML = ''; // Xóa các hàng hiện có
             dataRows.forEach(row => tableBody.appendChild(row)); // Chèn lại các hàng dữ liệu đã sắp xếp
           }
-
+          
         </script>
+        <script>
+          // Hàm kiểm tra và lọc hàng trong bảng
+function filterTable() {
+    const nameFilter = document.getElementById('filterName').value.toLowerCase();
+    const classFilter = document.getElementById('filterClass').value.toLowerCase();
+    const boMonFilter = document.getElementById('filterBoMon').value.toLowerCase();
+    const tableRows = document.querySelectorAll('#tableBody tr');
 
+    tableRows.forEach(row => {
+        const nameCell = row.querySelector('td:nth-child(3)'); // Cột tên giảng viên
+        const classCell = row.querySelector('td:nth-child(1)'); // Cột học phần
+        const boMonInput = row.querySelector('td:nth-child(7) input[name="bomon"]'); // Cột bộ môn
+
+        const name = nameCell ? nameCell.textContent.toLowerCase() : '';
+        const className = classCell ? classCell.textContent.toLowerCase() : '';
+        const boMon = boMonInput ? boMonInput.value.toLowerCase() : '';
+
+        // Kiểm tra điều kiện lọc
+        const matchesName = name.includes(nameFilter);
+        const matchesClass = className.includes(classFilter);
+        const matchesBoMon = boMon.includes(boMonFilter);
+
+        // Hiện hoặc ẩn hàng dựa trên điều kiện lọc
+        if (matchesName && matchesClass && matchesBoMon) {
+            row.style.display = ''; // Hiện hàng nếu tất cả các điều kiện đều khớp
+        } else {
+            row.style.display = 'none'; // Ẩn hàng nếu không khớp
+        }
+    });
+
+    calculateTotals(); // Cập nhật tổng số tiết sau khi lọc
+}
+
+// Gán sự kiện cho các input filter
+document.getElementById('filterName').addEventListener('input', filterTable);
+document.getElementById('filterClass').addEventListener('input', filterTable);
+document.getElementById('filterBoMon').addEventListener('input', filterTable);
+        </script>
         <script>
           function sortTableByColumn(columnIndex, direction) {
             const tableBody = document.getElementById('tableBody');
