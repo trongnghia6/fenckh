@@ -912,6 +912,7 @@
           const ghiChuTd = document.createElement("td");
           const ghiChuValue = row.GhiChu && row.GhiChu.trim() !== "" ? row.GhiChu : false;
           const deadlineValue = row.Deadline || ""; // Lấy giá trị Deadline
+          const hoanThanh = row.HoanThanh;
           if (role === 'GV' || role === 'Thường') {
             ghiChuTd.innerHTML = "📜"; // Hiển thị biểu tượng ghi chú nếu role là GV hoặc Thường
             ghiChuTd.style.cursor = "not-allowed"; // Thay đổi con trỏ chuột thành 'not-allowed' để báo hiệu không thể tương tác
@@ -919,7 +920,12 @@
           } else {
 
             if (ghiChuValue) {
-              ghiChuTd.innerHTML = `📜 <span style="color: red;">•</span>`; // Hiển thị biểu tượng ghi chú và chấm đỏ
+              if (hoanThanh) {
+                ghiChuTd.innerHTML = `📜 <span class="bi bi-check2-circle" style="color: green;"></span>`; // Hiển thị biểu tượng ghi chú và chấm xanh
+              } else {
+                ghiChuTd.innerHTML = `📜 <span class="bi bi-circle" style="color: red;"></span>`; // Hiển thị biểu tượng ghi chú và chấm đỏ
+              }
+              
             } else {
               ghiChuTd.innerHTML = "📜"; // Hiển thị biểu tượng ghi chú nếu không có ghi chú
             }
@@ -1619,7 +1625,7 @@
               headers: {
                 'Content-Type': 'application/json',
               },
-              body: JSON.stringify({ id }),
+              body: JSON.stringify({ id, ghiChu: note, deadline }),
             });
             const result = await response.json();
             if (!result.success) {

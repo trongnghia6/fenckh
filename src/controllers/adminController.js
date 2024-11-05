@@ -514,25 +514,30 @@ const AdminController = {
       const query1 = "SELECT * FROM `nhanvien` WHERE id_User = ?";
       const [results1] = await connection.query(query1, [id_User]);
       let user = results1 && results1.length > 0 ? results1[0] : {};
+      let maBoMon = user.MonGiangDayChinh || "";
 
       // Lấy dữ liệu tài khoản
-      connection = await createPoolConnection();
-      const query3 = "SELECT * FROM `taikhoannguoidung` WHERE id_User = ?";
-      const [results3] = await connection.query(query3, [id_User]);
-      let account = results3 && results3.length > 0 ? results3[0] : {};
+      const query2 = "SELECT * FROM `taikhoannguoidung` WHERE id_User = ?";
+      const [results2] = await connection.query(query2, [id_User]);
+      let account = results2 && results2.length > 0 ? results2[0] : {};
       let TenDangNhap = account.TenDangNhap || "";
 
       // Lấy dữ liệu role
-      connection = await createPoolConnection();
-      const query4 = "SELECT * FROM `role` WHERE TenDangNhap = ?";
-      const [results4] = await connection.query(query4, [TenDangNhap]);
-      let role = results4 && results4.length > 0 ? results4[0] : {};
+      const query3 = "SELECT * FROM `role` WHERE TenDangNhap = ?";
+      const [results3] = await connection.query(query3, [TenDangNhap]);
+      let role = results3 && results3.length > 0 ? results3[0] : {};
+
+      //Lấy tên môn học
+      const query4 = "SELECT * FROM bomon WHERE MaBoMon = ?";
+      const [results4] = await connection.query(query4,[maBoMon]);
+      let TenBoMon = results4 && results4.length > 0 ? results4[0] : {};;
 
       // Render trang với 2 biến: value và departmentLists
       res.render("viewNV.ejs", {
         value: user,
         account: account,
         role: role,
+        tenBoMon: TenBoMon,
       });
     } catch (error) {
       console.error("Lỗi: ", error);
@@ -567,6 +572,26 @@ const AdminController = {
         success: false,
         message: "Đã có lỗi xảy ra khi lấy dữ liệu năm học",
       });
+    } finally {
+      if (connection) connection.release(); // Đảm bảo giải phóng kết nối
+    }
+  },
+  getBoMonList: async (req, res) => {
+    let maPhongBan = req.params.maPhongBan;
+    console.log(maPhongBan);
+  
+    let connection = await createPoolConnection();
+    try {
+      let results;
+        const query = `SELECT * FROM bomon WHERE MaPhongBan = ?`;
+        [results] = await connection.query(query, [maPhongBan]);
+      res.json({
+        success: true,
+        maBoMon: results,
+      });
+    } catch (error) {
+      console.error("Lỗi: ", error);
+      res.status(500).send("Đã có lỗi xảy ra");
     } finally {
       if (connection) connection.release(); // Đảm bảo giải phóng kết nối
     }

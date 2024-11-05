@@ -144,7 +144,7 @@
                               <div class="col-md-4 input-wrapper d-flex justify-content-between">
                                 <div>
                                   <label for="MaPhongBan" class="form-label">Mã Phòng Ban</label>
-                                <select class="form-control" id="MaPhongBan" name="MaPhongBan" onchange="fetchQuyen()">
+                                <select class="form-control" id="MaPhongBan" name="MaPhongBan" onchange="fetchQuyen(), fetchBoMon()">
                                   <!-- Option đầu tiên là giá trị hiện tại của role.MaPhongBan -->
                                   <option value="<%= role.MaPhongBan %>"><%= role.MaPhongBan %></option>
                                   
@@ -158,7 +158,7 @@
                               </div>
                               <div>
                                 <label for="Quyen" class="form-label">Quyền</label>
-                                <select id="Quyen" class="form-control" name="Quyen">
+                                <select id="Quyen" class="form-control" name="Quyen" style="width: 250px;">
                                   <option value="<%= role.Quyen %>"><%= role.Quyen %></option>
                                 </select>
                               </div>
@@ -193,8 +193,9 @@
                                 </div>
                                 
                                 <div class="col-md-4 input-wrapper">
-                                    <label for="MonGiangDayChinh" class="form-label">Môn Giảng Dạy Chính*</label>
-                                    <input type="text" class="form-control" id="MonGiangDayChinh" name="MonGiangDayChinh" value="<%= value.MonGiangDayChinh %>" required>
+                                    <label for="MonGiangDayChinh" class="form-label">Môn Giảng Dạy Chính</label>
+                                    <select class="form-control" name="MonGiangDayChinh" id="MonGiangDayChinh"></select>
+                                    <input type="text" id="boMon" value="<%= value.MonGiangDayChinh %>" hidden>
                                 </div>
                                 <div class="col-md-4 input-wrapper">
                                     <label for="CacMonLienQuan" class="form-label">Các Môn Liên Quan</label>
@@ -324,7 +325,6 @@
   <script>
     function fetchQuyen() {
 const maPhongBan = document.getElementById('MaPhongBan').value;
-alert(maPhongBan);
 // Gọi API để lấy thông tin isKhoa
 fetch(`/getQuyenByPhongBan?MaPhongBan=${maPhongBan}`)
   .then(response => response.json())
@@ -361,6 +361,87 @@ fetch(`/getQuyenByPhongBan?MaPhongBan=${maPhongBan}`)
       alert("Không tìm thấy TenDangNhap trong localStorage.");
   }
 });
+  </script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const maPhongBan = document.getElementById("MaPhongBan").value;
+      const monGiangDayChinh = document.getElementById("boMon").value; // Lấy giá trị MonGiangDayChinh từ localStorage    
+      
+      fetch(`/getMaBoMon/${maPhongBan}`)
+        .then(response => response.json())
+        .then(data => {
+          console.log(data); // In ra phản hồi để kiểm tra
+          const maBoMonSelect = document.getElementById('MonGiangDayChinh');
+          
+          if (!maBoMonSelect) {
+            console.error("Không tìm thấy phần tử với ID 'MonGiangDayChinh'");
+            return;
+          }
+          
+          maBoMonSelect.innerHTML = ''; // Xóa các option cũ
+          let foundMatch = false;
+  
+          // Kiểm tra success và dữ liệu maBoMon
+          if (data.success && data.maBoMon) {
+            data.maBoMon.forEach(item => {
+              const option = document.createElement('option');
+              option.value = item.MaBoMon; // Giả sử MaBoMon là thuộc tính cần làm value
+              option.textContent = item.TenBoMon; // Giả sử TenBoMon là tên bộ môn cần hiển thị
+              
+              // Kiểm tra nếu giá trị trùng với monGiangDayChinh
+              if (item.MaBoMon === monGiangDayChinh) {
+                option.selected = true; // Đặt option thành selected nếu trùng
+                foundMatch = true; // Đánh dấu là đã tìm thấy giá trị trùng
+              }
+              
+              maBoMonSelect.appendChild(option); // Thêm option vào select
+  
+              
+            });
+          } else {
+            console.error("Dữ liệu maBoMon không tồn tại hoặc không thành công");
+          }
+  
+          // Nếu không tìm thấy giá trị nào trùng, hiển thị cảnh báo
+          if (!foundMatch) {
+                alert("Không tồn tại mã bộ môn vui lòng sửa lại");
+              }
+  
+        })
+        .catch(error => console.error('Error:', error));
+    });
+  </script>
+  <script>
+    function fetchBoMon(){
+      const maPhongBan = document.getElementById("MaPhongBan").value;
+      fetch(`/getMaBoMon/${maPhongBan}`)
+        .then(response => response.json())
+        .then(data => {
+          console.log(data); // In ra phản hồi để kiểm tra
+          const maBoMonSelect = document.getElementById('MonGiangDayChinh');
+          
+          if (!maBoMonSelect) {
+            console.error("Không tìm thấy phần tử với ID 'MonGiangDayChinh'");
+            return;
+          }
+          
+          maBoMonSelect.innerHTML = ''; // Xóa các option cũ
+  
+          // Kiểm tra success và dữ liệu maBoMon
+          if (data.success && data.maBoMon) {
+            data.maBoMon.forEach(item => {
+              const option = document.createElement('option');
+              option.value = item.MaBoMon; // Giả sử MaBoMon là thuộc tính cần làm value
+              option.textContent = item.TenBoMon; // Giả sử TenBoMon là tên bộ môn cần hiển thị
+              
+              maBoMonSelect.appendChild(option); // Thêm option vào select
+            });
+          } else {
+            console.error("Dữ liệu maBoMon không tồn tại hoặc không thành công");
+          }
+        })
+        .catch(error => console.error('Error:', error));
+    };
   </script>
 
 </body>

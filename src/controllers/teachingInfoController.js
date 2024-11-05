@@ -631,17 +631,18 @@ const SaveNote = async (req, res) => {
   let connection = await createPoolConnection();
   try {
     const { id, ghiChu, deadline } = req.body;
-    console.log(id, ghiChu, deadline);
+    const HoanThanh = false;
+    console.log(id, ghiChu, deadline, HoanThanh);
 
     const query = `
         UPDATE quychuan 
-        SET GhiChu = ?, Deadline = ? 
+        SET GhiChu = ?, Deadline = ?, HoanThanh = ?
         WHERE ID = ?
       `;
-    await connection.query(query, [ghiChu, deadline, id]);
+    await connection.query(query, [ghiChu, deadline, HoanThanh, id]);
     res.json({ success: true, message: "Ghi chú đã được lưu thành công" });
   } catch (error) {
-    console.error("Lỗi khi lưu dữ liệu vào bảng giangday:", error);
+    console.error("Lỗi khi lưu dữ liệu vào bảng quychuan:", error);
     return res
       .status(500)
       .json({ success: false, message: "Lỗi khi lưu ghi chú" });
@@ -650,19 +651,20 @@ const SaveNote = async (req, res) => {
 const DoneNote = async (req, res) => {
   let connection = await createPoolConnection();
   try {
-    const { id } = req.body; // Chỉ lấy id từ body, không lấy ghiChu và deadline
+    const { id, ghiChu, deadline } = req.body;
+    const HoanThanh = true;
+    const mGhiChu = ghiChu + " Đã sửa";
 
-    console.log(id);
-
+    console.log(id, ghiChu, mGhiChu, deadline, HoanThanh);
     const query = `
           UPDATE quychuan 
-          SET GhiChu = NULL, Deadline = NULL 
+          SET GhiChu = ?, Deadline = ?, HoanThanh = ? 
           WHERE ID = ?
       `;
-    await connection.query(query, [id]);
+      await connection.query(query, [mGhiChu, deadline, HoanThanh, id]);
     res.json({ success: true, message: "Ghi chú đã được lưu thành công" });
   } catch (error) {
-    console.error("Lỗi khi lưu dữ liệu vào bảng giangday:", error);
+    console.error("Lỗi khi lưu dữ liệu vào bảng quychuan:", error);
     return res
       .status(500)
       .json({ success: false, message: "Lỗi khi lưu ghi chú" });
