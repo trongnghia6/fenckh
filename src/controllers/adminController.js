@@ -20,6 +20,122 @@ const AdminController = {
     res.render("themPhongBan", { title: "Thêm Phòng Ban" });
   },
 
+  // themNhanVien: async (req, res) => {
+  //   const {
+  //     TenNhanVien,
+  //     NgaySinh,
+  //     GioiTinh,
+  //     DienThoai,
+  //     HocVi,
+  //     CCCD,
+  //     NgayCapCCCD,
+  //     NoiCapCCCD,
+  //     DiaChiCCCD,
+  //     DiaChiHienNay,
+  //     ChucVu,
+  //     NoiCongTac,
+  //     MaPhongBan,
+  //     MaSoThue,
+  //     SoTaiKhoan,
+  //     NganHang,
+  //     ChiNhanh,
+  //     MonGiangDayChinh,
+  //     CacMonLienQuan,
+  //     MatKhau, // Lấy từ form
+  //     Quyen,
+  //     HSL, // Lấy từ form
+  //   } = req.body;
+  //   let TenDangNhap = req.body.TenDangNhap; // Lấy từ form
+
+  //   try {
+  //     // Đầu tiên, chèn dữ liệu vào CSDL mà không cần MaNhanVien
+  //     const queryInsert = `
+  //         INSERT INTO nhanvien (
+  //             TenNhanVien, NgaySinh, GioiTinh, DienThoai, HocVi, CCCD,
+  //             NgayCapCCCD, NoiCapCCCD, DiaChiHienNay, DiaChiCCCD, ChucVu, NoiCongTac,
+  //             MaPhongBan, MaSoThue, SoTaiKhoan, NganHang, ChiNhanh,
+  //             MonGiangDayChinh, CacMonLienQuan,HSL
+  //         ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)
+  //     `;
+
+  //     const valuesInsert = [
+  //       TenNhanVien,
+  //       NgaySinh,
+  //       GioiTinh,
+  //       DienThoai,
+  //       HocVi,
+  //       CCCD,
+  //       NgayCapCCCD,
+  //       NoiCapCCCD,
+  //       DiaChiHienNay,
+  //       DiaChiCCCD,
+  //       ChucVu,
+  //       NoiCongTac,
+  //       MaPhongBan,
+  //       MaSoThue,
+  //       SoTaiKhoan,
+  //       NganHang,
+  //       ChiNhanh,
+  //       MonGiangDayChinh,
+  //       CacMonLienQuan,
+  //       HSL,
+  //     ];
+
+  //     console.log(MaPhongBan);
+  //     // Chèn nhân viên và lấy id_User vừa tạo
+  //     const [result] = await connection
+  //       .promise()
+  //       .query(queryInsert, valuesInsert);
+  //     const id_User = result.insertId; // Lấy id_User vừa được tạo
+
+  //     // Tạo MaNhanVien bằng cách ghép MaPhongBan với id_User
+  //     const MaNhanVien = `${MaPhongBan}${id_User}`;
+
+  //     // Cập nhật lại MaNhanVien trong CSDL
+  //     const queryUpdate = `UPDATE nhanvien SET MaNhanVien = ? WHERE id_User = ?`;
+  //     await connection.promise().query(queryUpdate, [MaNhanVien, id_User]);
+
+  //     if (!TenDangNhap) {
+  //       TenDangNhap = `${MaPhongBan}${id_User}`;
+  //     }
+
+  //     const queryInsertTaiKhoanNguoiDung = `
+  //       INSERT INTO taikhoannguoidung (TenDangNhap, MatKhau, id_User)
+  //       VALUES (?, ?, ?)
+  //     `;
+  //     await connection
+  //       .promise()
+  //       .query(queryInsertTaiKhoanNguoiDung, [TenDangNhap, MatKhau, id_User]);
+
+  //     // Truy vấn lấy isKhoa từ bảng phongban dựa trên MaPhongBan
+  //     const querySelectIsKhoa =
+  //       "SELECT isKhoa FROM phongban WHERE MaPhongBan = ?";
+  //     const [resultIsKhoa] = await connection
+  //       .promise()
+  //       .query(querySelectIsKhoa, [MaPhongBan]);
+  //     const isKhoa = resultIsKhoa.length > 0 ? resultIsKhoa[0].isKhoa : 0;
+
+  //     // Chèn dữ liệu vào bảng role
+  //     const queryInsertRole = `
+  //       INSERT INTO role (TenDangNhap, MaPhongBan, Quyen, isKhoa)
+  //       VALUES (?, ?, ?, ?)
+  //     `;
+  //     await connection
+  //       .promise()
+  //       .query(queryInsertRole, [TenDangNhap, MaPhongBan, Quyen, isKhoa]);
+
+  //     res
+  //       .status(200)
+  //       .json({ message: "Thêm nhân viên thành công", MaNhanVien: MaNhanVien });
+  //   } catch (error) {
+  //     console.error("Lỗi khi thêm nhân viên:", error);
+  //     res.status(500).json({
+  //       message: "Đã xảy ra lỗi khi thêm nhân viên",
+  //       error: error.message,
+  //     });
+  //   }
+  // },
+
   // phần thêm
   themNhanVien: async (req, res) => {
     const {
@@ -42,21 +158,23 @@ const AdminController = {
       ChiNhanh,
       MonGiangDayChinh,
       CacMonLienQuan,
-      MatKhau, // Lấy từ form
+      MatKhau,
       Quyen,
-      HSL, // Lấy từ form
+      HSL,
     } = req.body;
-    let TenDangNhap = req.body.TenDangNhap; // Lấy từ form
+    let TenDangNhap = req.body.TenDangNhap;
 
+    let connection;
     try {
-      // Đầu tiên, chèn dữ liệu vào CSDL mà không cần MaNhanVien
+      connection = await createPoolConnection();
+
       const queryInsert = `
-          INSERT INTO nhanvien (
-              TenNhanVien, NgaySinh, GioiTinh, DienThoai, HocVi, CCCD,
-              NgayCapCCCD, NoiCapCCCD, DiaChiHienNay, DiaChiCCCD, ChucVu, NoiCongTac,
-              MaPhongBan, MaSoThue, SoTaiKhoan, NganHang, ChiNhanh,
-              MonGiangDayChinh, CacMonLienQuan,HSL
-          ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)
+        INSERT INTO nhanvien (
+            TenNhanVien, NgaySinh, GioiTinh, DienThoai, HocVi, CCCD,
+            NgayCapCCCD, NoiCapCCCD, DiaChiHienNay, DiaChiCCCD, ChucVu, NoiCongTac,
+            MaPhongBan, MaSoThue, SoTaiKhoan, NganHang, ChiNhanh,
+            MonGiangDayChinh, CacMonLienQuan, HSL
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
       `;
 
       const valuesInsert = [
@@ -82,19 +200,13 @@ const AdminController = {
         HSL,
       ];
 
-      console.log(MaPhongBan);
-      // Chèn nhân viên và lấy id_User vừa tạo
-      const [result] = await connection
-        .promise()
-        .query(queryInsert, valuesInsert);
-      const id_User = result.insertId; // Lấy id_User vừa được tạo
+      const [result] = await connection.execute(queryInsert, valuesInsert);
+      const id_User = result.insertId;
 
-      // Tạo MaNhanVien bằng cách ghép MaPhongBan với id_User
       const MaNhanVien = `${MaPhongBan}${id_User}`;
 
-      // Cập nhật lại MaNhanVien trong CSDL
       const queryUpdate = `UPDATE nhanvien SET MaNhanVien = ? WHERE id_User = ?`;
-      await connection.promise().query(queryUpdate, [MaNhanVien, id_User]);
+      await connection.execute(queryUpdate, [MaNhanVien, id_User]);
 
       if (!TenDangNhap) {
         TenDangNhap = `${MaPhongBan}${id_User}`;
@@ -104,26 +216,29 @@ const AdminController = {
         INSERT INTO taikhoannguoidung (TenDangNhap, MatKhau, id_User) 
         VALUES (?, ?, ?)
       `;
-      await connection
-        .promise()
-        .query(queryInsertTaiKhoanNguoiDung, [TenDangNhap, MatKhau, id_User]);
+      await connection.execute(queryInsertTaiKhoanNguoiDung, [
+        TenDangNhap,
+        MatKhau,
+        id_User,
+      ]);
 
-      // Truy vấn lấy isKhoa từ bảng phongban dựa trên MaPhongBan
       const querySelectIsKhoa =
         "SELECT isKhoa FROM phongban WHERE MaPhongBan = ?";
-      const [resultIsKhoa] = await connection
-        .promise()
-        .query(querySelectIsKhoa, [MaPhongBan]);
+      const [resultIsKhoa] = await connection.execute(querySelectIsKhoa, [
+        MaPhongBan,
+      ]);
       const isKhoa = resultIsKhoa.length > 0 ? resultIsKhoa[0].isKhoa : 0;
 
-      // Chèn dữ liệu vào bảng role
       const queryInsertRole = `
         INSERT INTO role (TenDangNhap, MaPhongBan, Quyen, isKhoa)
         VALUES (?, ?, ?, ?)
       `;
-      await connection
-        .promise()
-        .query(queryInsertRole, [TenDangNhap, MaPhongBan, Quyen, isKhoa]);
+      await connection.execute(queryInsertRole, [
+        TenDangNhap,
+        MaPhongBan,
+        Quyen,
+        isKhoa,
+      ]);
 
       res
         .status(200)
@@ -134,13 +249,23 @@ const AdminController = {
         message: "Đã xảy ra lỗi khi thêm nhân viên",
         error: error.message,
       });
+    } finally {
+      if (connection) {
+        try {
+          await connection.release(); // Trả lại kết nối vào pool
+        } catch (error) {
+          console.error("Lỗi khi trả lại kết nối:", error);
+        }
+      }
     }
   },
 
   themPhongBan: async (req, res) => {
     const { maPhongBan, tenPhongBan, ghiChu, khoa } = req.body;
-
+    let connection;
     try {
+      connection = await createPoolConnection();
+
       const query = `
             INSERT INTO phongban (maPhongBan, tenPhongBan, ghiChu, isKhoa)
             VALUES (?, ?, ?, ?)
@@ -148,11 +273,13 @@ const AdminController = {
 
       const values = [maPhongBan, tenPhongBan, ghiChu, khoa ? 1 : 0];
 
-      await connection.promise().query(query, values);
+      await connection.execute(query, values);
       res.redirect("/phongBan?themphongbanthanhcong");
     } catch (error) {
       console.error("Lỗi khi thêm phòng ban:", error);
       res.status(500).json({ message: "Đã xảy ra lỗi khi thêm phòng ban" });
+    } finally {
+      if (connection) connection.release(); // Đảm bảo giải phóng kết nối
     }
   },
 

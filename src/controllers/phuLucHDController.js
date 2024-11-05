@@ -1,6 +1,5 @@
 const express = require("express");
 const ExcelJS = require("exceljs");
-const createConnection = require("../config/databaseAsync");
 const createPoolConnection = require("../config/databasePool");
 const fs = require("fs");
 const path = require("path");
@@ -98,8 +97,9 @@ const numberToWords = (num) => {
   }
 
   // Chuyển chữ cái đầu tiên thành chữ hoa
-  const capitalizeFirstLetter = (str) => str.charAt(0).toUpperCase() + str.slice(1);
-  
+  const capitalizeFirstLetter = (str) =>
+    str.charAt(0).toUpperCase() + str.slice(1);
+
   return capitalizeFirstLetter(words.trim() + " đồng");
 };
 
@@ -120,7 +120,7 @@ function formatDateDMY(date) {
 const exportPhuLucGiangVienMoi = async (req, res) => {
   let connection;
   try {
-    connection = await createConnection();
+    connection = await createPoolConnection();
 
     const { dot, ki, namHoc, khoa, teacherName } = req.query;
 
@@ -261,11 +261,10 @@ const exportPhuLucGiangVienMoi = async (req, res) => {
       // Thêm tiêu đề cột
       const headerRow = worksheet.addRow(header);
       headerRow.font = { name: "Times New Roman", bold: true };
-      worksheet.getColumn(10).numFmt = '#,##0'; // Thành tiền
-      worksheet.getColumn(11).numFmt = '#,##0'; // Trừ thuế TNCN 10%
-      worksheet.getColumn(12).numFmt = '#,##0'; // Còn lại
-      worksheet.getColumn(13).numFmt = '#,##0'; // Còn lại
-
+      worksheet.getColumn(10).numFmt = "#,##0"; // Thành tiền
+      worksheet.getColumn(11).numFmt = "#,##0"; // Trừ thuế TNCN 10%
+      worksheet.getColumn(12).numFmt = "#,##0"; // Còn lại
+      worksheet.getColumn(13).numFmt = "#,##0"; // Còn lại
 
       worksheet.pageSetup = {
         paperSize: 9, // A4 paper size
@@ -348,11 +347,10 @@ const exportPhuLucGiangVienMoi = async (req, res) => {
         ]);
         row.font = { name: "Times New Roman", size: 12 };
 
-        row.getCell(10).numFmt = '#,##0'; // Thành tiền
-        row.getCell(11).numFmt = '#,##0'; // Trừ thuế TNCN 10%
-        row.getCell(12).numFmt = '#,##0'; // Còn lại
-        row.getCell(13).numFmt = '#,##0'; // Còn lại
-
+        row.getCell(10).numFmt = "#,##0"; // Thành tiền
+        row.getCell(11).numFmt = "#,##0"; // Trừ thuế TNCN 10%
+        row.getCell(12).numFmt = "#,##0"; // Còn lại
+        row.getCell(13).numFmt = "#,##0"; // Còn lại
 
         // Bật wrapText cho các ô dữ liệu và căn giữa
         row.eachCell((cell, colNumber) => {
@@ -502,13 +500,7 @@ const exportPhuLucGiangVienMoi = async (req, res) => {
       message: "Error exporting data",
     });
   } finally {
-    if (connection) {
-      try {
-        await connection.end();
-      } catch (error) {
-        console.error("Error closing database connection:", error);
-      }
-    }
+    if (connection) connection.release(); // Đảm bảo giải phóng kết nối
   }
 };
 
