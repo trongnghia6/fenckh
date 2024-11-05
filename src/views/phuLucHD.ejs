@@ -249,6 +249,7 @@
         <select class="form-select w-100px mx-1 selectop" id="MaPhongBan">
           <option value="">Chọn khoa</option>
         </select>
+        
         <input type="text" class="form-control w-200px mx-2" id="search-teacher" onclick="showSuggestionsGvm(this)" placeholder="Tìm kiếm giảng viên">
 
         <div class="d-flex justify-content-center">
@@ -258,10 +259,9 @@
             Xuất dữ liệu phụ lục giảng viên mời
           </button>
         </div>
-      </div>
-    </div>
-  </div>
-  </div>
+     
+  
+
   <script>
     document.getElementById('exportButton').addEventListener('click', function() {
         const dot = document.getElementById("combobox-dot").value;
