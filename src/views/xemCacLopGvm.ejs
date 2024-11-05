@@ -341,10 +341,10 @@
           class="form-control m-2 search" style="width: 200px;" />
         <input type="text" id="filterClass" placeholder="Tìm theo tên học phần" oninput="filterByClass()"
           class="form-control m-2 search" style="width: 200px;" />
-        <!-- <input type="text" id="filterKhoa" placeholder="Tìm theo khoa" onclick="showSuggestionsKhoa(this)" oninput="filterByKhoa()"
-          class="form-control m-2 search" style="width: 200px; display: none;" /> -->
-        <input type="text" id="filterKhoa" placeholder="Tìm theo khoa" onclick="showSuggestionsKhoa(this)"
-        class="form-control m-2 search" />
+        <input type="text" id="filterKhoa" placeholder="Tìm theo khoa" onclick="showSuggestionsKhoa(this)" oninput="filterByKhoa()"
+          class="form-control m-2 search" style="width: 200px; display: none;" />
+        <!-- <input type="text" id="filterKhoa" placeholder="Tìm theo khoa" onclick="showSuggestionsKhoa(this)"
+        class="form-control m-2 search" /> -->
           
         <!-- Tìm kiếm theo bộ môn -->
         <input type="text" id="filterBoMon" placeholder="Tìm theo tên bộ môn"
@@ -2313,6 +2313,33 @@ function showSuggestionsKhoa(input) {
   };
 }
 
+function filterKhoa() {
+  const input = document.getElementById("filterKhoa");
+  const filter = input.value.toLowerCase();
+  const tableRows = document.querySelectorAll("#tableBody tr");
+
+  // Nếu ô tìm kiếm trống, hiển thị tất cả các dòng
+  if (!filter) {
+    tableRows.forEach((row) => {
+      row.style.display = ""; // Hiện tất cả các dòng
+    });
+    return;
+  }
+
+  // Chỉ hiện các dòng có tên giảng viên khớp với giá trị tìm kiếm
+  tableRows.forEach((row) => {
+    const nameCell = row.querySelector("td:nth-child(6)"); // Giả sử tên giảng viên nằm ở cột thứ 5
+    const name = nameCell.textContent.toLowerCase();
+
+    if (name.includes(filter)) {
+      row.style.display = ""; // Hiện hàng nếu khớp
+    } else {
+      row.style.display = "none"; // Ẩn hàng nếu không khớp
+    }
+  });
+  calculateTotals();
+}
+
 // Định nghĩa hàm hideSuggestionsKhoa
 function hideSuggestionsKhoa() {
   const existingSuggestions = document.querySelectorAll('.suggestions');
@@ -2321,7 +2348,7 @@ function hideSuggestionsKhoa() {
 
 // Bây giờ bọc phần còn lại của mã trong DOMContentLoaded
 document.addEventListener("DOMContentLoaded", function() {
-  alert("gà");
+  
   const phongBanData = <%- JSON.stringify(phongBanList) %>; 
   console.log("Dữ liệu phòng ban:", phongBanData);
   localStorage.setItem("phongBanList", JSON.stringify(phongBanData));
