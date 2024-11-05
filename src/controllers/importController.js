@@ -304,7 +304,7 @@ const importTableQC = async (jsonData) => {
     return results;
   };
 
-  const boMonData = await executeDataBoMonFromJsonData(jsonData);
+  const dataGiangVien = await executeDataBoMonFromJsonData(jsonData);
   // console.log(boMonData);
 
   // Tạo câu lệnh INSERT động với các trường đầy đủ
@@ -344,9 +344,10 @@ const importTableQC = async (jsonData) => {
     return giangVienArray.map(({ MoiGiang, GiaoVienGiangDay }) => {
       return new Promise((resolve, reject) => {
         // Tìm MonGiangDayChinh tương ứng với GiaoVienGiangDay
-        const boMonFound = boMonData.find(
-          (boMon) => boMon.HoTen === GiaoVienGiangDay
+        const boMonFound = dataGiangVien.find(
+          (dataGiangVien) => dataGiangVien.HoTen === GiaoVienGiangDay
         );
+        const giangVien = boMonFound ? boMonFound.HoTen : "";
         const monGiangDayChinh = boMonFound ? boMonFound.MonGiangDayChinh : "";
 
         // Tạo mảng giá trị
@@ -356,7 +357,7 @@ const importTableQC = async (jsonData) => {
           item["Ki"], // Đợt
           item["Nam"], // Đợt
           item["GiaoVien"], // Tên Giảng viên
-          GiaoVienGiangDay, // Tên giảng viên
+          giangVien, // Tên giảng viên
           MoiGiang, // Giảng viên mời hay không
           item["SoTinChi"], // Số tín chỉ
           item["MaHocPhan"], // Mã học phần
@@ -1298,11 +1299,11 @@ const updateAllTeachingInfo = async () => {
   //   `;
   const query2 = `
 SELECT
-    qc.*,                 -- Lấy tất cả các cột từ bảng quychuan
-    gvmoi.*,              -- Lấy tất cả các cột từ bảng gvmoi
-    SUM(qc.QuyChuan) AS TongSoTiet,     -- Tổng số tiết
-    MIN(qc.NgayBatDau) AS NgayBatDau,   -- Ngày bắt đầu sớm nhất
-    MAX(qc.NgayKetThuc) AS NgayKetThuc  -- Ngày kết thúc muộn nhất
+    qc.*,                 
+    gvmoi.*,              
+    SUM(qc.QuyChuan) AS TongSoTiet,     
+    MIN(qc.NgayBatDau) AS NgayBatDau,   
+    MAX(qc.NgayKetThuc) AS NgayKetThuc  
 FROM 
     quychuan qc
 JOIN 
