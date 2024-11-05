@@ -3,6 +3,7 @@ const Docxtemplater = require("docxtemplater");
 const fs = require("fs");
 const path = require("path");
 const createConnection = require("../config/databaseAsync");
+const createPoolConnection = require("../config/databasePool");
 const archiver = require("archiver");
 
 function deleteFolderRecursive(folderPath) {
@@ -810,7 +811,28 @@ const exportMultipleContracts = async (req, res) => {
   }
 };
 
+const getExportHDSite = async (req, res) => {
+  let connection;
+  try {
+    connection = await createPoolConnection();
+
+    // Lấy danh sách phòng ban để lọc
+    const query = `select HoTen, MaPhongBan from gvmoi`;
+    const [gvmoiList] = await connection.query(query);
+
+    res.render("exportHD", {
+      gvmoiList: gvmoiList,
+    });
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    res.status(500).send("Internal Server Error");
+  } finally {
+    if (connection) connection.release(); // Đảm bảo giải phóng kết nối
+  }
+};
+
 module.exports = {
   exportSingleContract,
   exportMultipleContracts,
+  getExportHDSite,
 };

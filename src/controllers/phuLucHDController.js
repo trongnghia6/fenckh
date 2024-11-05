@@ -1,12 +1,14 @@
 const express = require("express");
 const ExcelJS = require("exceljs");
 const createConnection = require("../config/databaseAsync");
+const createPoolConnection = require("../config/databasePool");
 const fs = require("fs");
 const path = require("path");
 
 function sanitizeFileName(fileName) {
   return fileName.replace(/[^a-z0-9]/gi, "_");
 }
+
 // Hàm chuyển đổi số thành chữ
 const numberToWords = (num) => {
   if (num === 0) return "không đồng";
@@ -102,20 +104,20 @@ const numberToWords = (num) => {
 };
 
 function formatVietnameseDate(date) {
-  const day = date.getDate().toString().padStart(2, '0');
-  const month = (date.getMonth() + 1).toString().padStart(2, '0');
+  const day = date.getDate().toString().padStart(2, "0");
+  const month = (date.getMonth() + 1).toString().padStart(2, "0");
   const year = date.getFullYear();
   return `ngày ${day} tháng ${month} năm ${year}`;
 }
 function formatDateDMY(date) {
   const d = new Date(date);
-  const day = d.getDate().toString().padStart(2, '0');
-  const month = (d.getMonth() + 1).toString().padStart(2, '0');
+  const day = d.getDate().toString().padStart(2, "0");
+  const month = (d.getMonth() + 1).toString().padStart(2, "0");
   const year = d.getFullYear();
   return `${day}/${month}/${year}`;
 }
 
-exports.exportPhuLucGiangVienMoi = async (req, res) => {
+const exportPhuLucGiangVienMoi = async (req, res) => {
   let connection;
   try {
     connection = await createConnection();
@@ -123,9 +125,9 @@ exports.exportPhuLucGiangVienMoi = async (req, res) => {
     const { dot, ki, namHoc, khoa, teacherName } = req.query;
 
     if (!dot || !ki || !namHoc) {
-      return res.status(400).json({ 
-        success: false, 
-        message: "Thiếu thông tin đợt, kỳ hoặc năm học" 
+      return res.status(400).json({
+        success: false,
+        message: "Thiếu thông tin đợt, kỳ hoặc năm học",
       });
     }
 
@@ -161,7 +163,7 @@ exports.exportPhuLucGiangVienMoi = async (req, res) => {
     const [data] = await connection.execute(query, params);
 
     if (data.length === 0) {
-      return res.send(     
+      return res.send(
         "<script>alert('Không tìm thấy giảng viên phù hợp điều kiện'); window.location.href='/phuLucHD';</script>"
       );
     }
@@ -205,8 +207,6 @@ exports.exportPhuLucGiangVienMoi = async (req, res) => {
       // Định dạng ngày bắt đầu sớm nhất thành chuỗi
       const formattedEarliestDate = formatVietnameseDate(earliestDate);
 
-
-
       const titleRow3 = worksheet.addRow([
         `Hợp đồng số:    /HĐ-ĐT ${formattedEarliestDate}`,
       ]);
@@ -241,8 +241,6 @@ exports.exportPhuLucGiangVienMoi = async (req, res) => {
       titleRow5.alignment = { horizontal: "center", vertical: "middle" };
       worksheet.mergeCells(`K${titleRow5.number}:M${titleRow5.number}`);
 
-
-   
       // Định nghĩa tiêu đề cột
       const header = [
         "Họ tên giảng viên",
@@ -323,7 +321,9 @@ exports.exportPhuLucGiangVienMoi = async (req, res) => {
         const soTien = item.SoTiet * mucThanhToan;
         const truThue = soTien * 0.1;
         const thucNhan = soTien - truThue;
-        const thoiGianThucHien = `${formatDateDMY(item.NgayBatDau)} - ${formatDateDMY(item.NgayKetThuc)}`;
+        const thoiGianThucHien = `${formatDateDMY(
+          item.NgayBatDau
+        )} - ${formatDateDMY(item.NgayKetThuc)}`;
 
         const row = worksheet.addRow([
           item.GiangVien,
@@ -429,38 +429,37 @@ exports.exportPhuLucGiangVienMoi = async (req, res) => {
 
       // Gộp ô cho hàng tổng cộng
       worksheet.mergeCells(`A${totalRow.number}:C${totalRow.number}`);
- // Thêm hai dòng trống
- worksheet.addRow([]);
- worksheet.addRow([]);
+      // Thêm hai dòng trống
+      worksheet.addRow([]);
+      worksheet.addRow([]);
 
- // Thêm dòng "Bằng chữ" không có viền và tăng cỡ chữ
- // Thêm dòng "Bằng chữ" không có viền và tăng cỡ chữ
- const bangChuRow = worksheet.addRow([
-  `Bằng chữ: ${numberToWords(totalSoTien)}`,
-]);
-bangChuRow.font = { name: "Times New Roman", italic: true, size: 14 };
-worksheet.mergeCells(`A${bangChuRow.number}:${bangChuRow.number}`);
-bangChuRow.alignment = { horizontal: 'left', vertical: 'middle' };
-
+      // Thêm dòng "Bằng chữ" không có viền và tăng cỡ chữ
+      // Thêm dòng "Bằng chữ" không có viền và tăng cỡ chữ
+      const bangChuRow = worksheet.addRow([
+        `Bằng chữ: ${numberToWords(totalSoTien)}`,
+      ]);
+      bangChuRow.font = { name: "Times New Roman", italic: true, size: 14 };
+      worksheet.mergeCells(`A${bangChuRow.number}:${bangChuRow.number}`);
+      bangChuRow.alignment = { horizontal: "left", vertical: "middle" };
 
       // Định dạng viền cho các hàng từ dòng thứ 6 trở đi
       const firstRowOfTable = 7; // Giả sử bảng bắt đầu từ hàng 7
       const lastRowOfTable = totalRow.number; // Hàng tổng cộng
-      
+
       for (let i = firstRowOfTable; i <= lastRowOfTable; i++) {
         const row = worksheet.getRow(i);
         row.eachCell((cell) => {
           cell.border = {
-            top: { style: 'thin' },
-            left: { style: 'thin' },
-            bottom: { style: 'thin' },
-            right: { style: 'thin' },
+            top: { style: "thin" },
+            left: { style: "thin" },
+            bottom: { style: "thin" },
+            right: { style: "thin" },
           };
         });
       }
     }
 
-        // Tạo tên file
+    // Tạo tên file
     let fileName = `PhuLuc_GiangVien_Moi_Dot${dot}_Ki${ki}_${namHoc}`;
     if (khoa && khoa !== "ALL") {
       fileName += `_${sanitizeFileName(khoa)}`;
@@ -476,20 +475,19 @@ bangChuRow.alignment = { horizontal: 'left', vertical: 'middle' };
       "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
     );
     res.setHeader(
-      "Content-Disposition", 
+      "Content-Disposition",
       `attachment; filename="${encodeURIComponent(fileName)}"`
     );
 
     // Ghi workbook vào response
     await workbook.xlsx.write(res);
-    
-    // Không cần gọi res.end() vì workbook.xlsx.write đã tự động kết thúc response
 
+    // Không cần gọi res.end() vì workbook.xlsx.write đã tự động kết thúc response
   } catch (error) {
     console.error("Error exporting data:", error);
-    return res.status(500).json({ 
-      success: false, 
-      message: "Error exporting data" 
+    return res.status(500).json({
+      success: false,
+      message: "Error exporting data",
     });
   } finally {
     if (connection) {
@@ -500,4 +498,29 @@ bangChuRow.alignment = { horizontal: 'left', vertical: 'middle' };
       }
     }
   }
+};
+
+const getPhuLucHDSite = async (req, res) => {
+  let connection;
+  try {
+    connection = await createPoolConnection();
+
+    // Lấy danh sách phòng ban để lọc
+    const query = `select HoTen, MaPhongBan from gvmoi`;
+    const [gvmoiList] = await connection.query(query);
+
+    res.render("phuLucHD.ejs", {
+      gvmoiList: gvmoiList,
+    });
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    res.status(500).send("Internal Server Error");
+  } finally {
+    if (connection) connection.release(); // Đảm bảo giải phóng kết nối
+  }
+};
+
+module.exports = {
+  exportPhuLucGiangVienMoi,
+  getPhuLucHDSite,
 };

@@ -96,7 +96,7 @@
                 <a class="nav-link" href="/xemCacLopGvm">Xem các lớp mời</a>
                 <a class="nav-link" href="/classInfoGvm">Thông tin lớp giảng viên mời</a>
                 <a class="nav-link active" href="/hopDongDuKien" role="button">Hợp đồng dự kiến</a>
-                <a class="nav-link active" href="/infoHDGvm" role="button">Thông tin hợp đồng</a>
+                <a class="nav-link" href="/infoHDGvm" role="button">Thông tin hợp đồng</a>
                 <li class="nav-item"></li>
                 <a class="nav-link " href="/phuLucHD">Phụ lục hợp đồng</a>
                 </li>
@@ -200,6 +200,15 @@
               <option value="">Năm học</option>
             </select>
 
+            <select id="filterByDepartment" class="filter" onchange="filterByDepartment()">
+              <option value="all">Tất cả</option>
+              <% phongBanList.forEach(function(phongBan) { %>
+                  <option value="<%= phongBan.MaPhongBan %>">
+                      <%= phongBan.TenPhongBan %>
+                  </option>
+              <% }); %>
+          </select>
+
             <button id="viewDataBtn" class="btn view">Xem dữ liệu</button>
           </div>
 
@@ -222,6 +231,7 @@
                     <th>Ngân hàng</th>
                     <th>Mã số thuế</th>
                     <th>Số tiết</th>
+                    <th style="display: none;">Khoa</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -268,8 +278,6 @@
           }
         }
       </script>
-
-
       <!-- phần dữ liệu để hiển thị trên bảng -->
       <script>
         document.addEventListener('DOMContentLoaded', function () {
@@ -310,6 +318,10 @@
                 row.insertCell(11).textContent = item.NganHang;
                 row.insertCell(12).textContent = item.MaSoThue;
                 row.insertCell(13).textContent = item.SoTiet;
+                const cell = row.insertCell(14); // Chỉ gọi insertCell một lần
+                cell.textContent = item.MaPhongBan;
+                cell.style.display = 'none';
+
               });
 
               // Hiển thị bảng
@@ -499,6 +511,75 @@
           });
         });
       </script>
+
+            <!-- Lọc theo khoa -->
+      <script>
+        function filterByDepartment() {
+          // Lấy giá trị của bộ lọc phòng ban
+          const departmentFilter = document.getElementById("filterByDepartment").value.trim();
+        
+          // Lấy bảng và các hàng
+          const table = document.getElementById("classTable");
+          const rows = table.getElementsByTagName("tr");
+
+          alert("gà")
+        
+          for (let i = 1; i < rows.length; i++) { // Bỏ qua hàng tiêu đề
+            // Lấy ô phòng ban từ hàng (cột 14)
+            const departmentCell = rows[i].getElementsByTagName("td")[14]; // Chỉ số cột 14
+        
+            // Lấy giá trị từ ô
+            const departmentValue = departmentCell ? departmentCell.textContent.trim() : '';
+        
+            // Kiểm tra điều kiện lọc
+            const departmentMatch = (departmentFilter === "all" || departmentValue === departmentFilter);
+        
+            // Hiện hoặc ẩn hàng dựa trên điều kiện
+            if (departmentMatch) {
+              rows[i].style.display = ""; // Hiện hàng nếu điều kiện khớp
+            } else {
+              rows[i].style.display = "none"; // Ẩn hàng nếu không khớp
+            }
+          }
+        }
+        
+    </script>
+      <!-- Lọc theo khoa -->
+      <script>
+        function filterByDepartment() {
+          console.log("filterByDepartment đã được gọi");
+      
+          const departmentFilter = document.getElementById("filterByDepartment").value.trim();
+          const table = document.getElementById("dataTable");
+          
+          // Kiểm tra bảng có tồn tại không
+          if (!table) {
+              console.error("Không tìm thấy bảng với ID 'dataTable'");
+              return; // Dừng hàm nếu không tìm thấy bảng
+          }
+          
+          const rows = table.querySelectorAll("tr"); // Lấy tất cả các hàng
+      
+          for (let i = 1; i < rows.length; i++) { // Bỏ qua hàng tiêu đề
+              const departmentCell = rows[i].getElementsByTagName("td")[14]; // Chỉ số cột 14
+      
+              // Kiểm tra nếu departmentCell không null
+              if (departmentCell) {
+                  const departmentValue = departmentCell.textContent.trim();
+                  const departmentMatch = (departmentFilter === "all" || departmentValue === departmentFilter);
+      
+                  if (departmentMatch) {
+                      rows[i].style.display = ""; // Hiện hàng nếu điều kiện khớp
+                  } else {
+                      rows[i].style.display = "none"; // Ẩn hàng nếu không khớp
+                  }
+              } else {
+                  console.error("Không tìm thấy ô phòng ban ở hàng:", i);
+              }
+          }
+      }
+      
+    </script>
 </body>
 
 </html>
