@@ -152,12 +152,12 @@ const exportHDGvmToExcel = async (req, res) => {
       worksheet.addRow({
         ...row,
         SoTien: soTien,
-        BangChuSoTien: soTienBangChu(soTien), // Số Tiền Bằng Chữ
+        BangChuSoTien: numberToWords(soTien), // Sử dụng hàm mới
         TruThue: truThue,
-        BangChuTruThue: soTienBangChu(truThue), // Trừ Thuế Bằng Chữ
+        BangChuTruThue: numberToWords(truThue), // Sử dụng hàm mới
         ThucNhan: thucNhan,
-        BangChuThucNhan: soTienBangChu(thucNhan), // Thực Nhận Bằng Chữ
-        NgayNghiemThu: row.NgayKetThuc, // Thiết lập Ngày Nghiệm Thu bằng Ngày Kết Thúc
+        BangChuThucNhan: numberToWords(thucNhan), // Sử dụng hàm mới
+        NgayNghiemThu: row.NgayKetThuc,
       });
     });
 
@@ -204,82 +204,96 @@ const exportHDGvmToExcel = async (req, res) => {
 };
 
 // hàm chuyển tiền sang chữ số
-function soTienBangChu(soTien) {
-  const soTienBangChu = {
-    0: "Không",
-    1: "Một",
-    2: "Hai",
-    3: "Ba",
-    4: "Bốn",
-    5: "Năm",
-    6: "Sáu",
-    7: "Bảy",
-    8: "Tám",
-    9: "Chín",
-  };
+// Hàm chuyển đổi số thành chữ
+const numberToWords = (num) => {
+  if (num === 0) return "không đồng";
 
-  const donVi = ["", "Mươi", "Trăm", "Nghìn", "Triệu", "Tỷ"];
+  const ones = [
+    "",
+    "một",
+    "hai",
+    "ba",
+    "bốn",
+    "năm",
+    "sáu",
+    "bảy",
+    "tám",
+    "chín",
+  ];
+  const teens = [
+    "mười",
+    "mười một",
+    "mười hai",
+    "mười ba",
+    "mười bốn",
+    "mười lăm",
+    "mười sáu",
+    "mười bảy",
+    "mười tám",
+    "mười chín",
+  ];
+  const tens = [
+    "",
+    "",
+    "hai mươi",
+    "ba mươi",
+    "bốn mươi",
+    "năm mươi",
+    "sáu mươi",
+    "bảy mươi",
+    "tám mươi",
+    "chín mươi",
+  ];
+  const thousands = ["", "nghìn", "triệu", "tỷ"];
 
-  // Xử lý số tiền thành nguyên và phần thập phân
-  const soTienString = soTien.toString().split(".");
-  const soTienNguyen = soTienString[0];
-  const soTienThapPhan = soTienString[1];
+  let words = "";
+  let unitIndex = 0;
 
-  let bangChuNguyen = "";
-  let bangChuThapPhan = "";
+  while (num > 0) {
+    const chunk = num % 1000;
+    if (chunk) {
+      let chunkWords = [];
+      const hundreds = Math.floor(chunk / 100);
+      const remainder = chunk % 100;
 
-  // Xử lý phần nguyên của số tiền
-  for (let i = 0; i < soTienNguyen.length; i++) {
-    const soTienDigit = parseInt(soTienNguyen[i]);
-    const donViDigit = (soTienNguyen.length - i - 1) % 3; // tính vị trí theo nhóm hàng trăm
-    const hangNhom = Math.floor((soTienNguyen.length - i - 1) / 3); // nhóm nghìn, triệu, tỷ
-
-    if (
-      soTienDigit !== 0 ||
-      donViDigit === 2 ||
-      (donViDigit === 1 && soTienNguyen[i - 1] != 0)
-    ) {
-      // Xử lý các trường hợp đặc biệt với chữ "mốt", "lăm"
-      if (donViDigit === 1 && soTienDigit === 1) {
-        bangChuNguyen += "Mười ";
-      } else if (
-        donViDigit === 1 &&
-        soTienDigit === 5 &&
-        soTienNguyen[i - 1] != 0
-      ) {
-        bangChuNguyen += "Lăm ";
-      } else {
-        bangChuNguyen +=
-          soTienBangChu[soTienDigit] + " " + donVi[donViDigit] + " ";
+      if (hundreds) {
+        chunkWords.push(ones[hundreds]);
+        chunkWords.push("trăm");
       }
-    }
 
-    // Thêm đơn vị nghìn, triệu, tỷ nếu đúng vị trí
-    if (
-      donViDigit === 0 &&
-      hangNhom > 0 &&
-      (soTienNguyen.length - i - 1 > 0 || soTienDigit !== 0)
-    ) {
-      bangChuNguyen += donVi[hangNhom + 2] + " ";
+      if (remainder < 10) {
+        if (remainder > 0) {
+          if (hundreds) chunkWords.push("lẻ");
+          chunkWords.push(ones[remainder]);
+        }
+      } else if (remainder < 20) {
+        chunkWords.push(teens[remainder - 10]);
+      } else {
+        const tenPlace = Math.floor(remainder / 10);
+        const onePlace = remainder % 10;
+
+        chunkWords.push(tens[tenPlace]);
+        if (onePlace === 1 && tenPlace > 1) {
+          chunkWords.push("mốt");
+        } else if (onePlace === 5 && tenPlace > 0) {
+          chunkWords.push("lăm");
+        } else if (onePlace) {
+          chunkWords.push(ones[onePlace]);
+        }
+      }
+
+      if (unitIndex > 0) {
+        chunkWords.push(thousands[unitIndex]);
+      }
+      
+      words = chunkWords.join(" ") + " " + words;
     }
+    num = Math.floor(num / 1000);
+    unitIndex++;
   }
 
-  // Xử lý phần thập phân (nếu có)
-  if (soTienThapPhan) {
-    bangChuThapPhan = "phẩy ";
-    for (let i = 0; i < soTienThapPhan.length; i++) {
-      const soTienDigit = parseInt(soTienThapPhan[i]);
-      bangChuThapPhan += soTienBangChu[soTienDigit] + " ";
-    }
-  }
-
-  // Kết hợp phần nguyên và phần thập phân với đơn vị "Đồng"
-  return (
-    bangChuNguyen.trim() +
-    " Đồng" +
-    (bangChuThapPhan.trim() ? " " + bangChuThapPhan.trim() : "")
-  );
-}
+  return words.trim() + " đồng";
+};
 
 const getHDGvmData = async (req, res) => {
   let connection;
