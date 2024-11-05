@@ -213,6 +213,7 @@
               <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                 <a class="nav-link active" href="/xemCacLopGvm">Xem các lớp mời</a>
                 <a class="nav-link" href="/classInfoGvm">Thông tin lớp giảng viên mời</a>
+                <a class="nav-link" href="/hopDongDuKien" role="button">Hợp đồng dự kiến</a>
                 <a class="nav-link " href="/infoHDGvm" role="button">Thông tin hợp đồng</a>
                 <li class="nav-item"></li>
                 <a class="nav-link " href="/phuLucHD">Phụ lục hợp đồng</a>
@@ -1316,6 +1317,7 @@ function filterByClass() {
 function filterBoMon() {
   applyFilters();
 }
+
 function filterByKhoa() {
       const input = document.getElementById("filterKhoa");
       const filter = input.value.toLowerCase();
@@ -1329,9 +1331,9 @@ function filterByKhoa() {
         return;
       }
 
-      // Chỉ hiện các dòng có tên giảng viên khớp với giá trị tìm kiếm
+      // Chỉ hiện các dòng có khoa khớp với giá trị tìm kiếm
       tableRows.forEach((row) => {
-        const nameCell = row.querySelector("td:nth-child(6)"); // Giả sử tên giảng viên nằm ở cột thứ 5
+        const nameCell = row.querySelector("td:nth-child(6)"); // Khoa nằm ở cột thứ 6
         const name = nameCell.textContent.toLowerCase();
 
         if (name.includes(filter)) {
@@ -1342,7 +1344,9 @@ function filterByKhoa() {
       });
       calculateTotals();
     }
-// Hàm gợi ý bộ môn với cải tiến cho việc điền giá trị vào input
+
+
+    // Hàm gợi ý bộ môn với cải tiến cho việc điền giá trị vào input
 function showSuggestionsBoMon(input) {
   const value = input.value.toLowerCase(); 
   hideSuggestionsBoMon(); 
@@ -1506,10 +1510,8 @@ function checkAll(type) {
         const name = nameInput.value.toLowerCase(); // Lấy giá trị của input có name="bomon"
         if (filter === '' || name.includes(filter)) {
           row.style.display = ''; // Hiện hàng nếu khớp hoặc filter trống
-          //checkbox.disabled = false; // Kích hoạt checkbox
         } else {
           row.style.display = 'none'; // Ẩn hàng nếu không khớp
-          //checkbox.disabled = true; // Vô hiệu hóa checkbox
         }
       }
     });
@@ -1519,7 +1521,11 @@ function checkAll(type) {
   // Khởi tạo sự kiện khi nhập vào ô input (hoặc gắn sự kiện vào các input cụ thể)
   document.getElementById('filterBoMon').addEventListener('input', function () {
     showSuggestionsBoMon(this);
+
   });
+
+  // Khởi tạo sự kiện của khoa
+
 
   // Hàm khởi động ứng dụng
   init();

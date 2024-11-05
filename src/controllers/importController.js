@@ -1298,11 +1298,11 @@ const updateAllTeachingInfo = async () => {
   //   `;
   const query2 = `
 SELECT
-    qc.*,                 -- Lấy tất cả các cột từ bảng quychuan
-    gvmoi.*,              -- Lấy tất cả các cột từ bảng gvmoi
-    SUM(qc.QuyChuan) AS TongSoTiet,     -- Tổng số tiết
-    MIN(qc.NgayBatDau) AS NgayBatDau,   -- Ngày bắt đầu sớm nhất
-    MAX(qc.NgayKetThuc) AS NgayKetThuc  -- Ngày kết thúc muộn nhất
+    qc.*,                 
+    gvmoi.*,              
+    SUM(qc.QuyChuan) AS TongSoTiet,     
+    MIN(qc.NgayBatDau) AS NgayBatDau,   
+    MAX(qc.NgayKetThuc) AS NgayKetThuc  
 FROM 
     quychuan qc
 JOIN 

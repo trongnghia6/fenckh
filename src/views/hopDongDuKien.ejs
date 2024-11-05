@@ -95,7 +95,7 @@
               <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                 <a class="nav-link" href="/xemCacLopGvm">Xem các lớp mời</a>
                 <a class="nav-link" href="/classInfoGvm">Thông tin lớp giảng viên mời</a>
-                <a class="nav-link" href="/hopDongDuKien" role="button">Hợp đồng dự kiến</a>
+                <a class="nav-link active" href="/hopDongDuKien" role="button">Hợp đồng dự kiến</a>
                 <a class="nav-link active" href="/infoHDGvm" role="button">Thông tin hợp đồng</a>
                 <li class="nav-item"></li>
                 <a class="nav-link " href="/phuLucHD">Phụ lục hợp đồng</a>
@@ -201,7 +201,6 @@
             </select>
 
             <button id="viewDataBtn" class="btn view">Xem dữ liệu</button>
-            <button class="btn export" onclick="exportData()"><i class="fas fa-file-export me-2"></i>Xuất dữ liệu</button>
           </div>
 
           <div id="tableContainer" style="display: none;">
@@ -269,15 +268,6 @@
           }
         }
       </script>
-      <script>
-        function exportData() {
-          const namHoc = document.getElementById('NamHoc').value;
-          const dot = document.getElementById('combobox-dot').value;
-          const ki = document.getElementById('combobox-ki').value;
-
-          window.location.href = '/hdgvm/export-excel?namHoc=' + namHoc + '&dot=' + dot + '&ki=' + ki;
-        }
-      </script>
 
 
       <!-- phần dữ liệu để hiển thị trên bảng -->
@@ -293,7 +283,7 @@
               const dot = document.getElementById('combobox-dot').value;
               const ki = document.getElementById('combobox-ki').value;
 
-              const response = await fetch(`/api/hdgvm?namHoc=${namHoc}&dot=${dot}&ki=${ki}`);
+              const response = await fetch(`/hop-dong-du-kien?namHoc=${namHoc}&dot=${dot}&ki=${ki}`);
               if (!response.ok) {
                 throw new Error('Network response was not ok');
               }
@@ -308,7 +298,7 @@
                 const row = tbody.insertRow();
                 row.insertCell(0).textContent = new Date(item.NgayBatDau).toLocaleDateString('vi-VN');
                 row.insertCell(1).textContent = new Date(item.NgayKetThuc).toLocaleDateString('vi-VN');
-                row.insertCell(2).textContent = item.DanhXung;
+                row.insertCell(2).textContent = item.GioiTinh;
                 row.insertCell(3).textContent = item.HoTen;
                 row.insertCell(4).textContent = new Date(item.NgaySinh).toLocaleDateString('vi-VN');
                 row.insertCell(5).textContent = item.CCCD;
@@ -355,53 +345,6 @@
             }
           }
         }
-
-
-
-        async function fetchGVMLists() {
-          try {
-            const response = await fetch('/api/classInfoGvm');
-            if (!response.ok) {
-              throw new Error('Network response was not ok');
-            }
-            const gvmLists = await response.json();
-            return gvmLists;
-          } catch (error) {
-            console.error('Error fetching data:', error);
-          }
-        }
-
-
-        async function viewClass(index) {
-
-          gvmLists = await fetchGVMLists();
-
-          index = parseInt(index);
-
-          var gvm = gvmLists[index];
-
-
-          // Hiển thị thông tin vào modal
-          document.getElementById('modal-ma-gv').innerText = gvm.MaGvm;
-          document.getElementById('modal-ho-ten').innerText = gvm.HoTen;
-          document.getElementById('modal-ngay-sinh').innerText = new Date(gvm.NgaySinh).toLocaleDateString('vi-VN');
-          document.getElementById('modal-cccd').innerText = gvm.CCCD;
-          document.getElementById('modal-ngay-cap').innerText = new Date(gvm.NgayCapCCCD).toLocaleDateString('vi-VN');
-          document.getElementById('modal-noi-cap').innerText = gvm.NoiCapCCCD;
-          document.getElementById('modal-dia-chi-cccd').innerText = gvm.DiaChi;
-          document.getElementById('modal-so-tk').innerText = gvm.STK;
-          document.getElementById('modal-ngan-hang').innerText = gvm.NganHang;
-          document.getElementById('modal-email').innerText = gvm.Email;
-          document.getElementById('modal-heso-luong').innerText = gvm.HSL;//
-          document.getElementById('modal-noi-cong-tac').innerText = gvm.NoiCongTac;
-          document.getElementById('modal-chuc-vu').innerText = gvm.ChucVu;
-          document.getElementById('modal-ma-so-thue').innerText = gvm.MaSoThue;
-          document.getElementById('modal-tot-nghiep-loai').innerText = gvm.TotNghiepLoai;
-
-          // Hiển thị modal
-          document.getElementById('modal').style.display = 'flex';
-        }
-
 
 
         // Đóng modal
