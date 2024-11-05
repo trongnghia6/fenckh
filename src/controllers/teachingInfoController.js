@@ -484,8 +484,24 @@ const getTeachingInfo1 = (req, res) => {
   res.render("teachingInfo.ejs");
 };
 
-const getTeachingInfo2 = (req, res) => {
-  res.render("teachingInfo2.ejs");
+const getTeachingInfo2 = async (req, res) => {
+  let connection;
+  try {
+    connection = await createPoolConnection();
+
+    // Lấy danh sách phòng ban để lọc
+    const qrPhongBan = `select MaPhongBan from phongban where isKhoa = 1`;
+    const [phongBanList] = await connection.query(qrPhongBan);
+
+    res.render("teachingInfo2.ejs", {
+      phongBanList: phongBanList,
+    });
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    res.status(500).send("Internal Server Error");
+  } finally {
+    if (connection) connection.release(); // Đảm bảo giải phóng kết nối
+  }
 };
 
 // const getBoMon = async (req, res) => {
@@ -606,43 +622,47 @@ const getBoMon = async (req, res) => {
     if (connection) connection.release(); // Giải phóng kết nối khi hoàn thành
   }
 };
-  const SaveNote = async (req, res) => {
-    let connection = await createPoolConnection()
-    try {
-      const { id, ghiChu, deadline } = req.body;
-      console.log(id, ghiChu, deadline);
+const SaveNote = async (req, res) => {
+  let connection = await createPoolConnection();
+  try {
+    const { id, ghiChu, deadline } = req.body;
+    console.log(id, ghiChu, deadline);
 
-      const query = `
+    const query = `
         UPDATE quychuan 
         SET GhiChu = ?, Deadline = ? 
         WHERE ID = ?
       `;
-      await connection.query(query, [ghiChu,deadline,id]);
-      res.json({ success: true, message: 'Ghi chú đã được lưu thành công' });
-    } catch (error) {
-      console.error('Lỗi khi lưu dữ liệu vào bảng giangday:', error);
-      return res.status(500).json({ success: false, message: 'Lỗi khi lưu ghi chú' });
-    }
-  };
-  const DoneNote = async (req, res) => {
-    let connection = await createPoolConnection()
-    try {
-      const { id } = req.body; // Chỉ lấy id từ body, không lấy ghiChu và deadline
+    await connection.query(query, [ghiChu, deadline, id]);
+    res.json({ success: true, message: "Ghi chú đã được lưu thành công" });
+  } catch (error) {
+    console.error("Lỗi khi lưu dữ liệu vào bảng giangday:", error);
+    return res
+      .status(500)
+      .json({ success: false, message: "Lỗi khi lưu ghi chú" });
+  }
+};
+const DoneNote = async (req, res) => {
+  let connection = await createPoolConnection();
+  try {
+    const { id } = req.body; // Chỉ lấy id từ body, không lấy ghiChu và deadline
 
-      console.log(id);
+    console.log(id);
 
-      const query = `
+    const query = `
           UPDATE quychuan 
           SET GhiChu = NULL, Deadline = NULL 
           WHERE ID = ?
       `;
-      await connection.query(query, [id]);
-      res.json({ success: true, message: 'Ghi chú đã được lưu thành công' });
-    } catch (error) {
-      console.error('Lỗi khi lưu dữ liệu vào bảng giangday:', error);
-      return res.status(500).json({ success: false, message: 'Lỗi khi lưu ghi chú' });
-    }
-  };
+    await connection.query(query, [id]);
+    res.json({ success: true, message: "Ghi chú đã được lưu thành công" });
+  } catch (error) {
+    console.error("Lỗi khi lưu dữ liệu vào bảng giangday:", error);
+    return res
+      .status(500)
+      .json({ success: false, message: "Lỗi khi lưu ghi chú" });
+  }
+};
 
 module.exports = {
   renderInfo,

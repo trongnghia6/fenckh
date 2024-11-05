@@ -1,6 +1,7 @@
 const express = require("express");
 const ExcelJS = require("exceljs");
 const createConnection = require("../config/databaseAsync");
+const createPoolConnection = require("../config/databasePool");
 const fs = require("fs");
 const path = require("path");
 
@@ -8,7 +9,115 @@ function sanitizeFileName(fileName) {
   return fileName.replace(/[^a-z0-9]/gi, "_");
 }
 
-exports.exportPhuLucGiangVienMoi = async (req, res) => {
+// Hàm chuyển đổi số thành chữ
+const numberToWords = (num) => {
+  if (num === 0) return "không đồng";
+
+  const ones = [
+    "",
+    "một",
+    "hai",
+    "ba",
+    "bốn",
+    "năm",
+    "sáu",
+    "bảy",
+    "tám",
+    "chín",
+  ];
+  const teens = [
+    "mười",
+    "mười một",
+    "mười hai",
+    "mười ba",
+    "mười bốn",
+    "mười lăm",
+    "mười sáu",
+    "mười bảy",
+    "mười tám",
+    "mười chín",
+  ];
+  const tens = [
+    "",
+    "",
+    "hai mươi",
+    "ba mươi",
+    "bốn mươi",
+    "năm mươi",
+    "sáu mươi",
+    "bảy mươi",
+    "tám mươi",
+    "chín mươi",
+  ];
+  const thousands = ["", "nghìn", "triệu", "tỷ"];
+
+  let words = "";
+  let unitIndex = 0;
+
+  while (num > 0) {
+    const chunk = num % 1000;
+    if (chunk) {
+      let chunkWords = [];
+      const hundreds = Math.floor(chunk / 100);
+      const remainder = chunk % 100;
+
+      if (hundreds) {
+        chunkWords.push(ones[hundreds]);
+        chunkWords.push("trăm");
+      }
+
+      if (remainder < 10) {
+        if (remainder > 0) {
+          if (hundreds) chunkWords.push("lẻ");
+          chunkWords.push(ones[remainder]);
+        }
+      } else if (remainder < 20) {
+        chunkWords.push(teens[remainder - 10]);
+      } else {
+        const tenPlace = Math.floor(remainder / 10);
+        const onePlace = remainder % 10;
+
+        chunkWords.push(tens[tenPlace]);
+        if (onePlace === 1 && tenPlace > 1) {
+          chunkWords.push("mốt");
+        } else if (onePlace === 5 && tenPlace > 0) {
+          chunkWords.push("lăm");
+        } else if (onePlace) {
+          chunkWords.push(ones[onePlace]);
+        }
+      }
+
+      if (unitIndex > 0) {
+        chunkWords.push(thousands[unitIndex]);
+      }
+
+      words = chunkWords.join(" ") + " " + words;
+    }
+    num = Math.floor(num / 1000);
+    unitIndex++;
+  }
+
+  // Chuyển chữ cái đầu tiên thành chữ hoa
+  const capitalizeFirstLetter = (str) => str.charAt(0).toUpperCase() + str.slice(1);
+  
+  return capitalizeFirstLetter(words.trim() + " đồng");
+};
+
+function formatVietnameseDate(date) {
+  const day = date.getDate().toString().padStart(2, "0");
+  const month = (date.getMonth() + 1).toString().padStart(2, "0");
+  const year = date.getFullYear();
+  return `ngày ${day} tháng ${month} năm ${year}`;
+}
+function formatDateDMY(date) {
+  const d = new Date(date);
+  const day = d.getDate().toString().padStart(2, "0");
+  const month = (d.getMonth() + 1).toString().padStart(2, "0");
+  const year = d.getFullYear();
+  return `${day}/${month}/${year}`;
+}
+
+const exportPhuLucGiangVienMoi = async (req, res) => {
   let connection;
   try {
     connection = await createConnection();
@@ -16,83 +125,48 @@ exports.exportPhuLucGiangVienMoi = async (req, res) => {
     const { dot, ki, namHoc, khoa, teacherName } = req.query;
 
     if (!dot || !ki || !namHoc) {
-      return res.status(400).send("Thiếu thông tin đợt, kỳ hoặc năm học");
+      return res.status(400).json({
+        success: false,
+        message: "Thiếu thông tin đợt, kỳ hoặc năm học",
+      });
     }
 
     let query = `
-    SELECT DISTINCT
-        SUBSTRING_INDEX(qc.GiaoVienGiangDay, ' - ', 1) AS GiangVien, 
-        qc.TenLop AS Lop, 
-        qc.QuyChuan AS SoTiet, 
-        qc.LopHocPhan AS TenHocPhan, 
-        qc.KiHoc AS HocKy,
-        gv.HocVi, 
-        gv.HSL,
-        qc.NgayBatDau, 
-        qc.NgayKetThuc,
-        gv.DiaChi
-    FROM quychuan qc
-    JOIN gvmoi gv ON SUBSTRING_INDEX(qc.GiaoVienGiangDay, ' - ', 1) = gv.HoTen
-    WHERE qc.Dot = ? AND qc.KiHoc = ? AND qc.NamHoc = ? AND qc.DaLuu = 1
-    ORDER BY HoTen
+      SELECT DISTINCT
+          SUBSTRING_INDEX(qc.GiaoVienGiangDay, ' - ', 1) AS GiangVien, 
+          qc.TenLop AS Lop, 
+          qc.QuyChuan AS SoTiet, 
+          qc.LopHocPhan AS TenHocPhan, 
+          qc.KiHoc AS HocKy,
+          gv.HocVi, 
+          gv.HSL,
+          qc.NgayBatDau, 
+          qc.NgayKetThuc,
+          gv.DiaChi
+      FROM quychuan qc
+      JOIN gvmoi gv ON SUBSTRING_INDEX(qc.GiaoVienGiangDay, ' - ', 1) = gv.HoTen
+      WHERE qc.Dot = ? AND qc.KiHoc = ? AND qc.NamHoc = ? AND qc.DaLuu = 1
     `;
-    //
 
-    //     SELECT
-    //     gd.GiangVien, gd.Lop, hd.SoTiet, gd.TenHocPhan, gd.HocKy,
-    //     hd.HocVi, hd.HSL, hd.DiaChi,
-    //     hd.NgayBatDau, hd.NgayKetThuc
-    // FROM giangday gd
-    // JOIN hopdonggvmoi hd ON gd.GiangVien = hd.HoTen
-    // WHERE hd.Dot = ? AND hd.KiHoc = ? AND hd.NamHoc = ?
     let params = [dot, ki, namHoc];
 
-    // Nếu khoa không được chỉ định hoặc là 'ALL', không cần thêm điều kiện
     if (khoa && khoa !== "ALL") {
-      query = `
-        SELECT DISTINCT
-            SUBSTRING_INDEX(qc.GiaoVienGiangDay, ' - ', 1) AS GiangVien, 
-            qc.TenLop AS Lop, 
-            qc.QuyChuan AS SoTiet, 
-            qc.LopHocPhan AS TenHocPhan, 
-            qc.KiHoc AS HocKy,
-            gv.HocVi, 
-            gv.HSL,
-            qc.NgayBatDau, 
-            qc.NgayKetThuc,
-            gv.DiaChi
-        FROM quychuan qc
-        JOIN gvmoi gv ON SUBSTRING_INDEX(qc.GiaoVienGiangDay, ' - ', 1) = gv.HoTen
-            WHERE qc.Dot = ? AND qc.KiHoc = ? AND qc.NamHoc = ? AND qc.DaLuu = 1
-AND qc.Khoa = ?
-        ORDER BY HoTen
-        `;
+      query += ` AND qc.Khoa = ?`;
       params.push(khoa);
     }
 
     if (teacherName) {
-      query = `
-        SELECT DISTINCT
-            SUBSTRING_INDEX(qc.GiaoVienGiangDay, ' - ', 1) AS GiangVien, 
-            qc.TenLop AS Lop, 
-            qc.QuyChuan AS SoTiet, 
-            qc.LopHocPhan AS TenHocPhan, 
-            qc.KiHoc AS HocKy,
-            gv.HocVi, 
-            gv.HSL,
-            qc.NgayBatDau, 
-            qc.NgayKetThuc,
-            gv.DiaChi
-        FROM quychuan qc
-        JOIN gvmoi gv ON SUBSTRING_INDEX(qc.GiaoVienGiangDay, ' - ', 1) = gv.HoTen
-        WHERE qc.Dot = ? AND qc.KiHoc = ? AND qc.NamHoc = ? AND qc.DaLuu = 1
- AND gv.HoTen LIKE ?
-        ORDER BY HoTen
-        `;
+      query += ` AND gv.HoTen LIKE ?`;
       params.push(`%${teacherName}%`);
     }
 
     const [data] = await connection.execute(query, params);
+
+    if (data.length === 0) {
+      return res.send(
+        "<script>alert('Không tìm thấy giảng viên phù hợp điều kiện'); window.location.href='/phuLucHD';</script>"
+      );
+    }
 
     // Tạo workbook mới
     const workbook = new ExcelJS.Workbook();
@@ -124,15 +198,24 @@ AND qc.Khoa = ?
       titleRow2.alignment = { horizontal: "center", vertical: "middle" };
       worksheet.mergeCells(`A${titleRow2.number}:K${titleRow2.number}`);
 
+      // Tìm ngày bắt đầu sớm nhất từ dữ liệu giảng viên
+      const earliestDate = giangVienData.reduce((minDate, item) => {
+        const currentStartDate = new Date(item.NgayBatDau);
+        return currentStartDate < minDate ? currentStartDate : minDate;
+      }, new Date(giangVienData[0].NgayBatDau));
+
+      // Định dạng ngày bắt đầu sớm nhất thành chuỗi
+      const formattedEarliestDate = formatVietnameseDate(earliestDate);
+
       const titleRow3 = worksheet.addRow([
-        "Hợp đồng số:    /HĐ-ĐT ngày   tháng   năm",
+        `Hợp đồng số:    /HĐ-ĐT ${formattedEarliestDate}`,
       ]);
       titleRow3.font = { name: "Times New Roman", bold: true, size: 14 };
       titleRow3.alignment = { horizontal: "center", vertical: "middle" };
       worksheet.mergeCells(`A${titleRow3.number}:K${titleRow3.number}`);
 
       const titleRow4 = worksheet.addRow([
-        "Kèm theo biên bản nghiệm thu và thanh lý Hợp đồng số:     /HĐ-ĐT ngày  tháng  năm ",
+        `Kèm theo biên bản nghiệm thu và thanh lý Hợp đồng số:     /HĐ-ĐT ${formattedEarliestDate}`,
       ]);
       titleRow4.font = { name: "Times New Roman", bold: true, size: 14 };
       titleRow4.alignment = { horizontal: "center", vertical: "middle" };
@@ -238,12 +321,10 @@ AND qc.Khoa = ?
         const soTien = item.SoTiet * mucThanhToan;
         const truThue = soTien * 0.1;
         const thucNhan = soTien - truThue;
-
-        const thoiGianThucHien = `${new Date(
+        const thoiGianThucHien = `${formatDateDMY(
           item.NgayBatDau
-        ).toLocaleDateString()} - ${new Date(
-          item.NgayKetThuc
-        ).toLocaleDateString()}`;
+        )} - ${formatDateDMY(item.NgayKetThuc)}`;
+
         const row = worksheet.addRow([
           item.GiangVien,
           item.TenHocPhan,
@@ -287,16 +368,16 @@ AND qc.Khoa = ?
               cell.font = { name: "Times New Roman", size: 9 };
               break;
             case 6: // Học kỳ
-              cell.font = { name: "Times New Roman", size: 9 };
+              cell.font = { name: "Times New Roman", size: 10 };
               break;
             case 7: // Địa Chỉ
-              cell.font = { name: "Times New Roman", size: 9 };
+              cell.font = { name: "Times New Roman", size: 10 };
               break;
             case 8: // Học vị
-              cell.font = { name: "Times New Roman", size: 9 };
+              cell.font = { name: "Times New Roman", size: 10 };
               break;
             case 9: // Hệ số lương
-              cell.font = { name: "Times New Roman", size: 9 };
+              cell.font = { name: "Times New Roman", size: 10 };
               break;
             case 10: // Mức thanh toán
               cell.font = { name: "Times New Roman", size: 10 };
@@ -305,7 +386,7 @@ AND qc.Khoa = ?
               cell.font = { name: "Times New Roman", size: 11 };
               break;
             case 12: // Trừ thuế TNCN 10%
-              cell.font = { name: "Times New Roman", size: 9 };
+              cell.font = { name: "Times New Roman", size: 10 };
               break;
             case 13: // Còn lại
               cell.font = { name: "Times New Roman", size: 11 };
@@ -348,10 +429,24 @@ AND qc.Khoa = ?
 
       // Gộp ô cho hàng tổng cộng
       worksheet.mergeCells(`A${totalRow.number}:C${totalRow.number}`);
+      // Thêm hai dòng trống
+      worksheet.addRow([]);
+      worksheet.addRow([]);
+
+      // Thêm dòng "Bằng chữ" không có viền và tăng cỡ chữ
+      // Thêm dòng "Bằng chữ" không có viền và tăng cỡ chữ
+      const bangChuRow = worksheet.addRow([
+        `Bằng chữ: ${numberToWords(totalSoTien)}`,
+      ]);
+      bangChuRow.font = { name: "Times New Roman", italic: true, size: 14 };
+      worksheet.mergeCells(`A${bangChuRow.number}:${bangChuRow.number}`);
+      bangChuRow.alignment = { horizontal: "left", vertical: "middle" };
 
       // Định dạng viền cho các hàng từ dòng thứ 6 trở đi
-      const rowCount = worksheet.lastRow.number;
-      for (let i = 7; i <= rowCount; i++) {
+      const firstRowOfTable = 7; // Giả sử bảng bắt đầu từ hàng 7
+      const lastRowOfTable = totalRow.number; // Hàng tổng cộng
+
+      for (let i = firstRowOfTable; i <= lastRowOfTable; i++) {
         const row = worksheet.getRow(i);
         row.eachCell((cell) => {
           cell.border = {
@@ -365,27 +460,35 @@ AND qc.Khoa = ?
     }
 
     // Tạo tên file
-    let fileName = `PhuLuc_Dot${dot}_Ki${ki}_${namHoc}`;
+    let fileName = `PhuLuc_GiangVien_Moi_Dot${dot}_Ki${ki}_${namHoc}`;
     if (khoa && khoa !== "ALL") {
-      fileName += `_${khoa}`;
+      fileName += `_${sanitizeFileName(khoa)}`;
     }
     if (teacherName) {
       fileName += `_${sanitizeFileName(teacherName)}`;
     }
     fileName += ".xlsx";
 
-    // Set headers cho response
+    // Set headers cho response và gửi file
     res.setHeader(
       "Content-Type",
       "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
     );
-    res.setHeader("Content-Disposition", `attachment; filename=${fileName}`);
+    res.setHeader(
+      "Content-Disposition",
+      `attachment; filename="${encodeURIComponent(fileName)}"`
+    );
 
+    // Ghi workbook vào response
     await workbook.xlsx.write(res);
-    res.end();
+
+    // Không cần gọi res.end() vì workbook.xlsx.write đã tự động kết thúc response
   } catch (error) {
     console.error("Error exporting data:", error);
-    res.status(500).send("Error exporting data");
+    return res.status(500).json({
+      success: false,
+      message: "Error exporting data",
+    });
   } finally {
     if (connection) {
       try {
@@ -395,4 +498,29 @@ AND qc.Khoa = ?
       }
     }
   }
+};
+
+const getPhuLucHDSite = async (req, res) => {
+  let connection;
+  try {
+    connection = await createPoolConnection();
+
+    // Lấy danh sách phòng ban để lọc
+    const query = `select HoTen, MaPhongBan from gvmoi`;
+    const [gvmoiList] = await connection.query(query);
+
+    res.render("phuLucHD.ejs", {
+      gvmoiList: gvmoiList,
+    });
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    res.status(500).send("Internal Server Error");
+  } finally {
+    if (connection) connection.release(); // Đảm bảo giải phóng kết nối
+  }
+};
+
+module.exports = {
+  exportPhuLucGiangVienMoi,
+  getPhuLucHDSite,
 };

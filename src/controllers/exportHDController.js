@@ -3,6 +3,7 @@ const Docxtemplater = require("docxtemplater");
 const fs = require("fs");
 const path = require("path");
 const createConnection = require("../config/databaseAsync");
+const createPoolConnection = require("../config/databasePool");
 const archiver = require("archiver");
 
 function deleteFolderRecursive(folderPath) {
@@ -70,7 +71,7 @@ const numberToWords = (num) => {
   while (num > 0) {
     const chunk = num % 1000;
     if (chunk) {
-      const chunkWords = [];
+      let chunkWords = [];
       const hundreds = Math.floor(chunk / 100);
       const remainder = chunk % 100;
 
@@ -80,7 +81,10 @@ const numberToWords = (num) => {
       }
 
       if (remainder < 10) {
-        chunkWords.push(ones[remainder]);
+        if (remainder > 0) {
+          if (hundreds) chunkWords.push("lẻ");
+          chunkWords.push(ones[remainder]);
+        }
       } else if (remainder < 20) {
         chunkWords.push(teens[remainder - 10]);
       } else {
@@ -88,23 +92,30 @@ const numberToWords = (num) => {
         const onePlace = remainder % 10;
 
         chunkWords.push(tens[tenPlace]);
-        if (onePlace === 1 && tenPlace > 0) {
+        if (onePlace === 1 && tenPlace > 1) {
           chunkWords.push("mốt");
+        } else if (onePlace === 5 && tenPlace > 0) {
+          chunkWords.push("lăm");
         } else if (onePlace) {
           chunkWords.push(ones[onePlace]);
         }
       }
 
-      chunkWords.push(thousands[unitIndex]);
+      if (unitIndex > 0) {
+        chunkWords.push(thousands[unitIndex]);
+      }
+
       words = chunkWords.join(" ") + " " + words;
     }
     num = Math.floor(num / 1000);
     unitIndex++;
   }
 
-  return words.trim() + " đồng";
+  // Chuyển chữ cái đầu tiên thành chữ hoa
+  const capitalizeFirstLetter = (str) => str.charAt(0).toUpperCase() + str.slice(1);
+  
+  return capitalizeFirstLetter(words.trim() + " đồng");
 };
-
 // Hàm chuyển đổi số thập phân thành chữ
 const numberWithDecimalToWords = (num) => {
   const [integerPart, decimalPart] = num.toString().split(".");
@@ -129,15 +140,17 @@ const formatDate = (date) => {
     if (!date) return "";
     const d = new Date(date);
     if (isNaN(d.getTime())) return "";
-    return `${d.getDate().toString().padStart(2, "0")}/${(d.getMonth() + 1)
-      .toString()
-      .padStart(2, "0")}/${d.getFullYear()}`;
+    
+    const day = d.getDate().toString().padStart(2, "0");
+    const month = (d.getMonth() + 1).toString().padStart(2, "0");
+    const year = d.getFullYear();
+    
+    return `ngày ${day} tháng ${month} năm ${year}`;
   } catch (error) {
     console.error("Error formatting date:", error);
     return "";
   }
 };
-
 // Controller xuất một hợp đồng
 const exportSingleContract = async (req, res) => {
   let connection;
@@ -798,7 +811,28 @@ const exportMultipleContracts = async (req, res) => {
   }
 };
 
+const getExportHDSite = async (req, res) => {
+  let connection;
+  try {
+    connection = await createPoolConnection();
+
+    // Lấy danh sách phòng ban để lọc
+    const query = `select HoTen, MaPhongBan from gvmoi`;
+    const [gvmoiList] = await connection.query(query);
+
+    res.render("exportHD", {
+      gvmoiList: gvmoiList,
+    });
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    res.status(500).send("Internal Server Error");
+  } finally {
+    if (connection) connection.release(); // Đảm bảo giải phóng kết nối
+  }
+};
+
 module.exports = {
   exportSingleContract,
   exportMultipleContracts,
+  getExportHDSite,
 };
