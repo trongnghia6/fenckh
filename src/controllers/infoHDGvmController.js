@@ -293,8 +293,9 @@ const numberToWords = (num) => {
   }
 
   // Chuyển chữ cái đầu tiên thành chữ hoa
-  const capitalizeFirstLetter = (str) => str.charAt(0).toUpperCase() + str.slice(1);
-  
+  const capitalizeFirstLetter = (str) =>
+    str.charAt(0).toUpperCase() + str.slice(1);
+
   return capitalizeFirstLetter(words.trim() + " đồng");
 };
 
@@ -390,8 +391,6 @@ const getHopDongDuKienData = async (req, res) => {
           gv.HoTen;`,
       [namHoc, dot, ki]
     );
-
-    console.log("xem ", rows);
 
     res.json(rows);
   } catch (error) {
