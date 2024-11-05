@@ -34,14 +34,20 @@
 
     /* phần css cho label tổng số tiết  ki*/
     .search {
-    /* Các style chung cho các ô tìm kiếm */
-    width: 200px; /* Hoặc bất kỳ chiều rộng nào bạn muốn */
-    padding: 8px; /* Padding cho ô input */
-    border: 1px solid #ccc; /* Đường viền cho ô input */
-    border-radius: 4px; /* Bo góc cho ô input */
-    font-size: 14px; /* Kích thước chữ */
-    height: 50px;
-}
+      /* Các style chung cho các ô tìm kiếm */
+      width: 200px;
+      /* Hoặc bất kỳ chiều rộng nào bạn muốn */
+      padding: 8px;
+      /* Padding cho ô input */
+      border: 1px solid #ccc;
+      /* Đường viền cho ô input */
+      border-radius: 4px;
+      /* Bo góc cho ô input */
+      font-size: 14px;
+      /* Kích thước chữ */
+      height: 50px;
+    }
+
     .total-label {
       margin-left: auto;
       /* Căn phải cho thẻ total-label */
@@ -371,53 +377,55 @@
       <div class="d-flex my-3" style="height: 70px">
         <input type="text" id="filterName" placeholder="Tìm theo tên giảng viên" class="form-control m-2 search" />
         <input type="text" id="filterClass" placeholder="Tìm theo tên học phần" class="form-control m-2 search" />
-        <input type="text" id="filterKhoa" placeholder="Tìm theo khoa" onclick="showSuggestionsKhoa(this)" class="form-control m-2 search" />
-        <input type="text" id="filterBoMon" placeholder="Tìm theo tên bộ môn"  onclick="showSuggestionsBoMon(this)" class="form-control m-2 search" />
+        <input type="text" id="filterKhoa" placeholder="Tìm theo khoa" onclick="showSuggestionsKhoa(this)"
+          class="form-control m-2 search" />
+        <input type="text" id="filterBoMon" placeholder="Tìm theo tên bộ môn" onclick="showSuggestionsBoMon(this)"
+          class="form-control m-2 search" />
       </div>
       <script>
         // Hàm lọc chung
-function filterClasses() {
-    const nameInput = document.getElementById("filterName").value.toLowerCase();
-    const classInput = document.getElementById("filterClass").value.toLowerCase();
-    const departmentInput = document.getElementById("filterKhoa").value.toLowerCase();
-    const boMonInput = document.getElementById("filterBoMon").value.toLowerCase();
-    
-    const tableRows = document.querySelectorAll("#tableBody tr");
+        function filterClasses() {
+          const nameInput = document.getElementById("filterName").value.toLowerCase();
+          const classInput = document.getElementById("filterClass").value.toLowerCase();
+          const departmentInput = document.getElementById("filterKhoa").value.toLowerCase();
+          const boMonInput = document.getElementById("filterBoMon").value.toLowerCase();
 
-    tableRows.forEach(row => {
-        const nameCell = row.querySelector("td:nth-child(3)"); // Tên giảng viên
-        const classCell = row.querySelector("td:nth-child(1)"); // Tên học phần
-        const departmentCell = row.querySelector("td:nth-child(6)"); // Khoa
-        const boMonCell = row.querySelector("td:nth-child(7)"); // Bộ môn
+          const tableRows = document.querySelectorAll("#tableBody tr");
 
-        // Lấy giá trị từ các ô
-        const nameValue = nameCell ? nameCell.textContent.toLowerCase() : '';
-        const classValue = classCell ? classCell.textContent.toLowerCase() : '';
-        const departmentValue = departmentCell ? departmentCell.textContent.toLowerCase() : '';
-        const boMonValue = boMonCell ? boMonCell.textContent.toLowerCase() : '';
+          tableRows.forEach(row => {
+            const nameCell = row.querySelector("td:nth-child(3)"); // Tên giảng viên
+            const classCell = row.querySelector("td:nth-child(1)"); // Tên học phần
+            const departmentCell = row.querySelector("td:nth-child(6)"); // Khoa
+            const boMonCell = row.querySelector("td:nth-child(7)"); // Bộ môn
 
-        // Kiểm tra điều kiện lọc
-        const nameMatch = nameValue.includes(nameInput);
-        const classMatch = classValue.includes(classInput);
-        const departmentMatch = departmentValue.includes(departmentInput);
-        const boMonMatch = boMonValue.includes(boMonInput);
+            // Lấy giá trị từ các ô
+            const nameValue = nameCell ? nameCell.textContent.toLowerCase() : '';
+            const classValue = classCell ? classCell.textContent.toLowerCase() : '';
+            const departmentValue = departmentCell ? departmentCell.textContent.toLowerCase() : '';
+            const boMonValue = boMonCell ? boMonCell.textContent.toLowerCase() : '';
 
-        // Hiện hoặc ẩn hàng dựa trên các điều kiện
-        if (nameMatch && classMatch && departmentMatch && boMonMatch) {
-            row.style.display = ""; // Hiện hàng nếu tất cả các điều kiện đều khớp
-        } else {
-            row.style.display = "none"; // Ẩn hàng nếu không khớp
+            // Kiểm tra điều kiện lọc
+            const nameMatch = nameValue.includes(nameInput);
+            const classMatch = classValue.includes(classInput);
+            const departmentMatch = departmentValue.includes(departmentInput);
+            const boMonMatch = boMonValue.includes(boMonInput);
+
+            // Hiện hoặc ẩn hàng dựa trên các điều kiện
+            if (nameMatch && classMatch && departmentMatch && boMonMatch) {
+              row.style.display = ""; // Hiện hàng nếu tất cả các điều kiện đều khớp
+            } else {
+              row.style.display = "none"; // Ẩn hàng nếu không khớp
+            }
+          });
+
+          calculateTotals(); // Cập nhật tổng số tiết
         }
-    });
 
-    calculateTotals(); // Cập nhật tổng số tiết
-}
-
-    // Gọi hàm lọc khi có thay đổi trong các ô tìm kiếm
-    document.getElementById("filterName").addEventListener("input", filterClasses);
-    document.getElementById("filterClass").addEventListener("input", filterClasses);
-    document.getElementById("filterKhoa").addEventListener("input", filterClasses);
-    document.getElementById("filterBoMon").addEventListener("input", filterClasses);
+        // Gọi hàm lọc khi có thay đổi trong các ô tìm kiếm
+        document.getElementById("filterName").addEventListener("input", filterClasses);
+        document.getElementById("filterClass").addEventListener("input", filterClasses);
+        document.getElementById("filterKhoa").addEventListener("input", filterClasses);
+        document.getElementById("filterBoMon").addEventListener("input", filterClasses);
       </script>
       <div id="renderInfo" class="fixed-section">
         <table class="text-center" style="width: 100%">
@@ -601,7 +609,7 @@ function filterClasses() {
         if (!gvmResponse.ok || !khoaResponse.ok || !teachingResponse.ok) {
           alert("Không tìm thấy dữ liệu!");
         }
-
+        // đẩy code cho P
         // Lưu dữ liệu giảng viên cùng với mã phòng ban
         nameGv = await gvmResponse.json();
 
@@ -701,14 +709,14 @@ function filterClasses() {
 
         const ghiChuTd = document.createElement("td");
         const ghiChuValue = row.GhiChu && row.GhiChu.trim() !== "" ? row.GhiChu : false;
-        const deadlineValue = row.Deadline  || ""; // Lấy giá trị Deadline
+        const deadlineValue = row.Deadline || ""; // Lấy giá trị Deadline
         if (ghiChuValue) {
-            ghiChuTd.innerHTML = `📜 <span style="color: red;">•</span>`; // Hiển thị biểu tượng ghi chú và chấm đỏ
+          ghiChuTd.innerHTML = `📜 <span style="color: red;">•</span>`; // Hiển thị biểu tượng ghi chú và chấm đỏ
         } else {
-            ghiChuTd.innerHTML = "📜"; // Hiển thị biểu tượng ghi chú nếu không có ghi chú
+          ghiChuTd.innerHTML = "📜"; // Hiển thị biểu tượng ghi chú nếu không có ghi chú
         }
         ghiChuTd.style.cursor = "pointer"; // Thay đổi con trỏ chuột khi di chuột qua biểu tượng
-        ghiChuTd.onclick = () => openNoteForm(tableRow,ghiChuValue,deadlineValue); // Gọi hàm mở form khi nhấn vào biểu tượng
+        ghiChuTd.onclick = () => openNoteForm(tableRow, ghiChuValue, deadlineValue); // Gọi hàm mở form khi nhấn vào biểu tượng
         tableRow.appendChild(ghiChuTd); // Thêm ô ghi chú vào hàng
 
 
@@ -747,16 +755,16 @@ function filterClasses() {
 
         // Hiển thị `td` khi điều kiện thỏa mãn
         if (MaPhongBan == "DAOTAO") {
-            // Thu nhỏ ô <td> chứa checkbox Tài Chính
+          // Thu nhỏ ô <td> chứa checkbox Tài Chính
           taiChinhCheckboxTd.style.width = '1px';
           taiChinhCheckboxTd.style.height = '1px';
           taiChinhCheckbox.style.width = '1px';
           taiChinhCheckbox.style.height = '1px';
           taiChinhCheckbox.style.opacity = '0';
           taiChinhCheckboxTd.style.display = 'none';
-        
+
         } else if (MaPhongBan == "TAICHINH") {
-            // Thu nhỏ ô <td> chứa checkbox Khoa
+          // Thu nhỏ ô <td> chứa checkbox Khoa
           khoaCheckboxTd.style.display = 'none';
         }
         /*
@@ -811,45 +819,45 @@ function filterClasses() {
         tableBody.appendChild(tableRow); // Thêm hàng vào bảng
       });
     }
-/*
-    function disableCheckAll(type) {
-      const checkAllCheckbox = document.getElementById(
-        `checkAll${type.charAt(0).toUpperCase() + type.slice(1)}`
-      );
+    /*
+        function disableCheckAll(type) {
+          const checkAllCheckbox = document.getElementById(
+            `checkAll${type.charAt(0).toUpperCase() + type.slice(1)}`
+          );
+    
+          if (checkAllCheckbox) {
+            // Ngăn không cho người dùng thay đổi checkbox tổng
+            checkAllCheckbox.addEventListener("click", function (e) {
+              e.preventDefault(); // Ngăn thay đổi trạng thái
+            });
+          }
+        }
+    */
 
-      if (checkAllCheckbox) {
-        // Ngăn không cho người dùng thay đổi checkbox tổng
-        checkAllCheckbox.addEventListener("click", function (e) {
-          e.preventDefault(); // Ngăn thay đổi trạng thái
-        });
-      }
-    }
-*/
-
-   /* 
-function checkAll(type) {
-  alert("1")
-  const checkboxes = document.querySelectorAll(
-    `input[type="checkbox"][name="${type}"]`
-  );
-  const checkAllCheckbox = document.getElementById(
-    `checkAll${type.charAt(0).toUpperCase() + type.slice(1)}`
-  );
-
-  for (const checkbox of checkboxes) {
-    if (checkbox.disabled || !checkbox.offsetParent) {
-      continue; // Bỏ qua checkbox bị vô hiệu hóa
-    }
-
-    const row = checkbox.closest('tr');
-    if (row.style.display == 'none') { // Kiểm tra nếu dòng hiện trên màn hình
-      continue; // Gán trạng thái checkbox "Check All" cho checkbox hiển thị
-    }
-
-    checkbox.checked = checkAllCheckbox.checked; // Gán giá trị checked cho checkbox không bị vô hiệu hóa
-  }
-}
-*/
+    /* 
+ function checkAll(type) {
+   alert("1")
+   const checkboxes = document.querySelectorAll(
+     `input[type="checkbox"][name="${type}"]`
+   );
+   const checkAllCheckbox = document.getElementById(
+     `checkAll${type.charAt(0).toUpperCase() + type.slice(1)}`
+   );
+ 
+   for (const checkbox of checkboxes) {
+     if (checkbox.disabled || !checkbox.offsetParent) {
+       continue; // Bỏ qua checkbox bị vô hiệu hóa
+     }
+ 
+     const row = checkbox.closest('tr');
+     if (row.style.display == 'none') { // Kiểm tra nếu dòng hiện trên màn hình
+       continue; // Gán trạng thái checkbox "Check All" cho checkbox hiển thị
+     }
+ 
+     checkbox.checked = checkAllCheckbox.checked; // Gán giá trị checked cho checkbox không bị vô hiệu hóa
+   }
+ }
+ */
 
 
     async function submitData() {
@@ -881,16 +889,16 @@ function checkAll(type) {
         // Biến để lưu trạng thái
         let khoaDuyet = khoaCheckbox ? khoaCheckbox.checked : false; // Cập nhật Khoa
         let taiChinhDuyet = taiChinhCheckbox ? taiChinhCheckbox.checked : false; // Cập nhật Tài Chính
-/*
-        if (MaPhongBan == "DAOTAO" && role == "Duyệt") {
-          // Khi role là DAOTAO_ALL
-          khoaDuyet = khoaCheckbox ? khoaCheckbox.checked : false; // Cập nhật Khoa
-        } else if (MaPhongBan == "TAICHINH" && role == "Duyệt") {
-          // Khi role là TAICHINH_ALL
-          khoaDuyet = globalData[index].KhoaDuyet; // Giữ nguyên giá trị cũ của Khoa
-          taiChinhDuyet = taiChinhCheckbox ? taiChinhCheckbox.checked : false; // Cập nhật Tài Chính
-        }
-*/
+        /*
+                if (MaPhongBan == "DAOTAO" && role == "Duyệt") {
+                  // Khi role là DAOTAO_ALL
+                  khoaDuyet = khoaCheckbox ? khoaCheckbox.checked : false; // Cập nhật Khoa
+                } else if (MaPhongBan == "TAICHINH" && role == "Duyệt") {
+                  // Khi role là TAICHINH_ALL
+                  khoaDuyet = globalData[index].KhoaDuyet; // Giữ nguyên giá trị cũ của Khoa
+                  taiChinhDuyet = taiChinhCheckbox ? taiChinhCheckbox.checked : false; // Cập nhật Tài Chính
+                }
+        */
         // Cập nhật vào mảng globalData tương ứng với chỉ mục hàng (index)
         globalData[index].KhoaDuyet = khoaDuyet; // Cập nhật Khoa
         globalData[index].DaoTaoDuyet = daoTaoDuyet; // Cập nhật Đào Tạo
@@ -1103,16 +1111,16 @@ function checkAll(type) {
       const checkAllCheckbox = document.getElementById(
         `checkAll${type.charAt(0).toUpperCase() + type.slice(1)}`
       );
-    
+
       for (const checkbox of checkboxes) {
         if (checkbox.disabled || !checkbox.offsetParent) {
           continue; // Bỏ qua checkbox bị vô hiệu hóa hoặc bị ẩn hoàn toàn
         }
-    
+
         checkbox.checked = checkAllCheckbox.checked; // Gán trạng thái checked cho checkbox hiển thị và không bị vô hiệu hóa
       }
     }
-    
+
 
     // Hàm để cập nhật trạng thái của checkbox "Check All" khi checkbox cá nhân được chọn
     function updateCheckAll(type) {
@@ -1179,7 +1187,7 @@ function checkAll(type) {
     window.onload = function () {
       const TenNhanVien = localStorage.getItem("TenNhanVien"); // Lấy tên người dùng từ localStorage
       let Role = localStorage.getItem("userRole");
-      if (Role.toUpperCase() == 'LÃNH ĐẠO KHOA'){
+      if (Role.toUpperCase() == 'LÃNH ĐẠO KHOA') {
         Role = 'LĐK';
       }
 
@@ -1199,15 +1207,15 @@ function checkAll(type) {
     let currentRow; // Biến toàn cục để lưu hàng hiện tại
 
     function openNoteForm(row, GhiChu, Deadline) {
-    currentRow = row; // Lưu hàng hiện tại
-    console.log(formatInputDate(Deadline));
-    document.getElementById("noteForm").style.display = "block"; // Hiển thị form
-    document.getElementById("modalBackdrop").style.display = "block"; // Hiển thị nền tối
+      currentRow = row; // Lưu hàng hiện tại
+      console.log(formatInputDate(Deadline));
+      document.getElementById("noteForm").style.display = "block"; // Hiển thị form
+      document.getElementById("modalBackdrop").style.display = "block"; // Hiển thị nền tối
 
-    // Hiển thị giá trị ghi chú và hạn
-    document.getElementById("noteInput").value = GhiChu || ""; // Hiển thị ghi chú
-    document.getElementById("deadlineInput").value = formatInputDate(Deadline)  || ""; // Hiển thị hạn
-}
+      // Hiển thị giá trị ghi chú và hạn
+      document.getElementById("noteInput").value = GhiChu || ""; // Hiển thị ghi chú
+      document.getElementById("deadlineInput").value = formatInputDate(Deadline) || ""; // Hiển thị hạn
+    }
 
 
     function closeNoteForm() {
@@ -1227,11 +1235,11 @@ function checkAll(type) {
 
       if (currentRow) {
         const id = currentRow.getAttribute("data-id"); // Lấy ID từ thuộc tính `data-id` của hàng
-        
+
         // Kiểm tra ID có tồn tại
         if (id) {
-          
-          
+
+
           // Gửi dữ liệu đến API để lưu vào CSDL
           try {
             const response = await fetch('/savenote', {
@@ -1259,44 +1267,44 @@ function checkAll(type) {
 
       closeNoteForm();
     }
-  async function doneNote() {
-    const note = document.getElementById("noteInput").value;
-    const deadline = document.getElementById("deadlineInput").value;
+    async function doneNote() {
+      const note = document.getElementById("noteInput").value;
+      const deadline = document.getElementById("deadlineInput").value;
 
-    if (currentRow) {
-      const id = currentRow.getAttribute("data-id"); // Lấy ID từ thuộc tính `data-id` của hàng
-      
-      // Kiểm tra ID có tồn tại
-      if (id) {
-        
-        
-        // Gửi dữ liệu đến API để lưu vào CSDL
-        try {
-          const response = await fetch('/donenote', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ id}),
-          });
-          const result = await response.json();
-          if (!result.success) {
-            alert("Lỗi khi lưu ghi chú vào CSDL: " + result.message);
-          } else {
-            alert("Cập nhật thành công");
+      if (currentRow) {
+        const id = currentRow.getAttribute("data-id"); // Lấy ID từ thuộc tính `data-id` của hàng
+
+        // Kiểm tra ID có tồn tại
+        if (id) {
+
+
+          // Gửi dữ liệu đến API để lưu vào CSDL
+          try {
+            const response = await fetch('/donenote', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({ id }),
+            });
+            const result = await response.json();
+            if (!result.success) {
+              alert("Lỗi khi lưu ghi chú vào CSDL: " + result.message);
+            } else {
+              alert("Cập nhật thành công");
+            }
+          } catch (error) {
+            alert("Lỗi khi gửi yêu cầu đến server: " + error);
           }
-        } catch (error) {
-          alert("Lỗi khi gửi yêu cầu đến server: " + error);
+        } else {
+          alert("ID của hàng hiện tại không tồn tại.");
         }
       } else {
-        alert("ID của hàng hiện tại không tồn tại.");
+        alert("currentRow không được xác định.");
       }
-    } else {
-      alert("currentRow không được xác định.");
-    }
 
-    closeNoteForm();
-  }
+      closeNoteForm();
+    }
 
 
     // Hàm để chuyển đổi định dạng ngày
@@ -1323,7 +1331,7 @@ function checkAll(type) {
 
   <script>
     // Chuyển đổi dữ liệu phòng ban thành JSON và lưu vào Local Storage
-    const phongBanData = <%- JSON.stringify(phongBanList) %>;
+    const phongBanData = <% - JSON.stringify(phongBanList) %>;
     localStorage.setItem("phongBanList", JSON.stringify(phongBanData));
     console.log("Dữ liệu phòng ban đã được lưu vào Local Storage:", phongBanData);
 
@@ -1583,22 +1591,22 @@ function checkAll(type) {
 
             response.NamHoc.forEach(function (item) {
               console.log(item.NamHoc);
-                $('#NamHoc').append(
-                  `<option value="${item.NamHoc}">${item.NamHoc}</option>`
-                );
+              $('#NamHoc').append(
+                `<option value="${item.NamHoc}">${item.NamHoc}</option>`
+              );
             });
 
             response.Ki.forEach(function (item) {
               console.log(item.Ki);
-                $('#combobox-ki').append(
-                  `<option value="${item.value}">${item.Ki}</option>`
-                );
+              $('#combobox-ki').append(
+                `<option value="${item.value}">${item.Ki}</option>`
+              );
             });
             response.Dot.forEach(function (item) {
               console.log(item.Dot);
-                $('#combobox-dot').append(
-                  `<option value="${item.value}">${item.Dot}</option>`
-                );
+              $('#combobox-dot').append(
+                `<option value="${item.value}">${item.Dot}</option>`
+              );
             });
           } else {
             console.error("Không lấy được dữ liệu năm học:", response.message);
