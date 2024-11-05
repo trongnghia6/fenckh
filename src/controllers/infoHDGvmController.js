@@ -334,7 +334,63 @@ const getHDGvmData = async (req, res) => {
   }
 };
 
+// P
+const getHopDongDuKienData = async (req, res) => {
+  let connection;
+  try {
+    connection = await createPoolConnection();
+    const namHoc = req.query.namHoc;
+    const dot = req.query.dot;
+    const ki = req.query.ki;
+
+    const [rows] = await connection.execute(
+      `SELECT
+          MIN(qc.NgayBatDau) AS NgayBatDau,
+          MAX(qc.NgayKetThuc) AS NgayKetThuc,
+          qc.KiHoc,
+          gv.GioiTinh,
+          gv.HoTen,
+          gv.NgaySinh,
+          gv.CCCD,
+          gv.NoiCapCCCD,
+          gv.Email,
+          gv.MaSoThue,
+          gv.HocVi,
+          gv.ChucVu,
+          gv.HSL,
+          gv.DienThoai,
+          gv.STK,
+          gv.NganHang,
+          SUM(qc.QuyChuan) AS SoTiet
+      FROM 
+    quychuan qc
+      JOIN 
+    gvmoi gv ON SUBSTRING_INDEX(qc.GiaoVienGiangDay, ' - ', 1) = gv.HoTen
+      WHERE
+          NamHoc = ? AND Dot = ? AND KiHoc = ?
+      GROUP BY
+          gv.HoTen;`,
+      [namHoc, dot, ki]
+    );
+
+    console.log("xem ", rows);
+
+    res.json(rows);
+  } catch (error) {
+    console.error("Error fetching HD Gvm data:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  } finally {
+    if (connection) connection.release(); // Trả lại connection cho pool
+  }
+};
+
+const getHopDongDuKien = (req, res) => {
+  res.render("hopDongDuKien.ejs");
+};
+
 module.exports = {
   exportHDGvmToExcel,
   getHDGvmData,
+  getHopDongDuKienData,
+  getHopDongDuKien,
 };
