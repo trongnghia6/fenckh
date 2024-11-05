@@ -361,6 +361,7 @@ const getHopDongDuKienData = async (req, res) => {
           gv.DienThoai,
           gv.STK,
           gv.NganHang,
+          gv.MaPhongBan,
           SUM(qc.QuyChuan) AS SoTiet
       FROM 
     quychuan qc
@@ -384,8 +385,23 @@ const getHopDongDuKienData = async (req, res) => {
   }
 };
 
-const getHopDongDuKien = (req, res) => {
-  res.render("hopDongDuKien.ejs");
+const getHopDongDuKien = async (req, res) => {
+  let connection;
+  try {
+    connection = await createPoolConnection();
+    // Lấy danh sách phòng ban để lọc
+    const qrPhongBan = `select * from phongban where isKhoa = 1`;
+    const [phongBanList] = await connection.query(qrPhongBan);
+
+    res.render("hopDongDuKien.ejs", {
+      phongBanList: phongBanList,
+    });
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    res.status(500).send("Internal Server Error");
+  } finally {
+    if (connection) connection.release(); // Đảm bảo giải phóng kết nối
+  }
 };
 
 module.exports = {

@@ -1,6 +1,7 @@
 const express = require("express");
 const ExcelJS = require("exceljs");
 const createConnection = require("../config/databaseAsync");
+const createPoolConnection = require("../config/databasePool");
 const fs = require("fs");
 const path = require("path");
 
@@ -8,7 +9,7 @@ function sanitizeFileName(fileName) {
   return fileName.replace(/[^a-z0-9]/gi, "_");
 }
 
-exports.exportPhuLucGiangVienMoi = async (req, res) => {
+const exportPhuLucGiangVienMoi = async (req, res) => {
   let connection;
   try {
     connection = await createConnection();
@@ -395,4 +396,29 @@ AND qc.Khoa = ?
       }
     }
   }
+};
+
+const getPhuLucHDSite = async (req, res) => {
+  let connection;
+  try {
+    connection = await createPoolConnection();
+
+    // Lấy danh sách phòng ban để lọc
+    const query = `select HoTen, MaPhongBan from gvmoi`;
+    const [gvmoiList] = await connection.query(query);
+
+    res.render("phuLucHD.ejs", {
+      gvmoiList: gvmoiList,
+    });
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    res.status(500).send("Internal Server Error");
+  } finally {
+    if (connection) connection.release(); // Đảm bảo giải phóng kết nối
+  }
+};
+
+module.exports = {
+  exportPhuLucGiangVienMoi,
+  getPhuLucHDSite,
 };
