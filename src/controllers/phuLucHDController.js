@@ -261,6 +261,12 @@ const exportPhuLucGiangVienMoi = async (req, res) => {
       // Thêm tiêu đề cột
       const headerRow = worksheet.addRow(header);
       headerRow.font = { name: "Times New Roman", bold: true };
+      worksheet.getColumn(10).numFmt = '#,##0'; // Thành tiền
+      worksheet.getColumn(11).numFmt = '#,##0'; // Trừ thuế TNCN 10%
+      worksheet.getColumn(12).numFmt = '#,##0'; // Còn lại
+      worksheet.getColumn(13).numFmt = '#,##0'; // Còn lại
+
+
       worksheet.pageSetup = {
         paperSize: 9, // A4 paper size
         orientation: "landscape",
@@ -341,6 +347,12 @@ const exportPhuLucGiangVienMoi = async (req, res) => {
           thucNhan,
         ]);
         row.font = { name: "Times New Roman", size: 12 };
+
+        row.getCell(10).numFmt = '#,##0'; // Thành tiền
+        row.getCell(11).numFmt = '#,##0'; // Trừ thuế TNCN 10%
+        row.getCell(12).numFmt = '#,##0'; // Còn lại
+        row.getCell(13).numFmt = '#,##0'; // Còn lại
+
 
         // Bật wrapText cho các ô dữ liệu và căn giữa
         row.eachCell((cell, colNumber) => {
