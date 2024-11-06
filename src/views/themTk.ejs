@@ -104,25 +104,9 @@
       <form id="themTK" action="/themTK" method="POST">
         <div class="row mb-3">
           <div class="col-md-4 input-wrapper">
-            <input
-              class="form-control mb-3"
-              type="text"
-              id="searchInput"
-              placeholder="Tìm kiếm theo tên..."
-            />
             <label for="username" class="form-label">Tên Nhân Viên</label>
-            <select
-              class="form-control"
-              id="TenNhanVien"
-              name="TenNhanVien"
-              onchange="fetchPhongBan()"
-            >
-              <% TenNhanVien.forEach(function(TenNhanVien) { %>
-              <option value="<%= TenNhanVien.TenNhanVien %>">
-                <%= TenNhanVien.TenNhanVien %>
-              </option>
-              <% }); %>
-            </select>
+            <input class="form-control" type="text" id="TenNhanVien" onkeyup="suggest()" placeholder="Nhập tên nhân viên">
+            <div id="suggestionBox"></div>
           </div>
         </div>
         <div class="row mb-3">
@@ -187,7 +171,7 @@
         <div class="row mb-3">
           <div class="col-md-4 input-wrapper">
             <label class="form-check-label" for="isKhoa"> isKhoa </label>
-            <input type="text" id="isKhoa" name="isKhoa" value="" readonly />
+            <input class="form-control" type="text" id="isKhoa" name="isKhoa" value="" readonly />
           </div>
         </div>
         <button type="submit" class="btn">Thêm Tài Khoản</button>
@@ -278,6 +262,46 @@
           option.style.display = text.includes(filter) ? "" : "none";
         }
       });
+    </script>
+    <script>
+      function suggest() {
+        const query = document.getElementById("TenNhanVien").value;
+        if (query.length === 0) {
+          document.getElementById("suggestionBox").innerHTML = "";
+          return;
+        }
+
+        fetch(`/suggest/${query}`)
+          .then(response => response.json())
+          .then(data => {
+            // Lấy mảng tên nhân viên từ phần tử đầu tiên
+            let results = data[0];  // Lấy dữ liệu từ phần tử đầu tiên
+
+            // Kiểm tra xem results có phải là mảng và có phần tử hay không
+            if (Array.isArray(results) && results.length > 0) {
+              let suggestions = results.map(item => {
+                return `<div onclick="selectSuggestion('${item.TenNhanVien.trim()}')">${item.TenNhanVien.trim()}</div>`;
+              }).join(""); // Kết hợp tất cả các phần tử thành chuỗi HTML
+              
+              // Chèn danh sách vào suggestionBox
+              document.getElementById("suggestionBox").innerHTML = suggestions;
+            } else {
+              // Nếu không có kết quả, hiển thị thông báo
+              document.getElementById("suggestionBox").innerHTML = "<div>No results found</div>";
+            }
+          })
+          .catch(error => console.error("Lỗi khi lấy dữ liệu:", error));
+      }
+      // Hàm này sẽ được gọi khi người dùng click vào một gợi ý
+      function selectSuggestion(value) {
+        // Thêm giá trị vào ô input
+        document.getElementById("TenNhanVien").value = value;
+
+        // Xóa các gợi ý khi chọn một tên
+        document.getElementById("suggestionBox").innerHTML = "";
+
+        fetchPhongBan(value);
+      }
     </script>
   </body>
 </html>
