@@ -723,6 +723,21 @@ const AdminController = {
       if (connection) connection.release(); // Đảm bảo giải phóng kết nối
     }
   },
+  suggest: async (req, res) => {
+    const query = req.params.query;
+    let connection = await createPoolConnection();
+    try {
+      const results = await connection.query("SELECT TenNhanVien FROM nhanvien WHERE TenNhanVien LIKE ?", [`%${query}%`]);
+      res.json(results);
+    } catch (error) {
+      console.error("Lỗi khi truy vấn cơ sở dữ liệu:", error);
+      res.status(500).send("Lỗi server");
+    }finally{
+      if (connection) {
+        connection.release();
+      }
+    }
+  },
 
   // Other methods can be added here as needed...
 };
