@@ -28,6 +28,54 @@
 
     }
 
+    /* phần css cho label tổng số tiết ki*/
+    .total-label {
+      margin-left: auto;
+      /* Căn phải cho thẻ total-label */
+      margin-right: 0;
+      font-family: Arial, sans-serif;
+      font-size: 16px;
+      background-color: #f4f4f4;
+      padding: 10px;
+      border-radius: 8px;
+      width: fit-content;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      display: block;
+      /* Đảm bảo thẻ div là khối để căn phải hoạt động */
+    }
+
+    .total-label label {
+      font-weight: bold;
+      /* Giữ chữ in đậm */
+      color: #000;
+      /* Màu chữ đen */
+      margin-right: 8px;
+      /* Thêm khoảng cách bên phải */
+      cursor: pointer;
+      /* Tạo hiệu ứng chuyển màu nền và màu chữ mềm mại */
+      padding: 5px 10px;
+      /* Thêm padding cho label để tạo không gian */
+      border: 1px solid #ccc;
+      /* Khung cho label */
+      border-radius: 4px;
+      /* Bo góc cho khung */
+    }
+
+    .total-label label,
+    .total-label label span {
+      background-color: #007BFF;
+      /* Màu nền khi hover */
+      color: #fff;
+      /* Màu chữ trắng khi hover */
+    }
+
+    .total-label span {
+      font-weight: bold;
+      /* Giữ chữ trong span cũng in đậm */
+      color: #333;
+      /* Màu chữ đậm cho giá trị */
+    }
+
     .btn {
       height: 45px !important;
     }
@@ -203,11 +251,11 @@
             <select id="filterByDepartment" class="filter selectop">
               <option value="all">Tất cả</option>
               <% phongBanList.forEach(function(phongBan) { %>
-                  <option value="<%= phongBan.MaPhongBan %>">
-                      <%= phongBan.TenPhongBan %>
-                  </option>
-              <% }); %>
-          </select>
+                <option value="<%= phongBan.MaPhongBan %>">
+                  <%= phongBan.TenPhongBan %>
+                </option>
+                <% }); %>
+            </select>
 
             <button id="viewDataBtn" onclick="viewData()" class="btn view">Xem dữ liệu</button>
           </div>
@@ -238,6 +286,11 @@
                   <!-- Dữ liệu sẽ được thêm vào đây bằng JavaScript -->
                 </tbody>
               </table>
+              <!-- Label tổng số tiết tách riêng với bảng -->
+              <div class="total-label">
+                <!-- <label>Tổng số tiết Lên Lớp: <span class="value" id="totalLL">0</span></label> -->
+                <label><span class="value" id="totalQC"></span></label>
+              </div>
             </div>
           </div>
         </div>
@@ -280,18 +333,21 @@
       </script>
       <!-- phần dữ liệu để hiển thị trên bảng -->
       <script>
+
+
+
         function viewData() {
           const namHoc = document.getElementById('NamHoc').value;
           const dot = document.getElementById('combobox-dot').value;
           const ki = document.getElementById('combobox-ki').value;
-      
+
           fetch(`/hop-dong-du-kien?namHoc=${namHoc}&dot=${dot}&ki=${ki}`)
             .then(response => response.json())
             .then(data => {
               // Xóa dữ liệu cũ trong bảng
               const tbody = dataTable.querySelector('tbody');
               tbody.innerHTML = '';
-      
+
               // Thêm dữ liệu mới vào bảng
               data.forEach(item => {
                 const row = tbody.insertRow();
@@ -313,39 +369,40 @@
                 cell.textContent = item.MaPhongBan;
                 cell.style.display = 'none';
               });
-      
+
               // Hiển thị bảng
               tableContainer.style.display = 'block';
-      
+
               // Gọi hàm lọc sau khi dữ liệu đã được tải vào bảng
               filterByDepartment();
+              calculateTotals();
             })
             .catch(error => {
               console.error('Error:', error);
               alert('Đã xảy ra lỗi khi tải dữ liệu');
             });
         }
-      
+
         function filterByDepartment() {
           const departmentFilter = document.getElementById("filterByDepartment").value.trim();
           const table = document.getElementById("dataTable");
-          
+
           // Kiểm tra bảng có tồn tại không
           if (!table) {
             console.error("Không tìm thấy bảng với ID 'dataTable'");
             return; // Dừng hàm nếu không tìm thấy bảng
           }
-          
+
           const rows = table.querySelectorAll("tbody tr"); // Lấy tất cả các hàng trong tbody
-      
+
           for (let i = 0; i < rows.length; i++) { // Bỏ qua hàng tiêu đề
             const departmentCell = rows[i].getElementsByTagName("td")[14]; // Chỉ số cột phòng ban (cột thứ 14)
-      
+
             // Kiểm tra nếu departmentCell không null
             if (departmentCell) {
               const departmentValue = departmentCell.textContent.trim();
               const departmentMatch = (departmentFilter === "all" || departmentValue === departmentFilter);
-      
+
               if (departmentMatch) {
                 rows[i].style.display = ""; // Hiện hàng nếu điều kiện khớp
               } else {
@@ -355,6 +412,33 @@
               console.error("Không tìm thấy ô phòng ban ở hàng:", i);
             }
           }
+        }
+
+        function calculateTotals() {
+          console.log('FUck anh P')
+          const table = document.getElementById('dataTable'); // Lấy bảng
+          const tbody = table.querySelector('tbody'); // Lấy phần thân bảng (tbody)
+
+          let total = 0; // Biến lưu trữ tổng số tiết
+
+          // Duyệt qua tất cả các hàng trong bảng
+          for (let row of tbody.rows) {
+
+            // Kiểm tra xem hàng có bị ẩn hay không
+            if (row.style.display === 'none') {
+              continue; // Bỏ qua hàng này nếu bị ẩn
+            }
+
+            const cell = row.cells[13]; // Cột số tiết là cột thứ 14 (chỉ số bắt đầu từ 0)
+            const soTiet = parseInt(cell.textContent, 10); // Chuyển giá trị trong ô thành số nguyên
+            if (!isNaN(soTiet)) { // Kiểm tra nếu giá trị hợp lệ
+              total += soTiet; // Cộng dồn vào tổng
+            }
+          }
+
+          // Hiển thị tổng số tiết
+          const totalElement = document.getElementById('totalQC'); // Giả sử có một phần tử để hiển thị tổng số tiết
+          totalElement.textContent = `Tổng số tiết Quy Chuẩn: ${total}`; // Hiển thị tổng
         }
       </script>
 
@@ -466,7 +550,7 @@
         window.onload = function () {
           const TenNhanVien = localStorage.getItem("TenNhanVien"); // Lấy tên người dùng từ localStorage
           let Role = localStorage.getItem("userRole");
-          if (Role.toUpperCase() == 'LÃNH ĐẠO KHOA'){
+          if (Role.toUpperCase() == 'LÃNH ĐẠO KHOA') {
             Role = 'LĐK';
           }
 
@@ -499,31 +583,31 @@
           $('#NamHoc option[value=""]').remove();
           $('#combobox-ki option[value=""]').remove();
           $('#combobox-dot option[value=""]').remove();
-    
+
           $.ajax({
             url: '/getNamHoc',
             method: 'GET',
             success: function (response) {
               if (response.success) {
-    
+
                 response.NamHoc.forEach(function (item) {
                   console.log(item.NamHoc);
-                    $('#NamHoc').append(
-                      `<option value="${item.NamHoc}">${item.NamHoc}</option>`
-                    );
+                  $('#NamHoc').append(
+                    `<option value="${item.NamHoc}">${item.NamHoc}</option>`
+                  );
                 });
-    
+
                 response.Ki.forEach(function (item) {
                   console.log(item.Ki);
-                    $('#combobox-ki').append(
-                      `<option value="${item.value}">${item.Ki}</option>`
-                    );
+                  $('#combobox-ki').append(
+                    `<option value="${item.value}">${item.Ki}</option>`
+                  );
                 });
                 response.Dot.forEach(function (item) {
                   console.log(item.Dot);
-                    $('#combobox-dot').append(
-                      `<option value="${item.value}">${item.Dot}</option>`
-                    );
+                  $('#combobox-dot').append(
+                    `<option value="${item.value}">${item.Dot}</option>`
+                  );
                 });
               } else {
                 console.error("Không lấy được dữ liệu năm học:", response.message);
@@ -536,7 +620,7 @@
         });
       </script>
 
-            <!-- Lọc theo khoa -->
+      <!-- Lọc theo khoa -->
       <!-- <script>
         function filterByDepartment() {
           // Lấy giá trị của bộ lọc phòng ban
@@ -603,41 +687,41 @@
       
     </script> -->
 
-    <script>
-      function filterByDepartment() {
-        console.log("filterByDepartment đã được gọi");
-    
-        const departmentFilter = document.getElementById("filterByDepartment").value.trim();
-        const table = document.getElementById("dataTable");
-    
-        // Kiểm tra bảng có tồn tại không
-        if (!table) {
+      <script>
+        function filterByDepartment() {
+          console.log("filterByDepartment đã được gọi");
+
+          const departmentFilter = document.getElementById("filterByDepartment").value.trim();
+          const table = document.getElementById("dataTable");
+
+          // Kiểm tra bảng có tồn tại không
+          if (!table) {
             console.error("Không tìm thấy bảng với ID 'dataTable'");
             return; // Dừng hàm nếu không tìm thấy bảng
-        }
-        
-        const rows = table.querySelectorAll("tbody tr"); // Lấy tất cả các hàng trong tbody
-    
-        for (let i = 0; i < rows.length; i++) { // Bỏ qua hàng tiêu đề
+          }
+
+          const rows = table.querySelectorAll("tbody tr"); // Lấy tất cả các hàng trong tbody
+
+          for (let i = 0; i < rows.length; i++) { // Bỏ qua hàng tiêu đề
             const departmentCell = rows[i].getElementsByTagName("td")[14]; // Chỉ số cột phòng ban (cột thứ 3)
-    
+
             // Kiểm tra nếu departmentCell không null
             if (departmentCell) {
-                const departmentValue = departmentCell.textContent.trim();
-                const departmentMatch = (departmentFilter === "all" || departmentValue === departmentFilter);
-    
-                if (departmentMatch) {
-                    rows[i].style.display = ""; // Hiện hàng nếu điều kiện khớp
-                } else {
-                    rows[i].style.display = "none"; // Ẩn hàng nếu không khớp
-                }
+              const departmentValue = departmentCell.textContent.trim();
+              const departmentMatch = (departmentFilter === "all" || departmentValue === departmentFilter);
+
+              if (departmentMatch) {
+                rows[i].style.display = ""; // Hiện hàng nếu điều kiện khớp
+              } else {
+                rows[i].style.display = "none"; // Ẩn hàng nếu không khớp
+              }
             } else {
-                console.error("Không tìm thấy ô phòng ban ở hàng:", i);
+              console.error("Không tìm thấy ô phòng ban ở hàng:", i);
             }
+          }
         }
-      }
-    </script>
-  
+      </script>
+
 </body>
 
 </html>
