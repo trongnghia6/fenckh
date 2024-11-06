@@ -337,56 +337,55 @@
 
       <!-- Phần tìm kiếm xuống dưới -->
       <div class="d-flex my-3" style="height: 70px;">
-        <input type="text" id="filterName" placeholder="Tìm theo tên giảng viên" 
-          class="form-control m-2 search" style="width: 200px;" />
-        <input type="text" id="filterClass" placeholder="Tìm theo tên học phần"
-          class="form-control m-2 search" style="width: 200px;" />
+        <input type="text" id="filterName" placeholder="Tìm theo tên giảng viên" class="form-control m-2 search"
+          style="width: 200px;" />
+        <input type="text" id="filterClass" placeholder="Tìm theo tên học phần" class="form-control m-2 search"
+          style="width: 200px;" />
         <input type="text" id="filterKhoa" placeholder="Tìm theo khoa" onclick="showSuggestionsKhoa(this)"
           class="form-control m-2 search" style="width: 200px; display: none;" />
         <!-- <input type="text" id="filterKhoa" placeholder="Tìm theo khoa" onclick="showSuggestionsKhoa(this)"
         class="form-control m-2 search" /> -->
-          
+
         <!-- Tìm kiếm theo bộ môn -->
-        <input type="text" id="filterBoMon" placeholder="Tìm theo tên bộ môn"
-          onkeyup=" showSuggestionsBoMon(this)" onclick="showSuggestionsBoMon(this)"
-          class="form-control m-2 search" style="width: 180px;" />
+        <input type="text" id="filterBoMon" placeholder="Tìm theo tên bộ môn" onkeyup=" showSuggestionsBoMon(this)"
+          onclick="showSuggestionsBoMon(this)" class="form-control m-2 search" style="width: 180px;" />
       </div>
       <script>
-                  function filterTable() {
-              const nameFilter = document.getElementById('filterName').value.toLowerCase();
-              const classFilter = document.getElementById('filterClass').value.toLowerCase();
-              const boMonFilter = document.getElementById('filterBoMon').value.toLowerCase();
-              const tableRows = document.querySelectorAll('#tableBody tr');
+        function filterTable() {
+          const nameFilter = document.getElementById('filterName').value.toLowerCase();
+          const classFilter = document.getElementById('filterClass').value.toLowerCase();
+          const boMonFilter = document.getElementById('filterBoMon').value.toLowerCase();
+          const tableRows = document.querySelectorAll('#tableBody tr');
 
-              tableRows.forEach(row => {
-                  const nameCell = row.querySelector('td:nth-child(3)'); // Cột tên giảng viên
-                  const classCell = row.querySelector('td:nth-child(1)'); // Cột học phần
-                  const boMonInput = row.querySelector('td:nth-child(7) input[name="bomon"]'); // Cột bộ môn
+          tableRows.forEach(row => {
+            const nameCell = row.querySelector('td:nth-child(3)'); // Cột tên giảng viên
+            const classCell = row.querySelector('td:nth-child(1)'); // Cột học phần
+            const boMonInput = row.querySelector('td:nth-child(7) input[name="bomon"]'); // Cột bộ môn
 
-                  const name = nameCell ? nameCell.textContent.toLowerCase() : '';
-                  const className = classCell ? classCell.textContent.toLowerCase() : '';
-                  const boMon = boMonInput ? boMonInput.value.toLowerCase() : '';
+            const name = nameCell ? nameCell.textContent.toLowerCase() : '';
+            const className = classCell ? classCell.textContent.toLowerCase() : '';
+            const boMon = boMonInput ? boMonInput.value.toLowerCase() : '';
 
-                  // Kiểm tra điều kiện lọc
-                  const matchesName = name.includes(nameFilter);
-                  const matchesClass = className.includes(classFilter);
-                  const matchesBoMon = boMon.includes(boMonFilter);
+            // Kiểm tra điều kiện lọc
+            const matchesName = name.includes(nameFilter);
+            const matchesClass = className.includes(classFilter);
+            const matchesBoMon = boMon.includes(boMonFilter);
 
-                  // Hiện hoặc ẩn hàng dựa trên điều kiện lọc
-                  if (matchesName && matchesClass && matchesBoMon) {
-                      row.style.display = ''; // Hiện hàng nếu tất cả các điều kiện đều khớp
-                  } else {
-                      row.style.display = 'none'; // Ẩn hàng nếu không khớp
-                  }
-              });
+            // Hiện hoặc ẩn hàng dựa trên điều kiện lọc
+            if (matchesName && matchesClass && matchesBoMon) {
+              row.style.display = ''; // Hiện hàng nếu tất cả các điều kiện đều khớp
+            } else {
+              row.style.display = 'none'; // Ẩn hàng nếu không khớp
+            }
+          });
 
-              calculateTotals(); // Cập nhật tổng số tiết sau khi lọc
-          }
+          calculateTotals(); // Cập nhật tổng số tiết sau khi lọc
+        }
 
-          // Gán sự kiện cho các input filter
-          document.getElementById('filterName').addEventListener('input', filterTable);
-          document.getElementById('filterClass').addEventListener('input', filterTable);
-          document.getElementById('filterBoMon').addEventListener('input', filterTable);
+        // Gán sự kiện cho các input filter
+        document.getElementById('filterName').addEventListener('input', filterTable);
+        document.getElementById('filterClass').addEventListener('input', filterTable);
+        document.getElementById('filterBoMon').addEventListener('input', filterTable);
       </script>
 
       <div id="renderInfo">
@@ -467,7 +466,7 @@
 <script>
   async function loadData() {
     try {
-      const response = await fetch('http://localhost:3000/bo-mon-theo-gv', {
+      const response = await fetch('/bo-mon-theo-gv', {
         method: 'GET', // Thay đổi thành POST
         // headers: {
         //   'Content-Type': 'application/json'
@@ -545,7 +544,7 @@
     const MaPhongBan = localStorage.getItem("MaPhongBan");
 
     try {
-      const response = await fetch('http://localhost:3000/bo-mon-theo-gv', {
+      const response = await fetch('/bo-mon-theo-gv', {
         method: 'GET', // Thay đổi thành POST
         // headers: {
         //   'Content-Type': 'application/json'
@@ -568,7 +567,7 @@
     }
 
     try {
-      const response = await fetch('http://localhost:3000/bo-mon', {
+      const response = await fetch('/bo-mon', {
         method: 'POST', // Thay đổi thành POST
         headers: {
           'Content-Type': 'application/json'
@@ -605,9 +604,9 @@
 
       // Fetch tên giảng viên mời
       const [gvmResponse, khoaResponse, teachingResponse] = await Promise.all([
-        fetch('http://localhost:3000/index/name-gvm'),
-        fetch('http://localhost:3000/index/name-gvm-khoa'),
-        fetch('http://localhost:3000/xemCacLopMoi', {
+        fetch('/index/name-gvm'),
+        fetch('/index/name-gvm-khoa'),
+        fetch('/xemCacLopMoi', {
           method: 'POST', // Sử dụng phương thức POST
           headers: {
             'Content-Type': 'application/json', // Đặt Content-Type là application/json
@@ -671,7 +670,7 @@
 
     // Trả về chuỗi ngày theo định dạng "YYYY-MM-DD"
     return `${year}-${month}-${day}`;
-}
+  }
 
 
   // Fill all startDate and endDate
@@ -863,26 +862,26 @@
       const deadlineValue = row.Deadline || ""; // Lấy giá trị Deadline
       const hoanThanh = row.HoanThanh;
       if (role === 'GV' || role === 'Thường') {
-            ghiChuTd.innerHTML = "📜"; // Hiển thị biểu tượng ghi chú nếu role là GV hoặc Thường
-            ghiChuTd.style.cursor = "not-allowed"; // Thay đổi con trỏ chuột thành 'not-allowed' để báo hiệu không thể tương tác
-            ghiChuTd.title = "Bạn không có quyền truy cập"; // Thêm tooltip để giải thích lý do không thể nhấn
-          } else {
+        ghiChuTd.innerHTML = "📜"; // Hiển thị biểu tượng ghi chú nếu role là GV hoặc Thường
+        ghiChuTd.style.cursor = "not-allowed"; // Thay đổi con trỏ chuột thành 'not-allowed' để báo hiệu không thể tương tác
+        ghiChuTd.title = "Bạn không có quyền truy cập"; // Thêm tooltip để giải thích lý do không thể nhấn
+      } else {
 
-            if (ghiChuValue) {
-              if (hoanThanh) {
-                ghiChuTd.innerHTML = `📜 <span class="bi bi-check2-circle" style="color: green;"></span>`; // Hiển thị biểu tượng ghi chú và chấm đỏ
-              } else {
-                ghiChuTd.innerHTML = `📜 <span class="bi bi-circle" style="color: red;"></span>`; // Hiển thị biểu tượng ghi chú và chấm đỏ
-              }
-              
-            } else {
-              ghiChuTd.innerHTML = "📜"; // Hiển thị biểu tượng ghi chú nếu không có ghi chú
-            }
-            ghiChuTd.style.cursor = "pointer"; // Thay đổi con trỏ chuột khi di chuột qua biểu tượng
-            ghiChuTd.onclick = () => openNoteForm(tableRow, ghiChuValue, deadlineValue); // Gọi hàm mở form khi nhấn vào biểu tượng
+        if (ghiChuValue) {
+          if (hoanThanh) {
+            ghiChuTd.innerHTML = `📜 <span class="bi bi-check2-circle" style="color: green;"></span>`; // Hiển thị biểu tượng ghi chú và chấm đỏ
+          } else {
+            ghiChuTd.innerHTML = `📜 <span class="bi bi-circle" style="color: red;"></span>`; // Hiển thị biểu tượng ghi chú và chấm đỏ
           }
-          tableRow.appendChild(ghiChuTd); // Thêm ô ghi chú vào hàng
-          tableBody.appendChild(tableRow);
+
+        } else {
+          ghiChuTd.innerHTML = "📜"; // Hiển thị biểu tượng ghi chú nếu không có ghi chú
+        }
+        ghiChuTd.style.cursor = "pointer"; // Thay đổi con trỏ chuột khi di chuột qua biểu tượng
+        ghiChuTd.onclick = () => openNoteForm(tableRow, ghiChuValue, deadlineValue); // Gọi hàm mở form khi nhấn vào biểu tượng
+      }
+      tableRow.appendChild(ghiChuTd); // Thêm ô ghi chú vào hàng
+      tableBody.appendChild(tableRow);
 
       let khoaCheckboxTd, khoaCheckbox;
       // Checkbox cho Khoa
@@ -1136,7 +1135,7 @@
           }
 
           // Gửi dữ liệu đã cập nhật lên server
-          fetch('http://localhost:3000/check-teaching', {
+          fetch('/check-teaching', {
             method: 'POST', // Phương thức POST
             headers: {
               'Content-Type': 'application/json' // Định dạng gửi là JSON
@@ -1265,7 +1264,7 @@
 
     // Gửi dữ liệu lên server
 
-    fetch('http://localhost:3000/check-teaching', {
+    fetch('/check-teaching', {
       method: 'POST', // Phương thức POST
       headers: {
         'Content-Type': 'application/json' // Định dạng gửi là JSON
@@ -1939,7 +1938,7 @@
       document.getElementById('khoaColumn').style.display = 'none';
       document.getElementById('daoTaoColumn').style.display = 'none';
       document.getElementById('taiChinhColumn').style.display = 'none';
-      if (!role.includes('CNBM')){
+      if (!role.includes('CNBM')) {
         document.getElementById('update-qc').style.display = 'none';
       }
     }
@@ -2310,126 +2309,126 @@
 </script> -->
 
 <script>
- // Định nghĩa hàm showSuggestionsKhoa ở phạm vi toàn cục
-function showSuggestionsKhoa(input) {
-  const value = input.value.toLowerCase(); 
-  hideSuggestionsKhoa(); 
+  // Định nghĩa hàm showSuggestionsKhoa ở phạm vi toàn cục
+  function showSuggestionsKhoa(input) {
+    const value = input.value.toLowerCase();
+    hideSuggestionsKhoa();
 
-  const suggestionsContainer = document.createElement('div');
-  suggestionsContainer.className = 'suggestions'; 
+    const suggestionsContainer = document.createElement('div');
+    suggestionsContainer.className = 'suggestions';
 
-  const { bottom, left, width } = input.getBoundingClientRect(); 
-  suggestionsContainer.style.position = 'absolute'; 
-  suggestionsContainer.style.top = `${bottom + window.scrollY}px`; 
-  suggestionsContainer.style.left = `${left + window.scrollX}px`; 
-  suggestionsContainer.style.width = `${width}px`; 
-  suggestionsContainer.style.zIndex = '1000'; 
-  suggestionsContainer.style.maxHeight = '200px'; 
-  suggestionsContainer.style.overflowY = 'auto'; 
+    const { bottom, left, width } = input.getBoundingClientRect();
+    suggestionsContainer.style.position = 'absolute';
+    suggestionsContainer.style.top = `${bottom + window.scrollY}px`;
+    suggestionsContainer.style.left = `${left + window.scrollX}px`;
+    suggestionsContainer.style.width = `${width}px`;
+    suggestionsContainer.style.zIndex = '1000';
+    suggestionsContainer.style.maxHeight = '200px';
+    suggestionsContainer.style.overflowY = 'auto';
 
-  document.body.appendChild(suggestionsContainer); 
+    document.body.appendChild(suggestionsContainer);
 
-  let suggestions = JSON.parse(localStorage.getItem("phongBanList")) || []; 
-  suggestions = suggestions.map(item => `${item.MaPhongBan}`); 
+    let suggestions = JSON.parse(localStorage.getItem("phongBanList")) || [];
+    suggestions = suggestions.map(item => `${item.MaPhongBan}`);
 
-  if (value) {
+    if (value) {
       suggestions = suggestions.filter(name => name.toLowerCase().includes(value));
-  }
+    }
 
-  if (suggestions.length === 0) {
+    if (suggestions.length === 0) {
       suggestionsContainer.remove();
       return;
-  }
+    }
 
-  suggestions.forEach(name => {
-      const suggestionItem = document.createElement('div'); 
-      suggestionItem.className = 'suggestion-item'; 
-      suggestionItem.textContent = name; 
+    suggestions.forEach(name => {
+      const suggestionItem = document.createElement('div');
+      suggestionItem.className = 'suggestion-item';
+      suggestionItem.textContent = name;
 
       suggestionItem.onclick = function () {
-          const processedName = name.split("-").slice(-1)[0].trim(); 
-          input.value = processedName; 
-          if (input.id == 'filterKhoa') {
-              filterKhoa();
-          }
-          hideSuggestionsKhoa(); 
+        const processedName = name.split("-").slice(-1)[0].trim();
+        input.value = processedName;
+        if (input.id == 'filterKhoa') {
+          filterKhoa();
+        }
+        hideSuggestionsKhoa();
       };
 
-      suggestionsContainer.appendChild(suggestionItem); 
-  });
-
-  input.onblur = function () {
-      setTimeout(() => {
-          hideSuggestionsKhoa();
-      }, 100); 
-  };
-}
-
-function filterKhoa() {
-  const input = document.getElementById("filterKhoa");
-  const filter = input.value.toLowerCase();
-  const tableRows = document.querySelectorAll("#tableBody tr");
-
-  // Nếu ô tìm kiếm trống, hiển thị tất cả các dòng
-  if (!filter) {
-    tableRows.forEach((row) => {
-      row.style.display = ""; // Hiện tất cả các dòng
+      suggestionsContainer.appendChild(suggestionItem);
     });
-    return;
+
+    input.onblur = function () {
+      setTimeout(() => {
+        hideSuggestionsKhoa();
+      }, 100);
+    };
   }
 
-  // Chỉ hiện các dòng có tên giảng viên khớp với giá trị tìm kiếm
-  tableRows.forEach((row) => {
-    const nameCell = row.querySelector("td:nth-child(6)"); // Giả sử tên giảng viên nằm ở cột thứ 5
-    const name = nameCell.textContent.toLowerCase();
-
-    if (name.includes(filter)) {
-      row.style.display = ""; // Hiện hàng nếu khớp
-    } else {
-      row.style.display = "none"; // Ẩn hàng nếu không khớp
-    }
-  });
-  calculateTotals();
-}
-
-// Định nghĩa hàm hideSuggestionsKhoa
-function hideSuggestionsKhoa() {
-  const existingSuggestions = document.querySelectorAll('.suggestions');
-  existingSuggestions.forEach(suggestion => suggestion.remove());
-}
-
-// Bây giờ bọc phần còn lại của mã trong DOMContentLoaded
-document.addEventListener("DOMContentLoaded", function() {
-  
-  const phongBanData = <%- JSON.stringify(phongBanList) %>; 
-  console.log("Dữ liệu phòng ban:", phongBanData);
-  localStorage.setItem("phongBanList", JSON.stringify(phongBanData));
-  console.log("Dữ liệu phòng ban đã được lưu vào Local Storage:", phongBanData);
-  
-  // Hàm filterKhoa (giữ nguyên)
   function filterKhoa() {
+    const input = document.getElementById("filterKhoa");
+    const filter = input.value.toLowerCase();
+    const tableRows = document.querySelectorAll("#tableBody tr");
+
+    // Nếu ô tìm kiếm trống, hiển thị tất cả các dòng
+    if (!filter) {
+      tableRows.forEach((row) => {
+        row.style.display = ""; // Hiện tất cả các dòng
+      });
+      return;
+    }
+
+    // Chỉ hiện các dòng có tên giảng viên khớp với giá trị tìm kiếm
+    tableRows.forEach((row) => {
+      const nameCell = row.querySelector("td:nth-child(6)"); // Giả sử tên giảng viên nằm ở cột thứ 5
+      const name = nameCell.textContent.toLowerCase();
+
+      if (name.includes(filter)) {
+        row.style.display = ""; // Hiện hàng nếu khớp
+      } else {
+        row.style.display = "none"; // Ẩn hàng nếu không khớp
+      }
+    });
+    calculateTotals();
+  }
+
+  // Định nghĩa hàm hideSuggestionsKhoa
+  function hideSuggestionsKhoa() {
+    const existingSuggestions = document.querySelectorAll('.suggestions');
+    existingSuggestions.forEach(suggestion => suggestion.remove());
+  }
+
+  // Bây giờ bọc phần còn lại của mã trong DOMContentLoaded
+  document.addEventListener("DOMContentLoaded", function () {
+
+    const phongBanData = <% - JSON.stringify(phongBanList) %>;
+    console.log("Dữ liệu phòng ban:", phongBanData);
+    localStorage.setItem("phongBanList", JSON.stringify(phongBanData));
+    console.log("Dữ liệu phòng ban đã được lưu vào Local Storage:", phongBanData);
+
+    // Hàm filterKhoa (giữ nguyên)
+    function filterKhoa() {
       const input = document.getElementById("filterKhoa");
       const filter = input.value.toLowerCase();
       const tableRows = document.querySelectorAll("#tableBody tr");
 
       if (!filter) {
-          tableRows.forEach((row) => {
-              row.style.display = ""; // Hiện tất cả các dòng
-          });
-          return;
+        tableRows.forEach((row) => {
+          row.style.display = ""; // Hiện tất cả các dòng
+        });
+        return;
       }
 
       tableRows.forEach((row) => {
-          const nameCell = row.querySelector("td:nth-child(6)"); 
-          const name = nameCell.textContent.toLowerCase();
-          row.style.display = name.includes(filter) ? "" : "none"; 
+        const nameCell = row.querySelector("td:nth-child(6)");
+        const name = nameCell.textContent.toLowerCase();
+        row.style.display = name.includes(filter) ? "" : "none";
       });
       calculateTotals();
-  }
-});
+    }
+  });
 
-  </script>
-  
+</script>
+
 
 </body>
 

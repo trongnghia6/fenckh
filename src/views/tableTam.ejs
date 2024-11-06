@@ -364,7 +364,7 @@
       };
 
       console.log(body)
-      fetch("http://localhost:3000/get-table-tam", {
+      fetch("/get-table-tam", {
         method: "POST", // Phương thức HTTP
         headers: {
           "Content-Type": "application/json", // Định dạng dữ liệu
@@ -453,7 +453,7 @@
         if (confirmation) { // Nếu người dùng chọn OK
           try {
             // Gọi tới API để xóa dữ liệu
-            const response = await fetch('http://localhost:3000/xoa-qcdk', { // Đường dẫn tới API của bạn
+            const response = await fetch('/xoa-qcdk', { // Đường dẫn tới API của bạn
               method: 'POST', // Phương thức HTTP
               headers: {
                 'Content-Type': 'application/json', // Định dạng dữ liệu
@@ -508,7 +508,7 @@
       };
 
       try {
-        const response = await fetch("http://localhost:3000/get-table-tam", {
+        const response = await fetch("/get-table-tam", {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -552,7 +552,7 @@
         console.log("Dữ liệu sẽ được gửi:", dataQC);
 
         try {
-          const response = await fetch("http://localhost:3000/ban-hanh", {
+          const response = await fetch("/ban-hanh", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -802,7 +802,7 @@
 
         // Gọi hàm updateDatabase để update dữ liệu
         async function updateDatabase(NamHoc) {
-          const response = await fetch(`http://localhost:3000/update/${NamHoc}/${Ki}/${Dot}`, {
+          const response = await fetch(`/update/${NamHoc}/${Ki}/${Dot}`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",

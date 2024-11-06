@@ -396,7 +396,7 @@
 
   <script>
     document.getElementById("viewtam").onclick = function () {
-      window.location.href = "http://localhost:3000/tableTam"; // Thay URL bằng trang bạn muốn chuyển hướng đến
+      window.location.href = "/tableTam"; // Thay URL bằng trang bạn muốn chuyển hướng đến
     };
   </script>
   <!-- phần chọn file -->
@@ -417,7 +417,7 @@
           formData.append("excelFile", fileInput.files[0]); // Thêm file vào FormData
 
           // Gửi yêu cầu POST đến server
-          fetch("http://localhost:3000/import", {
+          fetch("/import", {
             method: "POST",
             body: formData,
           })
@@ -489,7 +489,7 @@
           Nam: namValue
         };
 
-        fetch("http://localhost:3000/kiem-tra-file", {
+        fetch("/kiem-tra-file", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -514,7 +514,7 @@
               deleteButton.onclick = null; // Xóa sự kiện cũ nếu có
               deleteButton.onclick = function handleDeleteClick() {
                 modal.style.display = "none";
-                fetch("http://localhost:3000/xoa-file", {
+                fetch("/xoa-file", {
                   method: "POST",
                   headers: {
                     "Content-Type": "application/json",
@@ -552,7 +552,7 @@
                   Nam: namValue,
                 }));
 
-                fetch("http://localhost:3000/save-data", {
+                fetch("/save-data", {
                   method: "POST",
                   headers: {
                     "Content-Type": "application/json",
@@ -593,7 +593,7 @@
                 Nam: namValue,
               }));
 
-              fetch("http://localhost:3000/save-data", {
+              fetch("/save-data", {
                 method: "POST",
                 headers: {
                   "Content-Type": "application/json",
