@@ -1,19 +1,24 @@
 const mysql = require("mysql2/promise");
 require("dotenv").config();
 
-const pool = mysql.createPool({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  database: process.env.DB_NAME,
-  port: process.env.DB_PORT,
-  connectionLimit: 150, // Giới hạn số kết nối tối đa trong pool
-  connectTimeout: 10000, // 10 giây
-  queueLimit: 0, // Không giới hạn hàng đợi (hoặc có thể đặt giới hạn cụ thể)
-});
-
+// Hàm tạo kết nối sử dụng async/await
 async function createConnection() {
-  const connection = await pool.getConnection();
-  return connection;
+  try {
+    // Tạo kết nối đến MySQL
+    const connection = await mysql.createConnection({
+      host: process.env.MYSQLHOST,
+      user: process.env.MYSQLUSER,
+      password: process.env.MYSQL_ROOT_PASSWORD,
+      database: process.env.MYSQLDATABASE,
+      port: process.env.MYSQLPORT || 5432, // Sử dụng cổng 5432 nếu không có cổng
+    });
+
+    console.log("Kết nối MySQL thành công");
+    return connection;
+  } catch (error) {
+    console.error("Lỗi khi kết nối MySQL:", error);
+    throw error;
+  }
 }
 
 module.exports = createConnection;

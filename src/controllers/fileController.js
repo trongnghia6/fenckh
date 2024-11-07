@@ -155,7 +155,7 @@ const importJSONToDB = async (jsonData) => {
   } catch (error) {
     console.error("Error:", error);
   } finally {
-    if (connection) connection.release(); // Giải phóng kết nối
+    if (connection) connection.end(); // Giải phóng kết nối
   }
 
   return results;

@@ -8,7 +8,7 @@ const login = require("./routes/loginRoute");
 //console.log("> check env: ", process.env);
 
 // Connect to database
-const connection = require("./config/database");
+// const connection = require("./config/database");
 
 // config engine template
 const configViewEngine = require("./config/viewEngine");

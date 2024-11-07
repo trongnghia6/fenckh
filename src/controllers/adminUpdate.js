@@ -1,7 +1,7 @@
 const express = require("express");
 const mysql = require("mysql2/promise"); // Ensure you have mysql2 installed
 const createPoolConnection = require("../config/databasePool");
-const connection = require("../config/database"); // Adjust the path as necessary
+// const connection = require("../config/database"); // Adjust the path as necessary
 // cu
 // const postUpdateNV = async (req, res) => {
 //   // Lấy các thông tin từ form
@@ -201,7 +201,7 @@ const postUpdateNV = async (req, res) => {
     console.error("Error executing query: ", error);
     res.redirect("/nhanVien?message=insertFalse");
   } finally {
-    if (connection) connection.release(); // Giải phóng kết nối
+    if (connection) connection.end(); // Giải phóng kết nối
   }
 };
 
@@ -221,7 +221,7 @@ const postUpdatePhongBan = async (req, res) => {
     console.error("Lỗi khi cập nhật dữ liệu: ", error);
     res.status(500).send("Lỗi server, không thể cập nhật dữ liệu");
   } finally {
-    if (connection) connection.release(); // Đảm bảo giải phóng kết nối
+    if (connection) connection.end(); // Đảm bảo giải phóng kết nối
   }
 };
 
@@ -258,7 +258,7 @@ const postUpdateTK = async (req, res) => {
       );
   } finally {
     if (connection) {
-      connection.release(); // Đảm bảo luôn giải phóng kết nối
+      connection.end(); // Đảm bảo luôn giải phóng kết nối
     }
   }
 };
@@ -283,7 +283,7 @@ const postUpdateBoMon = async (req, res) => {
         `Lỗi server, không thể cập nhật dữ liệu. Chi tiết: ${error.message}`
       );
   } finally {
-      if (connection){connection.release();}  // Đảm bảo giải phóng kết nối
+      if (connection){connection.end();}  // Đảm bảo giải phóng kết nối
   }
 };
 

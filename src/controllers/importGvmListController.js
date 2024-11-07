@@ -168,7 +168,7 @@ const saveToDB = async (req, res) => {
       res.status(500).send("Đã xảy ra lỗi khi lưu dữ liệu vào database!");
     }
   } finally {
-    if (connection) connection.release(); // Đảm bảo giải phóng kết nối
+    if (connection) connection.end(); // Đảm bảo giải phóng kết nối
   }
 };
 

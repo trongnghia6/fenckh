@@ -27,7 +27,7 @@ const getaccountList = async (req, res) => {
     console.error("Lỗi khi lấy dữ liệu từ cơ sở dữ liệu: ", error);
     res.status(500).send("Lỗi server, không thể lấy dữ liệu");
   } finally {
-    if (connection) connection.release(); // Trả lại connection cho pool
+    if (connection) connection.end(); // Trả lại connection cho pool
   }
 };
 
@@ -46,7 +46,7 @@ const getnhanvienList = async (req, res) => {
     console.error("Lỗi khi lấy dữ liệu từ cơ sở dữ liệu: ", error);
     res.status(500).send("Lỗi server, không thể lấy dữ liệu");
   } finally {
-    if (connection) connection.release(); // Trả lại connection cho pool
+    if (connection) connection.end(); // Trả lại connection cho pool
   }
 };
 
@@ -64,7 +64,7 @@ const getdepartmentList = async (req, res) => {
     console.error("Lỗi khi lấy dữ liệu từ cơ sở dữ liệu: ", error);
     res.status(500).send("Lỗi server, không thể lấy dữ liệu");
   } finally {
-    if (connection) connection.release(); // Trả lại connection cho pool
+    if (connection) connection.end(); // Trả lại connection cho pool
   }
 };
 const getMaPhongBanList = async (req, res) => {
@@ -81,7 +81,7 @@ const getMaPhongBanList = async (req, res) => {
     console.error("Lỗi khi lấy dữ liệu từ cơ sở dữ liệu: ", error);
     res.status(500).send("Lỗi server, không thể lấy dữ liệu");
   } finally {
-    if (connection) connection.release(); // Trả lại connection cho pool
+    if (connection) connection.end(); // Trả lại connection cho pool
   }
 };
 
@@ -104,7 +104,7 @@ const getUpdatePhongBan = async (req, res) => {
     console.error("Lỗi khi lấy dữ liệu từ cơ sở dữ liệu: ", error);
     res.status(500).send("Lỗi server, không thể lấy dữ liệu");
   } finally {
-    if (connection) connection.release(); // Trả lại connection cho pool
+    if (connection) connection.end(); // Trả lại connection cho pool
   }
 };
 
@@ -122,7 +122,7 @@ const getidUserLists = async (req, res) => {
     console.error("Lỗi khi lấy dữ liệu từ cơ sở dữ liệu: ", error);
     res.status(500).send("Lỗi server, không thể lấy dữ liệu");
   } finally {
-    if (connection) connection.release(); // Trả lại connection cho pool
+    if (connection) connection.end(); // Trả lại connection cho pool
   }
 };
 
@@ -157,7 +157,7 @@ const getchangePassword = async (req, res) => {
     console.error("Lỗi khi lấy trang đổi mật khẩu:", error);
     res.status(500).send("Lỗi hệ thống");
   } finally {
-    if (connection) connection.release(); // Trả lại connection cho pool
+    if (connection) connection.end(); // Trả lại connection cho pool
   }
 };
 
@@ -198,7 +198,7 @@ const updatePassword = async (req, res) => {
     console.error("Lỗi khi cập nhật mật khẩu:", error);
     res.status(500).send("Lỗi hệ thống");
   } finally {
-    if (connection) connection.release(); // Trả lại connection cho pool
+    if (connection) connection.end(); // Trả lại connection cho pool
   }
 };
 
@@ -216,7 +216,7 @@ const getupdateBoMon = async (req, res) => {
     console.error("Lỗi khi lấy dữ liệu:", error);
     res.status(500).send("Lỗi hệ thống");
   } finally {
-    if (connection) connection.release(); // Trả lại connection cho pool
+    if (connection) connection.end(); // Trả lại connection cho pool
   }
 };
 
@@ -231,7 +231,7 @@ const getNamHoc = async (req, res) => {
     console.error("Lỗi khi lấy dữ liệu:", error);
     res.status(500).send("Lỗi hệ thống");
   } finally {
-    if (connection) connection.release(); // Trả lại connection cho pool
+    if (connection) connection.end(); // Trả lại connection cho pool
   }
 };
 const postNamHoc = async (req, res) => {
@@ -245,7 +245,7 @@ const postNamHoc = async (req, res) => {
     console.error("Lỗi khi cập nhật dữ liệu: ", error);
     res.status(500).send("Lỗi server, không thể cập nhật dữ liệu");
   } finally {
-    if (connection) connection.release(); // Trả lại connection cho pool
+    if (connection) connection.end(); // Trả lại connection cho pool
   }
 };
 const deleteNamHoc = async (req, res) => {
@@ -264,7 +264,7 @@ const deleteNamHoc = async (req, res) => {
     console.error("Lỗi khi xóa dữ liệu: ", error);
     res.status(500).json({ message: "Lỗi server, không thể xóa dữ liệu" }); // Thông báo lỗi
   } finally {
-    if (connection) connection.release(); // Trả lại connection cho pool
+    if (connection) connection.end(); // Trả lại connection cho pool
   }
 };
 module.exports = {

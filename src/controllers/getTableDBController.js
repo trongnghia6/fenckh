@@ -40,7 +40,7 @@ const getTableQC = async (req, res) => {
       .status(500)
       .json({ message: "Không thể truy xuất dữ liệu từ cơ sở dữ liệu." });
   } finally {
-    if (connection) connection.release(); // Trả lại kết nối cho pool
+    if (connection) connection.end(); // Trả lại kết nối cho pool
   }
 };
 
@@ -76,7 +76,7 @@ const getTableTam = async (req, res) => {
       .status(500)
       .json({ message: "Không thể truy xuất dữ liệu từ cơ sở dữ liệu." });
   } finally {
-    if (connection) connection.release(); // Trả lại kết nối cho pool
+    if (connection) connection.end(); // Trả lại kết nối cho pool
   }
 };
 

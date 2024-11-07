@@ -69,7 +69,7 @@
 //     console.error(err);
 //     return res.status(500).json({ message: "Lỗi máy chủ" });
 //   } finally {
-//     if (connection) connection.release(); // Giải phóng kết nối
+//     if (connection) connection.end(); // Giải phóng kết nối
 //   }
 // };
 
@@ -238,7 +238,7 @@ const login = async (req, res) => {
     console.error(err);
     return res.status(500).json({ message: "Lỗi máy chủ" });
   } finally {
-    if (connection) connection.release(); // Giải phóng kết nối
+    if (connection) connection.end(); // Giải phóng kết nối
   }
 };
 

@@ -31,7 +31,7 @@ const updateTableQC = async (data) => {
     console.error("Error:", error);
     return false; // Trả về false nếu có lỗi
   } finally {
-    if (connection) connection.release(); // Giải phóng kết nối
+    if (connection) connection.end(); // Giải phóng kết nối
   }
 };
 

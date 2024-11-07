@@ -42,7 +42,7 @@ const KhoaCheckAll = async (req, Dot, KiHoc, NamHoc) => {
     console.error("Error in KhoaCheckAll:", error);
     throw error; // Throw lại lỗi để xử lý ở nơi gọi hàm này
   } finally {
-    if (connection) connection.release();
+    if (connection) connection.end();
   }
 
   // Trả về kết quả có dấu phẩy cuối cùng
@@ -88,11 +88,11 @@ const DaoTaoCheckAll = async (req, Dot, KiHoc, NamHoc) => {
           kq += MaPhongBan + ",";
         }
       } finally {
-        connection.release(); // Giải phóng kết nối sau khi truy vấn xong
+        connection.end(); // Giải phóng kết nối sau khi truy vấn xong
       }
     }
   } finally {
-    connection1.release(); // Giải phóng kết nối sau khi lấy danh sách phòng ban
+    connection1.end(); // Giải phóng kết nối sau khi lấy danh sách phòng ban
   }
 
   return kq;
@@ -134,7 +134,7 @@ const TaiChinhCheckAll = async (req, Dot, KiHoc, NamHoc) => {
       }
     }
   } finally {
-    if (connection) connection.release();
+    if (connection) connection.end();
   }
 
   return kq;
@@ -189,7 +189,7 @@ const renderInfo = async (req, res) => {
     console.error("Error executing query:", error);
     return res.status(500).json({ error: "Internal server error" });
   } finally {
-    connection.release(); // Trả kết nối về pool sau khi hoàn tất
+    connection.end(); // Trả kết nối về pool sau khi hoàn tất
   }
 };
 

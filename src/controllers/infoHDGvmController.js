@@ -27,7 +27,7 @@ async function fetchHDGvmData() {
     console.error("Error fetching data:", error);
     throw error; // Xử lý lỗi tùy ý
   } finally {
-    connection.release(); // Trả lại connection về pool
+    connection.end(); // Trả lại connection về pool
   }
 }
 
@@ -208,7 +208,7 @@ const exportHDGvmToExcel = async (req, res) => {
     console.error("Lỗi khi xuất dữ liệu:", error);
     res.status(500).send("Có lỗi xảy ra khi xuất dữ liệu");
   } finally {
-    if (connection) connection.release(); // Trả lại connection cho pool
+    if (connection) connection.end(); // Trả lại connection cho pool
   }
 };
 
@@ -352,7 +352,7 @@ const getHDGvmData = async (req, res) => {
     console.error("Error fetching HD Gvm data:", error);
     res.status(500).json({ message: "Internal Server Error" });
   } finally {
-    if (connection) connection.release(); // Trả lại connection cho pool
+    if (connection) connection.end(); // Trả lại connection cho pool
   }
 };
 
@@ -401,7 +401,7 @@ const getHopDongDuKienData = async (req, res) => {
     console.error("Error fetching HD Gvm data:", error);
     res.status(500).json({ message: "Internal Server Error" });
   } finally {
-    if (connection) connection.release(); // Trả lại connection cho pool
+    if (connection) connection.end(); // Trả lại connection cho pool
   }
 };
 
@@ -420,7 +420,7 @@ const getHopDongDuKien = async (req, res) => {
     console.error("Error fetching data:", error);
     res.status(500).send("Internal Server Error");
   } finally {
-    if (connection) connection.release(); // Đảm bảo giải phóng kết nối
+    if (connection) connection.end(); // Đảm bảo giải phóng kết nối
   }
 };
 

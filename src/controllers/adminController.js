@@ -1,7 +1,7 @@
 const express = require("express");
 const mysql = require("mysql2/promise"); // Ensure you have mysql2 installed
 const createPoolConnection = require("../config/databasePool");
-const connection = require("../config/database"); // Adjust the path as necessary
+// const connection = require("../config/database"); // Adjust the path as necessary
 
 const AdminController = {
   index: (req, res) => {
@@ -252,7 +252,7 @@ const AdminController = {
     } finally {
       if (connection) {
         try {
-          await connection.release(); // Trả lại kết nối vào pool
+          await connection.end(); // Trả lại kết nối vào pool
         } catch (error) {
           console.error("Lỗi khi trả lại kết nối:", error);
         }
@@ -279,7 +279,7 @@ const AdminController = {
       console.error("Lỗi khi thêm phòng ban:", error);
       res.status(500).json({ message: "Đã xảy ra lỗi khi thêm phòng ban" });
     } finally {
-      if (connection) connection.release(); // Đảm bảo giải phóng kết nối
+      if (connection) connection.end(); // Đảm bảo giải phóng kết nối
     }
   },
 
@@ -320,7 +320,7 @@ const AdminController = {
       console.error("Lỗi khi cập nhật dữ liệu: ", error);
       res.status(500).send("Lỗi server, không thể cập nhật dữ liệu");
     } finally {
-      if (connection) connection.release(); // Đảm bảo giải phóng kết nối
+      if (connection) connection.end(); // Đảm bảo giải phóng kết nối
     }
   },
 
@@ -398,7 +398,7 @@ const AdminController = {
       console.error("Lỗi: ", error);
       res.status(500).send("Đã có lỗi xảy ra");
     } finally {
-      if (connection) connection.release(); // Đảm bảo giải phóng kết nối
+      if (connection) connection.end(); // Đảm bảo giải phóng kết nối
     }
   },
   getUpdateTK: async (req, res) => {
@@ -452,7 +452,7 @@ const AdminController = {
       console.error("Lỗi: ", error);
       res.status(500).send("Đã có lỗi xảy ra");
     } finally {
-      if (connection) connection.release(); // Đảm bảo giải phóng kết nối
+      if (connection) connection.end(); // Đảm bảo giải phóng kết nối
     }
   },
 
@@ -480,7 +480,7 @@ const AdminController = {
       console.error("Lỗi khi truy vấn cơ sở dữ liệu: ", error);
       res.status(500).json({ error: "Đã có lỗi xảy ra" });
     } finally {
-      if (connection) connection.release(); // Đảm bảo giải phóng kết nối
+      if (connection) connection.end(); // Đảm bảo giải phóng kết nối
     }
   },
 
@@ -500,7 +500,7 @@ const AdminController = {
       console.error("Lỗi: ", error);
       res.status(500).send("Đã có lỗi xảy ra");
     } finally {
-      if (connection) connection.release(); // Đảm bảo giải phóng kết nối
+      if (connection) connection.end(); // Đảm bảo giải phóng kết nối
     }
   },
 
@@ -526,7 +526,7 @@ const AdminController = {
       console.error("Lỗi khi truy vấn cơ sở dữ liệu:", err);
       return res.status(500).json({ error: "Database error" });
     } finally {
-      if (connection) connection.release(); // Đảm bảo giải phóng kết nối
+      if (connection) connection.end(); // Đảm bảo giải phóng kết nối
     }
   },
   updatePassword: async (req, res) => {
@@ -569,7 +569,7 @@ const AdminController = {
       console.error("Lỗi khi cập nhật mật khẩu:", error);
       res.status(500).send("Lỗi hệ thống");
     } finally {
-      if (connection) connection.release(); // Đảm bảo giải phóng kết nối
+      if (connection) connection.end(); // Đảm bảo giải phóng kết nối
     }
   },
   getBoMon: async (req, res) => {
@@ -587,7 +587,7 @@ const AdminController = {
       console.error("Lỗi: ", error);
       res.status(500).send("Đã có lỗi xảy ra");
     } finally {
-      if (connection) connection.release(); // Đảm bảo giải phóng kết nối
+      if (connection) connection.end(); // Đảm bảo giải phóng kết nối
     }
   },
 
@@ -605,7 +605,7 @@ const AdminController = {
       console.error("Lỗi: ", error);
       res.status(500).send("Đã có lỗi xảy ra");
     } finally {
-      if (connection) connection.release(); // Đảm bảo giải phóng kết nối
+      if (connection) connection.end(); // Đảm bảo giải phóng kết nối
     }
   },
 
@@ -627,7 +627,7 @@ const AdminController = {
       console.error("Lỗi khi cập nhật dữ liệu: ", error);
       res.status(500).send("Lỗi server, không thể cập nhật dữ liệu");
     } finally {
-      if (connection) connection.release(); // Đảm bảo giải phóng kết nối
+      if (connection) connection.end(); // Đảm bảo giải phóng kết nối
     }
   },
 
@@ -670,7 +670,7 @@ const AdminController = {
       console.error("Lỗi: ", error);
       res.status(500).send("Đã có lỗi xảy ra");
     } finally {
-      if (connection) connection.release(); // Đảm bảo giải phóng kết nối
+      if (connection) connection.end(); // Đảm bảo giải phóng kết nối
     }
   },
   getNamHoc: async (req, res) => {
@@ -700,7 +700,7 @@ const AdminController = {
         message: "Đã có lỗi xảy ra khi lấy dữ liệu năm học",
       });
     } finally {
-      if (connection) connection.release(); // Đảm bảo giải phóng kết nối
+      if (connection) connection.end(); // Đảm bảo giải phóng kết nối
     }
   },
   getBoMonList: async (req, res) => {
@@ -720,7 +720,7 @@ const AdminController = {
       console.error("Lỗi: ", error);
       res.status(500).send("Đã có lỗi xảy ra");
     } finally {
-      if (connection) connection.release(); // Đảm bảo giải phóng kết nối
+      if (connection) connection.end(); // Đảm bảo giải phóng kết nối
     }
   },
   suggest: async (req, res) => {
@@ -734,7 +734,7 @@ const AdminController = {
       res.status(500).send("Lỗi server");
     }finally{
       if (connection) {
-        connection.release();
+        connection.end();
       }
     }
   },

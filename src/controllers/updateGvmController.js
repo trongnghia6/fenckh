@@ -25,7 +25,7 @@ const getUpdateGvm = async (req, res) => {
     // Xử lý lỗi, có thể trả về phản hồi lỗi cho client
     res.status(500).send("Lỗi khi lấy dữ liệu");
   } finally {
-    if (connection) connection.release(); // Giải phóng kết nối
+    if (connection) connection.end(); // Giải phóng kết nối
   }
 };
 
@@ -66,7 +66,7 @@ const getViewGvm = async (req, res) => {
     // Xử lý lỗi, có thể trả về phản hồi lỗi cho client
     res.status(500).send("Lỗi khi lấy dữ liệu");
   } finally {
-    if (connection) connection.release(); // Giải phóng kết nối
+    if (connection) connection.end(); // Giải phóng kết nối
   }
 };
 
@@ -191,7 +191,7 @@ const postUpdateGvm = async (req, res) => {
       console.error("Error executing query: ", err);
       res.redirect("/gvmList?message=insertFalse");
     } finally {
-      connection.release(); // Giải phóng kết nối
+      connection.end(); // Giải phóng kết nối
     }
   });
 };

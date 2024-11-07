@@ -240,7 +240,7 @@ const exportSingleContract = async (req, res) => {
     console.error("Error in exportSingleContract:", error);
     res.status(500).send(`Lỗi khi tạo file hợp đồng: ${error.message}`);
   } finally {
-    if (connection) connection.release(); // Đảm bảo giải phóng kết nối
+    if (connection) connection.end(); // Đảm bảo giải phóng kết nối
   }
 };
 
@@ -504,7 +504,7 @@ const exportMultipleContracts = async (req, res) => {
     console.error("Error in exportMultipleContracts:", error);
     res.status(500).send(`Lỗi khi tạo file hợp đồng: ${error.message}`);
   } finally {
-    if (connection) connection.release(); // Đảm bảo giải phóng kết nối
+    if (connection) connection.end(); // Đảm bảo giải phóng kết nối
   }
 };
 
@@ -524,7 +524,7 @@ const getExportHDSite = async (req, res) => {
     console.error("Error fetching data:", error);
     res.status(500).send("Internal Server Error");
   } finally {
-    if (connection) connection.release(); // Đảm bảo giải phóng kết nối
+    if (connection) connection.end(); // Đảm bảo giải phóng kết nối
   }
 };
 

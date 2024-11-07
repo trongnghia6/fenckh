@@ -92,7 +92,7 @@ const KhoaCheckAll = async (req, Dot, KiHoc, NamHoc) => {
     console.error("Error in KhoaCheckAll:", error);
     throw error; // Throw lại lỗi để xử lý ở nơi gọi hàm này
   } finally {
-    if (connection) connection.release();
+    if (connection) connection.end();
   }
 
   // Trả về kết quả có dấu phẩy cuối cùng
@@ -173,11 +173,11 @@ const DaoTaoCheckAll = async (req, Dot, KiHoc, NamHoc) => {
           kq += MaPhongBan + ",";
         }
       } finally {
-        connection.release(); // Giải phóng kết nối sau khi truy vấn xong
+        connection.end(); // Giải phóng kết nối sau khi truy vấn xong
       }
     }
   } finally {
-    connection1.release(); // Giải phóng kết nối sau khi lấy danh sách phòng ban
+    connection1.end(); // Giải phóng kết nối sau khi lấy danh sách phòng ban
   }
 
   return kq;
@@ -219,7 +219,7 @@ const TaiChinhCheckAll = async (req, Dot, KiHoc, NamHoc) => {
       }
     }
   } finally {
-    if (connection) connection.release();
+    if (connection) connection.end();
   }
 
   return kq;
@@ -424,7 +424,7 @@ const getNameGV = async (req, res) => {
     console.error("Lỗi khi truy vấn danh sách giảng viên:", error);
     return res.status(500).json({ error: "Internal server error" });
   } finally {
-    if (connection) connection.release(); // Giải phóng kết nối
+    if (connection) connection.end(); // Giải phóng kết nối
   }
 };
 
@@ -481,7 +481,7 @@ const getKhoaAndNameGvmOfKhoa = async (req, res) => {
       .status(500)
       .json({ error: "Đã xảy ra lỗi trong quá trình xử lý dữ liệu." });
   } finally {
-    if (connection) connection.release(); // Giải phóng kết nối khi hoàn tất
+    if (connection) connection.end(); // Giải phóng kết nối khi hoàn tất
   }
 };
 
@@ -505,7 +505,7 @@ const getTeachingInfo2 = async (req, res) => {
     console.error("Error fetching data:", error);
     res.status(500).send("Internal Server Error");
   } finally {
-    if (connection) connection.release(); // Đảm bảo giải phóng kết nối
+    if (connection) connection.end(); // Đảm bảo giải phóng kết nối
   }
 };
 
@@ -624,7 +624,7 @@ const getBoMon = async (req, res) => {
       .status(500)
       .json({ error: "Đã xảy ra lỗi trong quá trình xử lý dữ liệu." });
   } finally {
-    if (connection) connection.release(); // Giải phóng kết nối khi hoàn thành
+    if (connection) connection.end(); // Giải phóng kết nối khi hoàn thành
   }
 };
 const SaveNote = async (req, res) => {

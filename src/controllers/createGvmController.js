@@ -135,7 +135,7 @@
 //     console.error("Lỗi khi xử lý tải lên: ", error);
 //     res.status(500).send("Lỗi khi xử lý tải lên");
 //   } finally {
-//     if (connection) connection.release(); // Đảm bảo giải phóng kết nối
+//     if (connection) connection.end(); // Đảm bảo giải phóng kết nối
 //   }
 // };
 
@@ -271,7 +271,7 @@
 
 const express = require("express");
 const multer = require("multer");
-const connection = require("../config/database");
+// const connection = require("../config/database");
 const createPoolConnection = require("../config/databasePool");
 const mysql = require("mysql2/promise");
 
@@ -342,7 +342,7 @@ let handleUploadFile = async (req, res) => {
       "SELECT COUNT(*) as count FROM gvmoi WHERE CCCD = ?";
     const [duplicateRows] = await con2.query(checkDuplicateQuery, [CCCD]);
     if (duplicateRows[0].count > 0) {
-      con2.release(); // Giải phóng kết nối trước khi trả về
+      con2.end(); // Giải phóng kết nối trước khi trả về
       return res.redirect("/gvmList?message=duplicateCCCD");
     }
 
@@ -408,7 +408,7 @@ let handleUploadFile = async (req, res) => {
         }
         return res.redirect("/gvmList?message=insertFalse");
       } finally {
-        con2.release();
+        con2.end();
       }
     });
   } catch (error) {
@@ -439,7 +439,7 @@ const getBoMonList = async (req, res) => {
     console.error("Lỗi: ", error);
     res.status(500).send("Đã có lỗi xảy ra");
   } finally {
-    if (connection) connection.release(); // Đảm bảo giải phóng kết nối
+    if (connection) connection.end(); // Đảm bảo giải phóng kết nối
   }
 };
 

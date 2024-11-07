@@ -23,7 +23,7 @@ const logController = {
       console.error("Lỗi khi truy vấn cơ sở dữ liệu:", err);
       res.status(500).send("Lỗi máy chủ");
     } finally {
-      if (connection) connection.release(); // Giải phóng kết nối
+      if (connection) connection.end(); // Giải phóng kết nối
     }
   }
 };

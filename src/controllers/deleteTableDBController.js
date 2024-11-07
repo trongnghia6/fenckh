@@ -53,7 +53,7 @@ const deleteTableTam = async (req, res) => {
     console.error("Lỗi khi xóa dữ liệu:", error);
     return res.status(500).json({ message: "Đã xảy ra lỗi khi xóa dữ liệu." });
   } finally {
-    if (connection) connection.release(); // Giải phóng kết nối
+    if (connection) connection.end(); // Giải phóng kết nối
   }
 };
 

@@ -1,6 +1,6 @@
 const express = require("express");
 const multer = require("multer");
-const connection = require("../config/database");
+// const connection = require("../config/database");
 
 const router = express.Router();
 const createConnection = require("../config/databaseAsync");

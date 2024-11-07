@@ -456,7 +456,7 @@ const updateBanHanh = async (req, res) => {
       .status(500)
       .json({ success: false, message: "Cập nhật thất bại, lỗi server." });
   } finally {
-    if (connection) connection.release(); // Giải phóng kết nối
+    if (connection) connection.end(); // Giải phóng kết nối
   }
 };
 
@@ -1104,7 +1104,7 @@ const phongBanDuyet = async (req, res) => {
     console.error("Lỗi cập nhật:", error);
     res.status(500).json({ error: "Có lỗi xảy ra khi cập nhật dữ liệu" });
   } finally {
-    connection.release(); // Trả kết nối về pool sau khi hoàn tất
+    connection.end(); // Trả kết nối về pool sau khi hoàn tất
   }
 };
 
@@ -1279,7 +1279,7 @@ const TaiChinhCheckAll = async (Dot, KiHoc, NamHoc) => {
       }
     }
   } finally {
-    if (connection) connection.release();
+    if (connection) connection.end();
   }
 
   return kq;

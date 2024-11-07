@@ -42,7 +42,7 @@ const getGvmList = async (req, res) => {
     console.error("Error fetching data:", error);
     res.status(500).send("Internal Server Error");
   } finally {
-    if (connection) connection.release(); // Đảm bảo giải phóng kết nối
+    if (connection) connection.end(); // Đảm bảo giải phóng kết nối
   }
 };
 

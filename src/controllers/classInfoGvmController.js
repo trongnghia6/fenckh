@@ -48,7 +48,7 @@ const getClassInfoGvm = async (req, res) => {
     console.error("Error fetching class info:", error);
     res.status(500).send("Internal Server Error");
   } finally {
-    if (connection) connection.release(); // Đảm bảo giải phóng kết nối
+    if (connection) connection.end(); // Đảm bảo giải phóng kết nối
   }
 };
 
@@ -66,7 +66,7 @@ const getGvm = async (req, res) => {
     console.error("Error fetching GVM list:", error);
     res.status(500).json({ message: "Internal Server Error" }); // Xử lý lỗi
   } finally {
-    if (connection) connection.release(); // Giải phóng kết nối
+    if (connection) connection.end(); // Giải phóng kết nối
   }
 };
 

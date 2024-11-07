@@ -26,7 +26,7 @@
 
 const express = require("express");
 const multer = require("multer");
-const connection = require("../config/database");
+// const connection = require("../config/database");
 
 const router = express.Router();
 const createConnection = require("../config/databaseAsync");
@@ -45,7 +45,7 @@ const getGvmLists = async (req, res) => {
     console.error("Error fetching GVM lists: ", error);
     return res.status(500).send("Internal server error"); // Trả về chuỗi thông báo lỗi
   } finally {
-    if (connection2) connection2.release(); // Đóng kết nối sau khi truy vấn
+    if (connection2) connection2.end(); // Đóng kết nối sau khi truy vấn
   }
 };
 
