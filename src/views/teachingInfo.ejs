@@ -320,11 +320,13 @@
 
       <div class="d-flex my-3" style="height: 70px;">
         <!-- Tìm kiếm theo giảng viên -->
-        <input type="text" id="filterName" placeholder="Tìm theo tên giảng viên" class="form-control m-2 search" style="width: 200px;"/>
-        <input type="text" id="filterClass" placeholder="Tìm theo tên học phần" class="form-control m-2 search" style="width: 200px;"/>
+        <input type="text" id="filterName" placeholder="Tìm theo tên giảng viên" class="form-control m-2 search"
+          style="width: 200px;" />
+        <input type="text" id="filterClass" placeholder="Tìm theo tên học phần" class="form-control m-2 search"
+          style="width: 200px;" />
         <!-- Tìm kiếm theo bộ môn -->
         <input type="text" id="filterBoMon" placeholder="Tìm theo tên bộ môn" onclick="showSuggestionsBoMon(this)"
-          class="form-control m-2 search" style="width: 200px;"/>
+          class="form-control m-2 search" style="width: 200px;" />
 
         <div class="input-group my-2 mx-1" style="width: 350px;" id="batdau">
           <label for="startDate" class="input-group-text">Ngày bắt đầu</label>
@@ -364,39 +366,39 @@
             tableBody.innerHTML = ''; // Xóa các hàng hiện có
             dataRows.forEach(row => tableBody.appendChild(row)); // Chèn lại các hàng dữ liệu đã sắp xếp
           }
-          
+
         </script>
         <script>
           // Hàm kiểm tra và lọc hàng trong bảng
           function filterTable() {
-              const nameFilter = document.getElementById('filterName').value.toLowerCase();
-              const classFilter = document.getElementById('filterClass').value.toLowerCase();
-              const boMonFilter = document.getElementById('filterBoMon').value.toLowerCase();
-              const tableRows = document.querySelectorAll('#tableBody tr');
+            const nameFilter = document.getElementById('filterName').value.toLowerCase();
+            const classFilter = document.getElementById('filterClass').value.toLowerCase();
+            const boMonFilter = document.getElementById('filterBoMon').value.toLowerCase();
+            const tableRows = document.querySelectorAll('#tableBody tr');
 
-              tableRows.forEach(row => {
-                  const nameCell = row.querySelector('td:nth-child(3)'); // Cột tên giảng viên
-                  const classCell = row.querySelector('td:nth-child(1)'); // Cột học phần
-                  const boMonInput = row.querySelector('td:nth-child(7) input[name="bomon"]'); // Cột bộ môn
+            tableRows.forEach(row => {
+              const nameCell = row.querySelector('td:nth-child(3)'); // Cột tên giảng viên
+              const classCell = row.querySelector('td:nth-child(1)'); // Cột học phần
+              const boMonInput = row.querySelector('td:nth-child(7) input[name="bomon"]'); // Cột bộ môn
 
-                  const name = nameCell ? nameCell.textContent.toLowerCase() : '';
-                  const className = classCell ? classCell.textContent.toLowerCase() : '';
-                  const boMon = boMonInput ? boMonInput.value.toLowerCase() : '';
+              const name = nameCell ? nameCell.textContent.toLowerCase() : '';
+              const className = classCell ? classCell.textContent.toLowerCase() : '';
+              const boMon = boMonInput ? boMonInput.value.toLowerCase() : '';
 
-                  // Kiểm tra điều kiện lọc
-                  const matchesName = name.includes(nameFilter);
-                  const matchesClass = className.includes(classFilter);
-                  const matchesBoMon = boMon.includes(boMonFilter);
+              // Kiểm tra điều kiện lọc
+              const matchesName = name.includes(nameFilter);
+              const matchesClass = className.includes(classFilter);
+              const matchesBoMon = boMon.includes(boMonFilter);
 
-                  // Hiện hoặc ẩn hàng dựa trên điều kiện lọc
-                  if (matchesName && matchesClass && matchesBoMon) {
-                      row.style.display = ''; // Hiện hàng nếu tất cả các điều kiện đều khớp
-                  } else {
-                      row.style.display = 'none'; // Ẩn hàng nếu không khớp
-                  }
-              });
+              // Hiện hoặc ẩn hàng dựa trên điều kiện lọc
+              if (matchesName && matchesClass && matchesBoMon) {
+                row.style.display = ''; // Hiện hàng nếu tất cả các điều kiện đều khớp
+              } else {
+                row.style.display = 'none'; // Ẩn hàng nếu không khớp
+              }
+            });
 
-              calculateTotals(); // Cập nhật tổng số tiết sau khi lọc
+            calculateTotals(); // Cập nhật tổng số tiết sau khi lọc
           }
 
           // Gán sự kiện cho các input filter
@@ -640,7 +642,7 @@
         console.log('Dữ liệu sau khi chèn:', data);
 
         // Gửi dữ liệu đã cập nhật lên server
-        fetch('http://localhost:3000/check-teaching', {
+        fetch('/check-teaching', {
           method: 'POST', // Phương thức POST
           headers: {
             'Content-Type': 'application/json' // Định dạng gửi là JSON
@@ -681,7 +683,7 @@
         const MaPhongBan = localStorage.getItem("MaPhongBan");
 
         try {
-          const response = await fetch('http://localhost:3000/bo-mon-theo-gv', {
+          const response = await fetch('/bo-mon-theo-gv', {
             method: 'GET', // Thay đổi thành POST
             // headers: {
             //   'Content-Type': 'application/json'
@@ -704,7 +706,7 @@
         }
 
         try {
-          const response = await fetch('http://localhost:3000/bo-mon', {
+          const response = await fetch('/bo-mon', {
             method: 'POST', // Thay đổi thành POST
             headers: {
               'Content-Type': 'application/json'
@@ -743,9 +745,9 @@
           console.log('Gọi API lấy dữ liệu mới...');
 
           const [gvmResponse, khoaResponse, teachingResponse] = await Promise.all([
-            fetch('http://localhost:3000/index/name-gvm'),
-            fetch('http://localhost:3000/index/name-gvm-khoa'),
-            fetch('http://localhost:3000/teaching-info', {
+            fetch('/index/name-gvm'),
+            fetch('/index/name-gvm-khoa'),
+            fetch('/teaching-info', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
@@ -958,7 +960,7 @@
               } else {
                 ghiChuTd.innerHTML = `📜 <span class="bi bi-circle" style="color: red;"></span>`; // Hiển thị biểu tượng ghi chú và chấm đỏ
               }
-              
+
             } else {
               ghiChuTd.innerHTML = "📜"; // Hiển thị biểu tượng ghi chú nếu không có ghi chú
             }
@@ -1172,7 +1174,7 @@
               }
 
               // Gửi dữ liệu đã cập nhật lên server
-              fetch('http://localhost:3000/check-teaching', {
+              fetch('/check-teaching', {
                 method: 'POST', // Phương thức POST
                 headers: {
                   'Content-Type': 'application/json' // Định dạng gửi là JSON
@@ -1529,7 +1531,7 @@
         item.NgayKetThuc = format(item.NgayKetThuc); // Định dạng ngày bắt đầu
       });
       // Gửi dữ liệu lên server
-      fetch('http://localhost:3000/check-teaching', {
+      fetch('/check-teaching', {
         method: 'POST', // Phương thức POST
         headers: {
           'Content-Type': 'application/json' // Định dạng gửi là JSON

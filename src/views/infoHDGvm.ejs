@@ -199,11 +199,14 @@
             <select class="form-select w-100px mx-2 selectop" id="NamHoc">
               <option value="">Năm học</option>
             </select>
+            <select class="form-select w-100px mx-1 selectop" id="MaPhongBan">
+              <option value="">Chọn khoa</option>
+            </select>
 
             <button id="viewDataBtn" class="btn view">Xem dữ liệu</button>
-            <button class="btn export" onclick="exportData()"><i class="fas fa-file-export me-2"></i>Xuất dữ liệu</button>
-          </div>
-
+            <button id="exportButton" class="btn export" onclick="exportData()">
+              <i class="fas fa-file-export me-2"></i>Xuất dữ liệu
+          </button>          </div>
           <div id="tableContainer" style="display: none;">
             <div class="table-responsive">
               <table class="table table-bordered" id="dataTable" class="table table-striped table-hover table-bordered">
@@ -269,66 +272,94 @@
           }
         }
       </script>
-      <script>
-        function exportData() {
-          const namHoc = document.getElementById('NamHoc').value;
-          const dot = document.getElementById('combobox-dot').value;
-          const ki = document.getElementById('combobox-ki').value;
+     <script>
+     function exportData() {
+    const dot = document.getElementById("combobox-dot").value;
+    const ki = document.getElementById("combobox-ki").value;
+    const namHoc = document.getElementById("NamHoc").value;
+    const khoa = document.getElementById("MaPhongBan").value;
 
-          window.location.href = '/hdgvm/export-excel?namHoc=' + namHoc + '&dot=' + dot + '&ki=' + ki;
-        }
+    // Kiểm tra các trường bắt buộc
+    if (!dot || !ki || !namHoc) {
+        alert("Vui lòng chọn đầy đủ thông tin đợt, kỳ và năm học");
+        return;
+    }
+
+    // Tạo URL với các tham số
+    let url = `/hdgvm/export-excel?dot=${encodeURIComponent(dot)}&ki=${encodeURIComponent(ki)}&namHoc=${encodeURIComponent(namHoc)}`;
+    
+    if (khoa && khoa !== "ALL") {
+        url += `&khoa=${encodeURIComponent(khoa)}`;
+    }
+
+    // Log URL để debug
+    console.log("Exporting data with URL:", url);
+
+    // Thực hiện tải xuống
+    window.location.href = url;
+}
       </script>
-
 
       <!-- phần dữ liệu để hiển thị trên bảng -->
       <script>
-        document.addEventListener('DOMContentLoaded', function () {
-          const viewDataBtn = document.getElementById('viewDataBtn');
-          const tableContainer = document.getElementById('tableContainer');
-          const dataTable = document.getElementById('dataTable');
+       document.addEventListener('DOMContentLoaded', function () {
+  const viewDataBtn = document.getElementById('viewDataBtn');
+  const tableContainer = document.getElementById('tableContainer');
+  const dataTable = document.getElementById('dataTable');
 
-          viewDataBtn.addEventListener('click', async function () {
-            try {
-              const namHoc = document.getElementById('NamHoc').value;
-              const dot = document.getElementById('combobox-dot').value;
-              const ki = document.getElementById('combobox-ki').value;
+  viewDataBtn.addEventListener('click', async function () {
+    try {
+      const namHoc = document.getElementById('NamHoc').value;
+      const dot = document.getElementById('combobox-dot').value;
+      const ki = document.getElementById('combobox-ki').value;
+      const khoa = document.getElementById('MaPhongBan').value;
 
-              const response = await fetch(`/api/hdgvm?namHoc=${namHoc}&dot=${dot}&ki=${ki}`);
-              if (!response.ok) {
-                throw new Error('Network response was not ok');
-              }
-              const data = await response.json();
+      if (!namHoc || !dot || !ki) {
+        alert('Vui lòng chọn đầy đủ Năm học, Đợt và Kỳ');
+        return;
+      }
 
-              // Xóa dữ liệu cũ trong bảng
-              const tbody = dataTable.querySelector('tbody');
-              tbody.innerHTML = '';
+      let url = `/api/hdgvm?namHoc=${encodeURIComponent(namHoc)}&dot=${encodeURIComponent(dot)}&ki=${encodeURIComponent(ki)}`;
+      if (khoa && khoa !== 'ALL') {
+        url += `&khoa=${encodeURIComponent(khoa)}`;
+      }
 
-              // Thêm dữ liệu mới vào bảng
-              data.forEach(item => {
-                const row = tbody.insertRow();
-                row.insertCell(0).textContent = new Date(item.NgayBatDau).toLocaleDateString('vi-VN');
-                row.insertCell(1).textContent = new Date(item.NgayKetThuc).toLocaleDateString('vi-VN');
-                row.insertCell(2).textContent = item.DanhXung;
-                row.insertCell(3).textContent = item.HoTen;
-                row.insertCell(4).textContent = new Date(item.NgaySinh).toLocaleDateString('vi-VN');
-                row.insertCell(5).textContent = item.CCCD;
-                row.insertCell(6).textContent = item.HocVi;
-                row.insertCell(7).textContent = item.ChucVu;
-                row.insertCell(8).textContent = item.DienThoai;
-                row.insertCell(9).textContent = item.Email;
-                row.insertCell(10).textContent = item.STK;
-                row.insertCell(11).textContent = item.NganHang;
-                row.insertCell(12).textContent = item.MaSoThue;
-                row.insertCell(13).textContent = item.SoTiet;
-              });
+      const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      const data = await response.json();
 
-              // Hiển thị bảng
-              tableContainer.style.display = 'block';
-            } catch (error) {
-              console.error('Error:', error);
-              alert('Đã xảy ra lỗi khi tải dữ liệu');
-            }
-          });
+      // Xóa dữ liệu cũ trong bảng
+      const tbody = dataTable.querySelector('tbody');
+      tbody.innerHTML = '';
+
+      // Thêm dữ liệu mới vào bảng
+      data.forEach(item => {
+        const row = tbody.insertRow();
+        row.insertCell(0).textContent = new Date(item.NgayBatDau).toLocaleDateString('vi-VN');
+        row.insertCell(1).textContent = new Date(item.NgayKetThuc).toLocaleDateString('vi-VN');
+        row.insertCell(2).textContent = item.DanhXung;
+        row.insertCell(3).textContent = item.HoTen;
+        row.insertCell(4).textContent = new Date(item.NgaySinh).toLocaleDateString('vi-VN');
+        row.insertCell(5).textContent = item.CCCD;
+        row.insertCell(6).textContent = item.HocVi;
+        row.insertCell(7).textContent = item.ChucVu;
+        row.insertCell(8).textContent = item.DienThoai;
+        row.insertCell(9).textContent = item.Email;
+        row.insertCell(10).textContent = item.STK;
+        row.insertCell(11).textContent = item.NganHang;
+        row.insertCell(12).textContent = item.MaSoThue;
+        row.insertCell(13).textContent = item.SoTiet;
+      });
+
+      // Hiển thị bảng
+      tableContainer.style.display = 'block';
+    } catch (error) {
+      console.error('Error:', error);
+      alert('Đã xảy ra lỗi khi tải dữ liệu');
+    }
+  });
         });
       </script>
 
@@ -552,6 +583,42 @@
             },
             error: function (error) {
               console.error("Lỗi khi lấy dữ liệu năm học:", error);
+            }
+          });
+        });
+      </script>
+       <script>
+        $(document).ready(function () {
+          $('#MaPhongBan option[value=""]').remove();
+          // Gọi AJAX để lấy dữ liệu JSON từ API
+          $.ajax({
+            url: '/getPhongBan', // Đường dẫn tới API getPhongBan
+            method: 'GET',
+            success: function (response) {
+              // Kiểm tra nếu response thành công
+              const MaPhongBan = response.MaPhongBan;
+              if (response.success) {
+                $('#MaPhongBan').prepend('<option value="ALL">Tất cả khoa</option>');
+                // Lặp qua từng mục trong mảng MaPhongBan
+                response.MaPhongBan.forEach(function (item) {
+                  // Nếu item.MaPhongBan bằng boMon.MaPhongBan, hiển thị trước
+                  console.log(item);
+                  $('#MaPhongBan').append(
+                    `<option value="${item.MaPhongBan}">${item.MaPhongBan}</option>`
+                  );
+                }
+                );
+    
+                // Nếu không có phòng ban nào tương ứng, bạn có thể thêm tùy chọn mặc định ở đây
+                if (!$('#MaPhongBan option:selected').length) {
+                  $('#MaPhongBan').prepend('<option value="">Chọn Phòng Ban</option>');
+                }
+              } else {
+                console.error("Không lấy được dữ liệu phongBan:", response.message);
+              }
+            },
+            error: function (error) {
+              console.error("Lỗi khi lấy dữ liệu phongBan:", error);
             }
           });
         });

@@ -976,18 +976,6 @@ const updateQC = async (req, res) => {
       const approvalQuery = `SELECT KhoaDuyet, DaoTaoDuyet, TaiChinhDuyet FROM ${tableName} WHERE ID = ?`;
       const approvalResult = await queryAsync(approvalQuery, [ID]);
 
-      // if (approvalResult.length > 0) {
-      //   const { KhoaDuyet, DaoTaoDuyet, TaiChinhDuyet } = approvalResult[0];
-
-      //   // Kiểm tra nếu tất cả 3 cột đều được duyệt
-      //   if (KhoaDuyet === 0 && DaoTaoDuyet === 0 && TaiChinhDuyet === 0) {
-      //     // Lúc đầu là full === 1
-      //     // Thêm ID vào danh sách hoàn thiện
-      //     completedIDs.push(ID);
-      //     //continue; // Bỏ qua bản ghi này và tiếp tục với bản ghi tiếp theo
-      //   }
-      // }
-
       // Nếu chưa duyệt đầy đủ, tiến hành cập nhật
       const updateQuery = `
         UPDATE ${tableName}
@@ -1108,109 +1096,9 @@ const phongBanDuyet = async (req, res) => {
   }
 };
 
-// const updateAllTeachingInfo = async (req, res) => {
-//   const query2 = `
-//     SELECT
-//       qc.*,
-//       gvmoi.*,
-//       SUBSTRING_INDEX(qc.GiaoVienGiangDay, ' - ', 1) AS TenGiangVien
-//     FROM quychuan qc
-//     JOIN gvmoi ON SUBSTRING_INDEX(qc.GiaoVienGiangDay, ' - ', 1) = gvmoi.HoTen
-//     GROUP BY gvmoi.HoTen;
-//   `;
-
 const getDanhXung = (gioiTinh) => {
   return gioiTinh === "Nam" ? "Ông" : gioiTinh === "Nữ" ? "Bà" : "";
 };
-
-//   try {
-//     const [dataJoin] = await connection.promise().query(query2);
-
-//     // Chuẩn bị dữ liệu để chèn từng loạt
-//     const insertValues = dataJoin.map((item) => {
-//       const {
-//         id_Gvm,
-//         DienThoai,
-//         Email,
-//         MaSoThue,
-//         HoTen,
-//         NgaySinh,
-//         HSL,
-//         CCCD,
-//         NoiCapCCCD,
-//         DiaChi,
-//         STK,
-//         NganHang,
-//         NgayBatDau,
-//         NgayKetThuc,
-//         KiHoc,
-//         QuyChuan,
-//         //SoTien,
-//         //TruThue,
-//         Dot,
-//         NamHoc,
-//         MaPhongBan,
-//         //MaBoMon,
-//         KhoaDuyet,
-//         DaoTaoDuyet,
-//         TaiChinhDuyet,
-//         GioiTinh,
-//       } = item;
-
-//       const DanhXung = getDanhXung(GioiTinh);
-//       let SoTien = QuyChuan * 1000000;
-//       let TruThue = 0;
-//       MaBoMon = 0;
-//       return [
-//         id_Gvm,
-//         DienThoai,
-//         Email,
-//         MaSoThue,
-//         DanhXung,
-//         HoTen,
-//         NgaySinh,
-//         HSL,
-//         CCCD,
-//         NoiCapCCCD,
-//         DiaChi,
-//         STK,
-//         NganHang,
-//         NgayBatDau,
-//         NgayKetThuc,
-//         KiHoc,
-//         QuyChuan,
-//         SoTien,
-//         TruThue,
-//         Dot,
-//         NamHoc,
-//         MaPhongBan,
-//         MaBoMon,
-//         KhoaDuyet,
-//         DaoTaoDuyet,
-//         TaiChinhDuyet,
-//       ];
-//     });
-
-//     // Định nghĩa câu lệnh chèn
-//     const queryInsert = `
-//       INSERT INTO hopdonggvmoi (
-//         id_Gvm, DienThoai, Email, MaSoThue, DanhXung, HoTen, NgaySinh, HSL, CCCD, NoiCapCCCD,
-//         DiaChi, STK, NganHang, NgayBatDau, NgayKetThuc, KiHoc, SoTiet, SoTien, TruThue,
-//         Dot, NamHoc, MaPhongBan, MaBoMon, KhoaDuyet, DaoTaoDuyet, TaiChinhDuyet
-//       ) VALUES ?;
-//     `;
-
-//     // Thực hiện câu lệnh chèn
-//     await connection.promise().query(queryInsert, [insertValues]);
-
-//     res.status(200).json({ message: "Dữ liệu đã được chèn thành công!" });
-//   } catch (err) {
-//     console.error(err); // Ghi lại lỗi để gỡ lỗi
-//     res
-//       .status(500)
-//       .json({ error: "Đã xảy ra lỗi trong quá trình cập nhật thông tin." });
-//   }
-// };
 
 const getGvmId = async (HoTen) => {
   const query = "SELECT id_Gvm FROM `gvmoi` WHERE HoTen = ?";
@@ -1285,7 +1173,10 @@ const TaiChinhCheckAll = async (Dot, KiHoc, NamHoc) => {
   return kq;
 };
 
-const updateAllTeachingInfo = async () => {
+// Tạo biến toàn cục để kiểm tra xem đã lưu hết dữ liệu chưa
+//let tmp = 0;
+
+const updateAllTeachingInfo = async (req, res) => {
   // const query2 = `
   //     SELECT
   //       qc.*,
@@ -1324,7 +1215,6 @@ GROUP BY
         message: "Không có dữ liệu để chèn.",
       };
     }
-    console.log(dataJoin);
 
     const firstItem = dataJoin[0]; // Lấy phần tử đầu tiên
 
@@ -1377,6 +1267,8 @@ GROUP BY
             TaiChinhDuyet,
             GioiTinh,
           } = item;
+
+          req.session.tmp++;
 
           const DanhXung = getDanhXung(GioiTinh);
           // const getDanhXung = (GioiTinh) => {
@@ -1455,7 +1347,7 @@ GROUP BY
   }
 };
 
-const insertGiangDay = async () => {
+const insertGiangDay = async (req, res) => {
   const query2 = `
     SELECT
       qc.*, 
@@ -1507,6 +1399,8 @@ const insertGiangDay = async () => {
             MaHocPhan,
             TenLop,
           } = item;
+
+          req.session.tmp++;
 
           const TenHocPhan = LopHocPhan;
           const gv1 = GiaoVienGiangDay ? GiaoVienGiangDay.split(" - ") : [];
@@ -1580,7 +1474,7 @@ const insertGiangDay = async () => {
   }
 };
 
-const insertGiangDay2 = async () => {
+const insertGiangDay2 = async (req, res) => {
   const query2 = `
     SELECT
       qc.*,
@@ -1633,6 +1527,8 @@ const insertGiangDay2 = async () => {
             MaHocPhan,
             TenLop,
           } = item;
+
+          req.session.tmp++;
 
           const TenHocPhan = LopHocPhan;
 
@@ -1704,25 +1600,106 @@ const insertGiangDay2 = async () => {
 
 const submitData2 = async (req, res) => {
   try {
-    const updateResult = await updateAllTeachingInfo(); // Hàm thêm vào hợp đồng giảng viên mời
+    let updateResult, update2, insertResult;
 
-    const update2 = await insertGiangDay2(); // Hàm thêm vào giảng dạy (nhân viên)
-
-    if (updateResult.success) {
-      const insertResult = await insertGiangDay(); // Hàm thêm vào giảng dạy (giảng viên mời)
-      if (insertResult.success) {
-        return res.status(200).json({ message: insertResult.message });
-      } else {
-        return res.status(400).json({ message: insertResult.message });
-      }
-    } else {
-      return res.status(400).json({ message: updateResult.message });
+    try {
+      updateResult = await updateAllTeachingInfo(req, res); // Hàm thêm vào hợp đồng giảng viên mời
+    } catch (err) {
+      console.error("Lỗi trong updateAllTeachingInfo:", err);
+      return res
+        .status(500)
+        .json({ error: "Lỗi khi cập nhật hợp đồng giảng viên mời." });
     }
+
+    try {
+      update2 = await insertGiangDay2(req, res); // Hàm thêm vào giảng dạy (nhân viên)
+    } catch (err) {
+      console.error("Lỗi trong insertGiangDay2:", err);
+      return res
+        .status(500)
+        .json({ error: "Lỗi khi thêm dữ liệu giảng dạy (nhân viên)." });
+    }
+
+    try {
+      insertResult = await insertGiangDay(req, res); // Hàm thêm vào giảng dạy (giảng viên mời)
+    } catch (err) {
+      console.error("Lỗi trong insertGiangDay:", err);
+      return res
+        .status(500)
+        .json({ error: "Lỗi khi thêm dữ liệu giảng dạy (giảng viên mời)." });
+    }
+
+    if (req.session.tmp == 0) {
+      req.session.tmp = 0;
+      return res.json({ message: "Dữ liệu đã được cập nhật đầy đủ" });
+    }
+
+    // Đặt lại giá trị cho req.session.tmp
+    req.session.tmp = 0;
+
+    res.json({
+      message: "Lưu dữ liệu thành công",
+      updateResult,
+      update2,
+      insertResult,
+    });
   } catch (err) {
-    console.error(err);
+    console.error("Lỗi không xác định:", err);
     return res.status(500).json({ error: "Đã xảy ra lỗi không xác định." });
   }
 };
+
+// const submitData2 = async (req, res) => {
+//   try {
+//     const updateResult = await updateAllTeachingInfo(); // Hàm thêm vào hợp đồng giảng viên mời
+
+//     const update2 = await insertGiangDay2(); // Hàm thêm vào giảng dạy (nhân viên)
+
+//     const insertResult = await insertGiangDay(); // Hàm thêm vào giảng dạy (giảng viên mời)
+
+//     if (tmp == 0) {
+//       return res.json({ message: "Dữ liệu đã được cập nhật đầy đủ" }); // Trả về phản hồi khi tmp == 0
+//     }
+
+//     res.json({
+//       message: "Lưu dữ liệu thành công",
+//       updateResult,
+//       update2,
+//       insertResult,
+//     });
+//   } catch (err) {
+//     console.error(err);
+//     console.log("gsgag");
+//     return res.status(500).json({ error: "Đã xảy ra lỗi không xác định." });
+//   }
+// };
+
+// const submitData2 = async (req, res) => {
+//   try {
+//     const updateResult = await updateAllTeachingInfo(); // Hàm thêm vào hợp đồng giảng viên mời
+
+//     const update2 = await insertGiangDay2(); // Hàm thêm vào giảng dạy (nhân viên)
+
+//     if (updateResult.success) {
+//       const insertResult = await insertGiangDay(); // Hàm thêm vào giảng dạy (giảng viên mời)
+
+//       if (tmp == 3) {
+//         console.log("dã ok");
+//         return res.status(400).json({ message: updateResult.message });
+//       }
+//       if (insertResult.success) {
+//         return res.status(200).json({ message: insertResult.message });
+//       } else {
+//         return res.status(400).json({ message: insertResult.message });
+//       }
+//     } else {
+//       return res.status(400).json({ message: updateResult.message });
+//     }
+//   } catch (err) {
+//     console.error(err);
+//     return res.status(500).json({ error: "Đã xảy ra lỗi không xác định." });
+//   }
+// };
 
 // const submitData2 = async (req, res) => {
 //   updateAllTeachingInfo(req, res);

@@ -283,19 +283,19 @@ const exportPhuLucGiangVienMoi = async (req, res) => {
       };
 
       // Căn chỉnh độ rộng cột
-      worksheet.getColumn(1).width = 15; // Họ tên giảng viên
-      worksheet.getColumn(2).width = 20; // Tên học phần
-      worksheet.getColumn(3).width = 15; // Tên lớp
+      worksheet.getColumn(1).width = 16; // Họ tên giảng viên
+      worksheet.getColumn(2).width = 12; // Tên học phần
+      worksheet.getColumn(3).width = 12; // Tên lớp
       worksheet.getColumn(4).width = 10; // Số tiết
-      worksheet.getColumn(5).width = 20; // Thời gian thực hiện
-      worksheet.getColumn(6).width = 10; // Học kỳ
-      worksheet.getColumn(7).width = 20; // Địa Chỉ
-      worksheet.getColumn(8).width = 15; // Học vị
+      worksheet.getColumn(5).width = 15; // Thời gian thực hiện
+      worksheet.getColumn(6).width = 9; // Học kỳ
+      worksheet.getColumn(7).width = 15; // Địa Chỉ
+      worksheet.getColumn(8).width = 10; // Học vị
       worksheet.getColumn(9).width = 10; // Hệ số lương
-      worksheet.getColumn(10).width = 15; // Mức thanh toán
-      worksheet.getColumn(11).width = 15; // Thành tiền
-      worksheet.getColumn(12).width = 15; // Trừ thuế TNCN 10%
-      worksheet.getColumn(13).width = 15; // Còn lại
+      worksheet.getColumn(10).width = 12; // Mức thanh toán
+      worksheet.getColumn(11).width = 14; // Thành tiền
+      worksheet.getColumn(12).width = 14; // Trừ thuế TNCN 10%
+      worksheet.getColumn(13).width = 14; // Còn lại
       // Bật wrapText cho tiêu đề
       headerRow.eachCell((cell) => {
         cell.fill = {
@@ -363,43 +363,43 @@ const exportPhuLucGiangVienMoi = async (req, res) => {
           // Chỉnh cỡ chữ cho từng cột
           switch (colNumber) {
             case 1: // Họ tên giảng viên
-              cell.font = { name: "Times New Roman", size: 11 };
+              cell.font = { name: "Times New Roman", size: 12 };
               break;
             case 2: // Tên học phần
               cell.font = { name: "Times New Roman", size: 11 };
               break;
             case 3: // Tên lớp
-              cell.font = { name: "Times New Roman", size: 10 };
+              cell.font = { name: "Times New Roman", size: 11 };
               break;
             case 4: // Số tiết
-              cell.font = { name: "Times New Roman", size: 10 };
+              cell.font = { name: "Times New Roman", size: 11 };
               break;
             case 5: // Thời gian thực hiện
-              cell.font = { name: "Times New Roman", size: 9 };
+              cell.font = { name: "Times New Roman", size: 11 };
               break;
             case 6: // Học kỳ
               cell.font = { name: "Times New Roman", size: 10 };
               break;
             case 7: // Địa Chỉ
-              cell.font = { name: "Times New Roman", size: 10 };
+              cell.font = { name: "Times New Roman", size: 11 };
               break;
             case 8: // Học vị
-              cell.font = { name: "Times New Roman", size: 10 };
+              cell.font = { name: "Times New Roman", size: 11 };
               break;
             case 9: // Hệ số lương
-              cell.font = { name: "Times New Roman", size: 10 };
+              cell.font = { name: "Times New Roman", size: 12 };
               break;
             case 10: // Mức thanh toán
-              cell.font = { name: "Times New Roman", size: 10 };
+              cell.font = { name: "Times New Roman", size: 12 };
               break;
             case 11: // Thành tiền
-              cell.font = { name: "Times New Roman", size: 11 };
+              cell.font = { name: "Times New Roman", size: 12 };
               break;
             case 12: // Trừ thuế TNCN 10%
-              cell.font = { name: "Times New Roman", size: 10 };
+              cell.font = { name: "Times New Roman", size: 12 };
               break;
             case 13: // Còn lại
-              cell.font = { name: "Times New Roman", size: 11 };
+              cell.font = { name: "Times New Roman", size: 12 };
               break;
           }
         });

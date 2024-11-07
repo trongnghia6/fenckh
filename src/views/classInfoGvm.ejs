@@ -379,6 +379,8 @@
 
                 <script>
                   function filterTable() {
+                    // thừa hàm ở đây này, src đời đầu của anh viết ko khác gì tôi đou :)
+                    console.log('filterTable')
                     // Get selected values
                     let dot = document.getElementById("combobox-dot").value;
                     let ki = document.getElementById("combobox-ki").value;
@@ -645,7 +647,7 @@
           if (qcCell) {
             const qcValue = parseInt(qcCell.textContent.trim());
             if (!isNaN(qcValue)) {
-              console.log(totalQC)
+              // console.log(totalQC)
               totalQC += qcValue;
             }
           }
@@ -978,6 +980,7 @@
           row.style.display = "none"; // Hide row
         }
       }
+      calculateTotals();
     }
   </script>
 

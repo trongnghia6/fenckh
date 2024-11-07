@@ -266,18 +266,17 @@
    </div>
                                </div>
                                <div class="row mb-3">
-   <div class="col-md-4">
-       <p style="margin-bottom: 8px;">Mã phòng ban:</p>
-       <label>
-           <input class="m-2" type="checkbox" name="maPhongBan" value="CNTT" style="cursor: pointer;"  <%= value.MaPhongBan.includes('CNTT') ? 'checked' : '' %> > CNTT
-       </label>
-       <label>
-           <input class="m-2" type="checkbox" name="maPhongBan" value="ATTT" style="cursor: pointer;"  <%= value.MaPhongBan.includes('ATTT') ? 'checked' : '' %> > ATTT
-       </label>
-       <label>
-           <input class="m-2" type="checkbox" name="maPhongBan" value="DTVT" style="cursor: pointer;"  <%= value.MaPhongBan.includes('DTVT') ? 'checked' : '' %> > DTVT
-       </label>
-   </div>
+                                <div class="col-md-4">
+                                  <p style="margin-bottom: 8px;">Mã phòng ban:</p>
+                                  <select id="filterByDepartment" name="maPhongBan" class="form-control filter" style="cursor: pointer;">
+                                      <% phongBanList.forEach(function(phongBan) { %>
+                                          <option value="<%= phongBan.MaPhongBan %>" <%= value.MaPhongBan === phongBan.MaPhongBan ? 'selected' : '' %>>
+                                              <%= phongBan.MaPhongBan %>
+                                          </option>
+                                      <% }); %>
+                                  </select>
+                              </div>
+                              
    <div class="col-md-4">
        <label for="tinhTrang">Tình trạng giảng dạy:</label>
        <select class="form-control" name="tinhTrangGiangDay" id="tinhTrang" >
@@ -291,7 +290,7 @@
       </select>
     </div>
     <input type="text" id="boMon" value="<%= value.MonGiangDayChinh %>" hidden>
-   <div class="col-md-4 d-flex justify-content-between">
+   <div class="col-md-4 d-flex justify-content-between" style="margin-top: 15px;">
       <button class="btn" id="submit">Cập nhật</button>
       <button class="btn" id="return" type="button" onclick="window.location.href='/gvmList'">Quay lại</button>
    </div>

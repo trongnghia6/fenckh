@@ -383,7 +383,7 @@
           };
 
           // Fetch thông tin giảng dạy
-          const teachingResponse = await fetch('http://localhost:3000/quy-chuan-chinh-thuc', {
+          const teachingResponse = await fetch('/quy-chuan-chinh-thuc', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -427,7 +427,7 @@
 
         console.log(requestData);
         // Fetch thông tin giảng dạy ngay khi tải trang
-        const teachingResponse = await fetch('http://localhost:3000/quy-chuan-chinh-thuc', {
+        const teachingResponse = await fetch('/quy-chuan-chinh-thuc', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
