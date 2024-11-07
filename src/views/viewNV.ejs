@@ -269,22 +269,18 @@
           </div>
           <div class="col-md-4 input-wrapper d-flex justify-content-between">
             <div>
-              <label for="Quyen" class="form-label">Quyền</label>
+              <label for="MaPhongBan" class="form-label">Mã Phòng Ban</label>
               <input
                 type="text"
-                class="form-control"
-                value="<%= role.Quyen %>"
+                class="form-control text-center"
+                value="<%= role.MaPhongBan %>"
+                style="width: 150px;"
                 readonly
               />
             </div>
             <div>
-              <label for="MaPhongBan" class="form-label">Mã Phòng Ban</label>
-              <input
-                type="text"
-                class="form-control"
-                value="<%= role.MaPhongBan %>"
-                readonly
-              />
+              <label for="Quyen" class="form-label">Quyền</label>
+              <input type="text" class="form-control text-center" value="<%= role.Quyen %>" style="width: 250px;" readonly />
             </div>
           </div>
           <div class="col-md-4 input-wrapper">
@@ -356,7 +352,7 @@
               class="form-control"
               id="MonGiangDayChinh"
               name="MonGiangDayChinh"
-              value="<%= value.MonGiangDayChinh %>"
+              value="<%= tenBoMon.TenBoMon %>"
               readonly
             />
           </div>

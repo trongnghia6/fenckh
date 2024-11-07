@@ -78,7 +78,7 @@ const createPoolConnection = require("../config/databasePool");
 require("dotenv").config();
 const createTrigger = async (connection, userId, tenNhanVien) => {
   // Tạo câu lệnh SQL để tạo trigger
-  const dropTriggerQuery = `DROP TRIGGER IF EXISTS log_changes;`
+  const dropTriggerQuery = `DROP TRIGGER IF EXISTS log_changes;`;
   const triggerQuery = `
   CREATE TRIGGER log_changes
   AFTER UPDATE ON quychuan
@@ -152,42 +152,38 @@ BEGIN
 END;
 
   `;
-  try{
+  try {
     // Tạo trigger sau khi đăng nhập thành công
     await connection.query(dropTriggerQuery);
     await connection.query(triggerQuery);
-    } catch (error) {
-        console.error("Lỗi khi tạo trigger:", error.message);
-    }
+  } catch (error) {
+    console.error("Lỗi khi tạo trigger:", error.message);
+  }
 
-            // Thực thi câu lệnh tạo trigger
+  // Thực thi câu lệnh tạo trigger
 };
 
-  
 const login = async (req, res) => {
   const { username, password } = req.body;
   let connection;
- 
+
   try {
     connection = await createPoolConnection(); // Đảm bảo dùng await
-    
+
     // Truy vấn người dùng từ cơ sở dữ liệu
     const [users] = await connection.query(
       "SELECT * FROM taikhoannguoidung WHERE TenDangNhap = ?",
       [username]
     );
- 
 
-        
-      
     // Kiểm tra nếu có người dùng
     if (users.length > 0) {
       const user = users[0];
-      
+
       // So sánh mật khẩu
       if (user.MatKhau == password) {
         req.session.userId = user.id_User; // Lưu id_User vào session
-        
+
         // Lấy tên người dùng
         const query = `SELECT TenNhanVien FROM nhanvien 
             JOIN taikhoannguoidung ON nhanvien.id_User = taikhoannguoidung.id_User
@@ -195,8 +191,7 @@ const login = async (req, res) => {
         const [TenNhanViens] = await connection.query(query, [username]);
         const TenNhanVien = TenNhanViens[0]?.TenNhanVien;
         await createTrigger(connection, req.session.userId, TenNhanVien);
-       
-      
+
         // Phân quyền người dùng
         const [roles] = await connection.query(
           "SELECT MaPhongBan, Quyen, isKhoa FROM role WHERE TenDangNhap = ?",
@@ -209,6 +204,9 @@ const login = async (req, res) => {
         req.session.role = role;
         req.session.MaPhongBan = MaPhongBan;
         req.session.isKhoa = isKhoa;
+
+        // Tạo 1 req.session để dùng làm mẫu
+        req.session.tmp = 0;
 
         let url;
 

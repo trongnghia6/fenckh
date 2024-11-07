@@ -379,6 +379,8 @@
 
                 <script>
                   function filterTable() {
+                    // thừa hàm ở đây này, src đời đầu của anh viết ko khác gì tôi đou :)
+                    console.log('filterTable')
                     // Get selected values
                     let dot = document.getElementById("combobox-dot").value;
                     let ki = document.getElementById("combobox-ki").value;
@@ -431,7 +433,7 @@
                   <th>Ngày kết thúc</th>
                   <th>Số tiết</th>
                   <th>Tổng số tiết</th>
-                  <th>Mã học phần</th>
+                  <th>Khoa</th>
                   <!-- Cột Khoa -->
                   <th>Chi tiết giảng viên mời</th>
                 </tr>
@@ -645,7 +647,7 @@
           if (qcCell) {
             const qcValue = parseInt(qcCell.textContent.trim());
             if (!isNaN(qcValue)) {
-              console.log(totalQC)
+              // console.log(totalQC)
               totalQC += qcValue;
             }
           }
@@ -966,7 +968,7 @@
         let rowNam = row.getAttribute("data-nam");
 
         // Filtering logic
-        let matchesDepartment = department === "ALL" || department === "" || rowDepartment === department; // Kiểm tra nếu chọn "ALL"
+        let matchesDepartment = department === "ALL" || department === "" || rowDepartment.includes(department); // Kiểm tra nếu chọn "ALL"
         let matchesDot = dot === "" || rowDot === dot;
         let matchesKi = ki === "" || rowKi === ki;
         let matchesNam = nam === "" || rowNam === nam;
@@ -978,6 +980,7 @@
           row.style.display = "none"; // Hide row
         }
       }
+      calculateTotals();
     }
   </script>
 

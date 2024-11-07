@@ -28,6 +28,54 @@
 
     }
 
+    /* phần css cho label tổng số tiết ki*/
+    .total-label {
+      margin-left: auto;
+      /* Căn phải cho thẻ total-label */
+      margin-right: 0;
+      font-family: Arial, sans-serif;
+      font-size: 16px;
+      background-color: #f4f4f4;
+      padding: 10px;
+      border-radius: 8px;
+      width: fit-content;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      display: block;
+      /* Đảm bảo thẻ div là khối để căn phải hoạt động */
+    }
+
+    .total-label label {
+      font-weight: bold;
+      /* Giữ chữ in đậm */
+      color: #000;
+      /* Màu chữ đen */
+      margin-right: 8px;
+      /* Thêm khoảng cách bên phải */
+      cursor: pointer;
+      /* Tạo hiệu ứng chuyển màu nền và màu chữ mềm mại */
+      padding: 5px 10px;
+      /* Thêm padding cho label để tạo không gian */
+      border: 1px solid #ccc;
+      /* Khung cho label */
+      border-radius: 4px;
+      /* Bo góc cho khung */
+    }
+
+    .total-label label,
+    .total-label label span {
+      background-color: #007BFF;
+      /* Màu nền khi hover */
+      color: #fff;
+      /* Màu chữ trắng khi hover */
+    }
+
+    .total-label span {
+      font-weight: bold;
+      /* Giữ chữ trong span cũng in đậm */
+      color: #333;
+      /* Màu chữ đậm cho giá trị */
+    }
+
     .btn {
       height: 45px !important;
     }
@@ -233,6 +281,11 @@
                   <!-- Dữ liệu sẽ được thêm vào đây bằng JavaScript -->
                 </tbody>
               </table>
+              <!-- Label tổng số tiết tách riêng với bảng -->
+              <div class="total-label">
+                <!-- <label>Tổng số tiết Lên Lớp: <span class="value" id="totalLL">0</span></label> -->
+                <label><span class="value" id="totalQC"></span></label>
+              </div>
             </div>
           </div>
         </div>
@@ -444,7 +497,7 @@
         window.onload = function () {
           const TenNhanVien = localStorage.getItem("TenNhanVien"); // Lấy tên người dùng từ localStorage
           let Role = localStorage.getItem("userRole");
-          if (Role.toUpperCase() == 'LÃNH ĐẠO KHOA'){
+          if (Role.toUpperCase() == 'LÃNH ĐẠO KHOA') {
             Role = 'LĐK';
           }
 
@@ -477,31 +530,31 @@
           $('#NamHoc option[value=""]').remove();
           $('#combobox-ki option[value=""]').remove();
           $('#combobox-dot option[value=""]').remove();
-    
+
           $.ajax({
             url: '/getNamHoc',
             method: 'GET',
             success: function (response) {
               if (response.success) {
-    
+
                 response.NamHoc.forEach(function (item) {
                   console.log(item.NamHoc);
-                    $('#NamHoc').append(
-                      `<option value="${item.NamHoc}">${item.NamHoc}</option>`
-                    );
+                  $('#NamHoc').append(
+                    `<option value="${item.NamHoc}">${item.NamHoc}</option>`
+                  );
                 });
-    
+
                 response.Ki.forEach(function (item) {
                   console.log(item.Ki);
-                    $('#combobox-ki').append(
-                      `<option value="${item.value}">${item.Ki}</option>`
-                    );
+                  $('#combobox-ki').append(
+                    `<option value="${item.value}">${item.Ki}</option>`
+                  );
                 });
                 response.Dot.forEach(function (item) {
                   console.log(item.Dot);
-                    $('#combobox-dot').append(
-                      `<option value="${item.value}">${item.Dot}</option>`
-                    );
+                  $('#combobox-dot').append(
+                    `<option value="${item.value}">${item.Dot}</option>`
+                  );
                 });
               } else {
                 console.error("Không lấy được dữ liệu năm học:", response.message);
@@ -514,7 +567,7 @@
         });
       </script>
 
-            <!-- Lọc theo khoa -->
+      <!-- Lọc theo khoa -->
       <!-- <script>
         function filterByDepartment() {
           // Lấy giá trị của bộ lọc phòng ban
@@ -581,36 +634,36 @@
       
     </script> -->
 
-    <script>
-      function filterByDepartment() {
-        console.log("filterByDepartment đã được gọi");
-    
-        const departmentFilter = document.getElementById("filterByDepartment").value.trim();
-        const table = document.getElementById("dataTable");
-    
-        // Kiểm tra bảng có tồn tại không
-        if (!table) {
+      <script>
+        function filterByDepartment() {
+          console.log("filterByDepartment đã được gọi");
+
+          const departmentFilter = document.getElementById("filterByDepartment").value.trim();
+          const table = document.getElementById("dataTable");
+
+          // Kiểm tra bảng có tồn tại không
+          if (!table) {
             console.error("Không tìm thấy bảng với ID 'dataTable'");
             return; // Dừng hàm nếu không tìm thấy bảng
-        }
-        
-        const rows = table.querySelectorAll("tbody tr"); // Lấy tất cả các hàng trong tbody
-    
-        for (let i = 0; i < rows.length; i++) { // Bỏ qua hàng tiêu đề
+          }
+
+          const rows = table.querySelectorAll("tbody tr"); // Lấy tất cả các hàng trong tbody
+
+          for (let i = 0; i < rows.length; i++) { // Bỏ qua hàng tiêu đề
             const departmentCell = rows[i].getElementsByTagName("td")[14]; // Chỉ số cột phòng ban (cột thứ 3)
-    
+
             // Kiểm tra nếu departmentCell không null
             if (departmentCell) {
-                const departmentValue = departmentCell.textContent.trim();
-                const departmentMatch = (departmentFilter === "all" || departmentValue === departmentFilter);
-    
-                if (departmentMatch) {
-                    rows[i].style.display = ""; // Hiện hàng nếu điều kiện khớp
-                } else {
-                    rows[i].style.display = "none"; // Ẩn hàng nếu không khớp
-                }
+              const departmentValue = departmentCell.textContent.trim();
+              const departmentMatch = (departmentFilter === "all" || departmentValue === departmentFilter);
+
+              if (departmentMatch) {
+                rows[i].style.display = ""; // Hiện hàng nếu điều kiện khớp
+              } else {
+                rows[i].style.display = "none"; // Ẩn hàng nếu không khớp
+              }
             } else {
-                console.error("Không tìm thấy ô phòng ban ở hàng:", i);
+              console.error("Không tìm thấy ô phòng ban ở hàng:", i);
             }
         }
       }

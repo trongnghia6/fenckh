@@ -500,6 +500,8 @@
       const isKhoa = localStorage.getItem("isKhoa");
       console.log('Giá trị isKhoa từ localStorage: ', isKhoa);
       hideButton();
+      const role = localStorage.getItem("userRole");
+      console.log('Giá trị QUyền từ localStorage: ', role);
     });
 
     function hideButton() {
@@ -595,9 +597,9 @@
         // Fetch tên giảng viên mời
         const [gvmResponse, khoaResponse, teachingResponse] =
           await Promise.all([
-            fetch("http://localhost:3000/index/name-gvm"),
-            fetch("http://localhost:3000/index/name-gvm-khoa"),
-            fetch("http://localhost:3000/teaching-info", {
+            fetch("/index/name-gvm"),
+            fetch("/index/name-gvm-khoa"),
+            fetch("/teaching-info", {
               method: "POST", // Sử dụng phương thức POST
               headers: {
                 "Content-Type": "application/json", // Đặt Content-Type là application/json
@@ -710,13 +712,26 @@
         const ghiChuTd = document.createElement("td");
         const ghiChuValue = row.GhiChu && row.GhiChu.trim() !== "" ? row.GhiChu : false;
         const deadlineValue = row.Deadline || ""; // Lấy giá trị Deadline
-        if (ghiChuValue) {
-          ghiChuTd.innerHTML = `📜 <span style="color: red;">•</span>`; // Hiển thị biểu tượng ghi chú và chấm đỏ
+        const hoanThanh = row.HoanThanh;
+        if (role === 'GV' || role === 'Thường') {
+          ghiChuTd.innerHTML = "📜"; // Hiển thị biểu tượng ghi chú nếu role là GV hoặc Thường
+          ghiChuTd.style.cursor = "not-allowed"; // Thay đổi con trỏ chuột thành 'not-allowed' để báo hiệu không thể tương tác
+          ghiChuTd.title = "Bạn không có quyền truy cập"; // Thêm tooltip để giải thích lý do không thể nhấn
         } else {
-          ghiChuTd.innerHTML = "📜"; // Hiển thị biểu tượng ghi chú nếu không có ghi chú
+
+          if (ghiChuValue) {
+            if (hoanThanh) {
+              ghiChuTd.innerHTML = `📜 <span class="bi bi-check2-circle" style="color: green;"></span>`; // Hiển thị biểu tượng ghi chú và chấm xanh
+            } else {
+              ghiChuTd.innerHTML = `📜 <span class="bi bi-circle" style="color: red;"></span>`; // Hiển thị biểu tượng ghi chú và chấm đỏ
+            }
+
+          } else {
+            ghiChuTd.innerHTML = "📜"; // Hiển thị biểu tượng ghi chú nếu không có ghi chú
+          }
+          ghiChuTd.style.cursor = "pointer"; // Thay đổi con trỏ chuột khi di chuột qua biểu tượng
+          ghiChuTd.onclick = () => openNoteForm(tableRow, ghiChuValue, deadlineValue); // Gọi hàm mở form khi nhấn vào biểu tượng
         }
-        ghiChuTd.style.cursor = "pointer"; // Thay đổi con trỏ chuột khi di chuột qua biểu tượng
-        ghiChuTd.onclick = () => openNoteForm(tableRow, ghiChuValue, deadlineValue); // Gọi hàm mở form khi nhấn vào biểu tượng
         tableRow.appendChild(ghiChuTd); // Thêm ô ghi chú vào hàng
 
 
@@ -815,6 +830,11 @@
             taiChinhCheckbox.disabled = true;
           }
         }
+        if (role.toLowerCase() === "thường") {
+          khoaCheckboxTd.style.display = 'none';
+          daoTaoCheckboxTd.style.display = 'none';
+          taiChinhCheckboxTd.style.display = 'none';
+        }
 
         tableBody.appendChild(tableRow); // Thêm hàng vào bảng
       });
@@ -907,7 +927,7 @@
       });
 
       // Gửi dữ liệu lên server
-      fetch("http://localhost:3000/phong-ban-duyet", {
+      fetch("/phong-ban-duyet", {
         method: "POST", // Phương thức POST
         headers: {
           "Content-Type": "application/json", // Định dạng gửi là JSON
@@ -1285,7 +1305,7 @@
               headers: {
                 'Content-Type': 'application/json',
               },
-              body: JSON.stringify({ id }),
+              body: JSON.stringify({ id, ghiChu: note, deadline }),
             });
             const result = await response.json();
             if (!result.success) {
@@ -1332,7 +1352,7 @@
   <script>
     // Chuyển đổi dữ liệu phòng ban thành JSON và lưu vào Local Storage
     const phongBanData = <% - JSON.stringify(phongBanList) %>
-    localStorage.setItem("phongBanList", JSON.stringify(phongBanData));
+      localStorage.setItem("phongBanList", JSON.stringify(phongBanData));
     console.log("Dữ liệu phòng ban đã được lưu vào Local Storage:", phongBanData);
 
     // Hàm gợi ý bộ môn ở ô nhập 

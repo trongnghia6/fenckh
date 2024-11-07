@@ -70,4 +70,8 @@ router.delete('/namHoc/:NamHoc', GetTable.deleteNamHoc);
 //lấy dữ liệu hiển thị vào thẻ select
 router.get('/getNamHoc', AdminController.getNamHoc);
 
+router.get('/getMaBoMon/:maPhongBan', AdminController.getBoMonList);
+
+router.get('/suggest/:query', AdminController.suggest);
+
 module.exports = router;

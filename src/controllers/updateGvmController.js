@@ -18,8 +18,12 @@ const getUpdateGvm = async (req, res) => {
 
     let user = results && results.length > 0 ? results[0] : {};
 
+    // Lấy dữ liệu phòng ban
+    const query1 = "SELECT MaPhongBan FROM phongban where isKhoa = 1";
+    const [phongBanList] = await connection.query(query1);
+
     // Render trang updateGvm.ejs với dữ liệu người dùng
-    res.render("updateGvm.ejs", { value: user });
+    res.render("updateGvm.ejs", { value: user, phongBanList: phongBanList });
   } catch (err) {
     console.error(err);
     // Xử lý lỗi, có thể trả về phản hồi lỗi cho client
@@ -76,7 +80,6 @@ const upload = multer().single("truocCCCD");
 
 const postUpdateGvm = async (req, res) => {
   // Lấy các thông tin từ form
-  let IdGvm = req.body.IdGvm;
   let HoTen = req.body.HoTen;
   let GioiTinh = req.body.GioiTinh;
   let NgaySinh = req.body.NgaySinh;
@@ -104,6 +107,13 @@ const postUpdateGvm = async (req, res) => {
   const MaPhongBan = Array.isArray(req.body.maPhongBan)
     ? req.body.maPhongBan.join(",") // Nếu là mảng
     : req.body.maPhongBan || ""; // Nếu là chuỗi hoặc không có giá trị
+  let IdGvm = req.body.IdGvm;
+  const parts = IdGvm.split("_"); // Chia chuỗi theo dấu gạch dưới
+  const lastPart = parts[parts.length - 1]; // Lấy phần cuối cùng của mảng
+
+  const MaGvm = MaPhongBan + "_GVM_" + lastPart;
+
+  console.log("id = ", IdGvm);
 
   let tinhTrangGiangDay = req.body.tinhTrangGiangDay ? 1 : 0;
 
@@ -132,6 +142,7 @@ const postUpdateGvm = async (req, res) => {
 
     // Truy vấn để update dữ liệu vào cơ sở dữ liệu
     const query = `UPDATE gvmoi SET 
+      MaGvm = ?,
       HoTen = ?,
       GioiTinh = ?,
       NgaySinh = ?,
@@ -160,6 +171,7 @@ const postUpdateGvm = async (req, res) => {
 
     try {
       await connection.query(query, [
+        MaGvm,
         HoTen,
         GioiTinh,
         NgaySinh,

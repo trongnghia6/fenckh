@@ -242,54 +242,54 @@
               Thêm giảng viên mời
             </button>
             <input type="text" placeholder="Tìm kiếm theo Tên..." class="search" id="searchInput" />
-            <input type="text" placeholder="Tìm kiếm theo Bộ môn" class="searchBoMon" id="searchBoMon" 
-            onkeyup="searchBoMon(); showSuggestionsBoMon(this);" onclick="showSuggestionsBoMon(this)"/>
+            <input type="text" placeholder="Tìm kiếm theo Bộ môn" class="searchBoMon" id="searchBoMon"
+              onkeyup="searchBoMon(); showSuggestionsBoMon(this);" onclick="showSuggestionsBoMon(this)" />
             <select id="filterByDepartment" class="filter">
-                <option value="all">Tất cả</option>
-                <% phongBanList.forEach(function(phongBan) { %>
-                    <option value="<%= phongBan.MaPhongBan %>">
-                        <%= phongBan.TenPhongBan %>
-                    </option>
+              <option value="all">Tất cả</option>
+              <% phongBanList.forEach(function(phongBan) { %>
+                <option value="<%= phongBan.MaPhongBan %>">
+                  <%= phongBan.TenPhongBan %>
+                </option>
                 <% }); %>
             </select>
             <script>
               // Hàm lọc chung
-            function filterClasses() {
+              function filterClasses() {
                 let nameInput = document.getElementById("searchInput").value.toLowerCase();
                 let boMonInput = document.getElementById('searchBoMon').value.toLowerCase();
                 let departmentFilter = document.getElementById("filterByDepartment").value.trim();
-                
+
                 let table = document.getElementById("classTable");
                 let tr = table.getElementsByTagName("tr");
 
                 for (let i = 1; i < tr.length; i++) { // Bỏ qua hàng tiêu đề
-                    let nameCell = tr[i].getElementsByTagName("td")[2]; // Tên giảng viên
-                    let boMonCell = tr[i].getElementsByTagName("td")[5]; // Bộ môn
-                    let departmentCell = tr[i].getElementsByTagName("td")[4]; // Khoa
+                  let nameCell = tr[i].getElementsByTagName("td")[2]; // Tên giảng viên
+                  let boMonCell = tr[i].getElementsByTagName("td")[5]; // Bộ môn
+                  let departmentCell = tr[i].getElementsByTagName("td")[4]; // Khoa
 
-                    // Lấy giá trị từ các ô
-                    let nameValue = nameCell ? nameCell.textContent.toLowerCase() : '';
-                    let boMonValue = boMonCell ? boMonCell.textContent.toLowerCase() : '';
-                    let departmentValue = departmentCell ? departmentCell.textContent.trim() : '';
+                  // Lấy giá trị từ các ô
+                  let nameValue = nameCell ? nameCell.textContent.toLowerCase() : '';
+                  let boMonValue = boMonCell ? boMonCell.textContent.toLowerCase() : '';
+                  let departmentValue = departmentCell ? departmentCell.textContent.trim() : '';
 
-                    // Kiểm tra điều kiện lọc
-                    let nameMatch = nameValue.includes(nameInput);
-                    let boMonMatch = boMonValue.includes(boMonInput);
-                    let departmentMatch = (departmentFilter === "all" || departmentValue === departmentFilter);
+                  // Kiểm tra điều kiện lọc
+                  let nameMatch = nameValue.includes(nameInput);
+                  let boMonMatch = boMonValue.includes(boMonInput);
+                  let departmentMatch = (departmentFilter === "all" || departmentValue === departmentFilter);
 
-                    // Hiện hoặc ẩn hàng dựa trên các điều kiện
-                    if (nameMatch && boMonMatch && departmentMatch) {
-                        tr[i].style.display = ""; // Hiện hàng nếu tất cả các điều kiện đều khớp
-                    } else {
-                        tr[i].style.display = "none"; // Ẩn hàng nếu không khớp
-                    }
+                  // Hiện hoặc ẩn hàng dựa trên các điều kiện
+                  if (nameMatch && boMonMatch && departmentMatch) {
+                    tr[i].style.display = ""; // Hiện hàng nếu tất cả các điều kiện đều khớp
+                  } else {
+                    tr[i].style.display = "none"; // Ẩn hàng nếu không khớp
+                  }
                 }
-            }
+              }
 
-            // Gọi hàm lọc khi có thay đổi trong các ô tìm kiếm
-            document.getElementById("searchInput").addEventListener("keyup", filterClasses);
-            document.getElementById("searchBoMon").addEventListener("keyup", filterClasses);
-            document.getElementById("filterByDepartment").addEventListener("change", filterClasses);
+              // Gọi hàm lọc khi có thay đổi trong các ô tìm kiếm
+              document.getElementById("searchInput").addEventListener("keyup", filterClasses);
+              document.getElementById("searchBoMon").addEventListener("keyup", filterClasses);
+              document.getElementById("filterByDepartment").addEventListener("change", filterClasses);
             </script>
           </div>
           <table class="class-table" id="classTable">
@@ -397,10 +397,10 @@
 
       //     const nameCell = row.querySelector('td:nth-child(6)'); // Lấy ô chứa bộ môn ở cột thứ 7
       //     const checkbox = row.querySelector('input[type="checkbox"]');
-      
+
       //     if (nameCell) {
       //       const name = nameCell.textContent.trim().toLowerCase(); // Lấy nội dung text của ô bộ môn
-            
+
       //       if (filter === '' || name.includes(filter)) {
       //         row.style.display = ''; // Hiện hàng nếu khớp hoặc filter trống
       //         if (checkbox) checkbox.disabled = false; // Kích hoạt checkbox nếu có
@@ -411,7 +411,7 @@
       //     }
       //   });
       // }
-      
+
 
       // Thêm lớp học
       function addClass() {
@@ -508,7 +508,7 @@
       window.onload = function () {
         const TenNhanVien = localStorage.getItem("TenNhanVien"); // Lấy tên người dùng từ localStorage
         let Role = localStorage.getItem("userRole");
-        if (Role.toUpperCase() == 'LÃNH ĐẠO KHOA'){
+        if (Role.toUpperCase() == 'LÃNH ĐẠO KHOA') {
           Role = 'LĐK';
         }
 
@@ -528,12 +528,12 @@
         let filterValue = document.getElementById("filterByDepartment").value.trim();
         let table = document.getElementById("classTable");
         let tr = table.getElementsByTagName("tr");
-      
+
         for (let i = 1; i < tr.length; i++) { // Bỏ qua hàng tiêu đề
           let td = tr[i].getElementsByTagName("td")[4]; // Đảm bảo cột chứa mã phòng ban là cột thứ 5
           if (td) {
             let textValue = (td.textContent || td.innerText).trim(); // Loại bỏ khoảng trắng thừa
-      
+
             // So sánh chính xác giá trị mã phòng ban
             if (filterValue === "all" || textValue === filterValue) {
               tr[i].style.display = ""; // Hiển thị hàng
@@ -543,7 +543,7 @@
           }
         }
       }
-      
+
     </script>
 
     <script>
@@ -568,7 +568,7 @@
         // alert(MaPhongBan);
 
         try {
-          const response = await fetch('http://localhost:3000/bo-mon', {
+          const response = await fetch('/bo-mon', {
             method: 'POST', // Thay đổi thành POST
             headers: {
               'Content-Type': 'application/json'
@@ -679,14 +679,14 @@
         const input = document.getElementById('filterBoMon');
         const filter = input.value.trim().toLowerCase(); // Bỏ khoảng trắng và chuyển chữ thường
         const tableRows = document.querySelectorAll('#tableBody tr');
-      
+
         tableRows.forEach(row => {
           const nameCell = row.querySelector('td:nth-child(7)'); // Lấy ô chứa tên bộ môn ở cột thứ 7
           const checkbox = row.querySelector('input[type="checkbox"]');
-      
+
           if (nameCell) {
             const name = nameCell.textContent.trim().toLowerCase(); // Lấy nội dung text của ô bộ môn và chuyển thành chữ thường
-      
+
             if (filter === '' || name.includes(filter)) {
               row.style.display = ''; // Hiện hàng nếu khớp hoặc filter trống
               checkbox.disabled = false; // Kích hoạt checkbox
@@ -697,8 +697,8 @@
           }
         });
       }
-      
-    
+
+
     </script>
 
 </body>
