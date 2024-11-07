@@ -3,7 +3,8 @@ const bodyParser = require("body-parser");
 const path = require("path");
 require("dotenv").config();
 const session = require("express-session");
-const login = require("./routes/loginRoute");
+// const login = require("./routes/loginRoute");
+const login = require("./src/routes/loginRoute");
 //const importFile = require("./routes/importRoute");
 //console.log("> check env: ", process.env);
 
@@ -11,24 +12,26 @@ const login = require("./routes/loginRoute");
 // const connection = require("./config/database");
 
 // config engine template
-const configViewEngine = require("./config/viewEngine");
+// const configViewEngine = require("./config/viewEngine");
+const configViewEngine = require("./src/config/viewEngine");
 
 // const webRoutes = require("./routes/web");
 
 // Cấu hình đường dẫn routes
-const webRoutes = require("./routes/web");
-const createGvmRoutes = require("./routes/createGvmRoute");
-const gvmListRoutes = require("./routes/gvmListRoute");
-const updateGvm = require("./routes/updateGvmRoute");
-const classInfoGvm = require("./routes/classInfoGvmRoute");
-const importGvmList = require("./routes/importGvmListRoute");
-const infoHDGvmRoutes = require("./routes/infoHDGvmRoute");
-const adminRoute = require("./routes/adminRoute");
-const xemCacLopGvmRoute = require("./routes/xemCacLopGvmRoute");
-const phuLucHDRoute = require("./routes/phuLucHDRoute");
-const exportHDRoute = require("./routes/exportHDRoute");
-const logRoute = require("./routes/logRoute");
-const xemCacLopMoiRoute = require("./routes/xemCacLopMoiRoute");
+const webRoutes = require("./src/routes/web");
+// const webRoutes = require("./src/routes/web");
+const createGvmRoutes = require("./src/routes/createGvmRoute");
+const gvmListRoutes = require("./src/routes/gvmListRoute");
+const updateGvm = require("./src/routes/updateGvmRoute");
+const classInfoGvm = require("./src/routes/classInfoGvmRoute");
+const importGvmList = require("./src/routes/importGvmListRoute");
+const infoHDGvmRoutes = require("./src/routes/infoHDGvmRoute");
+const adminRoute = require("./src/routes/adminRoute");
+const xemCacLopGvmRoute = require("./src/routes/xemCacLopGvmRoute");
+const phuLucHDRoute = require("./src/routes/phuLucHDRoute");
+const exportHDRoute = require("./src/routes/exportHDRoute");
+const logRoute = require("./src/routes/logRoute");
+const xemCacLopMoiRoute = require("./src/routes/xemCacLopMoiRoute");
 
 const app = express();
 const port = process.env.port || 8888;
@@ -113,10 +116,10 @@ app.use(express.static(path.join(__dirname, "public/js"))); // cấu hình tệp
 
 app.use(express.json()); // Thêm dòng này để xử lý JSON
 
-const importFile = require("./routes/importRoute");
-const infoGvm = require("./routes/infoRoute");
-const tableQc = require("./routes/gvmRoute");
-const xoaQCDK = require("./routes/qcdkRoute");
+const importFile = require("./src/routes/importRoute");
+const infoGvm = require("./src/routes/infoRoute");
+const tableQc = require("./src/routes/gvmRoute");
+const xoaQCDK = require("./src/routes/qcdkRoute");
 const { log } = require("console");
 //const { require } = require("app-root-path");
 
