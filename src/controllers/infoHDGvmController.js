@@ -6,6 +6,14 @@ const router = express.Router();
 const mysql = require("mysql2/promise");
 const xlsx = require("xlsx");
 const path = require("path"); // Thêm dòng này
+const fs = require('fs'); // Thêm dòng này
+
+
+
+function sanitizeFileName(fileName) {
+  return fileName.replace(/[^a-z0-9]/gi, "_");
+}
+
 
 const getGvm = async (req, res) => {
   try {
@@ -44,58 +52,63 @@ const exportHDGvmToExcel = async (req, res) => {
   let connection;
   try {
     connection = await createPoolConnection();
-    console.log("Kết nối database thành công");
 
-    const namHoc = req.query.namHoc;
-    const dot = req.query.dot;
-    const ki = req.query.ki;
+    const { dot, ki, namHoc, khoa } = req.query;
 
-    // Truy vấn dữ liệu mà không lấy các cột không cần thiết
-    const [rows] = await connection.execute(
-      // `SELECT NgayBatDau, NgayKetThuc, KiHoc, DanhXung, HoTen, NgaySinh, CCCD, NoiCapCCCD, DiaChi, Email,
-      //     MaSoThue, HocVi, ChucVu, HSL, DienThoai, STK, NganHang, SUM(SoTiet) AS SoTiet
-      //  FROM hopdonggvmoi
-      //  WHERE NamHoc = ? AND Dot = ? AND KiHoc = ?
-      //  GROUP BY HoTen;`,
-      `SELECT
-          MIN(NgayBatDau) AS NgayBatDau,
-          MAX(NgayKetThuc) AS NgayKetThuc,
-          KiHoc,
-          DanhXung,
-          HoTen,
-          NgaySinh,
-          CCCD,
-          NoiCapCCCD,
-          DiaChi,
-          Email,
-          MaSoThue,
-          HocVi,
-          ChucVu,
-          HSL,
-          DienThoai,
-          STK,
-          NganHang,
-          SUM(SoTiet) AS SoTiet
+    if (!dot || !ki || !namHoc) {
+      return res.status(400).json({
+        success: false,
+        message: "Thiếu thông tin đợt, kỳ hoặc năm học",
+      });
+    }
+
+    let query = `
+      SELECT
+        MIN(NgayBatDau) AS NgayBatDau,
+        MAX(NgayKetThuc) AS NgayKetThuc,
+        KiHoc,
+        DanhXung,
+        HoTen,
+        NgaySinh,
+        CCCD,
+        NoiCapCCCD,
+        Email,
+        MaSoThue,
+        HocVi,
+        ChucVu,
+        HSL,
+        DienThoai,
+        STK,
+        NganHang,
+        SUM(SoTiet) AS SoTiet,
+        DiaChi
       FROM
-          hopdonggvmoi
+        hopdonggvmoi
       WHERE
-          NamHoc = ? AND Dot = ? AND KiHoc = ?
+        NamHoc = ? AND Dot = ? AND KiHoc = ?
+    `;
+
+    let params = [namHoc, dot, ki];
+
+    if (khoa && khoa !== "ALL") {
+      query += ` AND MaPhongBan = ?`;
+      params.push(khoa);
+    }
+
+    query += `
       GROUP BY
-          HoTen, KiHoc, DanhXung, NgaySinh, CCCD, NoiCapCCCD, Email,
-          MaSoThue, HocVi, ChucVu, HSL, DienThoai, STK, NganHang;`,
+        HoTen, KiHoc, DanhXung, NgaySinh, CCCD, NoiCapCCCD, Email,
+        MaSoThue, HocVi, ChucVu, HSL, DienThoai, STK, NganHang, DiaChi
+    `;
 
-      [namHoc, dot, ki]
-    );
-
-    console.log("Lấy dữ liệu từ bảng hopdonggvmoi thành công");
+    const [rows] = await connection.execute(query, params);
 
     if (rows.length === 0) {
-      console.log("Không có dữ liệu để xuất ");
-      res.send(
-        "<script>alert('Không có dữ liệu để xuất '); window.location.href='/infoHDGvm';</script>"
+      return res.send(
+        "<script>alert('Không tìm thấy giảng viên phù hợp điều kiện'); window.location.href='/infoHDGvm';</script>"
       );
-      return;
     }
+
 
     // Tạo workbook và worksheet
     const workbook = new ExcelJS.Workbook();
@@ -180,27 +193,35 @@ const exportHDGvmToExcel = async (req, res) => {
       });
     });
 
-    // Ghi file Excel
-    const filePath = path.join(
-      __dirname,
-      "../public/exports/hopdonggvmList.xlsx"
-    );
-    await workbook.xlsx.writeFile(filePath);
-    console.log("Ghi file Excel thành công");
+   
+    let fileName = `ThongTinHopDong_${namHoc}_Dot${dot}_Ki${ki}`;
+    if (khoa && khoa !== "ALL") {
+      fileName += `_${sanitizeFileName(khoa)}`;
+    }
+    fileName += ".xlsx";
 
-    // Tải file về cho client
-    res.download(filePath, "hopdonggvmList.xlsx", (err) => {
+    // Ghi file Excel
+    const filePath = path.join(__dirname, '../public/exports', fileName);
+    await workbook.xlsx.writeFile(filePath);
+
+    // Gửi file để download
+    res.download(filePath, fileName, (err) => {
       if (err) {
-        console.log("Lỗi khi tải file:", err);
-      } else {
-        console.log("File đã được tải thành công!");
+        console.error("Error downloading file:", err);
+        res.status(500).send("Error downloading file");
       }
+      // Xóa file sau khi đã gửi
+      fs.unlinkSync(filePath);
     });
+
   } catch (error) {
-    console.error("Lỗi khi xuất dữ liệu:", error);
-    res.status(500).send("Có lỗi xảy ra khi xuất dữ liệu");
+    console.error("Error exporting data:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Error exporting data",
+    });
   } finally {
-    if (connection) connection.release(); // Trả lại connection cho pool
+    if (connection) connection.release();
   }
 };
 
@@ -307,42 +328,49 @@ const getHDGvmData = async (req, res) => {
     const namHoc = req.query.namHoc;
     const dot = req.query.dot;
     const ki = req.query.ki;
+    const khoa = req.query.khoa;
 
-    const [rows] = await connection.execute(
-      // `SELECT NgayBatDau, NgayKetThuc, KiHoc, DanhXung, HoTen, SUM(SoTiet) AS SoTiet, NgaySinh, CCCD, NoiCapCCCD, Email,
-      //     MaSoThue, HocVi, ChucVu, HSL, DienThoai, STK, NganHang, NgayNghiemThu
-      //  FROM hopdonggvmoi
-      //  WHERE NamHoc = ? AND Dot = ? AND KiHoc = ?
-      //  GROUP BY HoTen;`,
-      `SELECT
-          MIN(NgayBatDau) AS NgayBatDau,
-          MAX(NgayKetThuc) AS NgayKetThuc,
-          KiHoc,
-          DanhXung,
-          HoTen,
-          NgaySinh,
-          CCCD,
-          NoiCapCCCD,
-          Email,
-          MaSoThue,
-          HocVi,
-          ChucVu,
-          HSL,
-          DienThoai,
-          STK,
-          NganHang,
-          SUM(SoTiet) AS SoTiet
-      FROM
-          hopdonggvmoi
-      WHERE
-          NamHoc = ? AND Dot = ? AND KiHoc = ?
-      GROUP BY
-          HoTen, KiHoc, DanhXung, NgaySinh, CCCD, NoiCapCCCD, Email,
-          MaSoThue, HocVi, ChucVu, HSL, DienThoai, STK, NganHang;`,
-      [namHoc, dot, ki]
-    );
 
-    console.log("xem ", rows);
+    let query = `
+    SELECT
+      MIN(NgayBatDau) AS NgayBatDau,
+      MAX(NgayKetThuc) AS NgayKetThuc,
+      KiHoc,
+      DanhXung,
+      HoTen,
+      NgaySinh,
+      CCCD,
+      NoiCapCCCD,
+      Email,
+      MaSoThue,
+      HocVi,
+      ChucVu,
+      HSL,
+      DienThoai,
+      STK,
+      NganHang,
+      SUM(SoTiet) AS SoTiet
+    FROM
+      hopdonggvmoi
+    WHERE
+      NamHoc = ? AND Dot = ? AND KiHoc = ?
+  `;
+
+  const queryParams = [namHoc, dot, ki];
+
+  // Thêm điều kiện lọc theo khoa nếu có
+  if (khoa && khoa !== 'ALL') {
+    query += ` AND MaPhongBan = ?`;
+    queryParams.push(khoa);
+  }
+
+  query += `
+    GROUP BY
+      HoTen, KiHoc, DanhXung, NgaySinh, CCCD, NoiCapCCCD, Email,
+      MaSoThue, HocVi, ChucVu, HSL, DienThoai, STK, NganHang
+  `;
+
+  const [rows] = await connection.execute(query, queryParams);
 
     res.json(rows);
   } catch (error) {
